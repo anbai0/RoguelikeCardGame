@@ -14,6 +14,11 @@ public class BattleSceneScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //SceneØ‚è‘Ö‚¦
+            sceneController.sceneChange("FieldScene");
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            //SceneØ‚è‘Ö‚¦
             sceneController.sceneChange("ResultScene");
         }
     }
