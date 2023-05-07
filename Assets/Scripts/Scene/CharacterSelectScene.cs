@@ -6,12 +6,15 @@ using UnityEngine.SceneManagement; // UnityEngine.SceneManagemntの機能を使用
 
 public class CharacterSelectScene : MonoBehaviour
 {
+    [SerializeField]
+    private SceneController sceneController;
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Scene切り替え
-            SceneManager.LoadScene("FieldScene");
+            sceneController.sceneChange("FieldScene");
         }
     }
 }

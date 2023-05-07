@@ -193,5 +193,4 @@ MonoBehaviour:
   isFadeIn: 0
   isFadeOut: 0
   alpha: 0
-  fadeSpeed: 0.2
-  fade: {fileID: 8647389251913310851}
+  fadeSpeed: 0.5
