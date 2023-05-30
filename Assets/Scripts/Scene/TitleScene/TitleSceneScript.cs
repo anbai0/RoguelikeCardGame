@@ -17,7 +17,8 @@ public class TitleSceneScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isCharaSelect)
+        //キャラクター画面へ遷移
+        if ((Input.GetMouseButton(0)) && !isCharaSelect)
         {
             text.SetActive(false);
             panel.SetActive(true);
@@ -25,7 +26,7 @@ public class TitleSceneScript : MonoBehaviour
             Button.SetActive(true);
             isCharaSelect = true;
         }
-
+        //タイトル画面へ遷移
         if (Input.GetKeyDown(KeyCode.Escape) && isCharaSelect)
         {
             text.SetActive(true);
@@ -36,6 +37,7 @@ public class TitleSceneScript : MonoBehaviour
         }
     }
 
+    //ボタンをクリックしたら
     public void OnClick()
     {
         //Scene切り替え
