@@ -8,8 +8,8 @@ using System.Security.Cryptography.X509Certificates;
 //基本はMain Cameraにアタッチしてください
 public class SceneController : MonoBehaviour
 {
-    public GameObject fade;//インスペクタからPrefab化したCanvasを入れる
-    public GameObject fadeCanvas;//操作するCanvas、タグで探す
+    public GameObject fade;//インスペクタからPrefab化したFadeを入れる
+    private GameObject fadeCanvas;//操作するCanvas、タグで探す
 
     private int fadeDelay;
 
@@ -20,7 +20,6 @@ public class SceneController : MonoBehaviour
     {
         float tmp = fadeManager.FadeSpeed * 10; //intに変換するために10倍にしてます
         fadeDelay = (int)tmp;
-        Debug.Log(fadeDelay);
         if (!FadeManager.isFadeInstance)
         {
             Instantiate(fade);
@@ -37,7 +36,7 @@ public class SceneController : MonoBehaviour
 
     public async void sceneChange(string sceneName)//ボタン操作などで呼び出す
     {
- 
+        fadeCanvas.SetActive(true);     //パネルが邪魔で消していたのここで表示させています
         fadeCanvas.GetComponent<FadeManager>().fadeOut();//フェードアウトフラグを立てる
         await Task.Delay(fadeDelay * 100);//暗転するまで待つ
         SceneManager.LoadScene(sceneName);//シーンチェンジ

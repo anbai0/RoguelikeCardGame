@@ -41,6 +41,7 @@ public class FadeManager : MonoBehaviour
             if (alpha <= 0.0f)//透明になったら、フェードインを終了
             {
                 isFadeIn = false;
+                gameObject.SetActive(false);    //パネルが邪魔になるので一時的に消しています
                 alpha = 0.0f;
             }
             this.GetComponentInChildren<Image>().color = new Color(0.0f, 0.0f, 0.0f, alpha);
