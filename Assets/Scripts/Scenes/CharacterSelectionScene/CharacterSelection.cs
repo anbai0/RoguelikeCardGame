@@ -90,10 +90,4 @@ public class CharacterSelection : MonoBehaviour
         }
     }
 
-
-    //フィールド画面へ遷移
-    public void OnClick()
-    {
-        sceneController.sceneChange("FieldScene");
-    }
 }
