@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 public class UIManagerCharacterSelectionScene : MonoBehaviour
 {
@@ -17,12 +16,17 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
     private Color32 originalColor;
     private Color32 targetColor;
+    private float originalScale;
+    public float targetScale = 0.9f;
 
     private float duration = 0.25f;      //色が変わるまでの秒数
     private float warriorElapsedTime = 0f;
     private float warriorLate;
+    private float warriorScale;
+
     private float wizardElapsedTime = 0f;
     private float wizardLate;
+    private float wizardScale;
 
     public GameObject button;
     public Image image;
@@ -44,7 +48,10 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
         // ハイライト時の色
         targetColor = new Color32(255, 255, 255, 255);
-    }
+
+        //変更前のScale
+        originalScale = warrior.transform.localScale.x;
+}
 
     void UIClick(GameObject UIObject)
     {
@@ -111,20 +118,27 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
             warriorElapsedTime += Time.deltaTime;
             warriorLate = Mathf.Clamp01(warriorElapsedTime / duration);
             warriorImage.color = Color32.Lerp(originalColor, targetColor, warriorLate);
+            warriorScale = Mathf.Lerp(originalScale, targetScale, warriorLate);
+            warrior.transform.localScale = new Vector3(warriorScale, warriorScale, warriorScale);
 
             //魔法使いをローライト
             wizardElapsedTime = 0;
             wizardImage.color = originalColor;
+            wizard.transform.localScale = new Vector3(originalScale, originalScale, originalScale);
         }
         if (selectWizard)   //魔法使いをハイライト
         {
             wizardElapsedTime += Time.deltaTime;
             wizardLate = Mathf.Clamp01(wizardElapsedTime / duration);
             wizardImage.color = Color32.Lerp(originalColor, targetColor, wizardLate);
+            wizardScale = Mathf.Lerp(originalScale, targetScale, wizardLate);
+            wizard.transform.localScale = new Vector3(wizardScale, wizardScale, wizardScale);
+
 
             //戦士をローライト
             warriorElapsedTime = 0;
             warriorImage.color = originalColor;
+            warrior.transform.localScale = new Vector3(originalScale, originalScale, originalScale);
         }
     }
 }
