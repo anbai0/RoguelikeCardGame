@@ -10531,6 +10531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 999589707}
+  - component: {fileID: 999589708}
   m_Layer: 0
   m_Name: SceneManager
   m_TagString: Untagged
@@ -10551,8 +10552,21 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &999589708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999589706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f367d4940c365243ba8acd6abfcffc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneController: {fileID: 418362621}
 --- !u!1 &1020034179
 GameObject:
   m_ObjectHideFlags: 0
@@ -25816,7 +25830,7 @@ MonoBehaviour:
   button: {fileID: 1615129647}
   image: {fileID: 1615129650}
   redButton: {fileID: 21300000, guid: 32c4fcdaf0a77324d8be0fbd83e6b540, type: 3}
-  sceneManager: {fileID: 0}
+  sceneManager: {fileID: 999589708}
 --- !u!4 &2071841385
 Transform:
   m_ObjectHideFlags: 0
@@ -25830,5 +25844,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
