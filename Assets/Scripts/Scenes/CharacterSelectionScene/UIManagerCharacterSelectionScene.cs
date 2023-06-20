@@ -60,16 +60,17 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
             isSelect = true;
             selectWarrior = true;
             selectWizard = false;
+            image.sprite = redButton;
         }
         if (UIObject == wizard)
         {
             isSelect = true;
             selectWarrior = false;
             selectWizard = true;
+            image.sprite = redButton;
         }
         if (UIObject == button && isSelect)
         {
-            image.sprite = redButton;
             sceneManager.FieldScene();
         }
     }
