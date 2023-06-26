@@ -33,6 +33,7 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
     public Sprite redButton;
     public CharacterSceneManager sceneManager;
 
+
     void Start()
     {
         UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -71,6 +72,10 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
         }
         if (UIObject == button && isSelect)
         {
+            if(UIObject == warrior)
+                GameManager.Instance.ReadPlayer("Warrior");
+            if (UIObject == wizard)
+                GameManager.Instance.ReadPlayer("Wizard");
             sceneManager.FieldScene();
         }
     }

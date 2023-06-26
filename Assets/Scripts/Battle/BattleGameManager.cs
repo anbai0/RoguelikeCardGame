@@ -80,6 +80,8 @@ public class BattleGameManager : MonoBehaviour
     }
     private void Start()
     {
+        //Initialize("Player",0,0,0);
+        //Initialize("Enemy");
         player = GameObject.Find("TestPlayer");
         ReadPlayer(player);
         playerCondition = new ConditionStatus();
@@ -106,6 +108,7 @@ public class BattleGameManager : MonoBehaviour
     }
     private void StartGame() 
     {
+        //UpdateTexts();
         //プレイヤーのステータスを取得、表示
         playerNameText.text = "現在のキャラ:"+ playerData._playerName;
         playerHP = playerData._playerHP;
