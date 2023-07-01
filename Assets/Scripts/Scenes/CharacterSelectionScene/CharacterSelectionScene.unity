@@ -20654,7 +20654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73e5862308656ab4ba22412285dd32f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 1158963690}
+  Canvas: {fileID: 1158963690}
   warrior: {fileID: 1748693079}
   wizard: {fileID: 1020034179}
   targetScale: 0.85

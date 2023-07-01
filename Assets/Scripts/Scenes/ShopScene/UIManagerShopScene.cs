@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManagerBase : MonoBehaviour
+public class UIManagerShopScene : MonoBehaviour
 {
     [SerializeField] private GameObject Canvas;
     private UIController[] UIs;
+
+    public float amplitude = 1f;
+    public float frequency = 1f;
 
     void Start()
     {
@@ -24,11 +27,26 @@ public class UIManagerBase : MonoBehaviour
 
     void UIEnter(GameObject UIObject)
     {
+        if(UIObject == UIObject.CompareTag("Cards"))
+        {
+            UIObject.transform.localScale += Vector3.one * 0.1f;
+        }
 
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            Debug.Log("a");
+            Animator anim = UIObject.GetComponent<Animator>();
+            anim.SetTrigger("RelicJump");
+        }
     }
 
     void UIExit(GameObject UIObject)
     {
+        if (UIObject == UIObject.CompareTag("Cards"))
+        {
+            UIObject.transform.localScale -= Vector3.one * 0.1f;
+        }
+
 
     }
 }

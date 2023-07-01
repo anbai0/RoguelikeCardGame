@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Lottery : MonoBehaviour
 {
+
     PlayerDataManager playerDataManager;
-    CardDataManager []cardDataManager;
+    public CardViewManager cardViewManager;// カードの見た目の処理
+    public CardDataManager cardData;// カードのデータを処理
+    [SerializeField]
+    //CardDataManager []cardDataManager;
 
     ShopController shopController;
 
@@ -17,19 +21,20 @@ public class Lottery : MonoBehaviour
     {
         for(int i = 1; i <= 20; i++)
         {
-            CardDataManager card = new CardDataManager(i);
+            cardData = new CardDataManager(i);
             //各カードのレアリティに分ける
-            if(card._cardRarity == 1)
+            if (cardData._cardRarity == 1)
             {
-                CardRarity1.Add(card);
+                CardRarity1.Add(cardData._cardID);
+                Debug.Log(CardRarity1[i]);
             }
-            if (card._cardRarity == 2)
+            if (cardData._cardRarity == 2)
             {
-                CardRarity2.Add(card);
+                CardRarity2.Add(cardData);
             }
-            if (card._cardRarity == 3)
+            if (cardData._cardRarity == 3)
             {
-                CardRarity3.Add(card);
+                CardRarity3.Add(cardData);
             }
         }
         

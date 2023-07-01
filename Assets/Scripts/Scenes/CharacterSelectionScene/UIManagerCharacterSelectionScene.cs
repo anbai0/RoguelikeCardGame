@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class UIManagerCharacterSelectionScene : MonoBehaviour
 {
-    [SerializeField] private GameObject parent;
+    [SerializeField] private GameObject Canvas;
     private UIController[] UIs;
 
     public GameObject warrior;
@@ -36,7 +36,7 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
     void Start()
     {
-        UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onClick.AddListener(() => UIClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
