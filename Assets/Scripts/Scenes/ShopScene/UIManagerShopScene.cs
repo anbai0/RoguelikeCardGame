@@ -34,7 +34,6 @@ public class UIManagerShopScene : MonoBehaviour
 
         if (UIObject == UIObject.CompareTag("Relics"))
         {
-            Debug.Log("a");
             Animator anim = UIObject.GetComponent<Animator>();
             anim.SetTrigger("RelicJump");
         }
