@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class Lottery : MonoBehaviour
 {
@@ -15,14 +16,13 @@ public class Lottery : MonoBehaviour
     [SerializeField]
     List<int> CardRarity3List;
 
-    List<int> ShopCards;
+    public List<int> ShopCards = new List<int>();
     List<int> DeckAndShopCards; //現在の所持カード＋ショップに追加されたカードを格納する
 
-
-
-
     int MaxNumCards = 20;
-    
+
+    int foreachCount = 0;
+
     void Start()
     {
         for (int i = 1; i <= MaxNumCards; i++)
@@ -43,7 +43,6 @@ public class Lottery : MonoBehaviour
             }
         }
 
-        CardLottery(1);
     }
 
     /// <summary>
@@ -53,7 +52,7 @@ public class Lottery : MonoBehaviour
     /// <returns>指定したレアリティのカードID (int)</returns>
     int CardLottery(int rarity)
     {
-        List<int> SelectedRarityList = null;
+        List<int> SelectedRarityList;
 
         //引数で指定されたレアリティのListをSelectedRarityListへ代入
         switch (rarity)
@@ -73,51 +72,74 @@ public class Lottery : MonoBehaviour
         }
 
         //所持カードとショップに出ているカードをDeckAndShopCardsへ追加
-        DeckAndShopCards.AddRange(playerDataManager._deckList);
+        var playerData = new PlayerDataManager("Warrior");
+        DeckAndShopCards = new List<int>(playerData._deckList);
         DeckAndShopCards.AddRange(ShopCards);
 
-        int cardLottery;
+        //foreachCount++;
+        //Debug.Log(foreachCount + "回目:   " + string.Join(", ", DeckAndShopCards));
+
+        int cardLottery = -1;
 
         //抽選処理
-        while (true)
-        {
-            cardLottery = Random.Range(0, SelectedRarityList.Count);   // 指定されたレアリティのListのからランダムに要素を選択
-            bool hasCards = false;
+        int maxAttempts = 100;  // 最大試行回数を設定
+        int attempts = 0;
 
-            for (int i = 0; i < DeckAndShopCards.Count; i++)  // 所持カードとショップに出ているカードの枚数分回す
-            {
-                if (SelectedRarityList[cardLottery] == DeckAndShopCards[i])  // 抽選されたカードを所持していたら再抽選
-                {
-                    hasCards = true;
-                    break;
-                }
-            }
-            
-            if (!hasCards) // 抽選されたカードを所持していなかったら抽選終了
-                break;
+
+        while ((cardLottery == -1 || DeckAndShopCards.Contains(SelectedRarityList[cardLottery])) && attempts < maxAttempts)
+        {
+            cardLottery = Random.Range(0, SelectedRarityList.Count);
+            attempts++;
         }
+
+
+        if (attempts >= maxAttempts)
+        {
+            Debug.Log("カードを抽選できませんでした。");
+            cardLottery = -1;
+
+        }
+
 
         DeckAndShopCards = null;
         return cardLottery;
     }
 
 
+
     public (int,int,int) ShopLottery()     // レア度2が１枚、レア度1が２枚、回復が１枚（確定）
     {
-        
-        int cardLottery1 = CardLottery(2);
+        //レアリティ2の抽選
+        int cardLottery1 = CardRarity2List[CardLottery(2)];
         ShopCards.Add(cardLottery1);     // ショップに追加するカードはListに格納する
+        //レアリティ2のカードがなかったら(cardLottery==-1)
+        //レアリティ1のカードを抽選
 
-        int cardLottery2 = CardLottery(1);
+        // レアリティ1の抽選
+        int cardLottery2 = CardRarity1List[CardLottery(1)];
         ShopCards.Add(cardLottery2);
+        //レアリティ1のカードがなかったら(cardLottery==-1)
+        //レアリティ2のカードを抽選
 
-        int cardLottery3 = CardLottery(1);
+
+        // レアリティ1の抽選
+        int cardLottery3 = CardRarity1List[CardLottery(1)];
         ShopCards.Add(cardLottery3);
-        
+        //レアリティ1のカードがなかったら(cardLottery==-1)
+        //レアリティ2のカードを抽選
+
+
+
+
+
+
+
+
+
         return (cardLottery1, cardLottery2, cardLottery3);
 
-
     }
+
 
     void zako()     // レア度1が２枚、レア度2が１枚 
     {

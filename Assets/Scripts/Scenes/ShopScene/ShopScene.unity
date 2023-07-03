@@ -209,6 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 387374074}
   - component: {fileID: 387374075}
+  - component: {fileID: 387374076}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -243,6 +244,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c29c687a351ef3b43918b572fc06a11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lottery: {fileID: 387374076}
+--- !u!114 &387374076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387374073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardRarity1List: 
+  CardRarity2List: 
+  CardRarity3List: 
 --- !u!1 &410269077
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,8 +289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardViewManager: {fileID: 0}
-  CardRarity1: 
+  CardRarity1List: 
+  CardRarity2List: 
+  CardRarity3List: 
 --- !u!4 &410269079
 Transform:
   m_ObjectHideFlags: 0
