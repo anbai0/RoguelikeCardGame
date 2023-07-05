@@ -18,8 +18,11 @@ public class ShopController : MonoBehaviour
     [SerializeField]
     Transform cardPlace1, cardPlace2, cardPlace3;
     [SerializeField]
-    Object cardPrefab;
-    
+    GameObject cardPrefab;
+
+    GameObject card1, card2, card3;
+
+
     private CardController SelectController;    //生成したカードPrefabにアタッチされているCardControllerを格納する
 
     [SerializeField]
@@ -27,9 +30,7 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
-        Object card1 = Instantiate(cardPrefab, cardPlace1);
-        Object card2 = Instantiate(cardPrefab, cardPlace2);
-        Object card3 = Instantiate(cardPrefab, cardPlace3);
+
 
 
 
@@ -52,18 +53,30 @@ public class ShopController : MonoBehaviour
         {
             lottery1();
 
-            Card1.
 
-            CardController card = SelectController.GetComponent<CardController>();//カードを生成する
-            card.Init(Card1);
+
+            //card1 = Instantiate(cardPrefab, cardPlace1);
+            //SelectController = card1.GetComponent<CardController>();//カードを生成する
+            //SelectController.Init(Card1);
+
+
+            //card2 = Instantiate(cardPrefab, cardPlace2);
+            //SelectController = card2.GetComponent<CardController>();//カードを生成する
+            //SelectController.Init(Card2);
+
+
+            //card3 = Instantiate(cardPrefab, cardPlace3);
+            //SelectController = card3.GetComponent<CardController>();//カードを生成する
+            //SelectController.Init(Card3);
+
 
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(tmpID >= 21)
+            if (tmpID >= 21)
                 tmpID = 0;
-            
+
             tmpID++;
 
             CreateCard(tmpID);
