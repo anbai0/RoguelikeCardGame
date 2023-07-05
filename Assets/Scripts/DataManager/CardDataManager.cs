@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardDataManager
 {
@@ -14,7 +15,7 @@ public class CardDataManager
     public int _cardHealingPower;
     public int _cardGuardPoint;
     public int _cardState;
-    public Sprite _cardImage;
+    public Image _cardImage;
     
 
     public CardDataManager(int cardID) 

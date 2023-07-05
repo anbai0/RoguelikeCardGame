@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "CardData", menuName = "Create CardData")]
 public class CardData : ScriptableObject 
@@ -56,5 +57,5 @@ public class CardData : ScriptableObject
     /// <summary>
     /// カードのイメージ
     /// </summary>
-    public Sprite cardImage;
+    public Image cardImage;
 }

@@ -18,6 +18,8 @@ public class Lottery : MonoBehaviour
     public List<int> ShopCards = new List<int>();
     List<int> DeckAndShopCards; //現在の所持カード＋ショップに追加されたカードを格納する
 
+    public static bool isInitialize = false;
+
     int MaxNumCards = 20;
 
     int foreachCount = 0;
@@ -42,6 +44,7 @@ public class Lottery : MonoBehaviour
             }
         }
 
+        isInitialize = true;
     }
 
     /// <summary>
