@@ -11,6 +11,11 @@ public class UIManagerShopScene : MonoBehaviour
 
     void Start()
     {
+        ReloadUI();
+    }
+
+    public void ReloadUI()
+    {
         UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
@@ -22,7 +27,7 @@ public class UIManagerShopScene : MonoBehaviour
 
     void UIClick(GameObject UIObject)
     {
-
+        
     }
 
     void UIEnter(GameObject UIObject)

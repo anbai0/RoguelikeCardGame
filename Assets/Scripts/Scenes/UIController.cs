@@ -11,19 +11,19 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnUIClicked();
+        //OnUIClicked();
         onClick?.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        OnUIEntered();
+        //OnUIEntered();
         onEnter?.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        OnUIExited();
+        //OnUIExited();
         onExit?.Invoke();
     }
 
