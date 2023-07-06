@@ -10,7 +10,7 @@ public class cameraController : MonoBehaviour
     void Start()
     {
         transform.position = new Vector3(-10, 6, 0);
-        transform.rotation =  Quaternion.Euler(30, 90, 0);
+        //transform.rotation =  Quaternion.Euler(30, 90, 0);
        
     }
 
