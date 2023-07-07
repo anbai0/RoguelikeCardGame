@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Lottery : MonoBehaviour
 {
-
-    PlayerDataManager playerDataManager;
     CardDataManager cardData;       // カードのデータを処理
 
+    //各レアリティのリスト
     [SerializeField]
     List<int> CardRarity1List;
     [SerializeField]
@@ -15,20 +14,22 @@ public class Lottery : MonoBehaviour
     [SerializeField]
     List<int> CardRarity3List;
 
-    public List<int> ShopCards = new List<int>();
-    List<int> DeckAndShopCards; //現在の所持カード＋ショップに追加されたカードを格納する
+    public List<int> ShopCards = new List<int>();   //ショップに追加されたカード
+    List<int> DeckAndShopCards;                     //現在の所持カード＋ショップに追加されたカードを格納する
 
     public static bool isInitialize = false;
 
-    int MaxNumCards = 20;
+    int MaxNumCards = 20;       //カード枚数
 
-    int foreachCount = 0;
+    public bool fromShopController = false;
+
 
     void Start()
     {
         for (int i = 1; i <= MaxNumCards; i++)
         {
             cardData = new CardDataManager(i);
+
             //各カードのレアリティに分ける
             if (cardData._cardRarity == 1)
             {
@@ -104,54 +105,75 @@ public class Lottery : MonoBehaviour
 
 
 
-    public (int,int,int) ShopLottery(int selectRare1, int selectRare2, int selectRare3)     // レア度2が１枚、レア度1が２枚、回復が１枚（確定）
+    public int[] SelectCardByRarity(int[] selectRarity)
     {
 
-        // レアリティ2の抽選
-        int cardLottery1;
-        int Lottery1 = CardLottery(2);
-        if (Lottery1 != -1)     // レアリティ2のカードがあったら
+        int[] lotteryResult = new int[selectRarity.Length];
+        //int result1, result2, result3;
+
+        
+        for (int i = 0; i < selectRarity.Length; i++)
         {
-            cardLottery1 = CardRarity2List[Lottery1];           // 各レアリティの抽選されたListの要素をCardIDに変換
-            ShopCards.Add(cardLottery1);                        // ショップに追加するカードはListに格納する
-        }
-        else     // なかったらレアリティ1のカードを抽選
-        {
-            cardLottery1 = CardRarity1List[CardLottery(1)];     //レアリティ1のカードを抽選
-            ShopCards.Add(cardLottery1);
+            //カードの抽選
+            lotteryResult[i] = CardLottery(selectRarity[i]);
+
+            //指定したレアリティにカードがなかった時の再抽選
+            if (lotteryResult[i] == -1)
+            {
+                Debug.Log("a");
+                switch (selectRarity[i])
+                {
+                    case 1:
+                        lotteryResult[i] = CardLottery(2);
+                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];   //抽選した各レアリティのListの要素をCardIDに変換
+                        break;
+                    case 2:
+                        lotteryResult[i] = CardLottery(1);
+                        lotteryResult[i] = CardRarity1List[lotteryResult[i]];
+                        break;
+                    case 3:
+                        lotteryResult[i] = CardLottery(2);
+                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];
+                        break;
+                    default:
+                        break;
+                }
+            }else
+            {
+                //抽選した各レアリティのListの要素をCardIDに変換
+                switch (selectRarity[i])
+                {
+                    case 1:
+                        lotteryResult[i] = CardRarity1List[lotteryResult[i]];
+                        break;
+                    case 2:
+                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];
+                        break;
+                    case 3:
+                        lotteryResult[i] = CardRarity3List[lotteryResult[i]];
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // ShopControllerから呼ばれたら
+            if (fromShopController)
+            {
+                ShopCards.Add(lotteryResult[i]);
+            }
         }
 
-        // レアリティ1の抽選
-        int cardLottery2;
-        int Lottery2 = CardLottery(1);
-        if (Lottery2 != -1)     // レアリティ1のカードがあったら
-        {
-            cardLottery2 = CardRarity1List[Lottery2];           // 各レアリティの抽選されたListの要素をCardIDに変換
-            ShopCards.Add(cardLottery2);                        // ショップに追加するカードはListに格納する
-        }
-        else     // なかったらレアリティ2のカードを抽選
-        {
-            cardLottery2 = CardRarity2List[CardLottery(2)];
-            ShopCards.Add(cardLottery2);
-        }
+        fromShopController = false;
 
-        // レアリティ1の抽選
-        int cardLottery3;
-        int Lottery3 = CardLottery(1);
-        if (Lottery3 != -1)     // レアリティ1のカードがあったら
-        {
-            cardLottery3 = CardRarity1List[Lottery3];           // 各レアリティの抽選されたListの要素をCardIDに変換
-            ShopCards.Add(cardLottery3);                        // ショップに追加するカードはListに格納する
-        }
-        else     // なかったらレアリティ2のカードを抽選
-        {
-            cardLottery3 = CardRarity2List[CardLottery(2)];
-            ShopCards.Add(cardLottery3);
-        }
+        //result1 = lotteryResult[0];
+        //result2 = lotteryResult[1];
+        //result3 = lotteryResult[2];
 
-        return (cardLottery1, cardLottery2, cardLottery3);
 
+        return (lotteryResult);
     }
+
 
 
     void zako()     // レア度1が２枚、レア度2が１枚 

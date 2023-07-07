@@ -8,44 +8,31 @@ public class ShopController : MonoBehaviour
     //PlayerDataManager playerDataManager;
     CardDataManager cardData;       // カードのデータを処理
     CardController cardController;
-    public Lottery lottery;
+
+    [SerializeField]
+    Lottery lottery;
     [SerializeField]
     UIManagerShopScene uiManager;
 
-    int Card1, Card2, Card3;    //抽選されたカードのIDを入れる変数
-    int heelPotionCardID = 3;   //回復カードのID
 
+    int heelPotionCardID = 3;   //回復カードのID
     bool isHeelPotion = false;  //回復カードを持っているか？
 
-
-    [SerializeField]
-    GameObject Canvas, cardPlace1, cardPlace2, cardPlace3, cardPlace4;  //CanvasとCardの生成位置
     [SerializeField]
     GameObject cardPrefab;
-
-    GameObject card1, card2, card3, card4;
-    Sprite cardImage;
-
-
-    private CardController SelectController;    //生成したカードPrefabにアタッチされているCardControllerを格納する
+    [SerializeField]
+    GameObject Canvas;
+    [SerializeField]
+    List<GameObject> cardPlace;     // Cardの生成位置
 
 
-    CardController selectCard1, selectCard2, selectCard3, selectCard4;
+    GameObject cardObject;
+    int[] ShopCards;
 
 
 
     [SerializeField]
-    int tmpID = 0;
-
-    private void Start()
-    {
-
-
-
-
-
-    }
-
+    int tmpID = 0;      //デバッグ用
 
 
     void Update()
@@ -53,56 +40,92 @@ public class ShopController : MonoBehaviour
 
         if (Lottery.isInitialize)
         {
-            lottery1();
+            ShopLottery();
 
+            // ショップに並ぶカード表示
+            for(int i = 0; i < ShopCards.Length; i++)
+            {
+                cardObject = Instantiate(cardPrefab, cardPlace[i].transform.position, cardPlace[i].transform.rotation);       // カードのPrefabを生成
+                cardObject.transform.SetParent(Canvas.transform);                                                                   // Canvasの子にする
+                cardController = cardObject.GetComponent<CardController>();                                                         // 生成したPrefabのCardControllerを取得
+                cardController.Init(ShopCards[i]);                                                                                  // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
 
-            //左のカードの生成
-            card1 = Instantiate(cardPrefab, cardPlace1.transform.position, cardPlace1.transform.rotation);                  //カードのPrefabを生成
-            card1.transform.SetParent(Canvas.transform);
-            selectCard1 = card1.GetComponent<CardController>();                        //生成したPrefabのCardControllerを取得
-            selectCard1.Init(Card1);                                                   //そのCardControllerのInitメソッドを使いカードの生成と表示をする
+            }
 
-            //真ん中のカードの生成
-            card2 = Instantiate(cardPrefab, cardPlace2.transform.position, cardPlace2.transform.rotation);
-            card2.transform.SetParent(Canvas.transform);
-            selectCard2 = card2.GetComponent<CardController>();
-            selectCard2.Init(Card2);
+            // 回復カードは固定なので別途表示
+            cardObject = Instantiate(cardPrefab, cardPlace[3].transform.position, cardPlace[3].transform.rotation);
+            cardObject.transform.SetParent(Canvas.transform);
+            cardController = cardObject.GetComponent<CardController>();
+            cardController.Init(heelPotionCardID);
 
-            //右のカードの生成
-            card3 = Instantiate(cardPrefab, cardPlace3.transform.position, cardPlace3.transform.rotation);
-            card3.transform.SetParent(Canvas.transform);
-            selectCard3 = card3.GetComponent<CardController>();
-            selectCard3.Init(Card3);
-
-            //回復カードの生成
-            card4 = Instantiate(cardPrefab, cardPlace4.transform.position, cardPlace4.transform.rotation);
-            card4.transform.SetParent(Canvas.transform);
-            selectCard4 = card4.GetComponent<CardController>();
-            selectCard4.Init(heelPotionCardID);
-
-            uiManager.ReloadUI();
+            uiManager.UIEventReload();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
         {
             if (tmpID >= 20)
                 tmpID = 0;
 
             tmpID++;
 
-            selectCard1.Init(tmpID);
+            cardController.Init(tmpID);
+            //DebugLottery();
         }
 
     }
 
 
-
-    void lottery1()
+    // Lotteryスクリプトから抽選したカードIDを受け取るメソッド
+    void ShopLottery()
     {
-        (Card1, Card2, Card3) = lottery.ShopLottery(2,1,1);     // メモ: タプルと言って複数の戻り値を受け取れる
-        Debug.Log("カード1:" + Card1 + "\nカード2:" + Card2 + "\nカード3:" + Card3);
+        lottery.fromShopController = true;
+        //(Card1, Card2, Card3) = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });     // メモ: タプルと言って複数の戻り値を受け取れる
+        ShopCards = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });
+        Debug.Log("カード1:" + ShopCards[0] + "\nカード2:" + ShopCards[1] + "\nカード3:" + ShopCards[2]);
 
         Lottery.isInitialize = false;
     }
-    
+
+
+
+
+
+
+
+
+    private void DebugLottery()
+    {
+        lottery.fromShopController = true;
+        ShopCards = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });
+        Debug.Log("カード1:" + ShopCards[0] + "\nカード2:" + ShopCards[1] + "\nカード3:" + ShopCards[2]);
+
+        // ショップに並ぶカード表示
+        for (int i = 0; i < ShopCards.Length; i++)
+        {
+            cardObject = Instantiate(cardPrefab, cardPlace[i].transform.position, cardPlace[i].transform.rotation);       // カードのPrefabを生成
+            cardObject.transform.SetParent(Canvas.transform);                                                                   // Canvasの子にする
+            cardController = cardObject.GetComponent<CardController>();                                                         // 生成したPrefabのCardControllerを取得
+            cardController.Init(ShopCards[i]);                                                                                  // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
+
+        }
+
+        // 回復カードは固定なので別途表示
+        cardObject = Instantiate(cardPrefab, cardPlace[3].transform.position, cardPlace[3].transform.rotation);
+        cardObject.transform.SetParent(Canvas.transform);
+        cardController = cardObject.GetComponent<CardController>();
+        cardController.Init(heelPotionCardID);
+
+        uiManager.UIEventReload();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

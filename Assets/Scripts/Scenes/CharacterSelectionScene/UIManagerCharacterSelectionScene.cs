@@ -36,13 +36,7 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
     void Start()
     {
-        UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
-        foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
-        {
-            UI.onClick.AddListener(() => UIClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
-            UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
-            UI.onExit.AddListener(() => UIExit(UI.gameObject));
-        }
+        UIEventReload();
 
         // 初期の色
         originalColor = new Color32(60, 60, 60, 255);
@@ -52,7 +46,18 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
         //変更前のScale
         originalScale = warrior.transform.localScale.x;
-}
+    }
+
+    public void UIEventReload()
+    {
+        UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
+        {
+            UI.onClick.AddListener(() => UIClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
+            UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
+            UI.onExit.AddListener(() => UIExit(UI.gameObject));
+        }
+    }
 
     void UIClick(GameObject UIObject)
     {

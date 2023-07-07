@@ -246,13 +246,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lottery: {fileID: 387374076}
   uiManager: {fileID: 2100310164}
-  Canvas: {fileID: 1963204191}
-  cardPlace1: {fileID: 1915607545}
-  cardPlace2: {fileID: 1980607797}
-  cardPlace3: {fileID: 671038533}
-  cardPlace4: {fileID: 1577842513}
   cardPrefab: {fileID: 7872756505218513689, guid: baa47ad89586ae7449c6177e1705c4ba,
     type: 3}
+  Canvas: {fileID: 1963204191}
+  cardPlace:
+  - {fileID: 1915607545}
+  - {fileID: 1980607797}
+  - {fileID: 671038533}
+  - {fileID: 1577842513}
   tmpID: 0
 --- !u!114 &387374076
 MonoBehaviour:
@@ -270,6 +271,7 @@ MonoBehaviour:
   CardRarity2List: 
   CardRarity3List: 
   ShopCards: 
+  fromShopController: 0
 --- !u!1 &630322091
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +420,7 @@ GameObject:
   - component: {fileID: 671038536}
   - component: {fileID: 671038535}
   m_Layer: 5
-  m_Name: Card3
+  m_Name: CardPlace3
   m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1001,7 +1003,7 @@ GameObject:
   - component: {fileID: 1577842516}
   - component: {fileID: 1577842515}
   m_Layer: 5
-  m_Name: Card4
+  m_Name: CardPlace4
   m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1296,7 +1298,7 @@ GameObject:
   - component: {fileID: 1915607548}
   - component: {fileID: 1915607547}
   m_Layer: 5
-  m_Name: Card1
+  m_Name: CardPlace1
   m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1481,7 +1483,7 @@ GameObject:
   - component: {fileID: 1980607800}
   - component: {fileID: 1980607799}
   m_Layer: 5
-  m_Name: Card2
+  m_Name: CardPlace2
   m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1575,8 +1577,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Canvas: {fileID: 1963204191}
-  amplitude: 100
-  frequency: 100
 --- !u!4 &2100310165
 Transform:
   m_ObjectHideFlags: 0
