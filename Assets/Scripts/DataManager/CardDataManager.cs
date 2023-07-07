@@ -15,7 +15,7 @@ public class CardDataManager
     public int _cardHealingPower;
     public int _cardGuardPoint;
     public int _cardState;
-    public Image _cardImage;
+    public Sprite _cardImage;
     
 
     public CardDataManager(int cardID) 

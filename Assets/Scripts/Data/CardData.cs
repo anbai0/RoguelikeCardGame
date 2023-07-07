@@ -57,5 +57,5 @@ public class CardData : ScriptableObject
     /// <summary>
     /// カードのイメージ
     /// </summary>
-    public Image cardImage;
+    public Sprite cardImage;
 }

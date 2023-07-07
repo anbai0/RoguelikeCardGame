@@ -104,7 +104,7 @@ public class Lottery : MonoBehaviour
 
 
 
-    public (int,int,int) ShopLottery()     // レア度2が１枚、レア度1が２枚、回復が１枚（確定）
+    public (int,int,int) ShopLottery(int selectRare1, int selectRare2, int selectRare3)     // レア度2が１枚、レア度1が２枚、回復が１枚（確定）
     {
 
         // レアリティ2の抽選

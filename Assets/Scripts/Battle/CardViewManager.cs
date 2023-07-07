@@ -13,6 +13,6 @@ public class CardViewManager : MonoBehaviour
         cardNameText.text = cardDataManager._cardName;
         cardEffectText.text = cardDataManager._cardEffect;
         cardCostText.text = cardDataManager._cardCost.ToString();
-        cardImage = cardDataManager._cardImage;
+        cardImage.sprite = cardDataManager._cardImage;
     }
 }

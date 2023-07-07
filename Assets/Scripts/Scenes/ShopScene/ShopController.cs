@@ -99,7 +99,7 @@ public class ShopController : MonoBehaviour
 
     void lottery1()
     {
-        (Card1, Card2, Card3) = lottery.ShopLottery();     // メモ: タプルと言って複数の戻り値を受け取れる
+        (Card1, Card2, Card3) = lottery.ShopLottery(2,1,1);     // メモ: タプルと言って複数の戻り値を受け取れる
         Debug.Log("カード1:" + Card1 + "\nカード2:" + Card2 + "\nカード3:" + Card3);
 
         Lottery.isInitialize = false;
