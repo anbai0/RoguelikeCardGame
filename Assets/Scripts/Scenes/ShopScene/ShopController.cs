@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ShopController : MonoBehaviour
 {
-    //PlayerDataManager playerDataManager;
+    PlayerDataManager playerDataManager;
     CardDataManager cardData;       // カードのデータを処理
     CardController cardController;
 
@@ -29,7 +29,7 @@ public class ShopController : MonoBehaviour
     GameObject cardObject;
     int[] ShopCards;
 
-
+    int myMoney;
 
     [SerializeField]
     int tmpID = 0;      //デバッグ用
@@ -37,6 +37,8 @@ public class ShopController : MonoBehaviour
 
     void Update()
     {
+        
+
 
         if (Lottery.isInitialize)
         {
@@ -72,6 +74,8 @@ public class ShopController : MonoBehaviour
             cardController.Init(tmpID);
             //DebugLottery();
         }
+
+        
 
     }
 
