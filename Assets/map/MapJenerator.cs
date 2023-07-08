@@ -2,7 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class RoomStatus
+{
+    public GameObject roomObject;
+    public GameObject stopForward;
+    public GameObject stopRight;
+    public GameObject stopLeft;
+}
 public class MapJenerator : MonoBehaviour
+
 {
     [SerializeField]
     public GameObject[] rooms;
@@ -20,6 +28,8 @@ public class MapJenerator : MonoBehaviour
     private GameObject treasurebox;
     [SerializeField]
     private GameObject tento;
+    [SerializeField]
+    private RoomStatus[] roomStatuses = new RoomStatus[12];
 
     enum roomNum
     {
@@ -45,12 +55,13 @@ public class MapJenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerSpawn();
+       
         TakibiSpawn();
         zakotekiSpawn();
         tuyoitekiSpawn();
-
+        PlayerSpawn();
     }
+        
 
     // Update is called once per framejuc
     void Update()
@@ -69,6 +80,15 @@ public class MapJenerator : MonoBehaviour
             zakoteki.transform.position = rooms[(int)roomNum.ROOM3].transform.position;
 
             //rooms[1].transform.GetComponent<GateCollidar>().roomNumber = 1;
+            rooms[(int)roomNum.ROOM3].transform.Find("stopright").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM1].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM4].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM8].transform.Find("stopleft").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM7].transform.Find("stopleft").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM7].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM6].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM10].transform.Find("stopleft").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM11].transform.Find("stopright").gameObject.SetActive(true);
         }
         else
         {
@@ -77,7 +97,17 @@ public class MapJenerator : MonoBehaviour
             zakoteki.transform.position = rooms[(int)roomNum.ROOM2].transform.position;
 
             //rooms[2].transform.GetComponent<GateCollidar>().roomNumber = 2;
-        }
+            rooms[(int)roomNum.ROOM2].transform.Find("stopleft").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM1].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM4].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM5].transform.Find("stopright").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM7].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM6].transform.Find("stopforward").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM6].transform.Find("stopright").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM10].transform.Find("stopleft").gameObject.SetActive(true);
+            rooms[(int)roomNum.ROOM11].transform.Find("stopright").gameObject.SetActive(true);
+        };
+        
         RoomsSetting(random % 2 == 0);
     }
 
@@ -94,6 +124,7 @@ public class MapJenerator : MonoBehaviour
             treasurebox.transform.position = rooms[(int)roomNum.ROOM5].transform.position;
             Instantiate(zakoteki, rooms[(int)roomNum.ROOM8].transform.position, Quaternion.identity);
             zakoteki.transform.position = rooms[(int)roomNum.ROOM8].transform.position;
+
         }
         else
         {
