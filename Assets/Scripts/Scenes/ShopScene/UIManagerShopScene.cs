@@ -6,6 +6,10 @@ public class UIManagerShopScene : MonoBehaviour
     [SerializeField] private GameObject Canvas;
     private UIController[] UIs;
 
+    bool isClick = false;
+
+    GameObject lastClickedCards;
+
     void Start()
     {
         UIEventReload();
@@ -24,30 +28,56 @@ public class UIManagerShopScene : MonoBehaviour
 
     void UIClick(GameObject UIObject)
     {
-        
+        if (UIObject == UIObject.CompareTag("Cards"))
+        {
+            isClick = true;
+
+            if (lastClickedCards != null)
+            {
+                lastClickedCards.transform.localScale -= Vector3.one * 0.1f;
+                UIObject.transform.localScale += Vector3.one * 0.1f;
+            }
+
+            lastClickedCards = UIObject;
+
+        }
+
+        if (isClick && UIObject == UIObject.CompareTag("BackGround"))
+        {
+            lastClickedCards.transform.localScale -= Vector3.one * 0.1f;
+            lastClickedCards = null;
+            isClick = false;
+        }
     }
 
     void UIEnter(GameObject UIObject)
     {
-        if(UIObject == UIObject.CompareTag("Cards"))
+        if (!isClick)
         {
-            UIObject.transform.localScale += Vector3.one * 0.1f;
+            if (UIObject == UIObject.CompareTag("Cards"))
+            {
+                UIObject.transform.localScale += Vector3.one * 0.1f;
+            }
+
         }
+
 
         if (UIObject == UIObject.CompareTag("Relics"))
         {
             Animator anim = UIObject.GetComponent<Animator>();
             anim.SetTrigger("RelicJump");
         }
+
     }
 
     void UIExit(GameObject UIObject)
     {
-        if (UIObject == UIObject.CompareTag("Cards"))
+        if (!isClick)
         {
-            UIObject.transform.localScale -= Vector3.one * 0.1f;
+            if (UIObject == UIObject.CompareTag("Cards"))
+            {
+                UIObject.transform.localScale -= Vector3.one * 0.1f;
+            }
         }
-
-
     }
 }

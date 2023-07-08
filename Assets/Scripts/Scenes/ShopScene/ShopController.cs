@@ -46,10 +46,10 @@ public class ShopController : MonoBehaviour
             for(int i = 0; i < ShopCards.Length; i++)
             {
                 cardObject = Instantiate(cardPrefab, cardPlace[i].transform.position, cardPlace[i].transform.rotation);       // カードのPrefabを生成
-                cardObject.transform.SetParent(Canvas.transform);                                                                   // Canvasの子にする
-                cardController = cardObject.GetComponent<CardController>();                                                         // 生成したPrefabのCardControllerを取得
-                cardController.Init(ShopCards[i]);                                                                                  // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
-
+                cardObject.transform.SetParent(Canvas.transform);                                                             // Canvasの子にする
+                cardController = cardObject.GetComponent<CardController>();                                                   // 生成したPrefabのCardControllerを取得
+                cardController.Init(ShopCards[i]);                                                                            // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
+                cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                      // 値札を表示
             }
 
             // 回復カードは固定なので別途表示
@@ -57,6 +57,7 @@ public class ShopController : MonoBehaviour
             cardObject.transform.SetParent(Canvas.transform);
             cardController = cardObject.GetComponent<CardController>();
             cardController.Init(heelPotionCardID);
+            cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);
 
             uiManager.UIEventReload();
         }
@@ -118,14 +119,3 @@ public class ShopController : MonoBehaviour
         uiManager.UIEventReload();
     }
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CardViewManager : MonoBehaviour
 {
-    [SerializeField] Text cardNameText,cardEffectText,cardCostText;
+    [SerializeField] Text cardNameText,cardEffectText,cardCostText, cardPriceText;
     [SerializeField] Image cardImage;
 
     public void ViewCard(CardDataManager cardDataManager) // cardDataManagerÇÃÉfÅ[É^éÊìæÇ∆îΩâf
@@ -13,6 +13,7 @@ public class CardViewManager : MonoBehaviour
         cardNameText.text = cardDataManager._cardName;
         cardEffectText.text = cardDataManager._cardEffect;
         cardCostText.text = cardDataManager._cardCost.ToString();
+        cardPriceText.text = cardDataManager._cardPrice.ToString();
         cardImage.sprite = cardDataManager._cardImage;
     }
 }

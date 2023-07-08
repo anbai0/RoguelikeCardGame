@@ -55,6 +55,10 @@ public class CardData : ScriptableObject
     /// </summary>
     public int cardState;
     /// <summary>
+    /// カードの金額
+    /// </summary>
+    public int cardPrice;
+    /// <summary>
     /// カードのイメージ
     /// </summary>
     public Sprite cardImage;

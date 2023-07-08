@@ -15,6 +15,7 @@ public class CardDataManager
     public int _cardHealingPower;
     public int _cardGuardPoint;
     public int _cardState;
+    public int _cardPrice;
     public Sprite _cardImage;
     
 
@@ -31,6 +32,7 @@ public class CardDataManager
         _cardHealingPower = cardData.cardHealingPower;
         _cardGuardPoint = cardData.cardGuardPoint;
         _cardState = cardData.cardState;
+        _cardPrice = cardData.cardPrice;
         _cardImage = cardData.cardImage;
     }
 }
