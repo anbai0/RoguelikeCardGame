@@ -5,32 +5,15 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
-    private float speed = 1f;
+    private float speed = 10f;
 
     void Update()
     {
-        // Wキー（前方移動）
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.position += speed * transform.forward * Time.deltaTime;
-        }
+        // プレイヤーの移動
+        float moveHorizontal = Input.GetAxisRaw("Horizontal");      //コントローラなどの場合はGetAxisで書く
+        float moveVertical = Input.GetAxisRaw("Vertical");
 
-        // Sキー（後方移動）
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position -= speed * transform.forward * Time.deltaTime;
-        }
-
-        // Dキー（右移動）
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position += speed * transform.right * Time.deltaTime;
-        }
-
-        // Aキー（左移動）
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position -= speed * transform.right * Time.deltaTime;
-        }
+        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical).normalized;    //正規化
+        transform.Translate(movement * speed * Time.deltaTime);
     }
 }

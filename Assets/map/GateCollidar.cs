@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class GateCollidar : MonoBehaviour
 {
-     private GameObject cameraPos;
+    private GameObject cameraPos;
 
-    [SerializeField]
-    private GameObject[] bossrooms;
     private GameObject currentRoom;
     public int roomNumber; 
 
-    public MapJenerator mapjenerator;
+
+    private MapGenerator mapGenerator;
 
     enum roomNum
     {
@@ -27,17 +26,18 @@ public class GateCollidar : MonoBehaviour
         ROOM10,
         ROOM11,
         ROOM12,
-    };
-    enum bossRoomNum
-    {
-        BOSSROOM1 = 0,
+        BOSSROOM1,
         BOSSROOM2,
-    }
+    };
+
     // Start is called before the first frame update
     void Start()
     {
-       // currentRoom = mapjenerator.rooms[roomNumber];
-        
+        // currentRoom = mapGenerator.rooms[roomNumber];
+
+        mapGenerator = GameObject.FindObjectOfType<MapGenerator>();
+
+
     }
 
     // Update is called once per frame
@@ -51,49 +51,45 @@ public class GateCollidar : MonoBehaviour
         
         if (other.CompareTag("Player"))
         {
-            
-
 
             Camera cam = Camera.main;
+
+
             if (gameObject.CompareTag("gateforward"))
             {
-                //GameObject nextroom = mapjenerator.rooms[roomNumber + 3];
-                GameObject nextroom = mapjenerator.rooms[roomNumber];
-                Transform cameraPos = nextroom.transform.GetChild(5);
-                cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(-4, 1, 0);
-                //roomNumber += 3;
+                GameObject nextroom = mapGenerator.rooms[roomNumber];       //当たった各gateに設定されているroomNumberのroomのオブジェクトを取得する
+                Transform cameraPos = nextroom.transform.GetChild(5);       //子オブジェクトの６番目であるcameraPosのTransformを取得
+                cam.transform.position = cameraPos.position;                //取得したTransformのPositionをカメラのPositionに代入
+                other.transform.position = nextroom.transform.position + new Vector3(0, 1, -4);     //Playerを次の部屋に移動させる
+                Debug.Log(nextroom);
+
             }
             if (gameObject.CompareTag("gateright"))
             {
-                //GameObject nextroom = mapjenerator.rooms[roomNumber + 1];
-                GameObject nextroom = mapjenerator.rooms[roomNumber];
+                GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(0,1,4);
-                //roomNumber += 1;
+                other.transform.position = nextroom.transform.position + new Vector3(-4,1,0);
+                Debug.Log(nextroom);
+
             }
             if (gameObject.CompareTag("gateleft"))
             {
-                Debug.Log(roomNumber + "roomNUM");
 
-                //GameObject nextroom = mapjenerator.rooms[roomNumber - 1];
-                GameObject nextroom = mapjenerator.rooms[roomNumber];
+                GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(
-                    0, 1, -4);
-                //roomNumber -= 1;
+                other.transform.position = nextroom.transform.position + new Vector3(4, 1, 0);
+                Debug.Log(nextroom);
 
             }
             if (gameObject.CompareTag("gateback"))
             {
-                //Transform cameraPos = mapjenerator.rooms[roomNumber - 4].transform.GetChild(5);
-                GameObject nextroom = mapjenerator.rooms[roomNumber];
+                GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(4, 1, 0);
-                //roomNumber -= 4;
+                other.transform.position = nextroom.transform.position + new Vector3(0, 1, 4);
+                Debug.Log(nextroom);
 
             }
 

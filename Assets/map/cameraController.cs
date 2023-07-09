@@ -9,7 +9,7 @@ public class cameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(-10, 6, 0);
+        //transform.position = new Vector3(-10, 6, 0);
         //transform.rotation =  Quaternion.Euler(30, 90, 0);
        
     }
