@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1424541092887709223}
   m_Layer: 0
-  m_Name: gateBack(floor)
+  m_Name: gateBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
