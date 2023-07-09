@@ -33,7 +33,7 @@ public class MapGenerator : MonoBehaviour
 
     enum RoomNum
     {
-        Room1 = 0,
+        Room1 = 1,
         Room2,
         Room3,
         Room4,
@@ -65,7 +65,7 @@ public class MapGenerator : MonoBehaviour
         int random = Random.Range(0, 100);
         if (random % 2 == 0)
         {
-            player.transform.position = rooms[(int)RoomNum.Room2].transform.position;
+            player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room3].transform.position, Quaternion.Euler(0f, 180f, 0f));
             Camera cam = Camera.main;
             cam.transform.position = cameraPos2.transform.position;
@@ -73,7 +73,7 @@ public class MapGenerator : MonoBehaviour
         }
         else
         {
-            player.transform.position = rooms[(int)RoomNum.Room3].transform.position;
+            player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room2].transform.position, Quaternion.identity);
             Camera cam = Camera.main;
             cam.transform.position = cameraPos3.transform.position;
@@ -85,23 +85,23 @@ public class MapGenerator : MonoBehaviour
     {
         if (isPlayerLeft)
         {
-            GameObject gateRightObj = rooms[(int)RoomNum.Room5].transform.GetChild(3).transform.GetChild(0).gameObject;         //gateRightというObjectを取得
-            MeshRenderer gateRight = gateRightObj.GetComponent<MeshRenderer>();                                             //メッシュレンダラーを取得し
-            gateRight.enabled = false;                                                                                      //非表示に
-            BoxCollider gateRightCol = gateRightObj.GetComponent<BoxCollider>();                                    //BOXColliderを取得し
-            gateRightCol.isTrigger = false;
-            Instantiate(treasureBox, rooms[(int)RoomNum.Room5].transform.position, Quaternion.identity);
-            Instantiate(smallEnemy, rooms[(int)RoomNum.Room8].transform.position, Quaternion.identity);
-        }
-        else
-        {
-            GameObject gateLeftObj = rooms[(int)RoomNum.Room8].transform.GetChild(0).transform.GetChild(0).gameObject;
-            MeshRenderer gateLeft = gateLeftObj.GetComponent<MeshRenderer>();
-            gateLeft.enabled = false;
-            BoxCollider gateLeftCol = gateLeftObj.GetComponent<BoxCollider>();
-            gateLeftCol.isTrigger = false;
-            Instantiate(treasureBox, rooms[(int)RoomNum.Room8].transform.position, Quaternion.identity);
-            Instantiate(smallEnemy, rooms[(int)RoomNum.Room5].transform.position, Quaternion.identity);
+        //    GameObject gateRightObj = rooms[(int)RoomNum.Room5].transform.GetChild(3).transform.gameObject;         //gateRightというObjectを取得
+        //    //MeshRenderer gateRight = gateRightObj.GetComponent<MeshRenderer>();                                             //メッシュレンダラーを取得し
+        //    //gateRight.enabled = false;                                                                                      //非表示に
+        //    BoxCollider gateRightCol = gateRightObj.GetComponent<BoxCollider>();                                    //BOXColliderを取得し
+        //    gateRightCol.isTrigger = false;
+        //    Instantiate(treasureBox, rooms[(int)RoomNum.Room5].transform.position, Quaternion.identity);
+        //    Instantiate(smallEnemy, rooms[(int)RoomNum.Room8].transform.position, Quaternion.identity);
+        //}
+        //else
+        //{
+        //    GameObject gateLeftObj = rooms[(int)RoomNum.Room8].transform.GetChild(0).transform.gameObject;
+        //    //MeshRenderer gateLeft = gateLeftObj.GetComponent<MeshRenderer>();
+        //    //gateLeft.enabled = false;
+        //    BoxCollider gateLeftCol = gateLeftObj.GetComponent<BoxCollider>();
+        //    gateLeftCol.isTrigger = false;
+        //    Instantiate(treasureBox, rooms[(int)RoomNum.Room8].transform.position, Quaternion.identity);
+        //    Instantiate(smallEnemy, rooms[(int)RoomNum.Room5].transform.position, Quaternion.identity);
         }
     }
 
@@ -139,19 +139,19 @@ public class MapGenerator : MonoBehaviour
 
     private void BonfireSpawn()
     {
-        int random = Random.Range(0, 100);
-        if (random % 2 == 0)
-        {
-            Instantiate(bonfire, rooms[(int)RoomNum.Room9].transform.position, Quaternion.identity);
-            Instantiate(tent, rooms[(int)RoomNum.Room12].transform.position, Quaternion.identity);
-        }
-        else
-        {
-            Instantiate(bonfire, rooms[(int)RoomNum.Room12].transform.position, Quaternion.identity);
-            Instantiate(tent, rooms[(int)RoomNum.Room9].transform.position, Quaternion.identity);
-            tent.transform.Rotate(new Vector3(0, 180f, 0));
-        }
-        BossRoomSetting(random % 2 == 0);
+        //int random = Random.Range(0, 100);
+        //if (random % 2 == 0)
+        //{
+        //    Instantiate(bonfire, rooms[(int)RoomNum.Room9].transform.position, Quaternion.identity);
+        //    Instantiate(tent, rooms[(int)RoomNum.Room12].transform.position, Quaternion.identity);
+        //}
+        //else
+        //{
+        //    Instantiate(bonfire, rooms[(int)RoomNum.Room12].transform.position, Quaternion.identity);
+        //    Instantiate(tent, rooms[(int)RoomNum.Room9].transform.position, Quaternion.identity);
+        //    tent.transform.Rotate(new Vector3(0, 180f, 0));
+        //}
+        //BossRoomSetting(random % 2 == 0);
     }
 
     private void SmallEnemySpawn()

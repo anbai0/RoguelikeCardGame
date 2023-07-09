@@ -55,40 +55,40 @@ public class GateCollidar : MonoBehaviour
             Camera cam = Camera.main;
 
 
-            if (gameObject.CompareTag("gateforward"))
+            if (gameObject.CompareTag("GateForward"))
             {
                 GameObject nextroom = mapGenerator.rooms[roomNumber];       //当たった各gateに設定されているroomNumberのroomのオブジェクトを取得する
                 Transform cameraPos = nextroom.transform.GetChild(5);       //子オブジェクトの６番目であるcameraPosのTransformを取得
                 cam.transform.position = cameraPos.position;                //取得したTransformのPositionをカメラのPositionに代入
-                other.transform.position = nextroom.transform.position + new Vector3(0, 1, -4);     //Playerを次の部屋に移動させる
+                other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, -4);     //Playerを次の部屋に移動させる
                 Debug.Log(nextroom);
 
             }
-            if (gameObject.CompareTag("gateright"))
+            if (gameObject.CompareTag("GateRight"))
             {
                 GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(-4,1,0);
+                other.transform.position = nextroom.transform.position + new Vector3(-4, -1.35f, 0);
                 Debug.Log(nextroom);
 
             }
-            if (gameObject.CompareTag("gateleft"))
+            if (gameObject.CompareTag("GateLeft"))
             {
 
                 GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(4, 1, 0);
+                other.transform.position = nextroom.transform.position + new Vector3(4, -1.35f, 0);
                 Debug.Log(nextroom);
 
             }
-            if (gameObject.CompareTag("gateback"))
+            if (gameObject.CompareTag("GateBack"))
             {
                 GameObject nextroom = mapGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(0, 1, 4);
+                other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, 4);
                 Debug.Log(nextroom);
 
             }
