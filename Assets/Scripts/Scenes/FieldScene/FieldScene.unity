@@ -2595,8 +2595,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fade: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce, type: 3}
-  fadeCanvas: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
   fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
     type: 3}
 --- !u!114 &1136374013
@@ -3221,28 +3219,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1568610422}
-  - component: {fileID: 1568610421}
+  - component: {fileID: 1568610423}
   m_Layer: 0
-  m_Name: GetTagObject
+  m_Name: FindObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1568610421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1568610420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 87d205624dc249143a8b68c6176e657b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: GameController
-  objectsWithTag: []
 --- !u!4 &1568610422
 Transform:
   m_ObjectHideFlags: 0
@@ -3258,6 +3242,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1568610423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568610420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ec079267e2d5e45b2d0ed846c8e0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: 
+  objectsWithTag: []
+  targetComponent: {fileID: 0}
+  objectsWithComponent: []
 --- !u!1 &1592340464 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8956413370411670574, guid: d76e4a668c068d04cb7a4b5b0ed5f7b0,
