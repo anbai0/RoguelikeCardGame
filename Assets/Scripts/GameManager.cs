@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Instance.ReadPlayer("Warrior");
     }
 
     void Start()
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
 
     public void ReadPlayer(string playerJob)
     {
