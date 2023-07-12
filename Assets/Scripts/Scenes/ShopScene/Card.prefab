@@ -412,7 +412,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -421,6 +424,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 0
 --- !u!114 &5132189345565835581
 MonoBehaviour:
   m_ObjectHideFlags: 0

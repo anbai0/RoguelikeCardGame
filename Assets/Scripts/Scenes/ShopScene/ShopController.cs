@@ -13,15 +13,15 @@ public class ShopController : MonoBehaviour
     [SerializeField] UIManagerShopScene uiManager;
 
 
-    const int heelCardID = 3;   //回復カードのID
-    bool isHeelPotion = false;  //回復カードを持っているか？
+    const int healCardID = 3;   //回復カードのID
+    [SerializeField] bool hasHealPotion = false;  //回復カードを持っているか？
 
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject Canvas;
     [SerializeField] List<GameObject> cardPlace;     // Cardの生成位置
 
     GameObject cardObject;  // 生成したカードIDを格納する
-    List<int> shopCardsID = null;
+    [SerializeField] List<int> shopCardsID = null;
 
     // カードの値段を表示するために必要なオブジェクトを格納する
     [SerializeField] List<GameObject> shopCards = null;
@@ -42,7 +42,7 @@ public class ShopController : MonoBehaviour
         if (Lottery.isInitialize)
         {
             ShopLottery();
-            shopCardsID.Add(heelCardID);       // 回復カードを追加
+            shopCardsID.Add(healCardID);       // 回復カードを追加
 
             // ショップに並ぶカード表示
             for (int i = 0; i < shopCardsID.Count; i++)
@@ -51,18 +51,24 @@ public class ShopController : MonoBehaviour
             }
 
             uiManager.UIEventReload();          // UI(カード)を表示
+            Lottery.isInitialize = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
-        {
-            if (tmpID >= 20)
-                tmpID = 0;
+        PriceCheck();
+        PotionCheck();
 
-            tmpID++;
 
-            cardController.Init(tmpID);
-            //DebugLottery();
-        }
+
+        //if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
+        //{
+        //    if (tmpID >= 20)
+        //        tmpID = 0;
+
+        //    tmpID++;
+
+        //    cardController.Init(tmpID);
+        //    //DebugLottery();
+        //}
 
     }
 
@@ -76,7 +82,6 @@ public class ShopController : MonoBehaviour
         shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
         Debug.Log("カード1:" + shopCardsID[0] + "\nカード2:" + shopCardsID[1] + "\nカード3:" + shopCardsID[2]);
 
-        Lottery.isInitialize = false;
     }
 
     /// <summary>
@@ -102,7 +107,12 @@ public class ShopController : MonoBehaviour
         for (int i = 0; i < shopCards.Count; i++)
         {
             CardController card = shopCards[i].GetComponent<CardController>();
-            if (playerData._money < card.cardDataManager._cardPrice)     //所持金が足りなかったら
+            if (playerData._money > card.cardDataManager._cardPrice)     // 所持金が足りるなら
+            {
+                Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
+                textComponent.color = Color.white;                                                              // 白で表示
+            }
+            else
             {
                 Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
                 textComponent.color = Color.red;                                                                // 赤で表示
@@ -110,15 +120,41 @@ public class ShopController : MonoBehaviour
 
         }
     }
-
+    
+    public void PotionCheck()
+    {
+        foreach(int cardsID in playerData._deckList)
+        {
+            if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
+            {
+                hasHealPotion = true;
+            }
+        }
+    }
+    
     public void BuyCards(GameObject selectCard)
     {
         for (int i = 0; i < shopCards.Count; i++)
         {
-            if (selectCard == shopCards[i])
+            if (selectCard == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
             {
                 CardController card = shopCards[i].GetComponent<CardController>();
-                playerData._deckList.Add(shopCardsID[i]);
+
+                if (playerData._money > card.cardDataManager._cardPrice)            // 所持金が足りるなら
+                {
+                    if (shopCardsID[i] != shopCardsID[healCardID])                  // 選んだカードが回復カードではなかった場合
+                    {
+                        playerData._money -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                        playerData._deckList.Add(shopCardsID[i]);                   // デッキに加える
+                        selectCard.SetActive(false);
+
+                    } else if (!hasHealPotion)   // 選んだカードが回復カードで、回復カードを所持していない場合
+                    {
+                        playerData._money -= card.cardDataManager._cardPrice;
+                        playerData._deckList.Add(shopCardsID[i]);
+                    }
+                }
+                    
             }
         }
 
@@ -150,7 +186,7 @@ public class ShopController : MonoBehaviour
         cardObject = Instantiate(cardPrefab, cardPlace[3].transform.position, cardPlace[3].transform.rotation);
         cardObject.transform.SetParent(Canvas.transform);
         cardController = cardObject.GetComponent<CardController>();
-        cardController.Init(heelCardID);
+        cardController.Init(healCardID);
 
         uiManager.UIEventReload();
     }

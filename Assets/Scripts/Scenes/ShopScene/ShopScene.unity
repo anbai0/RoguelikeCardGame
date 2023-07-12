@@ -227,7 +227,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 1
+  isDraggable: 0
 --- !u!1 &215877334
 GameObject:
   m_ObjectHideFlags: 0
@@ -752,7 +752,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 1
+  isDraggable: 0
 --- !u!1 &876531460
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,7 +994,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 1
+  isDraggable: 0
 --- !u!1 &999992566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1515,7 +1515,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 1
+  isDraggable: 0
 --- !u!114 &1598600396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1701,7 +1701,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 1
+  isDraggable: 0
 --- !u!1 &1899865130
 GameObject:
   m_ObjectHideFlags: 0

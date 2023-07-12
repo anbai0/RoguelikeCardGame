@@ -11,6 +11,8 @@ public class UIManagerShopScene : MonoBehaviour
 
     bool isClick = false;
 
+    Vector3 defaultScale = Vector3.one * 0.37f;
+
     GameObject lastClickedCards;
 
     void Start()
@@ -36,27 +38,29 @@ public class UIManagerShopScene : MonoBehaviour
         {
             isClick = true;
 
-            // 二つ目にクリックしたカードを大きくして、その前にクリックしたカードを小さくする
-            if (lastClickedCards != null)              
+            // カード選択状態の切り替え
+            if (lastClickedCards != null && lastClickedCards != UIObject)              
             {
-                lastClickedCards.transform.localScale -= Vector3.one * 0.1f;
+                lastClickedCards.transform.localScale = defaultScale;
                 UIObject.transform.localScale += Vector3.one * 0.1f;
+            }
+            else if (UIObject == lastClickedCards)      // 同じカードを2回クリックしたら(カード購入)
+            {
+                shopController.BuyCards(UIObject);
+                UIObject.GetComponent<Image>().color = Color.gray;          // 買ったカードを暗くする 
+                UIObject.transform.localScale = defaultScale;               // スケールを戻す
             }
 
             lastClickedCards = UIObject;
 
         }
 
-        // 同じカードをクリックしたら(クリックしたオブジェクトが最後にクリックしたカードだったら)
-        if (UIObject == lastClickedCards)
-        {
-            shopController.BuyCards(UIObject);
-        }
+
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
         if (isClick && UIObject == UIObject.CompareTag("BackGround"))
         {
-            lastClickedCards.transform.localScale -= Vector3.one * 0.1f;
+            lastClickedCards.transform.localScale = defaultScale;
             lastClickedCards = null;
             isClick = false;
         }
@@ -93,7 +97,7 @@ public class UIManagerShopScene : MonoBehaviour
         {
             if (UIObject == UIObject.CompareTag("Cards"))
             {
-                UIObject.transform.localScale -= Vector3.one * 0.1f;
+                UIObject.transform.localScale = defaultScale;
             }
         }
     }
