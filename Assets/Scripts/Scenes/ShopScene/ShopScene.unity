@@ -212,7 +212,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -221,6 +224,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 1
 --- !u!1 &215877334
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,7 +737,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -739,6 +749,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 1
 --- !u!1 &876531460
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,7 +979,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -974,6 +991,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 1
 --- !u!1 &999992566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -1488,6 +1512,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 1
 --- !u!114 &1598600396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1658,7 +1686,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
@@ -1667,6 +1698,10 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  isDraggable: 1
 --- !u!1 &1899865130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2116,6 +2151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2323046fb119a3744b54772140326def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopController: {fileID: 387374075}
   Canvas: {fileID: 1963204191}
 --- !u!4 &2100310165
 Transform:

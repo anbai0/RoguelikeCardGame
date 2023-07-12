@@ -15,7 +15,6 @@ public class UIManagerShopScene : MonoBehaviour
 
     void Start()
     {
-        ShopController shopController = GetComponent<ShopController>();
         UIEventReload();
     }
 

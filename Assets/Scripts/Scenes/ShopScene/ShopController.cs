@@ -117,7 +117,7 @@ public class ShopController : MonoBehaviour
         {
             if (selectCard == shopCards[i])
             {
-                CardController se = selectCard.GetComponent<CardController>();
+                CardController card = shopCards[i].GetComponent<CardController>();
                 playerData._deckList.Add(shopCardsID[i]);
             }
         }

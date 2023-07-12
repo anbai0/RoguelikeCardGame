@@ -18,7 +18,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     [SerializeField] public UnityEvent onExit = null;
     [SerializeField] public UnityEvent onDrop = null;
 
-    [SerializeField] private bool isDraggable = true;   // trueにするとUIをドラッグアンドドロップできるようになる
+    [SerializeField] private bool isDraggable = false;   // trueにするとUIをドラッグアンドドロップできるようになる
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -80,13 +80,13 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 右クリック
+        // 左クリック
         if (eventData.button == PointerEventData.InputButton.Left)
         {
             onLeftClick?.Invoke();
         }
 
-        // 左クリック
+        // 右クリック
         if (eventData.button == PointerEventData.InputButton.Right)
         {
             onRightClick?.Invoke();
