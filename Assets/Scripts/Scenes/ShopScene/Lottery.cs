@@ -105,80 +105,75 @@ public class Lottery : MonoBehaviour
 
 
 
-    public int[] SelectCardByRarity(int[] selectRarity)
+    public List<int> SelectCardByRarity(List<int> selectRarity)
     {
+        List<int> lotteryResult = new List<int>();
 
-        int[] lotteryResult = new int[selectRarity.Length];
-        //int result1, result2, result3;
-
-        
-        for (int i = 0; i < selectRarity.Length; i++)
+        for (int i = 0; i < selectRarity.Count; i++)
         {
             //カードの抽選
-            lotteryResult[i] = CardLottery(selectRarity[i]);
+            int selectedCard = CardLottery(selectRarity[i]);
 
             //指定したレアリティにカードがなかった時の再抽選
-            if (lotteryResult[i] == -1)
+            if (selectedCard == -1)
             {
                 Debug.Log("a");
                 switch (selectRarity[i])
                 {
                     case 1:
-                        lotteryResult[i] = CardLottery(2);
-                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];   //抽選した各レアリティのListの要素をCardIDに変換
+                        selectedCard = CardLottery(2);
+                        selectedCard = CardRarity2List[selectedCard];   //抽選した各レアリティのListの要素をCardIDに変換
                         break;
                     case 2:
-                        lotteryResult[i] = CardLottery(1);
-                        lotteryResult[i] = CardRarity1List[lotteryResult[i]];
+                        selectedCard = CardLottery(1);
+                        selectedCard = CardRarity1List[selectedCard];
                         break;
                     case 3:
-                        lotteryResult[i] = CardLottery(2);
-                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];
+                        selectedCard = CardLottery(2);
+                        selectedCard = CardRarity2List[selectedCard];
                         break;
                     default:
                         break;
                 }
-            }else
+            }
+            else
             {
                 //抽選した各レアリティのListの要素をCardIDに変換
                 switch (selectRarity[i])
                 {
                     case 1:
-                        lotteryResult[i] = CardRarity1List[lotteryResult[i]];
+                        selectedCard = CardRarity1List[selectedCard];
                         break;
                     case 2:
-                        lotteryResult[i] = CardRarity2List[lotteryResult[i]];
+                        selectedCard = CardRarity2List[selectedCard];
                         break;
                     case 3:
-                        lotteryResult[i] = CardRarity3List[lotteryResult[i]];
+                        selectedCard = CardRarity3List[selectedCard];
                         break;
                     default:
                         break;
                 }
             }
 
+            lotteryResult.Add(selectedCard);
+
             // ShopControllerから呼ばれたら
             if (fromShopController)
             {
-                ShopCards.Add(lotteryResult[i]);
+                ShopCards.Add(selectedCard);
             }
         }
 
         fromShopController = false;
 
-        //result1 = lotteryResult[0];
-        //result2 = lotteryResult[1];
-        //result3 = lotteryResult[2];
-
-
-        return (lotteryResult);
+        return lotteryResult;
     }
 
 
 
     void zako()     // レア度1が２枚、レア度2が１枚 
     {
-        
+
     }
 
     void kyoutakara()   // レア度1が１枚、レア度2が２枚
@@ -190,6 +185,12 @@ public class Lottery : MonoBehaviour
     {
 
     }
-
-
 }
+
+
+
+
+
+
+
+

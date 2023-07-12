@@ -53,13 +53,14 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
         UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
-            UI.onClick.AddListener(() => UIClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
+            UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
+            UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
         }
     }
 
-    void UIClick(GameObject UIObject)
+    void UILeftClick(GameObject UIObject)
     {
         if (UIObject == warrior)
         {
@@ -83,6 +84,11 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
                 GameManager.Instance.ReadPlayer("Wizard");
             sceneManager.FieldScene();
         }
+    }
+
+    void UIRightClick(GameObject UIObject)
+    {
+
     }
 
     void UIEnter(GameObject UIObject)
