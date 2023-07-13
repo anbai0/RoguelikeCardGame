@@ -99,7 +99,8 @@ public class ShopController : MonoBehaviour
     }
 
     /// <summary>
-    /// カードを買えるかどうかを判定します
+    /// カードを買えるかどうかを判定し、
+    /// 変えなかった場合値段を赤く表示します
     /// </summary>
     void PriceCheck()
     {
