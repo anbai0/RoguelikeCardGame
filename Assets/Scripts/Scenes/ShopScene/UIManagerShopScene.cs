@@ -47,8 +47,7 @@ public class UIManagerShopScene : MonoBehaviour
             else if (UIObject == lastClickedCards)      // 同じカードを2回クリックしたら(カード購入)
             {
                 shopController.BuyCards(UIObject);
-                UIObject.GetComponent<Image>().color = Color.gray;          // 買ったカードを暗くする 
-                UIObject.transform.localScale = defaultScale;               // スケールを戻す
+
             }
 
             lastClickedCards = UIObject;

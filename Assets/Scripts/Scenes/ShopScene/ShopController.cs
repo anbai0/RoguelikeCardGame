@@ -27,6 +27,8 @@ public class ShopController : MonoBehaviour
     [SerializeField] List<GameObject> shopCards = null;
 
 
+    Vector3 defaultScale = Vector3.one * 0.37f;     // カードのデフォルトの大きさ
+ 
     [SerializeField]
     int tmpID = 0;      //デバッグ用
 
@@ -147,12 +149,19 @@ public class ShopController : MonoBehaviour
                     {
                         playerData._money -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                         playerData._deckList.Add(shopCardsID[i]);                   // デッキに加える
+
+                        selectCard.GetComponent<Image>().color = Color.gray;          // 買ったカードを暗くする 
+                        selectCard.transform.localScale = defaultScale;               // スケールを戻す
+
                         selectCard.SetActive(false);
 
                     } else if (!hasHealPotion)   // 選んだカードが回復カードで、回復カードを所持していない場合
                     {
                         playerData._money -= card.cardDataManager._cardPrice;
                         playerData._deckList.Add(shopCardsID[i]);
+
+                        selectCard.GetComponent<Image>().color = Color.gray;
+                        selectCard.transform.localScale = defaultScale;
                     }
                 }
                     
