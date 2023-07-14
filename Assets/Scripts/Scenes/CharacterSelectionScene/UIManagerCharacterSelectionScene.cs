@@ -20,6 +20,7 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
     public float targetScale = 0.9f;
 
     private float duration = 0.25f;      //色が変わるまでの秒数
+
     private float warriorElapsedTime = 0f;
     private float warriorLate;
     private float warriorScale;
@@ -50,11 +51,10 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
 
     public void UIEventReload()
     {
-        UIs = Canvas.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
-        foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
+        UIs = Canvas.GetComponentsInChildren<UIController>();       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
-            UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
-            UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
+            UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
         }
@@ -86,10 +86,6 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
         }
     }
 
-    void UIRightClick(GameObject UIObject)
-    {
-
-    }
 
     void UIEnter(GameObject UIObject)
     {
