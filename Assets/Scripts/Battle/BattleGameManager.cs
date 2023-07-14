@@ -5,134 +5,259 @@ using UnityEngine.UI;
 
 public class BattleGameManager : MonoBehaviour
 {
+    PlayerBattleAction playerScript;
+    EnemyBattleAction enemyScript;
     //プレイヤー
     GameObject player;
-    public PlayerDataManager playerData;
-    [SerializeField] public Text playerHPText;
-    [SerializeField] public Text playerAPText;
-    [SerializeField] public Text playerGPText;
-    [SerializeField] Text playerNameText;
+    PlayerDataManager playerData;
     [SerializeField] Image playerTurnDisplay;
+    PlayerConditionDisplay conditionDisplay;
 
     //エネミー
     EnemyDataManager enemyData;
-    [SerializeField] public Text enemyHPText;
-    [SerializeField] Text enemyNameText;
-    [SerializeField] public Slider enemyHPSlider;
-    [SerializeField] Image enemyImage;
     [SerializeField] Image enemyTurnDisplay;
 
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
-    CardEffectList cardEffectList;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
 
-    //プレイヤーの変数
-    public int playerHP;
-    public int playerCurrentHP;
-    int playerLastHP;
-    public int playerAP;
-    public int playerCurrentAP;
-    int playerChargeAP;
-    public int playerGP;
-    int playerLastGP;
-    public ConditionStatus playerCondition;
-    public BattleRelicStatus playerRelics;
-    //エネミーの変数
-    public int enemyHP;
-    public int enemyCurrentHP;
-    public int enemyAP;
-    public int enemyCurrentAP;
-    int enemyChargeAP;
-    public int enemyGP;
-    public ConditionStatus enemyCondition;
+    //レリック
+    RelicStatus playerRelics;
+    RelicEffectList relicEffect;
 
-    //その他の変数
-    public int roundCount;
-    public float ChangeTurnTime = 2.0f;//ターンが切り替わる速度
-    bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
-    bool isPlayerMove;//プレイヤーが行動したか判定//ChangeTurn()で使用
-    bool isChangeTurn;//行動終了ボタンを押したか判定//CardEffect(),ChangeTurn()で使用
-    bool isPlayerHealing;//プレイヤーが回復行動をとったか判定//TurnCalc()で使用
-    bool isPlayerAddGP;//プレイヤーがGPを増やしたか判定//TurnCalc()で使用
-    bool isAutoHealing;//状態異常の自動回復が発動したか判定//CardEffect()で使用
-    bool isImpatience;//状態異常の焦燥が発動したか判定//CardEffect()で使用
-    bool isBurn;//状態異常の火傷が発動したか判定//CardEffect()で使用
+    public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
+    private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
+    private bool isTurnEnd;//行動終了ボタンを押したか判定//TurnEnd()で使用
     public bool isAccelerate;//カード＜アクセラレート＞を使用したか判定//TurnCalc()で使用
-    bool isDecelerate;//カード＜アクセラレート＞の効果を無効かしたか判定//TurnCalc()で使用
-    public int reduceCost;//コストの減少を軽減する値
-    int playerMoveCount;//ラウンド中にプレイヤーが何回行動したか記録する
-    int AccelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
+    private bool isDecelerate;//カード＜アクセラレート＞の効果を無効かしたか判定//TurnCalc()で使用
+    private bool isFirstCall;//最初のラウンドのときに呼ぶ判定//EndRound()で使用
+    public bool isCoroutine;//コルーチンが動作中か判定//PlayerMove(),EnemyMove()で使用
+    public float turnTime = 1.0f;//ターンの切り替え時間
+    public float roundTime = 2.0f;//ラウンドの切り替え時間
+    private int playerMoveCount;//プレイヤーがラウンド中に行動した値
+    private int enemyMoveCount;//エネミーがラウンド中に行動した値
+    private int AccelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
+    public int roundCount;//何ラウンド目かを記録する
 
-    //Debug用変数
-    int p = 1;
-    int e = 1;
-    public int enemyAttackPower = 1;
+    //Debug用
+    int RelicID2 = 0;
+    int RelicID3 = 0;
+    int RelicID4 = 0;
+    int RelicID5 = 0;
+    int RelicID6 = 0;
+    int RelicID7 = 0;
+    int RelicID8 = 0;
+    int RelicID9 = 0;
+    int RelicID10 = 0;
+    int RelicID11 = 0;
+    int RelicID12 = 0;
+    public string enemyName = "Slime";
 
     public static BattleGameManager Instance;
     private void Awake()
     {
-        if(Instance == null) 
+        if (Instance == null)
         {
             Instance = this;
         }
     }
     private void Start()
     {
-        //Initialize("Player",0,0,0);
-        //Initialize("Enemy");
-        player = GameObject.Find("TestPlayer");
-        ReadPlayer(player);
-        playerCondition = new ConditionStatus();
-        playerRelics = new BattleRelicStatus();
-        enemyData = new EnemyDataManager("Slime");
-        enemyCondition = new ConditionStatus();
-        isChangeTurn = false;
-        isPlayerMove = false;
-        cardEffectList = GetComponent<CardEffectList>();
-        reduceCost = 0;
-        playerMoveCount = 0;
-        AccelerateCount = 0;
-        isAutoHealing = false;
-        isImpatience = false;
-        isBurn = false;
+        playerScript = GetComponent<PlayerBattleAction>();
+        enemyScript = GetComponent<EnemyBattleAction>();
+        relicEffect = GetComponent<RelicEffectList>();
+        conditionDisplay = GameObject.Find("ConditionPlace").GetComponent<PlayerConditionDisplay>();
+        //初期化
+        isPlayerTurn = false;
+        isTurnEnd = false;
         isAccelerate = false;
         isDecelerate = false;
+        isFirstCall = false;
+        isCoroutine = false;
+        playerMoveCount = 0;
+        enemyMoveCount = 0;
+        AccelerateCount = 0;
         roundCount = 0;
-        StartGame();
+        player = GameObject.Find("TestPlayer");
+        ReadPlayer(player);
+        ReadEnemy(enemyName);
+        SetStatus(playerData, enemyData);
+        StartRelicEffect();
+        InitDeck();
+        StartRound();
     }
-    
-    private void Update()
+    private void StartRound() //ラウンド開始時の効果処理
     {
+        roundCount++;//ラウンド数を加算する
+        if (isDecelerate) //アクセラレートの効果を初期化
+        {
+            UndoCardCost();
+            isDecelerate = false;
+            AccelerateCount = 0;
+        }
+        //ChageAPとCurseを加味してAPを決める
+        playerScript.SetUpAP();
+        playerScript.SaveAP();
+        enemyScript.SetUpAP();
+        enemyScript.SaveAP();
+        TurnCalc();
     }
-    private void StartGame() 
+    public void TurnCalc() //行動順を決める
     {
-        //UpdateTexts();
-        //プレイヤーのステータスを取得、表示
-        playerNameText.text = "現在のキャラ:"+ playerData._playerName;
-        playerHP = playerData._playerHP;
-        playerCurrentHP = playerHP;
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-        playerAP = playerData._playerAP;
-        playerCurrentAP = playerAP;
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-        playerGP = 0;
-        playerGPText.text = playerGP.ToString();
-        playerChargeAP = 0;
-        //エネミーのステータスを取得、表示
-        enemyNameText.text = enemyData._enemyName;
-        enemyImage.sprite = enemyData._enemyImage;
-        enemyHP = enemyData._enemyHP;
-        enemyCurrentHP = enemyHP;
-        enemyHPSlider.value = 1;
-        enemyHPText.text = enemyCurrentHP + "/" + enemyHP;
-        enemyAP = enemyData._enemyAP;
-        enemyCurrentAP = enemyAP;
-        enemyGP = 0;
-        enemyChargeAP = 0;
-
-        //プレイヤーのデッキを作成
+        conditionDisplay.ViewIcon(playerScript.GetSetPlayerCondition); //状態異常のアイコンの更新
+        Debug.Log("now weakness amount is: " + playerScript.GetSetPlayerCondition.weakness);
+        Debug.Log("now invalidBadStatuses amount is: " + playerScript.GetSetPlayerCondition.invalidBadStatus);
+        if (isAccelerate)
+        {
+            CardCostDown();
+            AccelerateCount++;
+            isAccelerate = false;
+            isDecelerate = true;
+        }
+        int playerCurrentAP = playerScript.GetSetPlayerCurrentAP;
+        int enemyCurrentAP = enemyScript.GetSetEnemyCurrentAP;
+        IsGameEnd();//戦闘の終了条件を満たしていないか確認する
+        if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
+        {
+            if (playerCurrentAP >= enemyCurrentAP) //APを比較して多い方が行動する
+            {
+                if (playerScript.IsCurse()) //呪縛になっていたら 
+                {
+                    //Curseの処理で減ったAPの更新
+                    playerScript.SetUpAP();
+                }
+                //プレイヤーの行動
+                isPlayerTurn = true;
+                isPlayerMove = false;
+                playerTurnDisplay.enabled = true;
+                enemyTurnDisplay.enabled = false;
+            }
+            else
+            {
+                if (enemyScript.IsCurse()) //呪縛になっていたら 
+                {
+                    //Curseの処理で減ったAPの更新
+                    enemyScript.SetUpAP();
+                }
+                //エネミーの行動
+                isPlayerTurn = false;
+                playerTurnDisplay.enabled = false;
+                enemyTurnDisplay.enabled = true;
+                EnemyMove();
+            }
+        }
+        else //どちらも行動できない場合
+        {
+            //ラウンドを終了する
+            playerTurnDisplay.enabled = false;
+            enemyTurnDisplay.enabled = false;
+            Invoke("EndRound", roundTime);
+        }
+    }
+    public void PlayerMove(CardController card) //プレイヤーの効果処理
+    {
+        if (isCoroutine) //コルーチンが動いているときに回ってきたらPlayerMoveは動かさない
+            return;
+        if (playerScript.GetSetPlayerCurrentAP < card.cardDataManager._cardCost) //カードのコストがプレイヤーのAPを超えたら何もしない
+        {
+            return;
+        }
+        isPlayerMove = true;//プレイヤーは行動中
+        playerScript.Move(card);
+        playerMoveCount++;
+        playerScript.PlayerAutoHealing();
+        playerScript.PlayerImpatience();
+        playerScript.PlayerBurn();
+        TurnCalc();
+    }
+    private void EnemyMove() //エネミーの効果処理
+    {
+        if (isCoroutine) //コルーチンが動いているときに回ってきたらEnemyMoveは動かさない
+            return;
+        enemyScript.Move();
+        //playerScript.TakeDamage(enemyScript.Move());
+        enemyMoveCount++;
+        enemyScript.EnemyAutoHealing();
+        enemyScript.EnemyImpatience();
+        enemyScript.EnemyBurn();
+        //playerScript.AddConditionStatus("Burn", 1);
+        playerScript.AddConditionStatus("InvalidBadStatus", 1);
+        Invoke("TurnCalc", turnTime);
+    }
+    private void EndRound() //ラウンド終了時の効果処理
+    {
+        playerScript.PlayerPoison(playerMoveCount);
+        enemyScript.EnemyPoison(enemyMoveCount);
+        playerScript.ChargeAP();
+        enemyScript.ChargeAP();
+        if (!isFirstCall) { isFirstCall = true; OnceEndRoundRelicEffect(); }
+        EndRoundRelicEffect();
+        isTurnEnd = false;//行動終了ボタンの復活
+        StartRound();
+    }
+    private void IsGameEnd()
+    {
+        if (playerScript.CheckHP()) //プレイヤーのHPがなくなったら
+        {
+            //エネミーの勝利演出
+            Debug.Log("Enemyの勝利");
+        }
+        if (enemyScript.CheckHP()) //エネミーのHPがなくなったら
+        {
+            EndGameRelicEffect();
+            //プレイヤーの勝利演出
+            Debug.Log("Playerの勝利");
+        }
+    }
+    //ここまでがゲームループ
+    //以下は関数(メソッド)
+    private void ReadPlayer(GameObject player) //プレイヤーのデータを読み取る
+    {
+        if (player.CompareTag("Warrior"))
+        {
+            playerData = new PlayerDataManager("Warrior");
+        }
+        else if (player.CompareTag("Sorcerer"))
+        {
+            playerData = new PlayerDataManager("Sorcerer");
+        }
+    }
+    private void ReadEnemy(string enemyName) //エネミーのデータを読み取る
+    {
+        if (enemyName == "Slime")
+        {
+            enemyData = new EnemyDataManager("Slime");
+        }
+        else if (enemyName == "SkeletonSwordsman")
+        {
+            enemyData = new EnemyDataManager("SkeletonSwordsman");
+        }
+        else if (enemyName == "Naga")
+        {
+            enemyData = new EnemyDataManager("Naga");
+        }
+        else if (enemyName == "Chimera")
+        {
+            enemyData = new EnemyDataManager("Chimera");
+        }
+        else if (enemyName == "DarkKnight")
+        {
+            enemyData = new EnemyDataManager("DarkKnight");
+        }
+    }
+    private void SetStatus(PlayerDataManager player, EnemyDataManager enemy)
+    {
+        //プレイヤーのステータスを割り振る
+        playerScript.SetStatus(player);
+        deckNumberList = player._deckList;
+        playerRelics = new RelicStatus();
+        SetRelics(playerRelics);
+        //エネミーのステータスを割り振る
+        enemyScript.SetStatus(enemy);
+    }
+    private void InitDeck() //デッキ生成
+    {
         deckNumberList = playerData._deckList;
         for (int init = 0; init < deckNumberList.Count; init++)// デッキの枚数分
         {
@@ -140,111 +265,70 @@ public class BattleGameManager : MonoBehaviour
             card.name = "Deck" + init.ToString();//生成したカードに名前を付ける
             card.Init(deckNumberList[init]);//デッキデータの表示
         }
-        //エネミーのデッキを作成
-
-        PreparateCalc();
     }
-    private void SetPlayerRelics()
+    private void SetRelics(RelicStatus playerRelics)
     {
-
+        //Debug用に設定したもの、GameManagerからレリックのリストを受け取れるようになったら直接呼び出せるようにする
+        playerRelics.hasRelicID2 = RelicID2;
+        playerRelics.hasRelicID3 = RelicID3;
+        playerRelics.hasRelicID4 = RelicID4;
+        playerRelics.hasRelicID5 = RelicID5;
+        playerRelics.hasRelicID6 = RelicID6;
+        playerRelics.hasRelicID7 = RelicID7;
+        playerRelics.hasRelicID8 = RelicID8;
+        playerRelics.hasRelicID9 = RelicID9;
+        playerRelics.hasRelicID10 = RelicID10;
+        playerRelics.hasRelicID11 = RelicID11;
+        playerRelics.hasRelicID12 = RelicID12;
     }
-    private void PreparateCalc() //ラウンド開始時の効果処理
+    public void StartRelicEffect() //戦闘開始時に発動するレリック効果
     {
-        roundCount++;//ラウンド数を数える
-        CardState();//カードの使用状況を更新
-        playerAP = playerData._playerAP + playerChargeAP - playerCondition.curse;
-        enemyAP = enemyData._enemyAP + enemyChargeAP;
-        playerCurrentAP = playerAP;
-        enemyCurrentAP = enemyAP;
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-        if (isDecelerate) 
-        {
-            UndoCardCost();
-            isDecelerate = false;
-        }
-        TurnCalc();
+        var ps = playerScript;
+        var es = enemyScript;
+        var pr = playerRelics;
+        ps.GetSetPlayerCondition.upStrength = relicEffect.RelicID2(pr.hasRelicID2, ps.GetSetPlayerCondition.upStrength, es.GetSetEnemyCondition.upStrength).playerUpStrength;
+        es.GetSetEnemyCondition.upStrength = relicEffect.RelicID2(pr.hasRelicID2, ps.GetSetPlayerCondition.upStrength, es.GetSetEnemyCondition.upStrength).enemyUpStrength;
+        ps.GetSetPlayerConstAP = relicEffect.RelicID3(pr.hasRelicID3, ps.GetSetPlayerConstAP, ps.GetSetPlayerChargeAP).playerConstAP;
+        ps.GetSetPlayerConstAP = relicEffect.RelicID4(pr.hasRelicID4, ps.GetSetPlayerConstAP);
+        ps.GetSetPlayerConstAP = relicEffect.RelicID5(pr.hasRelicID5, ps.GetSetPlayerConstAP, ps.GetSetPlayerChargeAP).playerConstAP;
+        ps.GetSetPlayerCondition.burn = relicEffect.RelicID6(pr.hasRelicID6, ps.GetSetPlayerCondition.burn);
+        ps.GetSetPlayerHP = relicEffect.RelicID7(pr.hasRelicID7, ps.GetSetPlayerHP);
+        ps.GetSetPlayerGP = relicEffect.RelicID8(pr.hasRelicID8, ps.GetSetPlayerGP);
+        ps.GetSetPlayerCondition.upStrength = relicEffect.RelicID12(pr.hasRelicID12, "Slime", ps.GetSetPlayerCondition.upStrength);
+        Debug.Log("スタート時のレリックが呼び出されました: " + ps.GetSetPlayerConstAP + " to " + ps.GetSetPlayerChargeAP);
     }
-    private void CardState() 
+    public void OnceEndRoundRelicEffect() //ラウンド終了時に一度だけ発動するレリック効果
     {
-        Transform deck = GameObject.Find("CardPlace").transform;
-        foreach (Transform child in deck)
-        {
-            CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardState == 1)
-            {
-                deckCard.cardDataManager._cardState = 0;
-            }
-        }
+        var ps = playerScript;
+        var pr = playerRelics;
+        ps.GetSetPlayerChargeAP = relicEffect.RelicID3(pr.hasRelicID3, ps.GetSetPlayerConstAP, ps.GetSetPlayerChargeAP).playerChargeAP;
+        ps.GetSetPlayerChargeAP = relicEffect.RelicID5(pr.hasRelicID5, ps.GetSetPlayerAP, ps.GetSetPlayerChargeAP).playerChargeAP;
     }
-    private void UndoCardCost() 
+    public void EndRoundRelicEffect() //ラウンド終了時に発動するレリック効果
     {
-        Transform deck = GameObject.Find("CardPlace").transform;
-        foreach (Transform child in deck)
-        {
-            CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardType == "Attack")
-            {
-                deckCard.cardDataManager._cardCost += AccelerateCount;
-            }
-            Text costText = child.transform.GetChild(3).GetComponentInChildren<Text>();
-            costText.text = deckCard.cardDataManager._cardCost.ToString();
-        }
+        var ps = playerScript;
+        var pr = playerRelics;
+        var pc = ps.GetSetPlayerCondition;
+        (pc.curse, pc.impatience, pc.weakness, pc.burn, pc.poison) = relicEffect.RelicID11(pr.hasRelicID11, pc.curse, pc.impatience, pc.weakness, pc.burn, pc.poison);
     }
-    private void TurnCalc() //行動するキャラクターを決める
+    public void EndGameRelicEffect() //戦闘終了時に発動するレリック効果
     {
-        if (isAccelerate) 
+        var ps = playerScript;
+        var pr = playerRelics;
+        int money = 10;
+        money = relicEffect.RelicID9(playerRelics.hasRelicID9, money);
+        ps.GetSetPlayerCurrentHP = relicEffect.RelicID10(pr.hasRelicID10, ps.GetSetPlayerCurrentHP);
+    }
+    public void TurnEnd() //行動終了ボタンを押した処理 
+    {
+        if (!isTurnEnd && !isPlayerMove) //まだボタンが押されていなかったら押すことが出来る
         {
-            CardCostDown();
-            AccelerateCount++;
-            isAccelerate = false;
-            isDecelerate = true;
-        }
-        Curse();
-        if (playerCurrentAP>0 || enemyCurrentAP>0)
-        {
-            if (playerCurrentAP >= enemyCurrentAP)//プレイヤーのAPがエネミーより多い時
-            {
-                //プレイヤーのターン
-                isPlayerTurn = true;
-                isPlayerMove = false;
-                isPlayerHealing = false;
-                isPlayerAddGP = false;
-                playerLastHP = playerCurrentHP;
-                playerLastGP = playerGP;
-                playerTurnDisplay.enabled = true;
-                enemyTurnDisplay.enabled = false;
-                Debug.Log("プレイヤーのターン" + p);
-            }
-            else
-            {
-                isPlayerTurn = false;
-                if (isPlayerAddGP == false && playerLastGP< playerGP || isPlayerHealing == false && playerLastHP < playerCurrentHP)//プレイヤーの体力かＧＰが増えていた場合
-                {
-                    StartCoroutine(WaitEnemyMove());//エネミーは時間を空けて行動する
-                    isPlayerHealing = true;
-                    isPlayerAddGP = true;
-                }
-                else 
-                {
-                    EnemyTurn();//エネミーのターン
-                }
-                playerTurnDisplay.enabled = false;
-                enemyTurnDisplay.enabled = true;
-            }
-            //行動できるキャラクターがいなければラウンドを終了する
-        }
-        else
-        {
-            playerTurnDisplay.enabled = false;
-            enemyTurnDisplay.enabled = false;
-            if (playerCondition.poison > 0) 
-            {
-                StartCoroutine(WaitPlayerPoison());
-            }
-            Invoke("ChargeAP",ChangeTurnTime);
+            isTurnEnd = true;
+            playerScript.TurnEnd();
+            TurnCalc();
         }
     }
-    private void CardCostDown() 
+    private void CardCostDown() //CardEffectListのアクセラレートが発動時の処理
     {
         Transform deck = GameObject.Find("CardPlace").transform;
         foreach (Transform child in deck)
@@ -262,214 +346,18 @@ public class BattleGameManager : MonoBehaviour
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }
-    private void Curse() 
+    private void UndoCardCost() //アクセラレートの効果を無効
     {
-        playerAP = playerData._playerAP + playerChargeAP - playerCondition.curse;
-        if (playerCurrentAP > playerAP) 
-        { 
-            playerCurrentAP = playerAP;
-        }
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-    }
-    private void PlayerPoison()
-    {
-        playerCurrentHP -= playerMoveCount * playerCondition.poison;
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-        playerMoveCount = 0;
-    }
-    IEnumerator WaitPlayerPoison() 
-    {
-        yield return new WaitForSeconds(1.0f);
-        PlayerPoison();
-    }
-    IEnumerator WaitEnemyMove() //エネミーの待機時間
-    {
-        yield return new WaitForSeconds(1.0f);
-        EnemyTurn();
-    }
-    public void ChangeTurn() //プレイヤーが行動終了ボタンを押した処理
-    {
-        if (!isChangeTurn && !isPlayerMove)
+        Transform deck = GameObject.Find("CardPlace").transform;
+        foreach (Transform child in deck)
         {
-            //プレイヤーをこのターンの間行動不能にする
-            playerCurrentAP = 0;
-            playerAPText.text = playerCurrentAP + "/" + playerAP;
-            isChangeTurn = true;
-            p++;
-            TurnCalc();//エネミーにターンを渡す
-        }
-        
-    }
-    public void PlayerTurn(CardController card) //プレイヤーの行動処理
-    {
-        CardEffect(card);
-    }
-    private void CardEffect(CardController card) //プレイヤーのカード効果を処理
-    {
-        if (isPlayerTurn && !isChangeTurn)
-        {
-            if (playerCurrentAP < card.cardDataManager._cardCost)
-            { 
-                return;
-            }
-            isPlayerMove = true;
-            PlayerMove(card);
-            CoditionAfterTurn();
-            DisplayCardEffect();
-            if (isImpatience||isAutoHealing||isBurn)
+            CardController deckCard = child.GetComponent<CardController>();
+            if (deckCard.cardDataManager._cardType == "Attack")
             {
-                StartCoroutine(WaitTurnCalc());
+                deckCard.cardDataManager._cardCost += AccelerateCount;
             }
-            else 
-            {
-                TurnCalc();
-            }
-            p++;
+            Text costText = child.transform.GetChild(3).GetComponentInChildren<Text>();
+            costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
-    }
-    private void PlayerMove(CardController card) 
-    {
-        //出したカードのコストを支払い、効果を発動する
-        int currentCardCost = card.cardDataManager._cardCost - reduceCost;
-        playerCurrentAP -= currentCardCost;
-        Debug.Log("プレイヤーの残りAPは" + playerAP);
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-        cardEffectList.ActiveCardEffect(card);
-        playerMoveCount++;
-    }
-    private void CoditionAfterTurn() 
-    {
-        //行動後の状態異常を反映する
-        if (playerCondition.autoHealing >0) 
-        {
-            isAutoHealing = true;
-            StartCoroutine(WaitPlayerAutoHealing());
-        }
-        if (playerCondition.burn > 0)
-        {
-            isBurn = true;
-            StartCoroutine(WaitPlayerBurn());
-        }
-        if (playerCondition.impatience > 0)
-        {
-            isImpatience = true;
-            StartCoroutine(WaitPlayerImpatience());
-        }
-    }
-    IEnumerator WaitPlayerAutoHealing()
-    {
-        yield return new WaitForSeconds(0.5f);
-        PlayerAutoHealing();
-    }
-    IEnumerator WaitPlayerImpatience()
-    {
-        yield return new WaitForSeconds(1.0f);
-        PlayerImpatience();
-    }
-    IEnumerator WaitPlayerBurn()
-    {
-        yield return new WaitForSeconds(0.5f);
-        PlayerBurn();
-    }
-    private void PlayerAutoHealing() 
-    {
-        playerCurrentHP += playerCondition.autoHealing;
-        if (playerCurrentHP > playerHP) 
-        {
-            playerCurrentHP = playerHP;
-        }
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-    }
-    private void PlayerImpatience() 
-    {
-        playerCurrentAP -= playerCondition.impatience;
-        if (playerCurrentAP < 0) { playerCurrentAP = 0; }
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-    }
-    private void PlayerBurn() 
-    {
-        playerCurrentHP -= playerCondition.burn;
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-    }
-    private void DisplayCardEffect() 
-    {
-        if (playerCurrentHP > playerHP)
-        {
-            playerCurrentHP = playerHP;
-        }
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-        playerAPText.text = playerCurrentAP + "/" + playerAP;
-        playerGPText.text = playerGP.ToString();
-        enemyHPText.text = enemyCurrentHP + "/" + enemyHP;
-        enemyHPSlider.value = enemyCurrentHP / (float)enemyHP;
-    }
-    IEnumerator WaitTurnCalc()
-    {
-        yield return new WaitForSeconds(1.0f);
-        TurnCalc();
-        isAutoHealing = false;
-        isBurn = false;
-        isImpatience = false;
-    }
-
-    void EnemyTurn() //エネミーの行動処理
-    {
-        int cost = 1;
-        if (enemyCurrentAP < cost) 
-        {
-            isPlayerMove = false;
-            return;
-        }
-        Debug.Log("エネミーのターン" + e);
-        enemyCurrentAP -= 1;
-        Debug.Log("エネミーの残りAPは" + enemyCurrentAP);
-        int enemyCurrentAttack = enemyAttackPower - playerGP;
-        if (playerGP > 0)
-        {
-            playerGP -= enemyAttackPower;
-            if (playerGP <= 0) 
-            {
-                playerGP = 0;
-            }
-        }
-        if (enemyCurrentAttack <= 0) 
-        {
-            enemyCurrentAttack = 0;
-        }
-        playerCurrentHP -= enemyCurrentAttack;
-        playerGPText.text = playerGP.ToString();
-        playerHPText.text = playerCurrentHP + "/" + playerHP;
-        Invoke("TurnCalc", 1.0f);
-        e++;
-    }
-    private void ReadPlayer(GameObject player)
-    {
-        if (player.CompareTag("Warrior"))
-        {
-            playerData = new PlayerDataManager("Warrior");
-        }
-        else if (player.CompareTag("Wizard"))
-        {
-            playerData = new PlayerDataManager("Wizard");
-        }
-    }
-    private void ReadEnemy(GameObject enemy)//敵のデータを取得する
-    {
-        if (enemy.CompareTag("Slime"))
-        {
-            enemyData = new EnemyDataManager("Slime");
-        }
-    }
-
-    private void ChargeAP() //最大APを増やして回復する
-    {
-        //最大APを1増やす
-        playerChargeAP += 1;
-        enemyChargeAP += 1;
-
-        isChangeTurn = false;
-        reduceCost = 0;
-        //ターンを進める
-        PreparateCalc();
     }
 }

@@ -7,69 +7,91 @@ using System.Text.RegularExpressions;
 
 public class CardEffectList : MonoBehaviour
 {
-    [SerializeField] Text playerHPText;
-    [SerializeField] Text playerAPText;
-    [SerializeField] Text playerGPText;
-    [SerializeField] Text enemyHPText;
-    [SerializeField] Slider enemyHPSlider;
+    BattleGameManager bg;
+    PlayerBattleAction player;
+    EnemyBattleAction enemy;
     int cardID;
     int cardAttackPower;
     int cardHealingPower;
     int cardGuardPoint;
-    BattleGameManager bg;
 
     public void ActiveCardEffect(CardController card)
     {
         bg = BattleGameManager.Instance;
+        player = GetComponent<PlayerBattleAction>();
+        enemy = GetComponent<EnemyBattleAction>();
         cardID = card.cardDataManager._cardID;
         cardAttackPower = card.cardDataManager._cardAttackPower;
         cardHealingPower = card.cardDataManager._cardHealingPower;
         cardGuardPoint = card.cardDataManager._cardGuardPoint;
+        //upStrength = bg.playerCondition.upStrength;
+        //weakness = bg.playerCondition.weakness;
         Debug.Log("Cardのナンバーは" + cardID);
         //カードのIDに応じて処理を呼び出す
         switch (cardID)
         {
-            case 1: CardID1();
+            case 1:
+                CardID1();
                 break;
-            case 2: CardID2();
+            case 2:
+                CardID2();
                 break;
-            case 3: CardID3(card);
+            case 3:
+                CardID3(card);
                 break;
-            case 4: CardID4();
+            case 4:
+                CardID4();
                 break;
-            case 5: CardID5(card);
+            case 5:
+                CardID5(card);
                 break;
-            case 6: CardID6();
+            case 6:
+                CardID6();
                 break;
-            case 7: CardID7();
+            case 7:
+                CardID7();
                 break;
-            case 8: CardID8(card);
+            case 8:
+                CardID8(card);
                 break;
-            case 9: CardID9();
+            case 9:
+                CardID9();
                 break;
-            case 10: CardID10();
+            case 10:
+                CardID10();
                 break;
-            case 11: CardID11();
+            case 11:
+                CardID11();
                 break;
-            case 12: CardID12();
+            case 12:
+                CardID12();
                 break;
-            case 13: CardID13(card);
+            case 13:
+                CardID13(card);
                 break;
-            case 14: CardID14();
+            case 14:
+                CardID14();
                 break;
-            case 15: CardID15(card);
+            case 15:
+                CardID15(card);
                 break;
-            case 16: CardID16();
+            case 16:
+                CardID16();
                 break;
-            case 17: CardID17(card);
+            case 17:
+                CardID17(card);
                 break;
-            case 18: CardID18(card);
+            case 18:
+                CardID18(card);
                 break;
-            case 19: CardID19(card);
+            case 19:
+                CardID19(card);
                 break;
-            case 20: CardID20();
+            case 20:
+                CardID20();
                 break;
-            default:Debug.Assert(false);
+            default:
+                Debug.Assert(false);
                 break;
         }
     }
@@ -88,7 +110,7 @@ public class CardEffectList : MonoBehaviour
     {
         Debug.Log("CardID2が呼び出されました");
         //HPを回復
-        PlayerHealing();
+        PlayerHealing(cardHealingPower);
     }
     /// <summary>
     /// 技名：魔女の霊薬
@@ -96,7 +118,7 @@ public class CardEffectList : MonoBehaviour
     private void CardID3(CardController card)
     {
         //HPを回復
-        PlayerHealing();
+        PlayerHealing(cardHealingPower);
         Destroy(card.gameObject);
     }
     /// <summary>
@@ -105,7 +127,7 @@ public class CardEffectList : MonoBehaviour
     private void CardID4()
     {
         //ガードを追加
-        PlayerAddGP();
+        PlayerAddGP(cardGuardPoint);
     }
     /// <summary>
     /// 技名：ツバメ返し
@@ -118,11 +140,17 @@ public class CardEffectList : MonoBehaviour
         card.cardDataManager._cardState = 1;
     }
 
-    IEnumerator ID5Attacking(int attackMethod,float attackInterval) 
+    IEnumerator ID5Attacking(int attackMethod, float attackInterval)
     {
+        bg.isCoroutine = true;
+        Debug.Log("現在のweakness数" + player.GetSetPlayerCondition.weakness);
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
+        Debug.Log("現在のweakness数" + player.GetSetPlayerCondition.weakness);
         PlayerAttacking(attackMethod);
+        bg.isCoroutine = false;
+        bg.TurnCalc();
+        //bg.isCardEffect = false;
     }
     /// <summary>
     /// 技名：シールドバッシュ
@@ -130,9 +158,9 @@ public class CardEffectList : MonoBehaviour
     private void CardID6()
     {
         //ガードを追加
-        PlayerAddGP();
+        PlayerAddGP(cardGuardPoint);
         //エネミーを攻撃
-        PlayerAttacking(bg.playerGP);
+        PlayerAttacking(player.GetSetPlayerGP);
     }
     /// <summary>
     /// 技名：逆鱗
@@ -140,16 +168,12 @@ public class CardEffectList : MonoBehaviour
     private void CardID7()
     {
         //バッドステータスが１つでもあった場合
-        if (bg.playerCondition.curse > 0 
-            || bg.playerCondition.impatience > 0 
-            || bg.playerCondition.weakness > 0 
-            || bg.playerCondition.burn > 0 
-            || bg.playerCondition.poison > 0) 
+        if (player.CheckBadStatus() > 0)
         {
             //バッドステータスを解除
-            ReleaseBadStatus();
+            PlayerReleaseBadStatus();
             //筋力増強を2付与
-            bg.playerCondition.upStrength += 2;
+            player.AddConditionStatus("UpStrength", 2);
         }
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
@@ -192,10 +216,10 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID9()
     {
-        //バッドステータスを解除
-        ReleaseBadStatus();
+        //全てのバッドステータスを解除
+        PlayerReleaseBadStatus();
         //状態異常無効を1付与
-        bg.playerCondition.invalidBadStatus += 1;
+        player.AddConditionStatus("InvalidBadStatus", 1);
     }
     /// <summary>
     /// 技名：クリアヴェール
@@ -203,9 +227,9 @@ public class CardEffectList : MonoBehaviour
     private void CardID10()
     {
         //ガードを追加
-        PlayerAddGP();
+        PlayerAddGP(cardGuardPoint);
         //状態異常無効を3付与
-        bg.playerCondition.invalidBadStatus += 3;
+        player.AddConditionStatus("InvalidBadStatus", 3);
     }
     /// <summary>
     /// 技名：アクセラレート
@@ -225,23 +249,25 @@ public class CardEffectList : MonoBehaviour
     }
     IEnumerator ID12Attacking(int attackMethod, float attackInterval)
     {
+        bg.isCoroutine = true;
         PlayerAttacking(attackMethod);
         for (int count = 0; count < 3; count++)
         {
             yield return new WaitForSeconds(attackInterval);
             PlayerAttacking(attackMethod);
         }
+        bg.isCoroutine = false;
+        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：フルバースト
     /// </summary>
     private void CardID13(CardController card)
     {
-        //現在のAP分のダメージを計算
-        int damage = bg.playerCurrentAP * 2;
         //APを全消費
-        bg.playerCurrentAP = 0;
-        bg.playerAPText.text = bg.playerCurrentAP + "/" + bg.playerAP;
+        //現在のAP分の2倍のダメージを計算
+        int damage = player.GetSetPlayerCurrentAP * 2;
+        player.GetSetPlayerCurrentAP = 0;
         //エネミーを攻撃
         PlayerAttacking(damage);
         //このラウンド中カードを使用不可にする
@@ -255,7 +281,7 @@ public class CardEffectList : MonoBehaviour
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
         //火傷を2付与
-        bg.enemyCondition.burn += 2;
+        enemy.AddConditionStatus("Burn", 2);
     }
     /// <summary>
     /// 技名：デビルドレイン
@@ -265,9 +291,9 @@ public class CardEffectList : MonoBehaviour
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
         //HPを回復
-        PlayerHealing();
+        PlayerHealing(cardHealingPower);
         //エネミーに衰弱を1付与
-        bg.enemyCondition.weakness += 1;
+        enemy.AddConditionStatus("Weakness", 1);
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 1;
     }
@@ -276,12 +302,12 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID16()
     {
-        if (bg.enemyCondition.burn > 0)//エネミーが火傷状態だった場合
+        if (enemy.GetSetEnemyCondition.burn > 0)//エネミーが火傷状態だった場合
         {
             //火傷の3倍のダメージでエネミーを攻撃
-            PlayerAttacking(bg.enemyCondition.burn * 3);
+            PlayerAttacking(enemy.GetSetEnemyCondition.burn * 3);
         }
-        else 
+        else
         {
             //エネミーを攻撃
             PlayerAttacking(cardAttackPower);
@@ -292,11 +318,10 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID17(CardController card)
     {
-        //行動不能の処理をもう少し弄りたい
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
         //エネミーを行動不能にする
-        bg.enemyCurrentAP = 0;
+        enemy.TurnEnd();
         //この戦闘中カードを使用不可にする
         card.cardDataManager._cardState = 2;
     }
@@ -314,16 +339,14 @@ public class CardEffectList : MonoBehaviour
         //この戦闘中カードを使用不可にする
         card.cardDataManager._cardState = 2;
     }
-    IEnumerator ID18APHealing(float attackInterval) 
-    { 
+    IEnumerator ID18APHealing(float attackInterval)
+    {
+        bg.isCoroutine = true;
         yield return new WaitForSeconds(attackInterval);
         //プレイヤーのAPを7回復する
-        bg.playerCurrentAP += 7;
-        if (bg.playerCurrentAP > bg.playerAP)
-        {
-            bg.playerCurrentAP = bg.playerAP;
-        }
-        playerAPText.text = bg.playerCurrentAP + "/" + bg.playerAP;
+        player.HealingAP(7);
+        bg.isCoroutine = false;
+        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：アヴァロンヴェール
@@ -331,9 +354,9 @@ public class CardEffectList : MonoBehaviour
     private void CardID19(CardController card)
     {
         //自動回復を1付与
-        bg.playerCondition.autoHealing += 1;
+        player.AddConditionStatus("AutoHealing", 1);
         //状態異常無効を2付与
-        bg.playerCondition.invalidBadStatus += 2;
+        player.AddConditionStatus("InvalidBadStatus", 2);
         //この戦闘中カードを使用不可にする
         card.cardDataManager._cardState = 2;
     }
@@ -343,48 +366,30 @@ public class CardEffectList : MonoBehaviour
     private void CardID20()
     {
         //火傷を1付与
-        bg.enemyCondition.burn += 1;
+        enemy.AddConditionStatus("Burn", 1);
     }
     private void PlayerAttacking(int attackMethod)//エネミーへの攻撃処理 
     {
-        attackMethod += bg.playerCondition.upStrength;//筋力増強の効果
-        attackMethod -= bg.playerCondition.weakness;//衰弱の効果
-        if (attackMethod < 0) 
-        {
-            attackMethod = 0;
-        }
-        int attackPower = attackMethod - bg.enemyGP;
-        if (bg.enemyGP > 0) 
-        {
-            bg.enemyGP -= attackMethod;
-            if (bg.enemyGP <= 0) 
-            {
-                bg.enemyGP = 0;
-            }
-        }
-        if (attackPower <= 0) 
-        {
-            attackPower = 0;
-        }
-        Debug.Log("計算後の攻撃力は" + attackPower);
-        bg.enemyCurrentHP -= attackPower;
-        enemyHPText.text = bg.enemyCurrentHP + "/" + bg.enemyHP;
-        enemyHPSlider.value = bg.enemyCurrentHP / (float)bg.enemyHP;
+        attackMethod = ChangeAttackPower(attackMethod);
+        Debug.Log("計算後の攻撃力は" + attackMethod);
+        enemy.TakeDamage(attackMethod);
     }
-    private void PlayerHealing()//プレイヤーのHP回復処理
+    private int ChangeAttackPower(int attackPower) //状態異常による攻撃力の増減
     {
-        bg.playerCurrentHP += cardHealingPower;
+        attackPower = player.PlayerUpStrength(attackPower);
+        attackPower = player.PlayerWeakness(attackPower);
+        return attackPower;
     }
-    private void PlayerAddGP()//プレイヤーにガードを追加
+    private void PlayerHealing(int healingPower)//プレイヤーのHP回復処理
     {
-        bg.playerGP += cardGuardPoint;
+        player.HealingHP(healingPower);
     }
-    private void ReleaseBadStatus()//プレイヤーに付与されたデバフの解除
+    private void PlayerAddGP(int addGP)//プレイヤーにガードを追加
     {
-        bg.playerCondition.curse = 0;
-        bg.playerCondition.impatience = 0;
-        bg.playerCondition.weakness = 0;
-        bg.playerCondition.burn = 0;
-        bg.playerCondition.poison = 0;
+        player.AddGP(addGP);
+    }
+    private void PlayerReleaseBadStatus()//プレイヤーに付与されたデバフの解除
+    {
+        player.ReleaseBadStatus();
     }
 }
