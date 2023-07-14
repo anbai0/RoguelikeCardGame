@@ -12,25 +12,34 @@ public class ShopController : MonoBehaviour
     [SerializeField] Lottery lottery;
     [SerializeField] UIManagerShopScene uiManager;
 
+    // 参照するUI
+    [SerializeField] GameObject shoppingUI;
+    [SerializeField] GameObject rest;
 
-    const int healCardID = 3;   //回復カードのID
-    [SerializeField] bool hasHealPotion = false;  //回復カードを持っているか？
+    const int healCardID = 3;   // 回復カードのID
+    const int restPrice = 70;   // 休憩の値段
 
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject Canvas;
     [SerializeField] List<GameObject> cardPlace;     // Cardの生成位置
 
     GameObject cardObject;  // 生成したカードIDを格納する
+
+    /// <summary>
+    /// ショップに出ているカードのIDを格納します
+    /// </summary>
     [SerializeField] List<int> shopCardsID = null;
 
-    // カードの値段を表示するために必要なオブジェクトを格納する
+    /// <summary>
+    /// カードの値段を表示するために必要なオブジェクトを格納します
+    /// </summary>
     [SerializeField] List<GameObject> shopCards = null;
 
 
-    Vector3 defaultScale = Vector3.one * 0.37f;     // カードのデフォルトの大きさ
+    Vector3 scaleReset = Vector3.one * 0.37f;     // カードのデフォルトの大きさ
  
     [SerializeField]
-    int tmpID = 0;      //デバッグ用
+    int tmpID = 0;      // デバッグ用
 
     private void Start()
     {
@@ -57,7 +66,7 @@ public class ShopController : MonoBehaviour
         }
 
         PriceCheck();
-        PotionCheck();
+        
 
 
 
@@ -93,9 +102,9 @@ public class ShopController : MonoBehaviour
     void CardsShow(int cardID)
     {
         cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
-        cardObject.transform.SetParent(Canvas.transform);                                                                       // Canvasの子にする
+        cardObject.transform.SetParent(shoppingUI.transform);                                                                   // Canvasの子にする
         cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
-        cardController.Init(shopCardsID[cardID]);                                                                              // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
+        cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
         cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
         shopCards.Add(cardObject);
     }
@@ -110,7 +119,7 @@ public class ShopController : MonoBehaviour
         for (int i = 0; i < shopCards.Count; i++)
         {
             CardController card = shopCards[i].GetComponent<CardController>();
-            if (playerData._money > card.cardDataManager._cardPrice)     // 所持金が足りるなら
+            if (playerData._money >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
             {
                 Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
                 textComponent.color = Color.white;                                                              // 白で表示
@@ -123,16 +132,51 @@ public class ShopController : MonoBehaviour
 
         }
     }
-    
-    public void PotionCheck()
+
+    /// <summary>
+    /// 休憩できるか判定します
+    /// </summary>
+    /// <returns>休憩できるできる場合true</returns>
+    public bool CheckRest()
+    {
+        if (playerData._playerHP == playerData._playerCurrentHP)     // 現在のHPがMAXの場合
+        {
+            rest.GetComponent<Image>().color = Color.gray;
+            return false;
+        }
+        if (playerData._money < restPrice)          // お金が足りない場合
+        {
+            rest.GetComponent<Image>().color = Color.gray;
+            ///  プライステキストを赤く表示
+            return false;
+        }
+        return true;
+
+    }
+
+    public void Rest()
+    {
+        if (playerData._playerHP == playerData._playerCurrentHP)
+        {
+            
+        }
+    }
+
+
+    /// <summary>
+    /// 魔女の霊薬を持っているか判定します
+    /// </summary>
+    /// <returns>持っている場合trueを返します</returns>
+    public bool HasHealPotion()
     {
         foreach(int cardsID in playerData._deckList)
         {
             if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
             {
-                hasHealPotion = true;
+                return true;
             }
         }
+        return false;
     }
     
     public void BuyCards(GameObject selectCard)
@@ -143,25 +187,25 @@ public class ShopController : MonoBehaviour
             {
                 CardController card = shopCards[i].GetComponent<CardController>();
 
-                if (playerData._money > card.cardDataManager._cardPrice)            // 所持金が足りるなら
+                if (playerData._money >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
                 {
                     if (shopCardsID[i] != shopCardsID[healCardID])                  // 選んだカードが回復カードではなかった場合
                     {
                         playerData._money -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                         playerData._deckList.Add(shopCardsID[i]);                   // デッキに加える
 
-                        selectCard.GetComponent<Image>().color = Color.gray;          // 買ったカードを暗くする 
-                        selectCard.transform.localScale = defaultScale;               // スケールを戻す
+                        selectCard.GetComponent<Image>().color = Color.gray;        // 買ったカードを暗くする
+                        selectCard.transform.localScale = scaleReset;               // スケールを戻す
 
                         selectCard.SetActive(false);
 
-                    } else if (!hasHealPotion)   // 選んだカードが回復カードで、回復カードを所持していない場合
+                    } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
                     {
                         playerData._money -= card.cardDataManager._cardPrice;
                         playerData._deckList.Add(shopCardsID[i]);
 
                         selectCard.GetComponent<Image>().color = Color.gray;
-                        selectCard.transform.localScale = defaultScale;
+                        selectCard.transform.localScale = scaleReset;
                     }
                 }
                     
@@ -172,32 +216,4 @@ public class ShopController : MonoBehaviour
     }
 
 
-
-    /// <summary>
-    /// カード抽選のデバッグ用です。
-    /// </summary>
-    private void DebugLottery()
-    {
-        lottery.fromShopController = true;
-        shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
-        Debug.Log("カード1:" + shopCardsID[0] + "\nカード2:" + shopCardsID[1] + "\nカード3:" + shopCardsID[2]);
-
-        // ショップに並ぶカード表示
-        for (int i = 0; i < shopCardsID.Count; i++)
-        {
-            cardObject = Instantiate(cardPrefab, cardPlace[i].transform.position, cardPlace[i].transform.rotation);       // カードのPrefabを生成
-            cardObject.transform.SetParent(Canvas.transform);                                                                   // Canvasの子にする
-            cardController = cardObject.GetComponent<CardController>();                                                         // 生成したPrefabのCardControllerを取得
-            cardController.Init(shopCardsID[i]);                                                                                  // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
-
-        }
-
-        // 回復カードは固定なので別途表示
-        cardObject = Instantiate(cardPrefab, cardPlace[3].transform.position, cardPlace[3].transform.rotation);
-        cardObject.transform.SetParent(Canvas.transform);
-        cardController = cardObject.GetComponent<CardController>();
-        cardController.Init(healCardID);
-
-        uiManager.UIEventReload();
-    }
 }
