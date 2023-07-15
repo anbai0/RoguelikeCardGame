@@ -32,7 +32,7 @@ public class PlayerData : ScriptableObject
     /// <summary>
     /// キャラクターの所持金
     /// </summary>
-    public int money;
+    public int playerMoney;
     /// <summary>
     /// キャラクターのデッキ
     /// </summary>

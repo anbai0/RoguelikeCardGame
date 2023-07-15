@@ -3,57 +3,66 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardMovement : MonoBehaviour,IDragHandler, IBeginDragHandler, IEndDragHandler,IPointerEnterHandler,IPointerExitHandler
+public class CardMovement : MonoBehaviour
 {
+    [SerializeField]
+    UIManagerBattle uIManagerBattle;
+
     public Transform cardParent;
-    public float zoomSize = 1.1f;
-    public float zoomPos = 0.3f;
+    public Vector3 defaultSize = Vector3.one * 0.22f;
+    public float zoomPos = 150f;
+
     Vector3 cardPos;
-    bool isDragging;
+    bool isInitialize = false;
+
+
     private void Start()
     {
         cardPos = transform.position;
-        isDragging = false;
-    }
-    public void OnBeginDrag(PointerEventData eventData) // ドラッグを始めるときに行う処理
-    {
-        transform.localScale = Vector3.one;
-        cardParent = transform.parent;
-        transform.SetParent(cardParent.parent, false);
-        GetComponent<CanvasGroup>().blocksRaycasts = false; // blocksRaycastsをオフにする
-        isDragging = true;
+        uIManagerBattle = FindObjectOfType<UIManagerBattle>();
     }
 
-    public void OnDrag(PointerEventData eventData) // ドラッグした時に起こす処理
+    private void Update()
     {
-        transform.position = eventData.position;
+        if (!isInitialize)
+        {
+            uIManagerBattle.UIEventsReload();
+            isInitialize = true;
+        }
     }
 
-    public void OnEndDrag(PointerEventData eventData) // カードを離したときに行う処理
+    public void CardBeginDrag(GameObject Card)
     {
-        transform.position = cardPos;
-        transform.SetParent(cardParent, false);
-        GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
+        Debug.Log("ドラッグはじめ");
+        Card.transform.localScale = defaultSize;                     // sizeを戻し
+        cardParent = Card.transform.parent;                          // カードの親を取得
+        Card.transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
+        Card.GetComponent<CanvasGroup>().blocksRaycasts = false;     // blocksRaycastsをオフにする
+    }
+
+    public void CardDrag()
+    {
+
+    }
+
+    public void CardDorp(GameObject Card)
+    {
+        Card.transform.position = cardPos;                       // カードを元の位置に戻す
+        Card.transform.SetParent(cardParent, false);
+        Card.GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
         GameObject.Find("CardPlace").GetComponent<SortDeck>().Sort();//名前順にソートをする
-        isDragging = false;
+
     }
 
-    public void OnPointerEnter(PointerEventData eventData)//マウスのポインターをかざしたときの処理
+    public void CardEnter(GameObject Card)
     {
-        if (!Input.GetMouseButton(0) && !isDragging)
-        {
-            cardPos = transform.position;
-            transform.position += Vector3.up * zoomPos;
-            transform.localScale = Vector3.one * zoomSize;
-        }
+        ////cardPos = Card.transform.position;
+        //Card.transform.position += Vector3.up * zoomPos;
+        //Card.transform.localScale = defaultSize * 1.5f;
     }
-
-    public void OnPointerExit(PointerEventData eventData)//マウスのポインターが離れたときの処理
+    public void CardExit(GameObject Card)
     {
-        if (!Input.GetMouseButton(0) && !isDragging)
-        {
-            transform.position = cardPos;
-            transform.localScale = Vector3.one;
-        }
+        //Card.transform.position = cardPos;
+        //Card.transform.localScale = defaultSize;
     }
 }

@@ -12,11 +12,13 @@ using Unity.VisualScripting;
 /// </summary>
 public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] public UnityEvent onLeftClick = null;
-    [SerializeField] public UnityEvent onRightClick = null;
-    [SerializeField] public UnityEvent onEnter = null;
-    [SerializeField] public UnityEvent onExit = null;
-    [SerializeField] public UnityEvent onDrop = null;
+    public UnityEvent onLeftClick = null;
+    public UnityEvent onRightClick = null;
+    public UnityEvent onEnter = null;
+    public UnityEvent onExit = null;
+    public UnityEvent onBeginDrag = null;
+    public UnityEvent onDrag = null;
+    public UnityEvent onDrop = null;
 
     [SerializeField] private bool isDraggable = false;   // trueにするとUIをドラッグアンドドロップできるようになる
 

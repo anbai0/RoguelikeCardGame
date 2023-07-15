@@ -23,7 +23,7 @@ public class PlayerDataManager
         _playerAP = playerData.playerAP;
         _playerCurrentAP = playerData.playerCurrentAP;
         _playerGP = playerData.playerGP;
-        _money = playerData.money;
+        _money = playerData.playerMoney;
         _deckList = playerData.deckList;
     }
 }

@@ -93,7 +93,7 @@ public class UIManagerShopScene : MonoBehaviour
             isClick = true;
 
             // カード選択状態の切り替え
-            if (lastClickedCards != null && lastClickedCards != UIObject)              
+            if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
             {
                 lastClickedCards.transform.localScale = scaleReset;
                 UIObject.transform.localScale += scaleBoost;
@@ -125,6 +125,7 @@ public class UIManagerShopScene : MonoBehaviour
 
     void UIEnter(GameObject UIObject)
     {
+        Debug.Log(UIObject);
         if (!isClick)
         {
             if (UIObject == UIObject.CompareTag("Cards"))
