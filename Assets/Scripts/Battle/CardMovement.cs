@@ -10,7 +10,7 @@ public class CardMovement : MonoBehaviour
 
     public Transform cardParent;
     public Vector3 defaultSize = Vector3.one * 0.22f;
-    public float zoomPos = 150f;
+    public float zoomPos = -77.5f;
 
     Vector3 cardPos;
     bool isInitialize = false;
@@ -58,8 +58,8 @@ public class CardMovement : MonoBehaviour
     public void CardEnter(GameObject Card)
     {
         cardPos = transform.position;
-        //transform.position += Vector3.up * zoomPos;
-        Card.transform.GetChild(0).position += new Vector3(0,15,0);
+        GetComponent<RectTransform>().anchoredPosition = Vector3.up * zoomPos;
+
 
         transform.localScale = defaultSize * 1.5f;
     }
@@ -67,6 +67,5 @@ public class CardMovement : MonoBehaviour
     {
         transform.position = cardPos;
         transform.localScale = defaultSize;
-        Card.transform.GetChild(0).position -= new Vector3(0, 15, 0);
     }
 }
