@@ -9,8 +9,8 @@ public class CardMovement : MonoBehaviour
     UIManagerBattle uIManagerBattle;
 
     public Transform cardParent;
-    public Vector3 defaultSize = Vector3.one * 0.22f;
-    public float zoomPos = -77.5f;
+    public Vector3 defaultScale = Vector3.one * 0.22f;
+    public float anchorPosY = -77.5f;
 
     Vector3 cardPos;
     bool isInitialize = false;
@@ -35,7 +35,7 @@ public class CardMovement : MonoBehaviour
     {
 
         Debug.Log("Cardの親:   " + transform.parent);
-        transform.localScale = defaultSize;                     // sizeを戻し
+        transform.localScale = defaultScale;                     // sizeを戻し
         cardParent = transform.parent;                          // カードの親を取得
         transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
         GetComponent<CanvasGroup>().blocksRaycasts = false;     // blocksRaycastsをオフにする
@@ -58,14 +58,17 @@ public class CardMovement : MonoBehaviour
     public void CardEnter(GameObject Card)
     {
         cardPos = transform.position;
-        GetComponent<RectTransform>().anchoredPosition = Vector3.up * zoomPos;
+        transform.localScale = defaultScale * 1.5f;
 
-
-        transform.localScale = defaultSize * 1.5f;
+        // スケールを大きくするとカードの一部が見えなくなるのでずらしています
+        Vector3 anchorePos = GetComponent<RectTransform>().anchoredPosition;
+        anchorePos = new Vector3(anchorePos.x, anchorPosY, anchorePos.z);
+        GetComponent<RectTransform>().anchoredPosition = anchorePos;
+        
     }
     public void CardExit(GameObject Card)
     {
         transform.position = cardPos;
-        transform.localScale = defaultSize;
+        transform.localScale = defaultScale;
     }
 }
