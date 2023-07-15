@@ -257,8 +257,8 @@ GameObject:
   - component: {fileID: -8640493512186852678}
   - component: {fileID: 4310897293274249790}
   m_Layer: 5
-  m_Name: CardPrefab 1
-  m_TagString: Untagged
+  m_Name: CardPrefab
+  m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   onDrop:
     m_PersistentCalls:
       m_Calls: []
-  isDraggable: 0
+  isDraggable: 1
 --- !u!1 &6534051872052221412
 GameObject:
   m_ObjectHideFlags: 0

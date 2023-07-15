@@ -33,36 +33,40 @@ public class CardMovement : MonoBehaviour
 
     public void CardBeginDrag(GameObject Card)
     {
-        Debug.Log("ドラッグはじめ");
-        Card.transform.localScale = defaultSize;                     // sizeを戻し
-        cardParent = Card.transform.parent;                          // カードの親を取得
-        Card.transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
-        Card.GetComponent<CanvasGroup>().blocksRaycasts = false;     // blocksRaycastsをオフにする
+
+        Debug.Log("Cardの親:   " + transform.parent);
+        transform.localScale = defaultSize;                     // sizeを戻し
+        cardParent = transform.parent;                          // カードの親を取得
+        transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
+        GetComponent<CanvasGroup>().blocksRaycasts = false;     // blocksRaycastsをオフにする
     }
 
-    public void CardDrag()
+    public void CardDrag(GameObject Card)
     {
 
     }
 
     public void CardDorp(GameObject Card)
     {
-        Card.transform.position = cardPos;                       // カードを元の位置に戻す
-        Card.transform.SetParent(cardParent, false);
-        Card.GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
-        GameObject.Find("CardPlace").GetComponent<SortDeck>().Sort();//名前順にソートをする
+        transform.position = cardPos;                                  // カードを元の位置に戻す
+        transform.SetParent(cardParent, false);
+        GetComponent<CanvasGroup>().blocksRaycasts = true;             // blocksRaycastsをオンにする
+        GameObject.Find("CardPlace").GetComponent<SortDeck>().Sort();       // 名前順にソートをする
 
     }
 
     public void CardEnter(GameObject Card)
     {
-        ////cardPos = Card.transform.position;
-        //Card.transform.position += Vector3.up * zoomPos;
-        //Card.transform.localScale = defaultSize * 1.5f;
+        cardPos = transform.position;
+        //transform.position += Vector3.up * zoomPos;
+        Card.transform.GetChild(0).position += new Vector3(0,15,0);
+
+        transform.localScale = defaultSize * 1.5f;
     }
     public void CardExit(GameObject Card)
     {
-        //Card.transform.position = cardPos;
-        //Card.transform.localScale = defaultSize;
+        transform.position = cardPos;
+        transform.localScale = defaultSize;
+        Card.transform.GetChild(0).position -= new Vector3(0, 15, 0);
     }
 }

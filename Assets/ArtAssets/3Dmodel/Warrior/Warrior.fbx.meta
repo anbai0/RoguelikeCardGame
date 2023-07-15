@@ -1,64 +1,9 @@
 fileFormatVersion: 2
-guid: 0c84dd6dd3742654998638daaa205e95
+guid: b8bada1416ee65e4b9a9929cd8ed8d57
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: aiStandardSurface7
-    second: {fileID: 2100000, guid: 2af600d379e354842a1fbcec02dfe4ea, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: hada
-    second: {fileID: 2100000, guid: 6b957e851222bb945ac6b5f642151092, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: houseki
-    second: {fileID: 2100000, guid: b167f059a052a3e41bf60f6d5ffb8937, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: kami
-    second: {fileID: 2100000, guid: e7c3a3136b2d26e4781d610665ad2a2a, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: kawa
-    second: {fileID: 2100000, guid: 45d0bd3a900b37d4faeebed028c61247, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: kawa2
-    second: {fileID: 2100000, guid: 2b7876f2576dfb24094608cc85e63066, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert1
-    second: {fileID: 2100000, guid: f300c4d0a71c93a48a73e4c2770a5f35, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: me
-    second: {fileID: 2100000, guid: 71ab14e2f7f00a34c930b5c778e6e90f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: nuno
-    second: {fileID: 2100000, guid: 755693bc9edde44418e844722b89722b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: taitu
-    second: {fileID: 2100000, guid: 0203731755c56ee44a2b87825259d905, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: tetu
-    second: {fileID: 2100000, guid: 92b5a4ab5bf177447b24479872129ea8, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

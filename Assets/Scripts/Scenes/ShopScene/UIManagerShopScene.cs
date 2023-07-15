@@ -28,7 +28,7 @@ public class UIManagerShopScene : MonoBehaviour
     [SerializeField] GameObject RestButton;
     [SerializeField] GameObject noRestButton;
 
-
+    bool isRemoved = true;
 
     void Start()
     {
@@ -43,6 +43,9 @@ public class UIManagerShopScene : MonoBehaviour
 
     public void UIEventReload()
     {
+        if(!isRemoved)
+            RemoveListeners();
+
         UIs = Canvas.GetComponentsInChildren<UIController>();       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
@@ -50,6 +53,18 @@ public class UIManagerShopScene : MonoBehaviour
             //UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
+        }
+
+        isRemoved = false;
+    }
+
+    private void RemoveListeners()
+    {
+        foreach (UIController UI in UIs)
+        {
+            UI.onLeftClick.RemoveAllListeners();
+            UI.onEnter.RemoveAllListeners();
+            UI.onExit.RemoveAllListeners();
         }
     }
 
@@ -78,7 +93,7 @@ public class UIManagerShopScene : MonoBehaviour
         if (UIObject == RestButton)
         {
             //回復する
-            shopController.Rest();
+            //shopController.Rest();
         }
         if (UIObject == noRestButton)
         {

@@ -14,7 +14,7 @@ public class UIManagerBattle : MonoBehaviour
 
     // 参照するスクリプト
 
-
+    bool isRemoved = true;
     bool isDragging;    // ドラッグ状態かを判定します
 
     void Start()
@@ -27,6 +27,9 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
+        if(!isRemoved)
+            RemoveListeners();
+
         UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
@@ -37,6 +40,21 @@ public class UIManagerBattle : MonoBehaviour
             UI.onDrag.AddListener(() => UIDrag(UI.gameObject));
             UI.onDrop.AddListener(() => UIDrop(UI.gameObject));
 
+        }
+
+        isRemoved = false;
+    }
+
+    private void RemoveListeners()
+    {
+        foreach (UIController UI in UIs)
+        {
+            UI.onLeftClick.RemoveAllListeners();
+            UI.onEnter.RemoveAllListeners();
+            UI.onExit.RemoveAllListeners();
+            UI.onBeginDrag.RemoveAllListeners();
+            UI.onDrag.RemoveAllListeners();
+            UI.onDrop.RemoveAllListeners();
         }
     }
 
@@ -84,12 +102,10 @@ public class UIManagerBattle : MonoBehaviour
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
-        Debug.Log("えんたーされた:  " + UIObject);
-        //if (!Input.GetMouseButton(0) && !isDragging)
-        //{
-        //    Debug.Log("えんたー");
-        //    UIObject.GetComponent<CardMovement>().CardEnter(UIObject);
-        //}
+        if (!Input.GetMouseButton(0) && !isDragging)
+        {
+            UIObject.GetComponent<CardMovement>().CardEnter(UIObject);
+        }
     }
 
 
@@ -100,11 +116,10 @@ public class UIManagerBattle : MonoBehaviour
     void UIExit(GameObject UIObject)
     {
 
-        //if (!Input.GetMouseButton(0) && !isDragging)
-        //{
-        //    Debug.Log("えぐ");
-        //    UIObject.GetComponent<CardMovement>().CardExit(UIObject);
-        //}
+        if (!Input.GetMouseButton(0) && !isDragging)
+        {
+            UIObject.GetComponent<CardMovement>().CardExit(UIObject);
+        }
     }
 
 

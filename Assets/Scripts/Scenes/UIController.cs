@@ -41,6 +41,8 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (!isDraggable) return;
 
+        onBeginDrag?.Invoke();
+
         canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
 
         // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
@@ -52,7 +54,9 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (!isDraggable) return;
 
-        rectTransform.anchoredPosition += eventData.delta / GetComponentInParent<Canvas>().scaleFactor;
+        onDrag?.Invoke();
+
+        transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -69,7 +73,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         {
 
             onDrop?.Invoke();
-            rectTransform.anchoredPosition = initialPosition;    // ドラッグ前の位置に戻す
+            //rectTransform.anchoredPosition = initialPosition;    // ドラッグ前の位置に戻す
         }
         else // 何もない場合                                   
         {
