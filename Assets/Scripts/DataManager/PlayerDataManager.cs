@@ -13,6 +13,7 @@ public class PlayerDataManager
     public int _playerGP;
     public int _playerMoney;
     public List<int> _deckList;
+    public List<int> _relicList;
 
     public PlayerDataManager(string name)
     {
@@ -25,5 +26,6 @@ public class PlayerDataManager
         _playerGP = playerData.playerGP;
         _playerMoney = playerData.playerMoney;
         _deckList = playerData.deckList;
+        _relicList = playerData.relicList;
     }
 }

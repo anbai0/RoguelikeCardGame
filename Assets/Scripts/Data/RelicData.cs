@@ -23,9 +23,17 @@ public class RelicData : ScriptableObject
     [SerializeField, TextArea]
     public string relicEffect;
     /// <summary>
+    /// レリックのレアリティ
+    /// </summary>
+    public int relicRarity;
+    /// <summary>
     /// レリックのダメージ
     /// </summary>
     //public int damage;
+    /// <summary>
+    /// レリックの金額
+    /// </summary>
+    public int relicPrice;
     /// <summary>
     /// レリックのイメージ
     /// </summary>
