@@ -224,6 +224,12 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
   onDrop:
     m_PersistentCalls:
       m_Calls: []
@@ -468,7 +474,8 @@ MonoBehaviour:
   lottery: {fileID: 387374076}
   uiManager: {fileID: 2100310164}
   shoppingUI: {fileID: 1016566035}
-  rest: {fileID: 0}
+  rest: {fileID: 1976851359}
+  restPriceText: {fileID: 2097210063}
   cardPrefab: {fileID: 7872756505218513689, guid: baa47ad89586ae7449c6177e1705c4ba,
     type: 3}
   Canvas: {fileID: 1963204191}
@@ -509,7 +516,7 @@ GameObject:
   - component: {fileID: 553753437}
   - component: {fileID: 553753436}
   m_Layer: 5
-  m_Name: restText (1)
+  m_Name: restText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,7 +540,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1200, y: 160}
+  m_SizeDelta: {x: 450, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &553753436
 MonoBehaviour:
@@ -746,7 +753,7 @@ GameObject:
   - component: {fileID: 684280627}
   - component: {fileID: 684280629}
   m_Layer: 0
-  m_Name: RestButton
+  m_Name: NoRestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -766,7 +773,7 @@ RectTransform:
   m_Children:
   - {fileID: 553753435}
   m_Father: {fileID: 2049788801}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -835,6 +842,12 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
   onDrop:
     m_PersistentCalls:
       m_Calls: []
@@ -851,7 +864,7 @@ GameObject:
   - component: {fileID: 803444349}
   - component: {fileID: 803444348}
   m_Layer: 5
-  m_Name: restText (2)
+  m_Name: restText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -875,7 +888,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1200, y: 160}
+  m_SizeDelta: {x: 450, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &803444348
 MonoBehaviour:
@@ -1040,6 +1053,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -1250,7 +1269,7 @@ GameObject:
   - component: {fileID: 930602218}
   - component: {fileID: 930602220}
   m_Layer: 0
-  m_Name: NoRestButton
+  m_Name: RestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1270,7 +1289,7 @@ RectTransform:
   m_Children:
   - {fileID: 803444347}
   m_Father: {fileID: 2049788801}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1337,6 +1356,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -1464,6 +1489,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -1889,6 +1920,12 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
   onDrop:
     m_PersistentCalls:
       m_Calls: []
@@ -1992,6 +2029,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -2313,6 +2356,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -2741,6 +2790,12 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
   onDrop:
     m_PersistentCalls:
       m_Calls: []
@@ -2884,6 +2939,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
@@ -3368,6 +3429,12 @@ MonoBehaviour:
   onExit:
     m_PersistentCalls:
       m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
   onDrop:
     m_PersistentCalls:
       m_Calls: []
@@ -3513,7 +3580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2049788801
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3528,8 +3595,8 @@ RectTransform:
   m_Children:
   - {fileID: 836576057}
   - {fileID: 196323760}
-  - {fileID: 684280626}
   - {fileID: 930602217}
+  - {fileID: 684280626}
   m_Father: {fileID: 1963204195}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3559,7 +3626,7 @@ GameObject:
   - component: {fileID: 2097210063}
   m_Layer: 5
   m_Name: PriceText
-  m_TagString: Untagged
+  m_TagString: Price
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3663,8 +3730,8 @@ MonoBehaviour:
   buy: {fileID: 1349941458}
   CloseShopping: {fileID: 1598600394}
   rest: {fileID: 1976851359}
-  RestButton: {fileID: 684280625}
-  noRestButton: {fileID: 930602216}
+  RestButton: {fileID: 930602216}
+  noRestButton: {fileID: 684280625}
 --- !u!4 &2100310165
 Transform:
   m_ObjectHideFlags: 0

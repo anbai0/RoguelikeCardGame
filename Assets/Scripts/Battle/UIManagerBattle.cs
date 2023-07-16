@@ -12,9 +12,7 @@ public class UIManagerBattle : MonoBehaviour
     [SerializeField] private GameObject parent;
     private UIController[] UIs;
 
-    // 参照するスクリプト
-
-    bool isRemoved = true;
+    bool isEventsReset = true;
     bool isDragging;    // ドラッグ状態かを判定します
 
     void Start()
@@ -27,7 +25,7 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
-        if(!isRemoved)
+        if(!isEventsReset)
             RemoveListeners();
 
         UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -42,7 +40,7 @@ public class UIManagerBattle : MonoBehaviour
 
         }
 
-        isRemoved = false;
+        isEventsReset = false;
     }
 
     private void RemoveListeners()

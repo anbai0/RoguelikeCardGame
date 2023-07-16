@@ -11,7 +11,7 @@ public class PlayerDataManager
     public int _playerAP;
     public int _playerCurrentAP;
     public int _playerGP;
-    public int _money;
+    public int _playerMoney;
     public List<int> _deckList;
 
     public PlayerDataManager(string name)
@@ -23,7 +23,7 @@ public class PlayerDataManager
         _playerAP = playerData.playerAP;
         _playerCurrentAP = playerData.playerCurrentAP;
         _playerGP = playerData.playerGP;
-        _money = playerData.playerMoney;
+        _playerMoney = playerData.playerMoney;
         _deckList = playerData.deckList;
     }
 }

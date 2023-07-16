@@ -32,13 +32,8 @@ public class UIManagerShopScene : MonoBehaviour
 
     void Start()
     {
+        shopController.CheckRest();
         UIEventReload();
-        restUI.SetActive(false);
-    }
-
-    private void Update()
-    {
-        
     }
 
     public void UIEventReload()
@@ -50,7 +45,6 @@ public class UIManagerShopScene : MonoBehaviour
         foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
-            //UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
         }
@@ -72,37 +66,31 @@ public class UIManagerShopScene : MonoBehaviour
     {
 
         #region ShopUI内での処理
+
+        // "購入"を押したら
         if (UIObject == buy)
         {
             shopUI.SetActive(false);
         }
-        if (UIObject == CloseShopping)
-        {
-            shopUI.SetActive(true);
-        }
-
+        // "店を出る"を押したら
         if (UIObject.tag == "ExitButton")
         {
             sceneController.sceneChange("FieldScene");
         }
-
+        // "休憩"を押したら
         if (UIObject == rest)
         {
-            restUI.SetActive(true);
+            if(shopController.CheckRest())      //休憩できる場合
+            {
+                restUI.SetActive(true);
+                UIEventReload();
+            }
         }
-        if (UIObject == RestButton)
-        {
-            //回復する
-            //shopController.Rest();
-        }
-        if (UIObject == noRestButton)
-        {
-            restUI.SetActive(false);
-        }
-
         #endregion
 
         #region ShoppingUI内での処理
+
+        // カードをクリックしたら
         if (UIObject == UIObject.CompareTag("Cards"))
         {
             isClick = true;
@@ -130,26 +118,42 @@ public class UIManagerShopScene : MonoBehaviour
             lastClickedCards = null;
             isClick = false;
         }
+
+        // 買い物を終えるボタンを押したら
+        if (UIObject == CloseShopping)
+        {
+            shopUI.SetActive(true);
+            shopController.CheckRest();
+        }
         #endregion
-    }
 
-    void UIRightClick(GameObject UIObject)
-    {
+        #region RestUI内での処理
 
+        // "休憩する"を押したら
+        if (UIObject == RestButton)
+        {
+            shopController.Rest();      // 回復する
+            shopController.CheckRest();
+            restUI.SetActive(false);
+        }
+        // "休憩しない"を押したら
+        if (UIObject == noRestButton)
+        {
+            restUI.SetActive(false);
+        }
+
+        #endregion
     }
 
     void UIEnter(GameObject UIObject)
     {
-        Debug.Log(UIObject);
         if (!isClick)
         {
             if (UIObject == UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
             }
-
         }
-
 
         if (UIObject == UIObject.CompareTag("Relics"))
         {

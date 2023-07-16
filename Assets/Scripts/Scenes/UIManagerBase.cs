@@ -11,6 +11,7 @@ public class UIManagerBase : MonoBehaviour
 {
     [SerializeField] private GameObject parent;
     private UIController[] UIs;
+    bool isRemoved = true;
 
     void Start()
     {
@@ -22,6 +23,9 @@ public class UIManagerBase : MonoBehaviour
     /// </summary>
     void UIEventsReload()
     {
+        if (!isRemoved)             // イベントの初期化
+            RemoveListeners();
+
         UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
@@ -29,17 +33,45 @@ public class UIManagerBase : MonoBehaviour
             UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
-            UI.onDrop.AddListener(() => UIDragAndDrop(UI.gameObject));
+            UI.onDrop.AddListener(() => UIDrop(UI.gameObject));
 
+        }
+
+        isRemoved = false;
+    }
+
+    private void RemoveListeners()
+    {
+        foreach (UIController UI in UIs)
+        {
+            UI.onLeftClick.RemoveAllListeners();
+            UI.onEnter.RemoveAllListeners();
+            UI.onExit.RemoveAllListeners();
         }
     }
 
 
     /// <summary>
-    /// ドラッグアンドドロップしたときに処理するメソッドです。
+    /// UIをドラッグし始めた時に処理するメソッドです。
+    /// </summary>
+    void UIBeginDrag(GameObject UIObject)
+    {
+
+    }
+
+    /// <summary>
+    /// UIをドラッグ中に処理するメソッドです。
+    /// </summary>
+    void UIDrag(GameObject UIObject)
+    {
+
+    }
+
+    /// <summary>
+    /// UIをドラッグアンドドロップしたときに処理するメソッドです。
     /// </summary>
     /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
-    void UIDragAndDrop(GameObject UIObject)
+    void UIDrop(GameObject UIObject)
     {
         Debug.Log("DragAndDrop UI: " + UIObject);
     }

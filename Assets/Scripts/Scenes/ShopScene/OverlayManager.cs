@@ -19,6 +19,6 @@ public class OverlayManager : MonoBehaviour
 
     void Update()
     {
-        myMoneyText.text = playerData._money.ToString();
+        myMoneyText.text = playerData._playerMoney.ToString();
     }
 }

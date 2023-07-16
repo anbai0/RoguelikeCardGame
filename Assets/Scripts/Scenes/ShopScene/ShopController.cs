@@ -15,6 +15,7 @@ public class ShopController : MonoBehaviour
     // 参照するUI
     [SerializeField] GameObject shoppingUI;
     [SerializeField] GameObject rest;
+    [SerializeField] Text restPriceText;
 
     const int healCardID = 3;   // 回復カードのID
     const int restPrice = 70;   // 休憩の値段
@@ -119,7 +120,7 @@ public class ShopController : MonoBehaviour
         for (int i = 0; i < shopCards.Count; i++)
         {
             CardController card = shopCards[i].GetComponent<CardController>();
-            if (playerData._money >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
+            if (playerData._playerMoney >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
             {
                 Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
                 textComponent.color = Color.white;                                                              // 白で表示
@@ -139,29 +140,30 @@ public class ShopController : MonoBehaviour
     /// <returns>休憩できるできる場合true</returns>
     public bool CheckRest()
     {
-        if (playerData._playerHP == playerData._playerCurrentHP)     // 現在のHPがMAXの場合
+        if (playerData._playerMoney < restPrice)          // お金が足りない場合
+        {
+            restPriceText.color = Color.red;              // 値段を赤く表示
+        }
+
+        // 現在HPがMaxの場合またはお金が足りない場合
+        if (playerData._playerHP == playerData._playerCurrentHP || playerData._playerMoney < restPrice)
         {
             rest.GetComponent<Image>().color = Color.gray;
             return false;
         }
-        if (playerData._money < restPrice)          // お金が足りない場合
-        {
-            rest.GetComponent<Image>().color = Color.gray;
-            ///  プライステキストを赤く表示
-            return false;
-        }
+
         return true;
 
     }
 
+    /// <summary>
+    /// 休憩の処理
+    /// </summary>
     public void Rest()
     {
-        if (playerData._playerHP == playerData._playerCurrentHP)
-        {
-            
-        }
+        playerData._playerMoney -= restPrice;
+        playerData._playerCurrentHP = playerData._playerHP;
     }
-
 
     /// <summary>
     /// 魔女の霊薬を持っているか判定します
@@ -179,6 +181,10 @@ public class ShopController : MonoBehaviour
         return false;
     }
     
+    /// <summary>
+    /// カードを買う処理です
+    /// </summary>
+    /// <param name="selectCard">選んだカード</param>
     public void BuyCards(GameObject selectCard)
     {
         for (int i = 0; i < shopCards.Count; i++)
@@ -187,21 +193,21 @@ public class ShopController : MonoBehaviour
             {
                 CardController card = shopCards[i].GetComponent<CardController>();
 
-                if (playerData._money >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
+                if (playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
                 {
-                    if (shopCardsID[i] != shopCardsID[healCardID])                  // 選んだカードが回復カードではなかった場合
+                    if (shopCardsID[i] != shopCardsID[healCardID])                        // 選んだカードが回復カードではなかった場合
                     {
-                        playerData._money -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                        playerData._deckList.Add(shopCardsID[i]);                   // デッキに加える
+                        playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                        playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
 
-                        selectCard.GetComponent<Image>().color = Color.gray;        // 買ったカードを暗くする
-                        selectCard.transform.localScale = scaleReset;               // スケールを戻す
+                        selectCard.GetComponent<Image>().color = Color.gray;              // 買ったカードを暗くする
+                        selectCard.transform.localScale = scaleReset;                     // スケールを戻す
 
                         selectCard.SetActive(false);
 
                     } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
                     {
-                        playerData._money -= card.cardDataManager._cardPrice;
+                        playerData._playerMoney -= card.cardDataManager._cardPrice;
                         playerData._deckList.Add(shopCardsID[i]);
 
                         selectCard.GetComponent<Image>().color = Color.gray;
@@ -211,8 +217,6 @@ public class ShopController : MonoBehaviour
                     
             }
         }
-
-
     }
 
 

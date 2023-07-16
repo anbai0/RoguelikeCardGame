@@ -68,7 +68,7 @@ public class PlayerBattleAction : MonoBehaviour
         playerAP = playerData._playerAP;
         playerCurrentAP = playerAP;
         playerGP = playerData._playerGP;
-        playerMoney = playerData._money;
+        playerMoney = playerData._playerMoney;
         cardEffectList = GetComponent<CardEffectList>();
         playerCondition = new ConditionStatus();
         inflictCondition = GetComponent<InflictCondition>();
