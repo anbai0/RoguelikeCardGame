@@ -289,8 +289,6 @@ public class Lottery : MonoBehaviour
                 }
             }
 
-            Debug.Log(selectedRelic);
-
             lotteryResult.Add(selectedRelic);
 
             // ShopController‚©‚çŒÄ‚Î‚ê‚½‚ç

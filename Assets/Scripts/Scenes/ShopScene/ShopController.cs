@@ -69,13 +69,18 @@ public class ShopController : MonoBehaviour
         {
             ShopLottery();
             shopCardsID.Add(healCardID);                        // 回復カードを追加
-            //shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
-            //Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
+            shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
+            Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
             // ショップに並ぶカード表示
             for (int i = 0; i < shopCardsID.Count; i++)
             {
                 CardsShow(i);
+            }
+            // ショップに並ぶレリック表示
+            for (int i = 0; i < shopRelicsID.Count; i++)
+            {
+                RelicsShow(i);
             }
 
             uiManager.UIEventReload();          // UI(カード)を表示
@@ -85,12 +90,6 @@ public class ShopController : MonoBehaviour
         PriceCheck();
 
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            lottery.fromShopController = true;
-            shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
-            Debug.Log("レリック2:   " + shopRelicsID[0] + "\nレリック3:  " + shopRelicsID[1]);
-        }
 
         //if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
         //{
@@ -113,7 +112,7 @@ public class ShopController : MonoBehaviour
         lottery.fromShopController = true;
         //(Card1, Card2, Card3) = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });     // メモ: タプルと言って複数の戻り値を受け取れる
         shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
-        //shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
+        shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
         Debug.Log("カード1:    " + shopCardsID[0] + "\nカード2:   " + shopCardsID[1] + "\nカード3:   " + shopCardsID[2]);
 
     }
