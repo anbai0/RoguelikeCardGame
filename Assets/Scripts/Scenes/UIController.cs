@@ -19,12 +19,13 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public UnityEvent onBeginDrag = null;
     public UnityEvent onDrag = null;
     public UnityEvent onDrop = null;
+    public UnityEvent onDropEmpty = null;
 
     [SerializeField] private bool isDraggable = false;   // trueにするとUIをドラッグアンドドロップできるようになる
 
     private RectTransform rectTransform;
-    private CanvasGroup canvasGroup;
-    Vector2 initialPosition;     // ドラッグ前の位置を格納
+    private CanvasGroup canvasGroup; 
+    Vector3 initialPosition;        // ドラッグ前の位置を格納
 
 
 
@@ -41,13 +42,15 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (!isDraggable) return;
 
-        onBeginDrag?.Invoke();
-
         canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
 
         // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
         canvasGroup.blocksRaycasts = false;
-        initialPosition = rectTransform.anchoredPosition;    // ドラッグ前の位置を記録
+
+        onBeginDrag?.Invoke();
+
+        initialPosition = transform.position;        // ドラッグ前の位置を記録
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -68,17 +71,8 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
         // ドラッグ操作の終了時に、ドロップされたオブジェクトが再びユーザーの入力を受け付けるようにするためtrueに
         canvasGroup.blocksRaycasts = true;
 
-        // ドロップした先に何かがあれば
-        if (eventData.pointerEnter != null)
-        {
+        onDrop?.Invoke();
 
-            onDrop?.Invoke();
-            //rectTransform.anchoredPosition = initialPosition;    // ドラッグ前の位置に戻す
-        }
-        else // 何もない場合                                   
-        {
-            rectTransform.anchoredPosition = initialPosition;    // ドラッグ前の位置に戻す
-        }
     }
     #endregion
 

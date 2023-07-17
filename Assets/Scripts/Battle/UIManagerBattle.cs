@@ -52,7 +52,6 @@ public class UIManagerBattle : MonoBehaviour
             UI.onExit.RemoveAllListeners();
             UI.onBeginDrag.RemoveAllListeners();
             UI.onDrag.RemoveAllListeners();
-            UI.onDrop.RemoveAllListeners();
         }
     }
 
@@ -61,7 +60,7 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     void UIBeginDrag(GameObject UIObject)
     {
-        if(UIObject.tag == "Cards")
+        if (UIObject.tag == "Cards")
         {
             UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
         }
@@ -81,9 +80,12 @@ public class UIManagerBattle : MonoBehaviour
     /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
     void UIDrop(GameObject UIObject)
     {
-        UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
-    }
+        if (UIObject.tag == "Cards")
+        {
+            UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
+        }
 
+    }
 
     /// <summary>
     /// 左クリックされたときに処理するメソッドです。

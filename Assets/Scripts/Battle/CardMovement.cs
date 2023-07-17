@@ -33,12 +33,9 @@ public class CardMovement : MonoBehaviour
 
     public void CardBeginDrag(GameObject Card)
     {
-
-        Debug.Log("Cardの親:   " + transform.parent);
-        transform.localScale = defaultScale;                     // sizeを戻し
+        transform.localScale = defaultScale;                    // sizeを戻し
         cardParent = transform.parent;                          // カードの親を取得
         transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
-        GetComponent<CanvasGroup>().blocksRaycasts = false;     // blocksRaycastsをオフにする
     }
 
     public void CardDrag(GameObject Card)
@@ -48,11 +45,8 @@ public class CardMovement : MonoBehaviour
 
     public void CardDorp(GameObject Card)
     {
-        transform.position = cardPos;                                  // カードを元の位置に戻す
         transform.SetParent(cardParent, false);
-        GetComponent<CanvasGroup>().blocksRaycasts = true;             // blocksRaycastsをオンにする
         GameObject.Find("CardPlace").GetComponent<SortDeck>().Sort();       // 名前順にソートをする
-
     }
 
     public void CardEnter(GameObject Card)
