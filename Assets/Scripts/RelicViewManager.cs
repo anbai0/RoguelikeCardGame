@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class RelicViewManager : MonoBehaviour
 {
-    [SerializeField] Text relicNameText,relicEffectText,relicCostText, relicPriceText;
+    [SerializeField] Text relicNameText,relicEffectText, relicPriceText;
     [SerializeField] Image relicImage;
 
     public void ViewRelic(RelicDataManager relicDataManager) // relicDataManager‚Ìƒf[ƒ^æ“¾‚Æ”½‰f
