@@ -262,12 +262,12 @@ public class Lottery : MonoBehaviour
                 switch (selectRarity[i])
                 {
                     case 1:
-                        selectedRelic = CardLottery(2);
-                        selectedRelic = cardRarity2List[selectedRelic];   // 抽選した各レアリティのListの要素をCardIDに変換
+                        selectedRelic = RelicLottery(2);
+                        selectedRelic = relicRarity2List[selectedRelic];   // 抽選した各レアリティのListの要素をRelicIDに変換
                         break;
                     case 2:
-                        selectedRelic = CardLottery(1);
-                        selectedRelic = cardRarity1List[selectedRelic];
+                        selectedRelic = RelicLottery(1);
+                        selectedRelic = relicRarity1List[selectedRelic];
                         break;
                     default:
                         break;
@@ -275,26 +275,28 @@ public class Lottery : MonoBehaviour
             }
             else
             {
-                // 抽選した各レアリティのListの要素をCardIDに変換
+                // 抽選した各レアリティのListの要素をRelicIDに変換
                 switch (selectRarity[i])
                 {
                     case 1:
-                        selectedRelic = cardRarity1List[selectedRelic];
+                        selectedRelic = relicRarity1List[selectedRelic];
                         break;
                     case 2:
-                        selectedRelic = cardRarity2List[selectedRelic];
+                        selectedRelic = relicRarity2List[selectedRelic];
                         break;
                     default:
                         break;
                 }
             }
 
+            Debug.Log(selectedRelic);
+
             lotteryResult.Add(selectedRelic);
 
             // ShopControllerから呼ばれたら
             if (fromShopController)
             {
-                shopCards.Add(selectedRelic);
+                shopRelics.Add(selectedRelic);
             }
         }
 
