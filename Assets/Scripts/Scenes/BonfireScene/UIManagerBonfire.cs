@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ShopSceneのUIManagerです。
+/// BonfireSceneのUIManagerです。
 /// ToDo: レリックがEnterされたときの処理はまだ書き終わってないので後でやります。
 /// </summary>
-public class UIManagerShopScene : MonoBehaviour
+public class UIManagerBonfire : MonoBehaviour
 {
     [SerializeField] private GameObject Canvas;
     private UIController[] UIs;
@@ -19,16 +19,15 @@ public class UIManagerShopScene : MonoBehaviour
 
     [Header("参照するスクリプト")]
     [SerializeField] private SceneController sceneController;
-    [SerializeField] private ShopController shopController;
     [SerializeField] private RestController restController;
 
     [Header("表示を切り替えるUI")]
-    [SerializeField] GameObject shopUI;
+    [SerializeField] GameObject BonfireUI;
     [SerializeField] GameObject restUI;
 
     [Header("クリック後に参照するUI")]
-    [SerializeField] GameObject buyButton;
-    [SerializeField] GameObject closeShopping;
+    [SerializeField] GameObject enhanceButton;
+    [SerializeField] GameObject closeEnhance;
     [SerializeField] GameObject restButton;
     [SerializeField] GameObject takeRestButton;
     [SerializeField] GameObject noRestButton;
@@ -37,7 +36,7 @@ public class UIManagerShopScene : MonoBehaviour
 
     void Start()
     {
-        restController.CheckRest("ShopScene");
+        restController.CheckRest("BonfireScene");
         UIEventReload();
     }
 
@@ -72,32 +71,30 @@ public class UIManagerShopScene : MonoBehaviour
 
         #region ShopUI内での処理
 
-        // "購入"を押したら
-        if (UIObject == buyButton)
+        // "強化"を押したら
+        if (UIObject == enhanceButton)
         {
-            shopUI.SetActive(false);
-            shopController.PriceTextCheck();
-            shopController.HasHealPotion();
+            BonfireUI.SetActive(false);
         }
-        // "店を出る"を押したら
+        // "休憩しない"を押したら
         if (UIObject == UIObject.CompareTag("ExitButton"))
         {
-            sceneController.sceneChange("FieldScene");
+            sceneController.sceneChange("FieldScene");          // フィールドに戻る
         }
         // "休憩"を押したら
         if (UIObject == restButton)
         {
-            if(restController.CheckRest("ShopScene"))      //休憩できる場合
+            if(restController.CheckRest("BonfireScene"))            //休憩できる場合
             {
-                restUI.SetActive(true);
+                restUI.SetActive(true);                             // 休憩UIを表示
 
-                restController.ChengeRestText("ShopScene");
+                restController.ChengeRestText("BonfireScene");      // 休憩textを更新
                 UIEventReload();
             }
         }
         #endregion
 
-        #region ShoppingUI内での処理
+        #region EnhanceUI内での処理
 
         // カードをクリックしたら
         if (UIObject == UIObject.CompareTag("Cards"))
@@ -109,11 +106,6 @@ public class UIManagerShopScene : MonoBehaviour
             {
                 lastClickedCards.transform.localScale = scaleReset;
                 UIObject.transform.localScale += scaleBoost;
-            }
-            else if (UIObject == lastClickedCards)      // 同じカードを2回クリックしたら(カード購入)
-            {
-                shopController.BuyItem(UIObject, "Card");
-                shopController.PriceTextCheck();
             }
 
             lastClickedCards = UIObject;
@@ -128,18 +120,10 @@ public class UIManagerShopScene : MonoBehaviour
             isClick = false;
         }
 
-        // いったんこれ
-        if (UIObject == UIObject.CompareTag("Relics"))
+        // "強化しない"を押したら
+        if (UIObject == closeEnhance)
         {
-            shopController.BuyItem(UIObject, "Relic");
-            shopController.PriceTextCheck();
-        }
-
-        // "買い物を終える"を押したら
-        if (UIObject == closeShopping)
-        {
-            shopUI.SetActive(true);
-            restController.CheckRest("ShopScene");
+            BonfireUI.SetActive(true);
         }
         #endregion
 
@@ -148,9 +132,9 @@ public class UIManagerShopScene : MonoBehaviour
         // "休憩する"を押したら
         if (UIObject == takeRestButton)
         {
-            restController.Rest("ShopScene");      // 回復する
-            restController.CheckRest("ShopScene");
+            restController.Rest("BonfireScene");                // 回復する
             restUI.SetActive(false);
+            sceneController.sceneChange("FieldScene");          // フィールドに戻る
         }
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
@@ -170,12 +154,6 @@ public class UIManagerShopScene : MonoBehaviour
                 UIObject.transform.localScale += scaleBoost;
             }
         }
-
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
-        }
-
     }
 
     void UIExit(GameObject UIObject)
@@ -186,11 +164,6 @@ public class UIManagerShopScene : MonoBehaviour
             {
                 UIObject.transform.localScale = scaleReset;
             }
-        }
-
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);
         }
     }
 }
