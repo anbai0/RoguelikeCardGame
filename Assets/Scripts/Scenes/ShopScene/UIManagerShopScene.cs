@@ -8,10 +8,11 @@ using UnityEngine.UI;
 /// </summary>
 public class UIManagerShopScene : MonoBehaviour
 {
-    [SerializeField]
-    private SceneController sceneController;
+    [SerializeField] private SceneController sceneController;
 
     [SerializeField] private ShopController shopController;
+    [SerializeField] private RestController restController;
+
 
     [SerializeField] private GameObject Canvas;
     private UIController[] UIs;
@@ -37,7 +38,7 @@ public class UIManagerShopScene : MonoBehaviour
 
     void Start()
     {
-        shopController.CheckRest();
+        restController.CheckRest();
         UIEventReload();
     }
 
@@ -87,11 +88,11 @@ public class UIManagerShopScene : MonoBehaviour
         // "‹xŒe"‚ğ‰Ÿ‚µ‚½‚ç
         if (UIObject == restButton)
         {
-            if(shopController.CheckRest())      //‹xŒe‚Å‚«‚éê‡
+            if(restController.CheckRest())      //‹xŒe‚Å‚«‚éê‡
             {
                 restUI.SetActive(true);
 
-                shopController.ChengeRestText();
+                restController.ChengeRestText();
                 UIEventReload();
             }
         }
@@ -139,7 +140,7 @@ public class UIManagerShopScene : MonoBehaviour
         if (UIObject == closeShopping)
         {
             shopUI.SetActive(true);
-            shopController.CheckRest();
+            restController.CheckRest();
         }
         #endregion
 
@@ -148,8 +149,8 @@ public class UIManagerShopScene : MonoBehaviour
         // "‹xŒe‚·‚é"‚ğ‰Ÿ‚µ‚½‚ç
         if (UIObject == takeRestButton)
         {
-            shopController.Rest();      // ‰ñ•œ‚·‚é
-            shopController.CheckRest();
+            restController.Rest();      // ‰ñ•œ‚·‚é
+            restController.CheckRest();
             restUI.SetActive(false);
         }
         // "‹xŒe‚µ‚È‚¢"‚ğ‰Ÿ‚µ‚½‚ç

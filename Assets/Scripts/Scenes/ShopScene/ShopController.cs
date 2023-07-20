@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
+/// ToDo: HasHealPotion()メソッドの処理があんまり良くない感じがするので修正したい。
+/// </summary>
 public class ShopController : MonoBehaviour
 {
     PlayerDataManager playerData;
@@ -16,14 +20,10 @@ public class ShopController : MonoBehaviour
 
     const int healCardID = 3;                       // 回復カードのID
     const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
-    const int restPrice = 70;                       // 休憩の値段
     Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
 
     [Header("参照するUI")]
     [SerializeField] GameObject shoppingUI;
-    [SerializeField] GameObject restButton;
-    [SerializeField] Text restText;
-    [SerializeField] Text restPriceText;
 
     [Header("ショップに並ぶアイテムのPrefab")]
     [SerializeField] GameObject cardPrefab;
@@ -81,19 +81,21 @@ public class ShopController : MonoBehaviour
             Lottery.isInitialize = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ShopLottery();
-            shopCardsID.Add(healCardID);                        // 回復カードを追加
-            shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
-            Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
-            // ショップに並ぶアイテムを表示
-            ShowItem();
+        //// デバッグ用
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    ShopLottery();
+        //    shopCardsID.Add(healCardID);                        // 回復カードを追加
+        //    shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
+        //    Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
-            uiManager.UIEventReload();          // UIEvent更新      
-            Lottery.isInitialize = false;
-        }
+        //    // ショップに並ぶアイテムを表示
+        //    ShowItem();
+
+        //    uiManager.UIEventReload();          // UIEvent更新      
+        //    Lottery.isInitialize = false;
+        //}
 
         //if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
         //{
@@ -267,46 +269,4 @@ public class ShopController : MonoBehaviour
         }
     }
 
-
-
-    /// <summary>
-    /// 休憩できるか判定します
-    /// </summary>
-    /// <returns>休憩できるできる場合true</returns>
-    public bool CheckRest()
-    {
-        if (playerData._playerMoney < restPrice)          // お金が足りない場合
-        {
-            restPriceText.color = Color.red;              // 値段を赤く表示
-        }
-
-        // 現在HPがMaxの場合またはお金が足りない場合
-        if (playerData._playerHP == playerData._playerCurrentHP || playerData._playerMoney < restPrice)
-        {
-            restButton.GetComponent<Image>().color = Color.gray;  // 休憩ボタンをグレーアウト
-            return false;
-        }
-
-        return true;
-
-    }
-
-    /// <summary>
-    /// 休憩画面でテキストを表示させるメソッドです
-    /// </summary>
-    public void ChengeRestText()
-    {
-        restText.text = $"70Gを消費して\n体力を{playerData._playerHP - playerData._playerCurrentHP}回復しますか？";
-    }
-
-    /// <summary>
-    /// 休憩の処理
-    /// 休憩に必要な金額を支払い、
-    /// 体力を全回復させます。
-    /// </summary>
-    public void Rest()
-    {
-        playerData._playerMoney -= restPrice;
-        playerData._playerCurrentHP = playerData._playerHP;
-    }
 }
