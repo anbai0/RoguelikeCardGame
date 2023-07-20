@@ -18,14 +18,15 @@ public class UIManagerShopScene : MonoBehaviour
     Vector3 scaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
     Vector3 scaleBoost = Vector3.one * 0.1f;     // 元のスケールに乗算して使います
 
-    // 切り替えるUI
+    [Header("表示を切り替えるUI")]
     [SerializeField] GameObject shopUI;
     [SerializeField] GameObject restUI;
-    // クリック後に参照するオブジェクト
-    [SerializeField] GameObject buy;
-    [SerializeField] GameObject CloseShopping;
-    [SerializeField] GameObject rest;
-    [SerializeField] GameObject RestButton;
+
+    [Header("クリック後に参照するUI")]
+    [SerializeField] GameObject buyButton;
+    [SerializeField] GameObject closeShopping;
+    [SerializeField] GameObject restButton;
+    [SerializeField] GameObject takeRestButton;
     [SerializeField] GameObject noRestButton;
 
     bool isRemoved = true;
@@ -68,23 +69,25 @@ public class UIManagerShopScene : MonoBehaviour
         #region ShopUI内での処理
 
         // "購入"を押したら
-        if (UIObject == buy)
+        if (UIObject == buyButton)
         {
             shopUI.SetActive(false);
             shopController.PriceTextCheck();
             shopController.HasHealPotion();
         }
         // "店を出る"を押したら
-        if (UIObject.tag == "ExitButton")
+        if (UIObject == UIObject.CompareTag("ExitButton"))
         {
             sceneController.sceneChange("FieldScene");
         }
         // "休憩"を押したら
-        if (UIObject == rest)
+        if (UIObject == restButton)
         {
             if(shopController.CheckRest())      //休憩できる場合
             {
                 restUI.SetActive(true);
+
+                shopController.ChengeRestText();
                 UIEventReload();
             }
         }
@@ -129,7 +132,7 @@ public class UIManagerShopScene : MonoBehaviour
         }
 
         // 買い物を終えるボタンを押したら
-        if (UIObject == CloseShopping)
+        if (UIObject == closeShopping)
         {
             shopUI.SetActive(true);
             shopController.CheckRest();
@@ -139,7 +142,7 @@ public class UIManagerShopScene : MonoBehaviour
         #region RestUI内での処理
 
         // "休憩する"を押したら
-        if (UIObject == RestButton)
+        if (UIObject == takeRestButton)
         {
             shopController.Rest();      // 回復する
             shopController.CheckRest();

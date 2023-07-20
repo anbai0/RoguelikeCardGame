@@ -14,23 +14,27 @@ public class ShopController : MonoBehaviour
     [SerializeField] Lottery lottery;
     [SerializeField] UIManagerShopScene uiManager;
 
-    // 参照するUI
+    const int healCardID = 3;                       // 回復カードのID
+    const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
+    const int restPrice = 70;                       // 休憩の値段
+    Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
+
+    [Header("参照するUI")]
     [SerializeField] GameObject shoppingUI;
-    [SerializeField] GameObject rest;
+    [SerializeField] GameObject restButton;
+    [SerializeField] Text restText;
     [SerializeField] Text restPriceText;
 
-    const int healCardID = 3;               // 回復カードのID
-    const int deckLimitIncRelicID = 1;      // デッキの上限を1枚増やすレリックのID
-    const int restPrice = 70;               // 休憩の値段
-
+    [Header("ショップに並ぶアイテムのPrefab")]
     [SerializeField] GameObject cardPrefab;
-    [SerializeField] List<GameObject> cardPlace;     // Cardの生成位置
     [SerializeField] GameObject relicPrefab;
+
+    [Header("各Prefabの生成位置")]
+    [SerializeField] List<GameObject> cardPlace;     // Cardの生成位置
     [SerializeField] List<GameObject> relicPlace;    // Relicの生成位置
 
-    GameObject cardObject;  // 生成したカードPrefabを格納する
-    GameObject relicObject; // 生成したレリックPrefabを格納する
 
+    [Header("ここから下はデバッグ用に表示させてます")]
     /// <summary>
     /// ショップに出ているカードのIDを格納します
     /// </summary>
@@ -52,10 +56,7 @@ public class ShopController : MonoBehaviour
     [SerializeField] List<GameObject> shopRelics = null;
 
 
-    Vector3 scaleReset = Vector3.one * 0.37f;     // カードのデフォルトの大きさ
- 
-    [SerializeField]
-    int tmpID = 0;      // デバッグ用
+    [SerializeField]    int tmpID = 0;      // デバッグ用
 
     private void Start()
     {
@@ -80,7 +81,19 @@ public class ShopController : MonoBehaviour
             Lottery.isInitialize = false;
         }
 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ShopLottery();
+            shopCardsID.Add(healCardID);                        // 回復カードを追加
+            shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
+            Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
+            // ショップに並ぶアイテムを表示
+            ShowItem();
+
+            uiManager.UIEventReload();          // UIEvent更新      
+            Lottery.isInitialize = false;
+        }
 
         //if (Input.GetKeyDown(KeyCode.Space))        // Spaceを押すごとに次のCardIDのカードが表示される
         //{
@@ -116,7 +129,7 @@ public class ShopController : MonoBehaviour
         // カード表示
         for (int cardID = 0; cardID < shopCardsID.Count; cardID++) 
         {
-            cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
+            GameObject cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
             cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
             cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
             cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
@@ -127,7 +140,7 @@ public class ShopController : MonoBehaviour
         // レリック表示
         for (int relicID = 0; relicID < shopRelicsID.Count; relicID++)
         {
-            relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
+            GameObject relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
             relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
             relicController = relicObject.GetComponent<RelicController>();                                                              // 生成したPrefabのRelicControllerを取得
             relicController.Init(shopRelicsID[relicID]);                                                                                // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
@@ -270,12 +283,20 @@ public class ShopController : MonoBehaviour
         // 現在HPがMaxの場合またはお金が足りない場合
         if (playerData._playerHP == playerData._playerCurrentHP || playerData._playerMoney < restPrice)
         {
-            rest.GetComponent<Image>().color = Color.gray;  // 休憩ボタンをグレーアウト
+            restButton.GetComponent<Image>().color = Color.gray;  // 休憩ボタンをグレーアウト
             return false;
         }
 
         return true;
 
+    }
+
+    /// <summary>
+    /// 休憩画面でテキストを表示させるメソッドです
+    /// </summary>
+    public void ChengeRestText()
+    {
+        restText.text = $"70Gを消費して\n体力を{playerData._playerHP - playerData._playerCurrentHP}回復しますか？";
     }
 
     /// <summary>

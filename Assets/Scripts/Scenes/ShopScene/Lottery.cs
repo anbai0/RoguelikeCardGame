@@ -8,24 +8,21 @@ public class Lottery : MonoBehaviour
     CardDataManager cardData;       // カードのデータを処理
     RelicDataManager relicData;     // レリックのデータを処理
 
+    public static bool isInitialize = false;        // Startにある処理が遅いので処理が終わったらtrueに
+    public bool fromShopController = false;         // ShopControllerから呼ばれた場合trueにします
+
+    const int MaxNumCards = 20;       // 全カードの枚数
+    const int MaxNumRelics = 11;      // 全レリックの数
+
+    [Header("ここから下はデバッグ用に表示させてます")]
     //各レアリティのリスト
     [SerializeField] List<int> cardRarity1List;
     [SerializeField] List<int> cardRarity2List;
     [SerializeField] List<int> cardRarity3List;
     [SerializeField] List<int> relicRarity1List;
     [SerializeField] List<int> relicRarity2List;
-
-    public List<int> shopCards = new List<int>();       // ショップに追加されたカード
-    List<int> deckAndShopCards;                         // 現在の所持カード＋ショップに追加されたカードを格納する
-    public List<int> shopRelics = new List<int>();      // ショップに追加されたレリック 
-    List<int> myRelicAndShopRelics;                     // 現在の所持レリック＋ショップに追加されたレリックを格納する
-
-    public static bool isInitialize = false;
-
-    int MaxNumCards = 20;       //カード枚数
-    int MaxNumRelics = 11;
-
-    public bool fromShopController = false;
+    [SerializeField] List<int> shopCards = new List<int>();       // ショップに追加されたカード
+    [SerializeField] List<int> shopRelics = new List<int>();      // ショップに追加されたレリック
 
     void Start()
     {
@@ -77,7 +74,7 @@ public class Lottery : MonoBehaviour
     {
         List<int> SelectedRarityList;
 
-        //引数で指定されたレアリティのListをSelectedRarityListへ代入
+        // 引数で指定されたレアリティのListをSelectedRarityListへ代入
         switch (rarity)
         {
             case 1:
@@ -94,8 +91,8 @@ public class Lottery : MonoBehaviour
                 return -1;
         }
 
-        //所持カードとショップに出ているカードをDeckAndShopCardsへ追加
-        deckAndShopCards = new List<int>(playerData._deckList);
+        // 所持カードとショップに出ているカードをDeckAndShopCardsへ追加
+        List<int> deckAndShopCards = new List<int>(playerData._deckList);
         deckAndShopCards.AddRange(shopCards);
 
         int cardLottery = -1;
@@ -200,7 +197,7 @@ public class Lottery : MonoBehaviour
     {
         List<int> SelectedRarityList;
 
-        //引数で指定されたレアリティのListをSelectedRarityListへ代入
+        // 引数で指定されたレアリティのListをSelectedRarityListへ代入
         switch (rarity)
         {
             case 1:
@@ -214,13 +211,13 @@ public class Lottery : MonoBehaviour
                 return -1;
         }
 
-        //所持レリックとショップに出ているカードをmyRelicAndShopRelicsへ追加
-        myRelicAndShopRelics = new List<int>(playerData._relicList);
+        // 所持レリックとショップに出ているカードをmyRelicAndShopRelicsへ追加
+        List<int> myRelicAndShopRelics = new List<int>(playerData._relicList);
         myRelicAndShopRelics.AddRange(shopRelics);
 
         int relicLottery = -1;
 
-        //抽選処理
+        // 抽選処理
         int maxAttempts = 100;  // 最大試行回数を設定
         int attempts = 0;
 
@@ -304,11 +301,3 @@ public class Lottery : MonoBehaviour
     }
 
 }
-
-
-
-
-
-
-
-

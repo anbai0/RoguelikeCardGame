@@ -365,17 +365,18 @@ MonoBehaviour:
   lottery: {fileID: 387374076}
   uiManager: {fileID: 2100310164}
   shoppingUI: {fileID: 1016566035}
-  rest: {fileID: 1976851359}
+  restButton: {fileID: 1976851359}
+  restText: {fileID: 196323761}
   restPriceText: {fileID: 2097210063}
   cardPrefab: {fileID: 7872756505218513689, guid: baa47ad89586ae7449c6177e1705c4ba,
+    type: 3}
+  relicPrefab: {fileID: 8617353695134665216, guid: 8058af89149049d4a90531c9f26d62e2,
     type: 3}
   cardPlace:
   - {fileID: 1915607545}
   - {fileID: 1980607797}
   - {fileID: 671038533}
   - {fileID: 1577842513}
-  relicPrefab: {fileID: 8617353695134665216, guid: 8058af89149049d4a90531c9f26d62e2,
-    type: 3}
   relicPlace:
   - {fileID: 1706668328}
   - {fileID: 955387422}
@@ -397,6 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fromShopController: 0
   cardRarity1List: 
   cardRarity2List: 
   cardRarity3List: 
@@ -404,7 +406,6 @@ MonoBehaviour:
   relicRarity2List: 
   shopCards: 
   shopRelics: 
-  fromShopController: 0
 --- !u!1 &553753434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,7 +1139,7 @@ GameObject:
   - component: {fileID: 930602218}
   - component: {fileID: 930602220}
   m_Layer: 0
-  m_Name: RestButton
+  m_Name: TakeRestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1479,7 +1480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1182467484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1751,7 +1752,7 @@ GameObject:
   - component: {fileID: 1349941461}
   - component: {fileID: 1349941460}
   m_Layer: 5
-  m_Name: Buy
+  m_Name: BuyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3198,7 +3199,7 @@ GameObject:
   - component: {fileID: 1976851361}
   - component: {fileID: 1976851363}
   m_Layer: 5
-  m_Name: Rest
+  m_Name: RestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3487,7 +3488,7 @@ GameObject:
   - component: {fileID: 2097210064}
   - component: {fileID: 2097210063}
   m_Layer: 5
-  m_Name: PriceText
+  m_Name: RestPriceText
   m_TagString: Price
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3589,10 +3590,10 @@ MonoBehaviour:
   Canvas: {fileID: 1963204191}
   shopUI: {fileID: 1182467483}
   restUI: {fileID: 2049788800}
-  buy: {fileID: 1349941458}
-  CloseShopping: {fileID: 1598600394}
-  rest: {fileID: 1976851359}
-  RestButton: {fileID: 930602216}
+  buyButton: {fileID: 1349941458}
+  closeShopping: {fileID: 1598600394}
+  restButton: {fileID: 1976851359}
+  takeRestButton: {fileID: 930602216}
   noRestButton: {fileID: 684280625}
 --- !u!4 &2100310165
 Transform:
