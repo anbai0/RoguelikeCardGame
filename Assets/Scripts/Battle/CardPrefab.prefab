@@ -378,8 +378,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIManagerBattle: {fileID: 0}
   cardParent: {fileID: 0}
-  defaultSize: {x: 0.22, y: 0.22, z: 0.22}
-  zoomPos: 150
+  defaultScale: {x: 0.22, y: 0.22, z: 0.22}
+  anchorPosY: -77.5
 --- !u!114 &4310897293274249790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,6 +411,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
   isDraggable: 1

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ShopController : MonoBehaviour
 {
@@ -48,7 +49,7 @@ public class ShopController : MonoBehaviour
     /// <summary>
     /// レリックの値段を表示するために必要なオブジェクトを格納します
     /// </summary>
-    [SerializeField] List<GameObject> shopRelic = null;
+    [SerializeField] List<GameObject> shopRelics = null;
 
 
     Vector3 scaleReset = Vector3.one * 0.37f;     // カードのデフォルトの大きさ
@@ -72,22 +73,12 @@ public class ShopController : MonoBehaviour
             shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
             Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
-            // ショップに並ぶカード表示
-            for (int i = 0; i < shopCardsID.Count; i++)
-            {
-                CardsShow(i);
-            }
-            // ショップに並ぶレリック表示
-            for (int i = 0; i < shopRelicsID.Count; i++)
-            {
-                RelicsShow(i);
-            }
-
-            uiManager.UIEventReload();          // UI(カード)を表示
+            // ショップに並ぶアイテムを表示
+            ShowItem();
+            
+            uiManager.UIEventReload();          // UIEvent更新      
             Lottery.isInitialize = false;
         }
-
-        PriceCheck();
 
 
 
@@ -96,11 +87,11 @@ public class ShopController : MonoBehaviour
         //    if (tmpID >= 20)
         //        tmpID = 0;
 
-            //    tmpID++;
+        //    tmpID++;
 
-            //    cardController.Init(tmpID);
-            //    //DebugLottery();
-            //}
+        //    cardController.Init(tmpID);
+        //    //DebugLottery();
+        //}
 
     }
 
@@ -118,40 +109,40 @@ public class ShopController : MonoBehaviour
     }
 
     /// <summary>
-    /// カードの表示を行います。
+    /// ショップに並ぶアイテムの表示を行います。
     /// </summary>
-    /// <param name="cardID">表示したいカードのID</param>
-    void CardsShow(int cardID)
+    void ShowItem()
     {
-        cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
-        cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
-        cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
-        cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
-        cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
-        shopCards.Add(cardObject);
+        // カード表示
+        for (int cardID = 0; cardID < shopCardsID.Count; cardID++) 
+        {
+            cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
+            cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
+            cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
+            cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
+            cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
+            shopCards.Add(cardObject);
+        }
+
+        // レリック表示
+        for (int relicID = 0; relicID < shopRelicsID.Count; relicID++)
+        {
+            relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
+            relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
+            relicController = relicObject.GetComponent<RelicController>();                                                              // 生成したPrefabのRelicControllerを取得
+            relicController.Init(shopRelicsID[relicID]);                                                                                // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+            relicObject.transform.Find("RelicPriceBG").gameObject.SetActive(true);                                                      // 値札を表示
+            shopRelics.Add(relicObject);
+        }
     }
 
     /// <summary>
-    /// レリックの表示を行います。
-    /// </summary>
-    /// <param name="relicID">表示したいレリックのID</param>
-    void RelicsShow(int relicID)
-    {
-        relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
-        relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
-        relicController = relicObject.GetComponent<RelicController>();                                                              // 生成したPrefabのRelicControllerを取得
-        relicController.Init(shopCardsID[relicID]);                                                                                 // 取得したRelicControllerのInitメソッドを使いカードの生成と表示をする
-        relicObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                   // 値札を表示
-        shopCards.Add(relicObject);
-    }
-
-    /// <summary>
-    /// カードを買えるかどうかを判定し、
+    /// アイテムを買えるかどうかを判定し、
     /// 変えなかった場合値段を赤く表示します
     /// </summary>
-    void PriceCheck()
+    public void PriceTextCheck()
     {
-        //所持金チェック
+        // カードの値段チェック
         for (int i = 0; i < shopCards.Count; i++)
         {
             CardController card = shopCards[i].GetComponent<CardController>();
@@ -167,7 +158,103 @@ public class ShopController : MonoBehaviour
             }
 
         }
+
+        // レリックの値段チェック
+        for (int i = 0; i < shopRelics.Count; i++)
+        {
+            RelicController relic = shopRelics[i].GetComponent<RelicController>();
+            if (playerData._playerMoney >= relic.relicDataManager._relicPrice)
+            {
+                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+                textComponent.color = Color.white;
+            }
+            else
+            {
+                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+                textComponent.color = Color.red;
+            }
+        }
     }
+
+    int healCardNum = 3;
+    /// <summary>
+    /// 魔女の霊薬を持っているか判定します
+    /// </summary>
+    /// <returns>持っている場合trueを返します</returns>
+    public bool HasHealPotion()
+    {
+        foreach(int cardsID in playerData._deckList)
+        {
+            if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
+            {
+                // 回復カードをグレーアウトにする
+                shopCards[healCardNum].GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /// <summary>
+    /// アイテムを買う処理です
+    /// </summary>
+    /// <param name="selectItem">クリックしたUIObject</param>
+    /// <param name="itemType">CardまたはRelicを指定</param>
+    public void BuyItem(GameObject selectItem, string itemType)
+    {
+        if (itemType == "Card")
+        for (int i = 0; i < shopCards.Count; i++)
+        {
+            if (selectItem == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
+            {
+                CardController card = shopCards[i].GetComponent<CardController>();
+
+                if (playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
+                {
+                    if (shopCardsID[i] != shopCardsID[healCardID])                        // 選んだカードが回復カードではなかった場合
+                    {
+                        playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                        playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
+
+                        selectItem.GetComponent<Image>().color = Color.gray;              // 買ったカードをグレーアウトする
+                        selectItem.transform.localScale = scaleReset;                     // スケールを戻す
+
+                        selectItem.SetActive(false);
+
+                    } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
+                    {
+                        playerData._playerMoney -= card.cardDataManager._cardPrice;
+                        playerData._deckList.Add(shopCardsID[i]);
+
+                        selectItem.GetComponent<Image>().color = Color.gray;
+                        selectItem.transform.localScale = scaleReset;
+                    }
+                }               
+            }
+        }
+
+        if (itemType == "Relic")
+        for (int i = 0; i < shopRelics.Count; i++)
+        {
+            if (selectItem == shopRelics[i])         // クリックしたレリックとショップに並んでるレリックが一致したら
+            {
+                RelicController relic = shopRelics[i].GetComponent<RelicController>();
+
+                if (playerData._playerMoney >= relic.relicDataManager._relicPrice)          // 所持金が足りるなら
+                {
+                    playerData._playerMoney -= relic.relicDataManager._relicPrice;          // 所持金から値段分のお金を引いて
+                    playerData._relicList.Add(shopRelicsID[i]);                             // レリックリストに加える
+
+                    selectItem.transform.localScale = scaleReset;                           // スケールを戻す
+
+                    selectItem.SetActive(false);
+                }
+            }
+        }
+    }
+
+
 
     /// <summary>
     /// 休憩できるか判定します
@@ -183,7 +270,7 @@ public class ShopController : MonoBehaviour
         // 現在HPがMaxの場合またはお金が足りない場合
         if (playerData._playerHP == playerData._playerCurrentHP || playerData._playerMoney < restPrice)
         {
-            rest.GetComponent<Image>().color = Color.gray;
+            rest.GetComponent<Image>().color = Color.gray;  // 休憩ボタンをグレーアウト
             return false;
         }
 
@@ -193,66 +280,12 @@ public class ShopController : MonoBehaviour
 
     /// <summary>
     /// 休憩の処理
+    /// 休憩に必要な金額を支払い、
+    /// 体力を全回復させます。
     /// </summary>
     public void Rest()
     {
         playerData._playerMoney -= restPrice;
         playerData._playerCurrentHP = playerData._playerHP;
     }
-
-    /// <summary>
-    /// 魔女の霊薬を持っているか判定します
-    /// </summary>
-    /// <returns>持っている場合trueを返します</returns>
-    public bool HasHealPotion()
-    {
-        foreach(int cardsID in playerData._deckList)
-        {
-            if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /// <summary>
-    /// カードを買う処理です
-    /// </summary>
-    /// <param name="selectCard">選んだカード</param>
-    public void BuyCards(GameObject selectCard)
-    {
-        for (int i = 0; i < shopCards.Count; i++)
-        {
-            if (selectCard == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
-            {
-                CardController card = shopCards[i].GetComponent<CardController>();
-
-                if (playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
-                {
-                    if (shopCardsID[i] != shopCardsID[healCardID])                        // 選んだカードが回復カードではなかった場合
-                    {
-                        playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                        playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
-
-                        selectCard.GetComponent<Image>().color = Color.gray;              // 買ったカードを暗くする
-                        selectCard.transform.localScale = scaleReset;                     // スケールを戻す
-
-                        selectCard.SetActive(false);
-
-                    } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
-                    {
-                        playerData._playerMoney -= card.cardDataManager._cardPrice;
-                        playerData._deckList.Add(shopCardsID[i]);
-
-                        selectCard.GetComponent<Image>().color = Color.gray;
-                        selectCard.transform.localScale = scaleReset;
-                    }
-                }
-                    
-            }
-        }
-    }
-
-
 }

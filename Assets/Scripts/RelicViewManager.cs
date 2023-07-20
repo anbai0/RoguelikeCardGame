@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RelicViewManager : MonoBehaviour
 {
-    [SerializeField] Text relicNameText,relicEffectText, relicPriceText;
+    [SerializeField] TextMeshProUGUI relicNameText,relicEffectText, relicPriceText;
     [SerializeField] Image relicImage;
 
     public void ViewRelic(RelicDataManager relicDataManager) // relicDataManagerÇÃÉfÅ[É^éÊìæÇ∆îΩâf

@@ -71,6 +71,8 @@ public class UIManagerShopScene : MonoBehaviour
         if (UIObject == buy)
         {
             shopUI.SetActive(false);
+            shopController.PriceTextCheck();
+            shopController.HasHealPotion();
         }
         // "店を出る"を押したら
         if (UIObject.tag == "ExitButton")
@@ -103,8 +105,8 @@ public class UIManagerShopScene : MonoBehaviour
             }
             else if (UIObject == lastClickedCards)      // 同じカードを2回クリックしたら(カード購入)
             {
-                shopController.BuyCards(UIObject);
-
+                shopController.BuyItem(UIObject, "Card");
+                shopController.PriceTextCheck();
             }
 
             lastClickedCards = UIObject;
@@ -117,6 +119,13 @@ public class UIManagerShopScene : MonoBehaviour
             lastClickedCards.transform.localScale = scaleReset;
             lastClickedCards = null;
             isClick = false;
+        }
+
+        // いったんこれ
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            shopController.BuyItem(UIObject, "Relic");
+            shopController.PriceTextCheck();
         }
 
         // 買い物を終えるボタンを押したら
@@ -155,11 +164,11 @@ public class UIManagerShopScene : MonoBehaviour
             }
         }
 
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            Animator anim = UIObject.GetComponent<Animator>();
-            anim.SetTrigger("RelicJump");
-        }
+        //if (UIObject == UIObject.CompareTag("Relics"))
+        //{
+        //    Animator anim = UIObject.GetComponent<Animator>();
+        //    anim.SetTrigger("RelicJump");
+        //}
 
     }
 
