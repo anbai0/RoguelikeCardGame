@@ -14,12 +14,13 @@ public class UIManagerBonfire : MonoBehaviour
     bool isClick = false;
     GameObject lastClickedCards;
 
-    Vector3 scaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
-    Vector3 scaleBoost = Vector3.one * 0.1f;     // 元のスケールに乗算して使います
+    Vector3 scaleReset = Vector3.one * 0.25f;    // 元のスケールに戻すときに使います
+    Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するスクリプト")]
     [SerializeField] private SceneController sceneController;
     [SerializeField] private RestController restController;
+    [SerializeField] private BonfireManager bonfireManager;
 
     [Header("表示を切り替えるUI")]
     [SerializeField] GameObject BonfireUI;
@@ -27,6 +28,7 @@ public class UIManagerBonfire : MonoBehaviour
 
     [Header("クリック後に参照するUI")]
     [SerializeField] GameObject enhanceButton;
+    [SerializeField] GameObject applyEnhance;
     [SerializeField] GameObject closeEnhance;
     [SerializeField] GameObject restButton;
     [SerializeField] GameObject takeRestButton;
@@ -69,18 +71,20 @@ public class UIManagerBonfire : MonoBehaviour
     void UILeftClick(GameObject UIObject)
     {
 
-        #region ShopUI内での処理
+        #region BonfireUI内での処理
 
         // "強化"を押したら
         if (UIObject == enhanceButton)
         {
-            BonfireUI.SetActive(false);
+            BonfireUI.SetActive(false);     // 強化画面に行く
         }
+
         // "休憩しない"を押したら
         if (UIObject == UIObject.CompareTag("ExitButton"))
         {
             sceneController.sceneChange("FieldScene");          // フィールドに戻る
         }
+
         // "休憩"を押したら
         if (UIObject == restButton)
         {
@@ -101,6 +105,11 @@ public class UIManagerBonfire : MonoBehaviour
         {
             isClick = true;
 
+            // 強化ボタン切り替え
+            applyEnhance.SetActive(true);
+            closeEnhance.SetActive(false);
+            UIEventReload();
+
             // カード選択状態の切り替え
             if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
             {
@@ -118,12 +127,25 @@ public class UIManagerBonfire : MonoBehaviour
             lastClickedCards.transform.localScale = scaleReset;
             lastClickedCards = null;
             isClick = false;
+
+            // 強化ボタン切り替え
+            applyEnhance.SetActive(false);
+            closeEnhance.SetActive(true);
+            UIEventReload();
+        }
+
+        // "強化する"を押したら
+        if (UIObject == applyEnhance && isClick)
+        {
+            bonfireManager.CardEnhance(lastClickedCards);   // ボタンを前にクリックしたCardを引数に
+
+            sceneController.sceneChange("FieldScene");      // 強化したらフィールドに戻る
         }
 
         // "強化しない"を押したら
         if (UIObject == closeEnhance)
         {
-            BonfireUI.SetActive(true);
+            BonfireUI.SetActive(true);          // 焚火画面に戻る
         }
         #endregion
 
@@ -139,7 +161,7 @@ public class UIManagerBonfire : MonoBehaviour
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
         {
-            restUI.SetActive(false);
+            restUI.SetActive(false);        // 焚火画面に戻る
         }
 
         #endregion
