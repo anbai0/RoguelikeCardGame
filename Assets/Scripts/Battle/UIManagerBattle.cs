@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
+/// BattleSceneのUIManagerです。
 /// UIの管理を行うスクリプトです。
 /// UIController側で起きた判定に対して処理を行います。
 /// </summary>

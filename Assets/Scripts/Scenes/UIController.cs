@@ -6,9 +6,9 @@ using Unity.VisualScripting;
 
 
 /// <summary>
-/// UIのクリックの判定を行います。
+/// UIのクリック、ドラッグアンドドロップ、Enter、Exitの判定を行います。
 /// 判定を行いたいUI(Image、Objectなど多分何でも行けます)に
-/// このスクリプトをアタッチして下さい
+/// このスクリプトをアタッチして下さい。
 /// </summary>
 public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {

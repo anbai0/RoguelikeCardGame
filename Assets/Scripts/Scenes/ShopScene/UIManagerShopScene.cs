@@ -2,6 +2,10 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// ShopSceneのUIManagerです。
+/// ToDo: レリックがEnterされたときの処理はまだ書き終わってないので後でやります。
+/// </summary>
 public class UIManagerShopScene : MonoBehaviour
 {
     [SerializeField]

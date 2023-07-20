@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// カードやレリックの抽選を行うスクリプトです。
+/// Sartにある処理が遅いのでisInitialize変数を使ってください。
+/// </summary>
 public class Lottery : MonoBehaviour
 {
     PlayerDataManager playerData;   // プレイヤーデータのインスタンスを格納
