@@ -164,11 +164,10 @@ public class UIManagerShopScene : MonoBehaviour
             }
         }
 
-        //if (UIObject == UIObject.CompareTag("Relics"))
-        //{
-        //    Animator anim = UIObject.GetComponent<Animator>();
-        //    anim.SetTrigger("RelicJump");
-        //}
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
+        }
 
     }
 
@@ -180,6 +179,11 @@ public class UIManagerShopScene : MonoBehaviour
             {
                 UIObject.transform.localScale = scaleReset;
             }
+        }
+
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);
         }
     }
 }
