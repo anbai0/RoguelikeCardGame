@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CardViewManager : MonoBehaviour
 {
-    [SerializeField] Text cardNameText,cardEffectText,cardCostText, cardPriceText;
+    [SerializeField] TextMeshProUGUI cardNameText,cardEffectText,cardCostText, cardPriceText;
     [SerializeField] Image cardImage;
 
     public void ViewCard(CardDataManager cardDataManager) // cardDataManager‚Ìƒf[ƒ^æ“¾‚Æ”½‰f

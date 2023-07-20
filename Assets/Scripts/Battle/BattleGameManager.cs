@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class BattleGameManager : MonoBehaviour
 {
@@ -342,7 +343,7 @@ public class BattleGameManager : MonoBehaviour
                     deckCard.cardDataManager._cardCost = 1;
                 }
             }
-            Text costText = child.transform.GetChild(3).GetComponentInChildren<Text>();
+            TextMeshProUGUI costText = child.transform.GetChild(3).GetComponentInChildren<TextMeshProUGUI>();
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }
@@ -356,7 +357,7 @@ public class BattleGameManager : MonoBehaviour
             {
                 deckCard.cardDataManager._cardCost += AccelerateCount;
             }
-            Text costText = child.transform.GetChild(3).GetComponentInChildren<Text>();
+            TextMeshProUGUI costText = child.transform.GetChild(3).GetComponentInChildren<TextMeshProUGUI>();
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 休憩に関する処理をするスクリプトです。
@@ -13,8 +14,8 @@ public class RestController : MonoBehaviour
     const int restPrice = 70;                       // 休憩の値段
     [Header("参照するUI")]
     [SerializeField] GameObject restButton;
-    [SerializeField] Text restText;
-    [SerializeField] Text restPriceText;
+    [SerializeField] TextMeshProUGUI restText;
+    [SerializeField] TextMeshProUGUI restPriceText;
 
     private void Start()
     {

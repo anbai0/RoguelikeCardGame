@@ -328,11 +328,11 @@ GameObject:
   - component: {fileID: 8582673388395179739}
   - component: {fileID: 3093219530864532913}
   - component: {fileID: 8968422678436629835}
-  - component: {fileID: 540093406809280476}
   - component: {fileID: 5132189345565835581}
   - component: {fileID: 6886142995699024272}
+  - component: {fileID: 540093406809280476}
   m_Layer: 5
-  m_Name: Card 1
+  m_Name: CardPrefab(Legacy)
   m_TagString: Cards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -400,43 +400,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &540093406809280476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7872756505218513689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onLeftClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onRightClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onExit:
-    m_PersistentCalls:
-      m_Calls: []
-  onBeginDrag:
-    m_PersistentCalls:
-      m_Calls: []
-  onDrag:
-    m_PersistentCalls:
-      m_Calls: []
-  onDrop:
-    m_PersistentCalls:
-      m_Calls: []
-  onDropEmpty:
-    m_PersistentCalls:
-      m_Calls: []
-  isDraggable: 0
 --- !u!114 &5132189345565835581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,11 +425,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0462512b6a606f1479556f0c32a42261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardNameText: {fileID: 1458885348579485536}
-  cardEffectText: {fileID: 5390870521513541415}
-  cardCostText: {fileID: 6804961032179572650}
-  cardPriceText: {fileID: 7343808336169450030}
+  cardNameText: {fileID: 0}
+  cardEffectText: {fileID: 0}
+  cardCostText: {fileID: 0}
+  cardPriceText: {fileID: 0}
   cardImage: {fileID: 8968422678436629835}
+--- !u!114 &540093406809280476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7872756505218513689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDraggable: 0
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropEmpty:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8430998958433664406
 GameObject:
   m_ObjectHideFlags: 0

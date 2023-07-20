@@ -163,13 +163,13 @@ public class ShopController : MonoBehaviour
             CardController card = shopCards[i].GetComponent<CardController>();
             if (playerData._playerMoney >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
             {
-                Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
-                textComponent.color = Color.white;                                                              // 白で表示
+                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
+                textComponent.color = Color.white;                                                                                    // 白で表示
             }
             else
             {
-                Text textComponent = shopCards[i].transform.GetChild(3).GetChild(0).GetComponent<Text>();       // Price表示テキストを取得
-                textComponent.color = Color.red;                                                                // 赤で表示
+                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
+                textComponent.color = Color.red;                                                                                      // 赤で表示
             }
 
         }
@@ -232,7 +232,7 @@ public class ShopController : MonoBehaviour
                         playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                         playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
 
-                        selectItem.GetComponent<Image>().color = Color.gray;              // 買ったカードをグレーアウトする
+                        selectItem.GetComponentInChildren<Image>().color = Color.gray;    // 買ったカードをグレーアウトする
                         selectItem.transform.localScale = scaleReset;                     // スケールを戻す
 
                         selectItem.SetActive(false);
@@ -242,7 +242,7 @@ public class ShopController : MonoBehaviour
                         playerData._playerMoney -= card.cardDataManager._cardPrice;
                         playerData._deckList.Add(shopCardsID[i]);
 
-                        selectItem.GetComponent<Image>().color = Color.gray;
+                        selectItem.GetComponentInChildren<Image>().color = Color.gray;
                         selectItem.transform.localScale = scaleReset;
                     }
                 }               

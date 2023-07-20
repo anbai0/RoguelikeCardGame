@@ -2207,7 +2207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTurnDisplay: {fileID: 1463396512}
   enemyTurnDisplay: {fileID: 916258405}
-  cardPrefab: {fileID: 7456682644446878729, guid: 0d127e60226d0104b836ad031a953d26,
+  cardPrefab: {fileID: 7009455883766435928, guid: 6d97bce2c74bb1a44ac0e09c10c805a7,
     type: 3}
   CardPlace: {fileID: 203011022}
   isPlayerTurn: 0
