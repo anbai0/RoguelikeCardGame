@@ -84,9 +84,12 @@ public class ShopController : MonoBehaviour
 
         //// デバッグ用
         //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    ShopLottery();
+        //{    
+        //    shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
         //    shopCardsID.Add(healCardID);                        // 回復カードを追加
+        //    Debug.Log("カード1:    " + shopCardsID[0] + "\nカード2:   " + shopCardsID[1] + "\nカード3:   " + shopCardsID[2]);
+
+        //    shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
         //    shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
         //    Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
@@ -119,7 +122,6 @@ public class ShopController : MonoBehaviour
         //(Card1, Card2, Card3) = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });     // メモ: タプルと言って複数の戻り値を受け取れる
         shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
         shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
-        Debug.Log("カード1:    " + shopCardsID[0] + "\nカード2:   " + shopCardsID[1] + "\nカード3:   " + shopCardsID[2]);
 
     }
 
