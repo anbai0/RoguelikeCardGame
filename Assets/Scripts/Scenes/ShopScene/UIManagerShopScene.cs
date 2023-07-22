@@ -12,10 +12,11 @@ public class UIManagerShopScene : MonoBehaviour
     private UIController[] UIs;
 
     bool isClick = false;
-    GameObject lastClickedCards;
+    GameObject lastClickedItem;
 
-    Vector3 scaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
-    Vector3 scaleBoost = Vector3.one * 0.1f;     // 元のスケールに乗算して使います
+    Vector3 cardScaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
+    Vector3 relicScaleReset = Vector3.one * 2.5f;
+    Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するスクリプト")]
     [SerializeField] private SceneController sceneController;
@@ -99,40 +100,74 @@ public class UIManagerShopScene : MonoBehaviour
 
         #region ShoppingUI内での処理
 
-        // カードをクリックしたら
-        if (UIObject == UIObject.CompareTag("Cards"))
+        // アイテムをクリックしたら
+        if (UIObject == UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isClick = true;
 
-            // カード選択状態の切り替え
-            if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
+            // アイテム選択状態の切り替え
+            if (lastClickedItem != null && lastClickedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
             {
-                lastClickedCards.transform.localScale = scaleReset;
+                // 最後にクリックしたアイテムの選択状態を解除する
+                if (lastClickedItem == lastClickedItem.CompareTag("Cards"))
+                {
+                    lastClickedItem.transform.localScale = cardScaleReset;
+                    lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                }
+                    
+                if (lastClickedItem == lastClickedItem.CompareTag("Relics"))
+                {
+                    lastClickedItem.transform.localScale = relicScaleReset;
+                    lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
+                    lastClickedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+                }
+
+                // 2回目に選択したアイテムを選択状態にする
                 UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);
+
+                // 2回目に選択したアイテムがレリックだった場合、レリックの説明を表示
+                if (UIObject == UIObject.CompareTag("Relics"))
+                    UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
+
             }
-            else if (UIObject == lastClickedCards)      // 同じカードを2回クリックしたら(カード購入)
+            else if (UIObject == lastClickedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
             {
-                shopController.BuyItem(UIObject, "Card");
-                shopController.PriceTextCheck();
+                // 選択したアイテムを買う
+                if (UIObject == UIObject.CompareTag("Cards"))
+                    shopController.BuyItem(UIObject, "Card");
+
+                if (UIObject == UIObject.CompareTag("Relics"))
+                    shopController.BuyItem(UIObject, "Relic");
+
+                shopController.PriceTextCheck();            // 値段テキスト更新
+
+                lastClickedItem = null;                     // 選択状態リセット
+                isClick = false;
             }
 
-            lastClickedCards = UIObject;
+            lastClickedItem = UIObject;
 
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
         if (isClick && UIObject == UIObject.CompareTag("BackGround"))
         {
-            lastClickedCards.transform.localScale = scaleReset;
-            lastClickedCards = null;
-            isClick = false;
-        }
+            // 最後にクリックしたアイテムの選択状態を解除する
+            if (lastClickedItem == lastClickedItem.CompareTag("Cards"))
+            {
+                lastClickedItem.transform.localScale = cardScaleReset;
+                lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+            }
 
-        // いったんこれ
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            shopController.BuyItem(UIObject, "Relic");
-            shopController.PriceTextCheck();
+            if (lastClickedItem == lastClickedItem.CompareTag("Relics"))
+            {
+                lastClickedItem.transform.localScale = relicScaleReset;
+                lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
+            }
+
+            lastClickedItem = null;         // 選択状態リセット
+            isClick = false;
         }
 
         // "買い物を終える"を押したら
@@ -168,14 +203,16 @@ public class UIManagerShopScene : MonoBehaviour
             if (UIObject == UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
+            }
+
+            if (UIObject == UIObject.CompareTag("Relics"))
+            {
+                UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
+                UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);        // レリックの説明を表示
             }
         }
-
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
-        }
-
     }
 
     void UIExit(GameObject UIObject)
@@ -184,13 +221,16 @@ public class UIManagerShopScene : MonoBehaviour
         {
             if (UIObject == UIObject.CompareTag("Cards"))
             {
-                UIObject.transform.localScale = scaleReset;
+                UIObject.transform.localScale = cardScaleReset;
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
             }
-        }
 
-        if (UIObject == UIObject.CompareTag("Relics"))
-        {
-            UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);
+            if (UIObject == UIObject.CompareTag("Relics"))
+            {
+                UIObject.transform.localScale = relicScaleReset;
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
+                UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+            }
         }
     }
 }

@@ -146,6 +146,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject == closeEnhance)
         {
             BonfireUI.SetActive(true);          // •°‰Î‰æ–Ê‚É–ß‚é
+            UIEventReload();
         }
         #endregion
 

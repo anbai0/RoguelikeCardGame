@@ -152,6 +152,7 @@ public class ShopController : MonoBehaviour
     }
 
     /// <summary>
+    /// 値段テキストを更新します。
     /// アイテムを買えるかどうかを判定し、
     /// 変えなかった場合値段を赤く表示します
     /// </summary>
@@ -163,12 +164,12 @@ public class ShopController : MonoBehaviour
             CardController card = shopCards[i].GetComponent<CardController>();
             if (playerData._playerMoney >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
             {
-                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
+                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
                 textComponent.color = Color.white;                                                                                    // 白で表示
             }
             else
             {
-                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
+                TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
                 textComponent.color = Color.red;                                                                                      // 赤で表示
             }
 
@@ -180,12 +181,12 @@ public class ShopController : MonoBehaviour
             RelicController relic = shopRelics[i].GetComponent<RelicController>();
             if (playerData._playerMoney >= relic.relicDataManager._relicPrice)
             {
-                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
                 textComponent.color = Color.white;
             }
             else
             {
-                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+                TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
                 textComponent.color = Color.red;
             }
         }
@@ -203,25 +204,24 @@ public class ShopController : MonoBehaviour
             if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
             {
                 // 回復カードをグレーアウトにする
-                shopCards[healCardNum].GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
+                shopCards[healCardNum].transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
                 return true;
             }
         }
         return false;
     }
 
-
     /// <summary>
     /// アイテムを買う処理です
     /// </summary>
-    /// <param name="selectItem">クリックしたUIObject</param>
+    /// <param name="selectedItem">クリックしたUIObject</param>
     /// <param name="itemType">CardまたはRelicを指定</param>
-    public void BuyItem(GameObject selectItem, string itemType)
+    public void BuyItem(GameObject selectedItem, string itemType)
     {
         if (itemType == "Card")
         for (int i = 0; i < shopCards.Count; i++)
         {
-            if (selectItem == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
+            if (selectedItem == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
             {
                 CardController card = shopCards[i].GetComponent<CardController>();
 
@@ -232,18 +232,17 @@ public class ShopController : MonoBehaviour
                         playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                         playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
 
-                        selectItem.GetComponentInChildren<Image>().color = Color.gray;    // 買ったカードをグレーアウトする
-                        selectItem.transform.localScale = scaleReset;                     // スケールを戻す
-
-                        selectItem.SetActive(false);
+                        selectedItem.SetActive(false);
 
                     } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
                     {
                         playerData._playerMoney -= card.cardDataManager._cardPrice;
                         playerData._deckList.Add(shopCardsID[i]);
 
-                        selectItem.GetComponentInChildren<Image>().color = Color.gray;
-                        selectItem.transform.localScale = scaleReset;
+
+                        // 回復カードをグレーアウトにする
+                        selectedItem.transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
+                        selectedItem.transform.localScale = scaleReset;
                     }
                 }               
             }
@@ -252,7 +251,7 @@ public class ShopController : MonoBehaviour
         if (itemType == "Relic")
         for (int i = 0; i < shopRelics.Count; i++)
         {
-            if (selectItem == shopRelics[i])         // クリックしたレリックとショップに並んでるレリックが一致したら
+            if (selectedItem == shopRelics[i])         // クリックしたレリックとショップに並んでるレリックが一致したら
             {
                 RelicController relic = shopRelics[i].GetComponent<RelicController>();
 
@@ -261,9 +260,9 @@ public class ShopController : MonoBehaviour
                     playerData._playerMoney -= relic.relicDataManager._relicPrice;          // 所持金から値段分のお金を引いて
                     playerData._relicList.Add(shopRelicsID[i]);                             // レリックリストに加える
 
-                    selectItem.transform.localScale = scaleReset;                           // スケールを戻す
+                    selectedItem.transform.localScale = scaleReset;                           // スケールを戻す
 
-                    selectItem.SetActive(false);
+                    selectedItem.SetActive(false);
                 }
             }
         }
