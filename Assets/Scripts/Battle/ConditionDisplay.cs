@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerConditionDisplay : MonoBehaviour
+public class ConditionDisplay : MonoBehaviour
 {
     [SerializeField]
     private GameObject coditionIcon;

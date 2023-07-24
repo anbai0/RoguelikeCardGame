@@ -6,27 +6,29 @@ using UnityEngine.UI;
 public class CardState : MonoBehaviour
 {
     CardDataManager cardDataManager;
-    GameObject hiddenPanel;
+    GameObject blindPanel;
+    public bool isActive = true;
     // Start is called before the first frame update
     void Start()
     {
+        isActive = true;
         cardDataManager = GetComponent<CardController>().cardDataManager;
-        hiddenPanel = gameObject.transform.GetChild(5).gameObject;
-        hiddenPanel.SetActive(false);
+        blindPanel = gameObject.transform.Find("BlindPanel").gameObject;
+        blindPanel.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (cardDataManager._cardState != 0)//カードが使用不可な場合
+        if (isActive == true && cardDataManager._cardState != 0)//カードが表示されていてステートが0以外の場合
         {
             //カードを暗くするパネルを表示する
-            hiddenPanel.SetActive(true);
+            blindPanel.SetActive(true);
         }
-        else 
+        else
         {
             //カードを暗くするパネルを非表示にする
-            hiddenPanel.SetActive(false);
+            blindPanel.SetActive(false);
         }
     }
 }

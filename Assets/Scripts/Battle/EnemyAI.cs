@@ -2,20 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class EnemyMove //エネミーの行動クラス
+{
+    public string moveName;
+    public bool isUsable;
+    public int moveCost;
+
+    public EnemyMove(string name, bool usable, int cost)
+    {
+        moveName = name;
+        isUsable = usable;
+        moveCost = cost;
+    }
+}
 public class EnemyAI : MonoBehaviour
 {
     BattleGameManager bg;
     PlayerBattleAction player;
     EnemyBattleAction enemy;
 
-    private int snakeGlaresCount;
+    //使用制限のある技の変数
+    int snakeGlaresCount; //蛇睨みの回数
+    bool isUsableGodCrusher; //神砕きを使用出来るか判定
+    //Debug用変数
+    int floor = 1;
     private enum EnemyState //エネミーの種別
     {
-        SLIME,                    //スライム
-        SKELETONSWORDSMAN,        //骸骨剣士
-        NAGA,                     //ナーガ
-        CHIMERA,                  //キマイラ
-        DARKKNIGHT                //暗黒騎士
+        SLIME1,                    //スライム(1階層目)
+        SKELETONSWORDSMAN1,        //骸骨剣士(1階層目)
+        NAGA1,                     //ナーガ(1階層目)
+        CHIMERA1,                  //キマイラ(1階層目)
+        DARKKNIGHT1,               //暗黒騎士(1階層目)
+        CYCLOPS,                   //サイクロプス(1階層目)
+        SLIME2,                    //スライム(2階層目)
+        SKELETONSWORDSMAN2,        //骸骨剣士(2階層目)
+        NAGA2,                     //ナーガ(2階層目)
+        CHIMERA2,                  //キマイラ(2階層目)
+        DARKKNIGHT2,               //暗黒騎士(2階層目)
+        SCYLLA,                    //スキュラ(2階層目) 
     }
     EnemyState enemyState;
     // Start is called before the first frame update
@@ -25,338 +49,362 @@ public class EnemyAI : MonoBehaviour
         player = GetComponent<PlayerBattleAction>();
         enemy = GetComponent<EnemyBattleAction>();
         snakeGlaresCount = 0;
+        isUsableGodCrusher = false;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    public void SetEnemyState(string enemyName) //エネミーの名前に応じて行動パターンのステートを変更する
-    {
-        if (enemyName == "スライム")
-        {
-            enemyState = EnemyState.SLIME;
-        }
-        else if (enemyName == "骸骨剣士")
-        {
-            enemyState = EnemyState.SKELETONSWORDSMAN;
-        }
-        else if (enemyName == "ナーガ")
-        {
-            enemyState = EnemyState.NAGA;
-        }
-        else if (enemyName == "キマイラ")
-        {
-            enemyState = EnemyState.CHIMERA;
-        }
-        else if (enemyName == "暗黒騎士")
-        {
-            enemyState = EnemyState.DARKKNIGHT;
-        }
-    }
-    /// <summary>
-    /// エネミーの行動を選択する
-    /// </summary>
-    /// <param name="currentAP">エネミーの現在のAP</param>
-    /// <returns>技の名前,技のコスト</returns>
     public (string moveName, int moveCost) SelectMove(int currentAP)
     {
-        Debug.Log("現在のエネミーステートは:" + enemyState);
-        string moveName = "RoundEnd";//使用する技の名前
-        int moveCost = 0;//使用する技のコスト
-        if (enemyState == EnemyState.SLIME)//スライムの行動パターン
-        {
-            Debug.Log("Slimeの行動");
-            int chargeCost = 2;//体当たりのコスト
-            int solutionCost = 3;//溶解液のコスト
-            int[] costArray = { chargeCost, solutionCost };//コストの配列
-            bool chargeEnabled = false;//体当たりが使用可能か
-            bool solutionEnabled = false;//溶解液が使用可能か
-            bool[] enabledArray = { chargeEnabled, solutionEnabled };//使用可能か判定する配列
-            for (int arrayNum = 0; arrayNum < costArray.Length; arrayNum++)
-            {
-                if (costArray[arrayNum] <= currentAP) //現在のAPがコストよりも大きい場合
-                {
-                    enabledArray[arrayNum] = true;//行動が可能になる
-                }
-            }
-            chargeEnabled = enabledArray[0];
-            solutionEnabled = enabledArray[1];
-            Debug.Log("dostArray.Length is :" + costArray.Length);
-            Debug.Log("chargeEnabled = " + chargeEnabled.ToString() + "chargeEnabled = " + solutionEnabled.ToString());
-            //行動パターンの選択
-            if (solutionEnabled && player.GetSetPlayerCondition.weakness == 0) //溶解液が使用可能でプレイヤーに衰弱が付いていなかった場合
-            {
-                moveName = "Solution";//溶解液を使用する
-                chargeEnabled = false;//体当たりを使用出来なくする
-                moveCost = solutionCost;//溶解液のコストをmoveCostを設定する
-                Debug.Log("溶解液");
-            }
-            if (chargeEnabled) //体当たりが使用可能な場合
-            {
-                moveName = "Charge";//体当たりを使用する
-                solutionEnabled = false;//溶解液を使用出来なくする
-                moveCost = chargeCost;//体当たりのコストをmoveCostを設定する
-                Debug.Log("体当たり");
-            }
-            if (!chargeEnabled && !solutionEnabled)//どの技も使用不可の場合 
-            {
-                moveName = "RoundEnd";//行動を終了する
-            }
-        }
-        else if (enemyState == EnemyState.SKELETONSWORDSMAN) //骸骨剣士の行動パターン
-        {
-            int slashCost = 2;//切りかかるのコスト
-            int holdShieldCost = 3;//盾を構えるのコスト
-            int[] costArray = { slashCost, holdShieldCost };
-            bool slashEnabled = false;//切りかかるが使用可能か
-            bool holdShieldEnabled = false;//盾を構えるが使用可能か
-            bool[] enabledArray = { slashEnabled, holdShieldEnabled };
-            for (int arrayNum = 0; arrayNum < costArray.Length; arrayNum++)
-            {
-                if (costArray[arrayNum] <= currentAP)
-                {
-                    enabledArray[arrayNum] = true;
-                }
-            }
-            slashEnabled = enabledArray[0];
-            holdShieldEnabled = enabledArray[1];
-            if (holdShieldEnabled && enemy.GetSetEnemyGP == 0) //盾を構えるが使用可能でエネミーにガードが無かった場合
-            {
-                moveName = "HoldShield";//盾を構えるを使用する
-                slashEnabled = false;//切りかかるを使用出来なくする
-                moveCost = holdShieldCost;//盾を構えるのコストをmoveCostを設定する
-                Debug.Log("盾を構える");
-            }
-            if (slashEnabled) //切りかかるが使用可能な場合
-            {
-                moveName = "Slash";//切りかかるを使用する
-                holdShieldEnabled = false;//盾を構えるを使用出来なくする
-                moveCost = slashCost;//切りかかるのコストをmoveCostを設定する
-                Debug.Log("切りかかる");
-            }
-            if (!slashEnabled && !holdShieldEnabled)//どの技も使用不可の場合 
-            {
-                moveName = "RoundEnd";
-            }
-        }
-        else if (enemyState == EnemyState.NAGA) //ナーガの行動パターン
-        {
-            int slashCost = 2;//切りかかるのコスト
-            int creepySongCost = 3;//不気味な歌のコスト
-            int[] costArray = { slashCost, creepySongCost };
-            bool slashEnabled = false;//切りかかるが使用可能か
-            bool creepySongEnabled = false;//不気味な歌が使用可能か
-            bool[] enabledArray = { slashEnabled, creepySongEnabled };
-            for (int arrayNum = 0; arrayNum < costArray.Length; arrayNum++)
-            {
-                if (costArray[arrayNum] <= currentAP)
-                {
-                    enabledArray[arrayNum] = true;
-                }
-            }
-            slashEnabled = enabledArray[0];
-            creepySongEnabled = enabledArray[1];
-            if (creepySongEnabled && player.GetSetPlayerCondition.impatience == 0) //不気味な歌が使用可能でプレイヤーに焦燥が付いていなかった場合
-            {
-                moveName = "CreepySong";//不気味な歌を使用する
-                slashEnabled = false;//切りかかるを使用出来なくする
-                moveCost = creepySongCost;//不気味な歌のコストをmoveCostを設定する
-                Debug.Log("不気味な歌");
-            }
-            if (slashEnabled) //切りかかるが使用可能な場合
-            {
-                moveName = "Slash";//切りかかるを使用する
-                creepySongEnabled = false;//盾を構えるを使用出来なくする
-                moveCost = slashCost;//切りかかるのコストをmoveCostを設定する
-                Debug.Log("切りかかる");
-            }
-            if (!slashEnabled && !creepySongEnabled)//どの技も使用不可の場合
-            {
-                moveName = "RoundEnd";
-            }
-        }
-        else if (enemyState == EnemyState.CHIMERA) //キマイラの行動パターン
-        {
-            int biteCost = 3;//噛みつきのコスト
-            int rampageCost = 7;//暴れ回るのコスト
-            int burningBreathCost = 4;//燃える息のコスト
-            int snakeGlaresCost = 2;//蛇睨みのコスト
-            int[] costArray = { biteCost, rampageCost, burningBreathCost, snakeGlaresCost };
-            bool biteEnabled = false;//噛みつきが使用可能か
-            bool rampageEnabled = false;//暴れ回るが使用可能か
-            bool burningBreathEnabled = false;//燃える息が使用可能か
-            bool snakeGlaresEnabled = false;//蛇睨みが使用可能か
-            bool[] enabledArray = { biteEnabled, rampageEnabled, burningBreathEnabled, snakeGlaresEnabled };
-            for (int arrayNum = 0; arrayNum < costArray.Length; arrayNum++)
-            {
-                if (costArray[arrayNum] <= currentAP)
-                {
-                    enabledArray[arrayNum] = true;
-                }
-            }
-            biteEnabled = enabledArray[0];
-            rampageEnabled = enabledArray[1];
-            burningBreathEnabled = enabledArray[2];
-            snakeGlaresEnabled = enabledArray[3];
+        string moveName = null; //選択された技の名前
+        int moveCost = 0; //選択されたコストの名前
+        List<EnemyMove> enemyMove; //エネミーの技リスト
 
-            if (snakeGlaresEnabled && snakeGlaresCount == 0) //蛇睨みが使用可能で一回も使用していない場合
-            {
-                snakeGlaresCount++;//使用した回数を増やす
-                moveName = "SnakeGlares";//蛇睨みを使用する
-                biteEnabled = false;//?みつきを使用出来なくする
-                rampageEnabled = false;//暴れ回るを使用出来なくする
-                burningBreathEnabled = false;//燃える息を使用出来なくする
-                moveCost = snakeGlaresCost;//蛇睨みのコストをmoveCostに設定する
-                Debug.Log("蛇睨み");
-            }
-            else
-            {
-                snakeGlaresEnabled = false;//蛇睨みを使用出来なくする
-            }
-
-            List<string> moveEnabledArray = new List<string>();//使用可能な技をListに保存
-            if (biteEnabled) //biteEnabledが使用可能であれば
-            {
-                moveEnabledArray.Add("Bite");//moveEnabledArrayに追加
-            }
-            if (rampageEnabled) //rampageEnabledが使用可能であれば
-            {
-                moveEnabledArray.Add("Rampage");//moveEnabledArrayに追加
-            }
-            if (burningBreathEnabled) //burningBreathEnabledが使用可能であれば
-            {
-                moveEnabledArray.Add("BurningBreath");//moveEnabledArrayに追加
-            }
-            if (moveEnabledArray.Count > 0)
-            {
-                int randSelectMove = Random.Range(0, moveEnabledArray.Count);//使用できる技の中からランダムに技を選択する
-
-                switch (moveEnabledArray[randSelectMove])
-                {
-                    case "Bite":　//選択された行動噛みつきだった場合
-                        moveName = "Bite";//噛みつきを使用する
-                        rampageEnabled = false;//暴れ回るを使用出来なくする
-                        burningBreathEnabled = false;//燃える息を使用出来なくする
-                        moveCost = biteCost;//噛みつきのコストをmoveCostに設定する
-                        Debug.Log("噛みつき");
-                        break;
-                    case "Rampage": //選択された行動が暴れ回るだった場合
-                        moveName = "Rampage";//暴れ回るを使用する
-                        biteEnabled = false;//噛みつきを使用出来なくする
-                        burningBreathEnabled = false;//燃える息を使用出来なくする
-                        moveCost = rampageCost;//暴れ回るのコストをmoveCostに設定する
-                        Debug.Log("暴れ回る");
-                        break;
-                    case "BurningBreath": //選択された行動が燃える息だった場合
-                        moveName = "BurningBreath";//燃える息を使用する
-                        biteEnabled = false;//噛みつきを使用出来なくする
-                        rampageEnabled = false;//暴れ回るを使用出来なくする
-                        moveCost = burningBreathCost; //燃える息のコストをmoveCostに設定する
-                        Debug.Log("燃える息");
-                        break;
-                    default:
-                        Debug.Assert(false);
-                        break;
-                }
-            }
-            if (!snakeGlaresEnabled && moveEnabledArray.Count == 0) //どの技も使用不可の場合
-            {
-                moveName = "RoundEnd";
-            }
-        }
-        else if (enemyState == EnemyState.DARKKNIGHT) //暗黒騎士の行動パターン
-        {
-            int swingCost = 3;//振り下ろすのコスト
-            int robustShieldCost = 3;//堅牢な盾のコスト
-            int desperateLungeCost = 3;//捨て身突進のコスト
-            int rampageCost = 7;//暴れ回るのコスト
-            int[] costArray = { swingCost, robustShieldCost, desperateLungeCost, rampageCost };
-            bool swingEnabled = false;//振り下ろすが使用可能か
-            bool robustShieldEnabled = false;//堅牢な盾が使用可能か
-            bool desperateLungeEnabled = false;//捨て身突進が使用可能か
-            bool rampageEnabled = false;//暴れ回るが使用可能か
-            bool[] enabledArray = { swingEnabled, robustShieldEnabled, desperateLungeEnabled, rampageEnabled };
-            for (int arrayNum = 0; arrayNum < costArray.Length; arrayNum++)
-            {
-                if (costArray[arrayNum] <= currentAP)
-                {
-                    enabledArray[arrayNum] = true;
-                }
-            }
-            swingEnabled = enabledArray[0];
-            robustShieldEnabled = enabledArray[1];
-            desperateLungeEnabled = enabledArray[2];
-            rampageEnabled = enabledArray[3];
-
-            if (robustShieldEnabled && enemy.GetSetRoundEnabled == false) //堅牢な盾が使用可能でラウンド中に1回も使用していなかった場合
-            {
-                enemy.GetSetRoundEnabled = true;//ラウンド中に使用した
-                moveName = "RobustShield";//堅牢な盾を使用する
-                swingEnabled = false;//振り下ろすを使用出来なくする
-                desperateLungeEnabled = false;//捨て身突進を使用出来なくする
-                rampageEnabled = false;//暴れ回るを使用出来なくする
-                moveCost = robustShieldCost;//堅牢な盾のコストをmoveCostに設定する
-            }
-            else
-            {
-                robustShieldEnabled = false;
-            }
-            List<string> moveEnabledArray = new List<string>();//使用可能な技をListに保存
-            if (swingEnabled) //swingEnabledが使用可能であれば
-            {
-                moveEnabledArray.Add("Swing");//moveEnabledArrayに追加
-            }
-            if (desperateLungeEnabled && enemy.GetSetEnemyCurrentHP >= 15) //desperateLungeEnabledが使用可能でエネミーの現在のHPが15以上であれば
-            {
-                moveEnabledArray.Add("DesperateLunge");//moveEnabledArrayに追加
-            }
-            if (rampageEnabled) //burningBreathEnabledが使用可能であれば
-            {
-                moveEnabledArray.Add("Rampage");//moveEnabledArrayに追加
-            }
-            if (moveEnabledArray.Count > 0)
-            {
-                int randomSelectMove = Random.Range(0, moveEnabledArray.Count);
-                switch (moveEnabledArray[randomSelectMove])
-                {
-                    case "Swing":
-                        moveName = "Swing";
-                        desperateLungeEnabled = false;
-                        rampageEnabled = false;
-                        moveCost = swingCost;
-                        Debug.Log("振り下ろす");
-                        break;
-                    case "DesperateLunge":
-                        moveName = "DesperateLunge";
-                        swingEnabled = false;
-                        rampageEnabled = false;
-                        moveCost = desperateLungeCost;
-                        Debug.Log("捨て身突進");
-                        break;
-                    case "Rampage":
-                        moveName = "Rampage";
-                        swingEnabled = false;
-                        desperateLungeEnabled = false;
-                        moveCost = rampageCost;
-                        Debug.Log("暴れ回る");
-                        break;
-                    default:
-                        Debug.Assert(false);
-                        break;
-                }
-            }
-            if (!robustShieldEnabled && moveEnabledArray.Count == 0)
-            {
-                moveName = "RoundEnd";
-            }
-        }
-        else //どのステートでもない場合
-        {
-            moveName = "RoundEnd";
-        }
+        enemyMove = SetMoveList(); //技をセットする
+        enemyMove = APCheck(enemyMove, currentAP); //現在のAPに応じて使える技を選出
+        enemyMove = CheckEnemyMove(enemyMove); //エネミーの条件に応じて使える技を選出
+        var selectMove = SelectMove(enemyMove); //使用できる技の中からランダムで選択する
+        moveName = selectMove.name; //選択された技の名前を代入
+        moveCost = selectMove.cost; //選択された技のコストを代入
         return (moveName, moveCost);
+    }
+    public void SetEnemyState(string enemyName) //エネミーの名前と階層数に応じてEnemyAIのステートを変更する
+    {
+        //floor = GameManager.instance.GetFloor;
+        if (enemyName == "スライム" && floor == 1)
+        {
+            enemyState = EnemyState.SLIME1;
+        }
+        else if (enemyName == "スライム" && floor == 2)
+        {
+            enemyState = EnemyState.SLIME2;
+        }
+        else if (enemyName == "骸骨剣士" && floor == 1)
+        {
+            enemyState = EnemyState.SKELETONSWORDSMAN1;
+        }
+        else if (enemyName == "骸骨剣士" && floor == 2)
+        {
+            enemyState = EnemyState.SKELETONSWORDSMAN2;
+        }
+        else if (enemyName == "ナーガ" && floor == 1)
+        {
+            enemyState = EnemyState.NAGA1;
+        }
+        else if (enemyName == "ナーガ" && floor == 2)
+        {
+            enemyState = EnemyState.NAGA2;
+        }
+        else if (enemyName == "キメラ" && floor == 1)
+        {
+            enemyState = EnemyState.CHIMERA1;
+        }
+        else if (enemyName == "キメラ" && floor == 2)
+        {
+            enemyState = EnemyState.CHIMERA2;
+        }
+        else if (enemyName == "暗黒騎士" && floor == 1)
+        {
+            enemyState = EnemyState.DARKKNIGHT1;
+        }
+        else if (enemyName == "暗黒騎士" && floor == 2)
+        {
+            enemyState = EnemyState.DARKKNIGHT2;
+        }
+        else if (enemyName == "サイクロプス" && floor == 1)
+        {
+            enemyState = EnemyState.CYCLOPS;
+        }
+        else if (enemyName == "スキュラ" && floor == 2)
+        {
+            enemyState = EnemyState.SCYLLA;
+        }
+
+    }
+    List<EnemyMove> SetMoveList() //エネミーの技をリストとしてセットする
+    {
+        List<EnemyMove> enemyMove = new List<EnemyMove>();
+        if (enemyState == EnemyState.SLIME1)
+        {
+            enemyMove.Add(new EnemyMove("Charge", false, 2)); //たいあたり
+            enemyMove.Add(new EnemyMove("Solution", false, 3)); //溶解液
+        }
+        else if (enemyState == EnemyState.SLIME2)
+        {
+            enemyMove.Add(new EnemyMove("Charge", false, 2)); //たいあたり
+            enemyMove.Add(new EnemyMove("Solution", false, 3)); //溶解液
+            enemyMove.Add(new EnemyMove("Curing", false, 2)); //硬化
+        }
+        else if (enemyState == EnemyState.SKELETONSWORDSMAN1)
+        {
+            enemyMove.Add(new EnemyMove("Slash", false, 2)); //切りかかる
+            enemyMove.Add(new EnemyMove("HoldShield", false, 2)); //盾を構える
+        }
+        else if (enemyState == EnemyState.SKELETONSWORDSMAN2)
+        {
+            enemyMove.Add(new EnemyMove("Slash", false, 2)); //切りかかる
+            enemyMove.Add(new EnemyMove("HoldShield", false, 2)); //盾を構える
+            enemyMove.Add(new EnemyMove("Rampage", false, 7));//暴れ回る
+        }
+        else if (enemyState == EnemyState.NAGA1)
+        {
+            enemyMove.Add(new EnemyMove("Slash", false, 2)); //切りかかる
+            enemyMove.Add(new EnemyMove("CreepySong", false, 3)); //不気味な歌
+        }
+        else if (enemyState == EnemyState.NAGA2)
+        {
+            enemyMove.Add(new EnemyMove("Slash", false, 2)); //切りかかる
+            enemyMove.Add(new EnemyMove("CreepySong", false, 3)); //不気味な歌
+            enemyMove.Add(new EnemyMove("SnakeFangs", false, 4)); //蛇牙
+        }
+        else if (enemyState == EnemyState.CHIMERA1)
+        {
+            enemyMove.Add(new EnemyMove("Bite", false, 3)); //噛みつき
+            enemyMove.Add(new EnemyMove("Rampage", false, 7));//暴れ回る
+            enemyMove.Add(new EnemyMove("BurningBreath", false, 4));//燃える息
+            enemyMove.Add(new EnemyMove("SnakeGlares", false, 2));//蛇睨み
+        }
+        else if (enemyState == EnemyState.CHIMERA2)
+        {
+            enemyMove.Add(new EnemyMove("Bite", false, 3)); //噛みつき
+            enemyMove.Add(new EnemyMove("Rampage", false, 7));//暴れ回る
+            enemyMove.Add(new EnemyMove("BurningBreath", false, 4));//燃える息
+            enemyMove.Add(new EnemyMove("SnakeGlares", false, 2));//蛇睨み
+            enemyMove.Add(new EnemyMove("SnakeFangs", false, 4)); //蛇牙
+        }
+        else if (enemyState == EnemyState.DARKKNIGHT1)
+        {
+            enemyMove.Add(new EnemyMove("Swing", false, 3));//振り下ろす
+            enemyMove.Add(new EnemyMove("RobustShield", false, 3));//堅牢なる盾
+            enemyMove.Add(new EnemyMove("DesperateLunge", false, 3));//捨て身突進
+            enemyMove.Add(new EnemyMove("Rampage", false, 7));//暴れ回る
+        }
+        else if (enemyState == EnemyState.DARKKNIGHT2)
+        {
+            enemyMove.Add(new EnemyMove("Swing", false, 3));//振り下ろす
+            enemyMove.Add(new EnemyMove("RobustShield", false, 3));//堅牢なる盾
+            enemyMove.Add(new EnemyMove("DesperateLunge", false, 3));//捨て身突進
+            enemyMove.Add(new EnemyMove("Rampage", false, 7));//暴れ回る
+            enemyMove.Add(new EnemyMove("Encouragement", false, 4));//鬨
+        }
+        else if (enemyState == EnemyState.CYCLOPS)
+        {
+            enemyMove.Add(new EnemyMove("SwingOver", false, 6));//振りかぶる
+            enemyMove.Add(new EnemyMove("GodCrusher", false, 0));//神砕き
+            enemyMove.Add(new EnemyMove("RandomPounding", false, 5));//乱れ打ち
+            enemyMove.Add(new EnemyMove("GiantFist", false, 2));//巨拳
+            enemyMove.Add(new EnemyMove("Rumbling", false, 4));//じならし
+        }
+        else if (enemyState == EnemyState.SCYLLA)
+        {
+            enemyMove.Add(new EnemyMove("SwingOver", false, 6));//振りかぶる
+            enemyMove.Add(new EnemyMove("GodCrusher", false, 0));//神砕き
+            enemyMove.Add(new EnemyMove("RandomPounding", false, 5));//乱れ打ち
+            enemyMove.Add(new EnemyMove("WrigglingTentacles", false, 4));//蠢く触手
+            enemyMove.Add(new EnemyMove("Rumbling", false, 4));//じならし
+        }
+        return enemyMove;
+    }
+    List<EnemyMove> CheckEnemyMove(List<EnemyMove> enemyMove) //エネミーの技が使用出来るかチェックする
+    {
+        if (enemyState == EnemyState.SLIME1)
+        {
+            if (player.GetSetCondition.weakness > 0) //プレイヤーに衰弱が付与されているなら
+            {
+                enemyMove[1].isUsable = false; //溶解液を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.SLIME2)
+        {
+            if (player.GetSetCondition.weakness > 0) //プレイヤーに衰弱が付与されてるなら
+            {
+                enemyMove[1].isUsable = false; //溶解液を使用不可に
+            }
+            if (enemy.GetSetGP > 0) //エネミーにGPがあるなら
+            {
+                enemyMove[2].isUsable = false; //硬化を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.SKELETONSWORDSMAN1)
+        {
+            if (enemy.GetSetGP > 0) //エネミーにGPがあるなら
+            {
+                enemyMove[1].isUsable = false; //盾を構えるを使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.SKELETONSWORDSMAN2)
+        {
+            if (enemy.GetSetGP > 0) //エネミーにGPがあるなら
+            {
+                enemyMove[1].isUsable = false; //盾を構えるを使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.NAGA1)
+        {
+            if (player.GetSetCondition.impatience > 0) //プレイヤーに焦燥が付与されているなら
+            {
+                enemyMove[1].isUsable = false;//不気味な歌を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.NAGA2)
+        {
+            if (player.GetSetCondition.impatience > 0) //プレイヤーに焦燥が付与されているなら
+            {
+                enemyMove[1].isUsable = false;//不気味な歌を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.CHIMERA1)
+        {
+            if (snakeGlaresCount > 0) //戦闘で一度でも蛇睨みを使用しているなら
+            {
+                enemyMove[3].isUsable = false; //蛇睨みを使用不可に
+            }
+            else //蛇睨みを使用していないなら
+            {
+                //蛇睨み以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[1].isUsable = false;
+                enemyMove[2].isUsable = false;
+                snakeGlaresCount++; //蛇睨みの使用回数をカウントする
+            }
+        }
+        else if (enemyState == EnemyState.CHIMERA2)
+        {
+            if (snakeGlaresCount > 0) //戦闘で一度でも蛇睨みを使用しているなら
+            {
+                enemyMove[3].isUsable = false; //蛇睨みを使用不可に
+            }
+            else //蛇睨みを使用していないなら
+            {
+                //蛇睨み以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[1].isUsable = false;
+                enemyMove[2].isUsable = false;
+                enemyMove[4].isUsable = false;
+                snakeGlaresCount++; //蛇睨みの使用回数をカウントする
+            }
+        }
+        else if (enemyState == EnemyState.DARKKNIGHT1)
+        {
+            if (enemy.GetSetRoundEnabled == true) //ラウンド中に堅牢なる盾を使用しているなら
+            {
+                enemyMove[1].isUsable = false; //堅牢なる盾を使用不可に
+            }
+            else //ラウンド中に堅牢なる盾を使用していないなら
+            {
+                //堅牢なる盾以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[2].isUsable = false;
+                enemyMove[3].isUsable = false;
+                enemy.GetSetRoundEnabled = true; //ラウンド中は堅牢なる盾を使用出来なくする
+            }
+
+            if (enemy.GetSetCurrentHP < 15) //エネミーの現在のHPが15未満なら
+            {
+                enemyMove[2].isUsable = false; //捨て身突進を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.DARKKNIGHT2)
+        {
+            if (enemy.GetSetRoundEnabled == true) //ラウンド中に堅牢なる盾を使用しているなら
+            {
+                enemyMove[1].isUsable = false; //堅牢なる盾を使用不可に
+            }
+            else //ラウンド中に堅牢なる盾を使用していないなら
+            {
+                //堅牢なる盾以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[2].isUsable = false;
+                enemyMove[3].isUsable = false;
+                enemyMove[4].isUsable = false;
+                enemy.GetSetRoundEnabled = true; //ラウンド中は堅牢なる盾を使用出来なくする
+            }
+
+            if (enemy.GetSetCurrentHP < 15) //エネミーの現在のHPが15未満なら
+            {
+                enemyMove[2].isUsable = false; //捨て身突進を使用不可に
+            }
+
+            if (enemy.GetSetCondition.upStrength > 0) //エネミーに筋力増強が付与されているなら 
+            {
+                enemyMove[4].isUsable = false; //鬨を使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.CYCLOPS)
+        {
+            if (isUsableGodCrusher == true) //神砕きが使用可能なら
+            {
+                //神砕き以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[2].isUsable = false;
+                enemyMove[3].isUsable = false;
+                enemyMove[4].isUsable = false;
+                isUsableGodCrusher = false; //神砕きの使用判定を戻す
+            }
+            else
+            {
+                enemyMove[1].isUsable = false; //神砕きを使用不可に
+            }
+
+            if (player.CheckBadStatus() == 0 && enemy.CheckBadStatus() == 0) //プレイヤーとエネミーにバフやデバフが付与されていないなら
+            {
+                enemyMove[4].isUsable = false; //じならしを使用不可に
+            }
+        }
+        else if (enemyState == EnemyState.SCYLLA)
+        {
+            if (isUsableGodCrusher == true) //神砕きが使用可能なら
+            {
+                //神砕き以外を使用不可に
+                enemyMove[0].isUsable = false;
+                enemyMove[2].isUsable = false;
+                enemyMove[3].isUsable = false;
+                enemyMove[4].isUsable = false;
+                isUsableGodCrusher = false; //神砕きの使用判定を戻す
+            }
+            else
+            {
+                enemyMove[1].isUsable = false; //神砕きを使用不可に
+            }
+
+            if (player.CheckBadStatus() == 0 && enemy.CheckBadStatus() == 0) //プレイヤーとエネミーにバフやデバフが付与されていないなら
+            {
+                enemyMove[4].isUsable = false; //じならしを使用不可に
+            }
+        }
+
+        return enemyMove;
+    }
+    List<EnemyMove> APCheck(List<EnemyMove> enemyMove, int currentAP) //エネミーの技がAP以下かチェックする
+    {
+        foreach (var move in enemyMove) //エネミーの技を全探索 
+        {
+            if (move.moveCost <= currentAP) //コストが現在のAP以下であれば
+            {
+                move.isUsable = true; //使用可能にする
+            }
+        }
+        return enemyMove;
+    }
+    (string name, int cost) SelectMove(List<EnemyMove> enemyMove) //使用する技を選ぶ
+    {
+        List<(string, int)> moveUsabledList = new List<(string, int)>(); //技の名前とコストを格納できるリスト
+        foreach (var move in enemyMove) //使用可能な技をmoveUsabledListに追加する
+        {
+            if (move.isUsable == true)
+            {
+                moveUsabledList.Add((move.moveName, move.moveCost));
+            }
+        }
+        if (moveUsabledList.Count == 0)
+        {
+            return ("RoundEnd", 0);
+        }
+        //ランダムに技を選ぶ
+        int rand = Random.Range(0, moveUsabledList.Count);
+
+        if (moveUsabledList[rand].Item1 == "SwingOver") //サイクロプス専用の神砕き使用判定
+        {
+            isUsableGodCrusher = true;
+        }
+        return moveUsabledList[rand];
     }
     /// <summary>
     /// 技の効果処理
@@ -375,6 +423,9 @@ public class EnemyAI : MonoBehaviour
             case "Solution":
                 Solution();
                 break;
+            case "Curing":
+                Curing();
+                break;
             case "Slash":
                 Slash();
                 break;
@@ -383,6 +434,9 @@ public class EnemyAI : MonoBehaviour
                 break;
             case "CreepySong":
                 CreepySong();
+                break;
+            case "SnakeFangs":
+                SnakeFangs();
                 break;
             case "Bite":
                 Bite();
@@ -404,6 +458,27 @@ public class EnemyAI : MonoBehaviour
                 break;
             case "DesperateLunge":
                 DesperateLunge();
+                break;
+            case "Encouragement":
+                Encouragement();
+                break;
+            case "SwingOver":
+                SwingOver();
+                break;
+            case "GodCrusher":
+                GodCrusher();
+                break;
+            case "RandomPounding":
+                RandomPounding();
+                break;
+            case "GiantFist":
+                GiantFist();
+                break;
+            case "Rumbling":
+                Rumbling();
+                break;
+            case "WrigglingTentacles":
+                WrigglingTentacles();
                 break;
             default:
                 Debug.Assert(false);
@@ -435,6 +510,15 @@ public class EnemyAI : MonoBehaviour
         player.AddConditionStatus("Weakness", 1);
     }
     /// <summary>
+    /// スライム:硬化
+    /// 4ガードを得る。状態異常無効を2得る。
+    /// </summary>
+    private void Curing()
+    {
+        enemy.AddGP(4);
+        enemy.AddConditionStatus("InvalidBadStatus", 2);
+    }
+    /// <summary>
     /// 骸骨剣士とナーガ:切りかかる
     /// プレイヤーに4ダメージ与える
     /// </summary>
@@ -459,6 +543,15 @@ public class EnemyAI : MonoBehaviour
         player.AddConditionStatus("Impatience", 1);
     }
     /// <summary>
+    /// ナーガとキマイラ:蛇牙
+    /// プレイヤーに3ダメージ与え、邪毒を1与える。
+    /// </summary>
+    private void SnakeFangs()
+    {
+        player.TakeDamage(3);
+        player.AddConditionStatus("Poison", 1);
+    }
+    /// <summary>
     /// キマイラ:噛みつき
     /// プレイヤーに4ダメージ与える
     /// </summary>
@@ -477,7 +570,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator RampageEnumerator()
     {
         bg.isCoroutine = true;
-        int attackCount = Random.Range(3, 4);
+        int attackCount = Random.Range(3, 6);
         for (int count = 0; count < attackCount; count++)
         {
             yield return new WaitForSeconds(1.0f);
@@ -502,17 +595,113 @@ public class EnemyAI : MonoBehaviour
     {
         player.AddConditionStatus("Impatience", 1);
     }
+    /// <summary>
+    /// 暗黒騎士：振り下ろす
+    /// プレイヤーに5ダメージを与える。
+    /// </summary>
     private void Swing()
     {
         player.TakeDamage(5);
     }
+    /// <summary>
+    /// 暗黒騎士：堅牢なる盾
+    /// ガードを4得る。
+    /// </summary>
     private void RobustShield()
     {
         enemy.AddGP(4);
     }
+    /// <summary>
+    /// 暗黒騎士：捨て身突進
+    /// プレイヤーに7ダメージを与え、自身にも4ダメージ。
+    /// </summary>
     private void DesperateLunge()
     {
         player.TakeDamage(7);
         enemy.TakeDamage(4);
+    }
+    /// <summary>
+    /// 暗黒騎士：鬨
+    /// 筋力増強を1つ得る
+    /// </summary>
+    private void Encouragement()
+    {
+        enemy.AddConditionStatus("UpStrength", 1);
+    }
+    /// <summary>
+    /// サイクロプスとスキュラ：振りかぶる
+    /// ガードを10得る。
+    /// </summary>
+    private void SwingOver()
+    {
+        enemy.AddGP(10);
+    }
+    /// <summary>
+    /// サイクロプスとスキュラ：神砕き
+    /// ガードの3倍のダメージを与える。ガードをすべて失う。
+    /// </summary>
+    private void GodCrusher()
+    {
+        int damage = enemy.GetSetGP * 3;
+        player.TakeDamage(damage);
+        enemy.GetSetGP = 0;
+    }
+    /// <summary>
+    /// サイクロプスとスキュラ：乱れ打ち
+    /// プレイヤーに5ダメージを0～3回与える。
+    /// </summary>
+    private void RandomPounding()
+    {
+        StartCoroutine(RandomPoundingEnumerator());
+    }
+    IEnumerator RandomPoundingEnumerator()
+    {
+        bg.isCoroutine = true;
+        int attackCount = Random.Range(0, 3);
+        for (int count = 0; count < attackCount; count++)
+        {
+            yield return new WaitForSeconds(1.0f);
+            player.TakeDamage(5);
+        }
+        bg.isCoroutine = false;
+        bg.TurnCalc();
+    }
+    /// <summary>
+    /// サイクロプス：巨拳
+    /// プレイヤーに4ダメージを与える。
+    /// </summary>
+    private void GiantFist()
+    {
+        player.TakeDamage(4);
+    }
+    /// <summary>
+    /// サイクロプスとスキュラ：じならし
+    /// お互いのバフ、デバフをすべて解除する。
+    /// </summary>
+    private void Rumbling()
+    {
+        player.GetSetCondition.upStrength = 0;
+        player.GetSetCondition.autoHealing = 0;
+        player.GetSetCondition.invalidBadStatus = 0;
+        player.ReleaseBadStatus();
+        enemy.GetSetCondition.upStrength = 0;
+        enemy.GetSetCondition.autoHealing = 0;
+        enemy.GetSetCondition.invalidBadStatus = 0;
+        enemy.ReleaseBadStatus();
+    }
+    /// <summary>
+    /// スキュラ：蠢く触手
+    /// プレイヤーに3ダメージを与え、呪縛、焦燥、衰弱、邪毒のいずれかを与える。
+    /// </summary>
+    private void WrigglingTentacles()
+    {
+        player.TakeDamage(3);
+        List<string> badStatus = new List<string>();
+        badStatus.Add("Curse");
+        badStatus.Add("Impatience");
+        badStatus.Add("Weakness");
+        badStatus.Add("Poison");
+        int rand = Random.Range(0, badStatus.Count);
+        player.AddConditionStatus(badStatus[rand], 1);
     }
 }
