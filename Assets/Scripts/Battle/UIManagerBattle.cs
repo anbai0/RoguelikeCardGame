@@ -53,6 +53,7 @@ public class UIManagerBattle : MonoBehaviour
             UI.onExit.RemoveAllListeners();
             UI.onBeginDrag.RemoveAllListeners();
             UI.onDrag.RemoveAllListeners();
+            UI.onDrop.RemoveAllListeners();
         }
     }
 

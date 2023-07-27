@@ -10,10 +10,10 @@ using UnityEngine.UI;
 /// UIの管理を行うスクリプトです。
 /// UIController側で起きた判定に対して処理を行います。
 /// </summary>
-public class UIManagerBase : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     // UIManagerに最初から定義してある変数
-    [Header ("Canvasをアタッチ")]
+    [Header("Canvasをアタッチ")]
     [SerializeField] private GameObject parent;
     private UIController[] UIs;
     bool isRemoved = true;
@@ -37,7 +37,6 @@ public class UIManagerBase : MonoBehaviour
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
-            UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
             UI.onBeginDrag.AddListener(() => UIBeginDrag(UI.gameObject));
@@ -58,7 +57,6 @@ public class UIManagerBase : MonoBehaviour
         foreach (UIController UI in UIs)
         {
             UI.onLeftClick.RemoveAllListeners();
-            UI.onRightClick.RemoveAllListeners();
             UI.onEnter.RemoveAllListeners();
             UI.onExit.RemoveAllListeners();
             UI.onBeginDrag.RemoveAllListeners();
@@ -68,7 +66,6 @@ public class UIManagerBase : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// 左クリックされたときに処理するメソッドです。
     /// </summary>
@@ -76,16 +73,6 @@ public class UIManagerBase : MonoBehaviour
     void UILeftClick(GameObject UIObject)
     {
         Debug.Log("LeftClicked UI: " + UIObject);
-    }
-
-
-    /// <summary>
-    /// 右クリックされたときに処理するメソッドです。
-    /// </summary>
-    /// <param name="UIObject">クリックされたObject</param>
-    void UIRightClick(GameObject UIObject)
-    {
-        Debug.Log("RightClicked UI: " + UIObject);
     }
 
 
@@ -137,4 +124,5 @@ public class UIManagerBase : MonoBehaviour
     {
         Debug.Log("DragAndDrop UI: " + UIObject);
     }
+    
 }

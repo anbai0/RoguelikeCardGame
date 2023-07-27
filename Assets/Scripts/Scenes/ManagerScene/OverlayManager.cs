@@ -19,6 +19,14 @@ public class OverlayManager : MonoBehaviour
 
     void Update()
     {
+        RefreshMoneyText();
+    }
+
+    /// <summary>
+    /// 所持金のテキストを更新するメソッドです。
+    /// </summary>
+    void RefreshMoneyText()
+    {
         myMoneyText.text = playerData._playerMoney.ToString();
     }
 }
