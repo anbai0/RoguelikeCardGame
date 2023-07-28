@@ -14,6 +14,7 @@ public class ShopController : MonoBehaviour
     PlayerDataManager playerData;
     CardController cardController;
     RelicController relicController;
+    RelicStatus relicStatus;
 
     [SerializeField] Lottery lottery;
     [SerializeField] UIManagerShopScene uiManager;
@@ -61,7 +62,7 @@ public class ShopController : MonoBehaviour
     private void Start()
     {
         playerData = GameManager.Instance.playerData;
-
+        relicStatus = new RelicStatus();                       //後でGameManagerにプレイヤーのRelicStatusを作成して参照します
     }
 
     void Update()
@@ -260,13 +261,63 @@ public class ShopController : MonoBehaviour
                 if (playerData._playerMoney >= relic.relicDataManager._relicPrice)          // 所持金が足りるなら
                 {
                     playerData._playerMoney -= relic.relicDataManager._relicPrice;          // 所持金から値段分のお金を引いて
-                    playerData._relicList.Add(shopRelicsID[i]);                             // レリックリストに加える
-
+                    AddRelicStatus(shopRelicsID[i]);                                        //レリックステータスに加える
+                    //playerData._relicList.Add(shopRelicsID[i]);                             // レリックリストに加える
                     selectedItem.transform.localScale = scaleReset;                           // スケールを戻す
 
                     selectedItem.SetActive(false);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// レリックを追加する処理です
+    /// </summary>
+    /// <param name="relicID">レリックのID</param>
+    void AddRelicStatus(int relicID)
+    {
+        switch (relicID) //レリックのIDに応じてrelicStatusに1つ追加する
+        {
+            case 1:
+                relicStatus.hasRelicID1++;
+                break;
+            case 2:
+                relicStatus.hasRelicID2++;
+                break;
+            case 3:
+                relicStatus.hasRelicID3++;
+                break;
+            case 4:
+                relicStatus.hasRelicID4++;
+                break;
+            case 5:
+                relicStatus.hasRelicID5++;
+                break;
+            case 6:
+                relicStatus.hasRelicID6++;
+                break;
+            case 7:
+                relicStatus.hasRelicID7++;
+                break;
+            case 8:
+                relicStatus.hasRelicID8++;
+                break;
+            case 9:
+                relicStatus.hasRelicID9++;
+                break;
+            case 10:
+                relicStatus.hasRelicID10++;
+                break;
+            case 11:
+                relicStatus.hasRelicID11++;
+                break;
+            case 12:
+                relicStatus.hasRelicID12++;
+                break;
+            default:
+                Debug.Assert(false);
+                break;
         }
     }
 
