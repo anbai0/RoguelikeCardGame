@@ -1,10 +1,8 @@
 using UnityEditor;
+using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-// このスクリプトはコピーして使います。
-// コピーした先で使わないイベントやメソッドは削除してください
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -18,11 +16,25 @@ public class UIManager : MonoBehaviour
     private UIController[] UIs;
     bool isRemoved = true;
 
+    [Header("参照するUI")]
+    [SerializeField] GameObject overlay;
+    [SerializeField] GameObject optionScreen;
+    [SerializeField] GameObject confirmationPanel;
+    [Space (10)]
+    [SerializeField] GameObject overlayOptionButton;
+    [SerializeField] GameObject titleOptionButton;
+    [SerializeField] GameObject closeOptionButton;
+    [SerializeField] GameObject titleBackButton;
+    [SerializeField] GameObject closeConfirmButton;
+    [SerializeField] GameObject confirmTitleBackButton;
 
+
+    bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
 
     void Start()
     {
         UIEventsReload();
+        //ChangeUI("OverlayOnly");
     }
 
     /// <summary>
@@ -39,9 +51,6 @@ public class UIManager : MonoBehaviour
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
-            UI.onBeginDrag.AddListener(() => UIBeginDrag(UI.gameObject));
-            UI.onDrag.AddListener(() => UIDrag(UI.gameObject));
-            UI.onDrop.AddListener(() => UIDrop(UI.gameObject));
 
         }
 
@@ -59,9 +68,6 @@ public class UIManager : MonoBehaviour
             UI.onLeftClick.RemoveAllListeners();
             UI.onEnter.RemoveAllListeners();
             UI.onExit.RemoveAllListeners();
-            UI.onBeginDrag.RemoveAllListeners();
-            UI.onDrag.RemoveAllListeners();
-            UI.onDrop.RemoveAllListeners();
         }
     }
 
@@ -72,7 +78,39 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        Debug.Log("LeftClicked UI: " + UIObject);
+        Debug.Log(UIObject.name);
+
+        // オプション画面表示
+        if (UIObject == (overlayOptionButton || titleOptionButton))
+        {
+            optionScreen.SetActive(true);
+            UIEventsReload();
+        }
+
+        // オプション画面非表示
+        if (UIObject == closeOptionButton)
+        {
+            optionScreen.SetActive(false);
+        }
+
+        // タイトルへ戻るの確認画面表示
+        if (UIObject == titleBackButton)
+        {
+            confirmationPanel.SetActive(true);
+            UIEventsReload();
+        }
+
+        // タイトルへ戻るの確認画面非表示
+        if (UIObject == closeConfirmButton)
+        {
+            confirmationPanel.SetActive(false);
+        }
+
+        if (UIObject == confirmTitleBackButton)
+        {
+            // タイトルへ戻る処理
+
+        }
     }
 
 
@@ -94,35 +132,38 @@ public class UIManager : MonoBehaviour
     {
         //Debug.Log("Exited UI: " + UIObject);
     }
-
-
-    /// <summary>
-    /// UIをドラッグし始めた時に処理するメソッドです。
-    /// </summary>
-    /// <param name="UIObject">ドラッグしたObject</param>
-    void UIBeginDrag(GameObject UIObject)
-    {
-
-    }
-
-
-    /// <summary>
-    /// ドラッグしているUIに対して処理をするメソッドです。
-    /// </summary>
-    /// <param name="UIObject">ドラッグしているObject</param>
-    void UIDrag(GameObject UIObject)
-    {
-
-    }
-
-
-    /// <summary>
-    /// UIをドラッグアンドドロップしたときに処理するメソッドです。
-    /// </summary>
-    /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
-    void UIDrop(GameObject UIObject)
-    {
-        Debug.Log("DragAndDrop UI: " + UIObject);
-    }
     
+
+    /// <summary>
+    /// UIを切り替えるメソッドです。
+    /// 引数は、タイトル画面であれば、"Title"、
+    /// キャラ選択画面であれば"Chara"、
+    /// Overlayだけ表示したい場合は、"OverlayOnly"にしてください。
+    /// </summary>
+    /// <param name="type"></param>
+    public void ChangeUI(string type)
+    {
+        if (type == "Title")
+        {
+            overlay.SetActive(false);
+            titleOptionButton.SetActive(true);
+            titleBackButton.SetActive(false);
+        }
+
+        if (type == "Chara")
+        {
+            overlay.SetActive(false);
+            titleOptionButton.SetActive(false);
+            titleBackButton.SetActive(true);
+        }
+
+        if (type == "OverlayOnly")
+        {
+            overlay.SetActive(true);
+            titleOptionButton.SetActive(false);
+            titleBackButton.SetActive(true);
+        }
+
+        UIEventsReload();
+    }
 }

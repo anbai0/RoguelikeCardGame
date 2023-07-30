@@ -6,23 +6,19 @@ public class AudioManager : MonoBehaviour
 {
     private AudioSource audioSource;
 
-    [Header("Overall Volume")]
+    [Header("全体音量")]
     [SerializeField, Range(0f, 1f)] public float overallVolume = 1f;
 
-    [Header("Sound Effects")]
-    [SerializeField] private AudioClip[] SEaudioClips;
-    [SerializeField] private float[] SEaudioVolumes;
-    [SerializeField, Range(0f, 1f)] public float SEVolume = 0.5f;
+    [Header("SE関係")]
+    [SerializeField] private AudioClip[] seAudioClips;
+    [SerializeField] private float[] seAudioVolumes;
+    [SerializeField, Range(0f, 1f)] public float seVolume = 0.5f;
 
-    [Header("Background Music")]
-    [SerializeField] private AudioClip[] BGMaudioClips;
-    [SerializeField] private float[] BGMaudioVolumes;
-    [SerializeField, Range(0f, 1f)] public float BGMVolume = 0.5f;
+    [Header("BGM関係")]
+    [SerializeField] private AudioClip[] bgmAudioClips;
+    [SerializeField] private float[] bgmAudioVolumes;
+    [SerializeField, Range(0f, 1f)] public float bgmVolume = 0.5f;
 
-
-    [SerializeField] int maxOverallVolume = 1;
-    [SerializeField] int maxSEVolume = 2;
-    [SerializeField] int maxBGMVolume = 2;
 
     void Start()
     {
@@ -31,12 +27,12 @@ public class AudioManager : MonoBehaviour
     }
 
     // 効果音を再生する
-    public void SEPlay(string seName)
+    public void PlaySE(string seName)
     {
         int seIndex = GetSEIndex(seName);
         if (seIndex >= 0)
         {
-            audioSource.PlayOneShot(SEaudioClips[seIndex], SEaudioVolumes[seIndex] * overallVolume * SEVolume);
+            audioSource.PlayOneShot(seAudioClips[seIndex], seAudioVolumes[seIndex] * overallVolume * seVolume);
         }
         else
         {
@@ -45,12 +41,12 @@ public class AudioManager : MonoBehaviour
     }
 
     // BGMを再生する
-    public void BGMPlay(string bgmName)
+    public void PlayBGM(string bgmName)
     {
         int bgmIndex = GetBGMIndex(bgmName);
         if (bgmIndex >= 0)
         {
-            audioSource.PlayOneShot(BGMaudioClips[bgmIndex], BGMaudioVolumes[bgmIndex] * overallVolume * BGMVolume);
+            audioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * overallVolume * bgmVolume);
         }
         else
         {
@@ -61,9 +57,9 @@ public class AudioManager : MonoBehaviour
     // 効果音のインデックスを取得する
     private int GetSEIndex(string seName)
     {
-        for (int i = 0; i < SEaudioClips.Length; i++)
+        for (int i = 0; i < seAudioClips.Length; i++)
         {
-            if (SEaudioClips[i].name == seName)
+            if (seAudioClips[i].name == seName)
             {
                 return i;
             }
@@ -74,9 +70,9 @@ public class AudioManager : MonoBehaviour
     // BGMのインデックスを取得する
     private int GetBGMIndex(string bgmName)
     {
-        for (int i = 0; i < BGMaudioClips.Length; i++)
+        for (int i = 0; i < bgmAudioClips.Length; i++)
         {
-            if (BGMaudioClips[i].name == bgmName)
+            if (bgmAudioClips[i].name == bgmName)
             {
                 return i;
             }

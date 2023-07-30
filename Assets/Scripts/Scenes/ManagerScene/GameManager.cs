@@ -13,30 +13,16 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     private void Awake()
     {
+        // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
-        Instance.ReadPlayer("Warrior");
+        // これでReadPlayerを呼び出してplayerDataを初期化できます
+        ReadPlayer("Warrior");
     }
 
-    void Start()
-    {
-
-    }
-
-
-    void Update()
-    {
-        
-    }
 
 
     public void ReadPlayer(string playerJob)
