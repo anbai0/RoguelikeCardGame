@@ -18,6 +18,7 @@ public class CharacterBattleAction : MonoBehaviour
     int GP; //ダメージを防げるガードポイント
     ConditionStatus condition; //状態異常ステータス
     InflictCondition inflictCondition; //状態異常の効果
+    RelicStatus relics; //所持しているレリック
     public int GetSetHP { get => HP; set => HP = value; }
     public int GetSetCurrentHP { get => currentHP; set => currentHP = value; }
     public int GetSetAP { get => AP; set => AP = value; }
@@ -27,6 +28,7 @@ public class CharacterBattleAction : MonoBehaviour
     public int GetSetGP { get => GP; set => GP = value; }
     public ConditionStatus GetSetCondition { get => condition; set => condition = value; }
     public InflictCondition GetSetInflictCondition { get => inflictCondition; set => inflictCondition = value; }
+    public RelicStatus GetSetRelicStatus { get => relics; set => relics = value; }
     // Start is called before the first frame update
     void Start()
     {
@@ -155,11 +157,23 @@ public class CharacterBattleAction : MonoBehaviour
         condition.burn = 0;
         condition.poison = 0;
     }
+    public void ReleaseBuffStatus() //バフステータスを解除する
+    {
+        condition.upStrength = 0;
+        condition.autoHealing = 0;
+        condition.invalidBadStatus = 0;
+    }
     public int CheckBadStatus() //バッドステータスがあるかチェックする
     {
         var charaC = condition;
         int badStatus = charaC.curse + charaC.impatience + charaC.weakness + charaC.burn + charaC.poison;
         return badStatus;
+    }
+    public int CheckBuffStatus() //バフステータスがあるかチェックする
+    {
+        var charaC = condition;
+        int buffStatus = charaC.upStrength + charaC.autoHealing + charaC.invalidBadStatus;
+        return buffStatus;
     }
     public void AddConditionStatus(string status, int count) //状態異常を追加する
     {

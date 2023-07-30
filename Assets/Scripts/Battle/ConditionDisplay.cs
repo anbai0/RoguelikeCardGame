@@ -15,15 +15,16 @@ public class ConditionDisplay : MonoBehaviour
     GameObject weaknessIcon = null;
     GameObject burnIcon = null;
     GameObject poisonIcon = null;
-    bool isDisplayUpStrength;
-    bool isDisplayAutoHealing;
-    bool isDisplayInvalidBadStatus;
-    bool isDisplayCurse;
-    bool isDisplayImpatience;
-    bool isDisplayWeakness;
-    bool isDisplayBurn;
-    bool isDisplayPoison;
+    bool isDisplayUpStrength = false;
+    bool isDisplayAutoHealing = false;
+    bool isDisplayInvalidBadStatus = false;
+    bool isDisplayCurse = false;
+    bool isDisplayImpatience = false;
+    bool isDisplayWeakness = false;
+    bool isDisplayBurn = false;
+    bool isDisplayPoison = false;
     public int DebugNum = 0;
+    [SerializeField]
     SortDeck sortIcon;
     enum conditionState
     {
@@ -37,48 +38,26 @@ public class ConditionDisplay : MonoBehaviour
         POISON,
         NUM
     };
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// 状態異常の有無に合わせてアイコンの表示・非表示を行う処理
+    /// </summary>
+    /// <param name="condition">キャラクターの状態異常のステータス</param>
+    public void ViewIcon(ConditionStatus condition)
     {
-        isDisplayUpStrength = false;
-        isDisplayAutoHealing = false;
-        isDisplayInvalidBadStatus = false;
-        isDisplayCurse = false;
-        isDisplayImpatience = false;
-        isDisplayWeakness = false;
-        isDisplayBurn = false;
-        isDisplayPoison = false;
-        sortIcon = GetComponent<SortDeck>();
+        ViewUpStrength(condition.upStrength);
+        ViewAutoHealing(condition.autoHealing);
+        ViewInvalidBadSttus(condition.invalidBadStatus);
+        ViewCurse(condition.curse);
+        ViewImpatience(condition.impatience);
+        ViewWeakness(condition.weakness);
+        ViewBurn(condition.burn);
+        ViewPoison(condition.poison);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void ViewIcon(ConditionStatus playerCondition) 
-    {
-        int upStrength = playerCondition.upStrength;
-        int autoHealing = playerCondition.autoHealing;
-        int invalidBadStatus  = playerCondition.invalidBadStatus;
-        int curse = playerCondition.curse;
-        int impatience = playerCondition.impatience;
-        int weakness = playerCondition.weakness;
-        int burn = playerCondition.burn;
-        int poison = playerCondition.poison;
-        ViewUpStrength(upStrength+DebugNum);
-        ViewAutoHealing(autoHealing + DebugNum);
-        ViewInvalidBadSttus(invalidBadStatus + DebugNum);
-        ViewCurse(curse + DebugNum);
-        ViewImpatience(impatience + DebugNum);
-        ViewWeakness(weakness + DebugNum);
-        ViewBurn(burn + DebugNum);
-        ViewPoison(poison + DebugNum);
-        
-    }
-
-    void ViewUpStrength(int upStrength) 
+    /// <summary>
+    /// 筋力増強アイコンの表示・非表示
+    /// </summary>
+    /// <param name="upStrength">筋力増強の数</param>
+    void ViewUpStrength(int upStrength)
     {
         if (upStrength > 0)
         {
@@ -98,7 +77,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(upStrengthIcon);
         }
     }
-
+    /// <summary>
+    /// 自動回復アイコンの表示・非表示
+    /// </summary>
+    /// <param name="autoHealing">自動回復の数</param>
     void ViewAutoHealing(int autoHealing)
     {
         if (autoHealing > 0)
@@ -119,7 +101,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(autoHealingIcon);
         }
     }
-
+    /// <summary>
+    /// 状態異常耐性アイコンの表示・非表示
+    /// </summary>
+    /// <param name="invalidBadStatus">状態異常耐性の数</param>
     void ViewInvalidBadSttus(int invalidBadStatus)
     {
         if (invalidBadStatus > 0)
@@ -140,7 +125,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(invalidBadStatusIcon);
         }
     }
-
+    /// <summary>
+    /// 呪縛アイコンの表示・非表示
+    /// </summary>
+    /// <param name="curse">呪縛の数</param>
     void ViewCurse(int curse)
     {
         if (curse > 0)
@@ -161,7 +149,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(curseIcon);
         }
     }
-
+    /// <summary>
+    /// 焦燥アイコンの表示・非表示
+    /// </summary>
+    /// <param name="impatience">焦燥の数</param>
     void ViewImpatience(int impatience)
     {
         if (impatience > 0)
@@ -182,7 +173,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(impatienceIcon);
         }
     }
-
+    /// <summary>
+    /// 衰弱アイコンの表示・非表示
+    /// </summary>
+    /// <param name="weakness">衰弱の数</param>
     void ViewWeakness(int weakness)
     {
         if (weakness > 0)
@@ -203,7 +197,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(weaknessIcon);
         }
     }
-
+    /// <summary>
+    /// 火傷アイコンの表示・非表示
+    /// </summary>
+    /// <param name="burn">火傷の数</param>
     void ViewBurn(int burn)
     {
         if (burn > 0)
@@ -224,7 +221,10 @@ public class ConditionDisplay : MonoBehaviour
             Destroy(burnIcon);
         }
     }
-
+    /// <summary>
+    /// 邪毒アイコンの表示・非表示
+    /// </summary>
+    /// <param name="poison">邪毒の数</param>
     void ViewPoison(int poison)
     {
         if (poison > 0)

@@ -12,7 +12,6 @@ public class EnemyDataManager
     public int _enemyCurrentAP;
     public int _enemyGP;
     public int _dropMoney;
-    public List<int> _enemyDeckList;
     public Sprite _enemyImage;
 
     public EnemyDataManager(string name) 
@@ -25,7 +24,6 @@ public class EnemyDataManager
         _enemyCurrentAP = enemyData.enemyAP;
         _enemyGP = enemyData.enemyGP;
         _dropMoney = enemyData.dropMoney;
-        _enemyDeckList = enemyData.enemyDeckList;
         _enemyImage = enemyData.enemyImage;
     }
 }

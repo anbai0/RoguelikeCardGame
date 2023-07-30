@@ -2045,6 +2045,7 @@ MonoBehaviour:
   coditionIcon: {fileID: 8872422394153287131, guid: 3a43282b58debff43827f2adb1fbfa84,
     type: 3}
   DebugNum: 0
+  sortIcon: {fileID: 1227849108}
 --- !u!114 &1227849110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2722,6 +2723,8 @@ GameObject:
   - component: {fileID: 1522913951}
   - component: {fileID: 1522913950}
   - component: {fileID: 1522913948}
+  - component: {fileID: 1522913956}
+  - component: {fileID: 1522913955}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -2769,7 +2772,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTurnDisplay: {fileID: 1463396512}
+  playerConditionDisplay: {fileID: 1839181335}
   enemyTurnDisplay: {fileID: 916258405}
+  enemyConditionDisplay: {fileID: 1227849109}
   cardPrefab: {fileID: 7009455883766435928, guid: 6d97bce2c74bb1a44ac0e09c10c805a7,
     type: 3}
   CardPlace: {fileID: 203011022}
@@ -2781,7 +2786,19 @@ MonoBehaviour:
   turnTime: 1
   roundTime: 2
   roundCount: 0
-  enemyName: Naga
+  RelicID2: 0
+  RelicID3: 0
+  RelicID4: 0
+  RelicID5: 0
+  RelicID6: 0
+  RelicID7: 0
+  RelicID8: 0
+  RelicID9: 0
+  RelicID10: 0
+  RelicID11: 0
+  RelicID12: 0
+  enemyName: Scylla
+  floor: 2
 --- !u!114 &1522913948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2863,6 +2880,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f699ddb54d139d64688ea5d2d6c76995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1522913955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522913944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eed28265a2a8c64ea18846e3a952a1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1522913956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522913944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1fe750cf35dfd43b3365852439c3af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1524366522
@@ -3209,6 +3250,7 @@ MonoBehaviour:
   coditionIcon: {fileID: 8872422394153287131, guid: 3a43282b58debff43827f2adb1fbfa84,
     type: 3}
   DebugNum: 0
+  sortIcon: {fileID: 1839181334}
 --- !u!114 &1839181336
 MonoBehaviour:
   m_ObjectHideFlags: 0

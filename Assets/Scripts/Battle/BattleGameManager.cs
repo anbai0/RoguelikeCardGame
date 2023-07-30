@@ -11,23 +11,25 @@ public class BattleGameManager : MonoBehaviour
     //プレイヤー
     GameObject player;
     PlayerDataManager playerData;
-    [SerializeField] Image playerTurnDisplay;
+    [SerializeField] 
+    Image playerTurnDisplay;
+    [SerializeField]
     ConditionDisplay playerConditionDisplay;
 
     //エネミー
     EnemyDataManager enemyData;
-    [SerializeField] Image enemyTurnDisplay;
+    [SerializeField] 
+    Image enemyTurnDisplay;
+    [SerializeField]
     ConditionDisplay enemyConditionDisplay;
+    SelectEnemyData selectEnemyData;
+    SelectEnemyRelic selectEnemyRelic;
 
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
     [SerializeField] Transform PickCardPlace;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
-
-    //レリック
-    RelicStatus playerRelics;
-    RelicEffectList relicEffect;
 
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
@@ -39,24 +41,37 @@ public class BattleGameManager : MonoBehaviour
     public bool isCoroutine;//コルーチンが動作中か判定//PlayerMove(),EnemyMove()で使用
     public float turnTime = 1.0f;//ターンの切り替え時間
     public float roundTime = 2.0f;//ラウンドの切り替え時間
-    private int playerMoveCount;//プレイヤーがラウンド中に行動した値
-    private int enemyMoveCount;//エネミーがラウンド中に行動した値
+    private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
+    private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     private int accelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
     public int roundCount;//何ラウンド目かを記録する
 
     //Debug用
+    [SerializeField]
     int RelicID2 = 0;
+    [SerializeField]
     int RelicID3 = 0;
+    [SerializeField]
     int RelicID4 = 0;
+    [SerializeField]
     int RelicID5 = 0;
+    [SerializeField]
     int RelicID6 = 0;
+    [SerializeField]
     int RelicID7 = 0;
+    [SerializeField]
     int RelicID8 = 0;
+    [SerializeField]
     int RelicID9 = 0;
+    [SerializeField]
     int RelicID10 = 0;
+    [SerializeField]
     int RelicID11 = 0;
+    [SerializeField]
     int RelicID12 = 0;
     public string enemyName = "Slime";
+    [SerializeField]
+    int floor = 1;
 
     public static BattleGameManager Instance;
     private void Awake()
@@ -71,9 +86,8 @@ public class BattleGameManager : MonoBehaviour
         //enemyName = GameManager.instance.EnemyName;
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
-        relicEffect = GetComponent<RelicEffectList>();
-        playerConditionDisplay = GameObject.Find("PlayerConditionPlace").GetComponent<ConditionDisplay>();
-        enemyConditionDisplay = GameObject.Find("EnemyConditionPlace").GetComponent<ConditionDisplay>();
+        selectEnemyData = GetComponent<SelectEnemyData>();
+        selectEnemyRelic = GetComponent<SelectEnemyRelic>();
         //初期化
         isPlayerTurn = false;
         isTurnEnd = false;
@@ -113,6 +127,12 @@ public class BattleGameManager : MonoBehaviour
     }
     public void TurnCalc() //行動順を決める
     {
+        if (IsGameEnd()) //戦闘の終了条件を満たしていないか確認する
+        {
+            //どちらかが先に戦闘不能になった場合、戦闘を止める
+            return;
+        }
+
         playerConditionDisplay.ViewIcon(playerScript.GetSetCondition); //プレイヤーの状態異常アイコンの更新
         enemyConditionDisplay.ViewIcon(enemyScript.GetSetCondition); //エネミーの状態異常アイコンの更新
 
@@ -125,7 +145,6 @@ public class BattleGameManager : MonoBehaviour
         }
         int playerCurrentAP = playerScript.GetSetCurrentAP;
         int enemyCurrentAP = enemyScript.GetSetCurrentAP;
-        IsGameEnd();//戦闘の終了条件を満たしていないか確認する
         if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
         {
             if (playerCurrentAP >= enemyCurrentAP) //APを比較して多い方が行動する
@@ -203,19 +222,22 @@ public class BattleGameManager : MonoBehaviour
         isTurnEnd = false;//行動終了ボタンの復活
         StartRound();
     }
-    private void IsGameEnd()
+    private bool IsGameEnd()
     {
         if (playerScript.CheckHP()) //プレイヤーのHPがなくなったら
         {
             //エネミーの勝利演出
             Debug.Log("Enemyの勝利");
+            return true;
         }
         if (enemyScript.CheckHP()) //エネミーのHPがなくなったら
         {
             EndGameRelicEffect();
             //プレイヤーの勝利演出
             Debug.Log("Playerの勝利");
+            return true;
         }
+        return false;
     }
     //ここまでがゲームループ
     //以下は関数(メソッド)
@@ -232,36 +254,17 @@ public class BattleGameManager : MonoBehaviour
     }
     private void ReadEnemy(string enemyName) //エネミーのデータを読み取る
     {
-        if (enemyName == "Slime")
-        {
-            enemyData = new EnemyDataManager("Slime");
-        }
-        else if (enemyName == "SkeletonSwordsman")
-        {
-            enemyData = new EnemyDataManager("SkeletonSwordsman");
-        }
-        else if (enemyName == "Naga")
-        {
-            enemyData = new EnemyDataManager("Naga");
-        }
-        else if (enemyName == "Chimera")
-        {
-            enemyData = new EnemyDataManager("Chimera");
-        }
-        else if (enemyName == "DarkKnight")
-        {
-            enemyData = new EnemyDataManager("DarkKnight");
-        }
+        enemyData = selectEnemyData.SetEnemyDataManager(floor, enemyName);
     }
     private void SetStatus(PlayerDataManager player, EnemyDataManager enemy)
     {
         //プレイヤーのステータスを割り振る
         playerScript.SetStatus(player);
         deckNumberList = player._deckList;
-        playerRelics = new RelicStatus();
-        SetRelics(playerRelics);
+        SetRelics();
         //エネミーのステータスを割り振る
-        enemyScript.SetStatus(enemy);
+        enemyScript.SetStatus(floor, enemy);
+        enemyScript.GetSetRelicStatus = selectEnemyRelic.SetEnemyRelics(floor, enemyName);
     }
     private void InitDeck() //デッキ生成
     {
@@ -280,58 +283,40 @@ public class BattleGameManager : MonoBehaviour
             pickCard.GetComponent<CanvasGroup>().blocksRaycasts = false; //レイで選ばれないようにしておく
         }
     }
-    private void SetRelics(RelicStatus playerRelics)
+    private void SetRelics()
     {
         //Debug用に設定したもの、GameManagerからレリックのリストを受け取れるようになったら直接呼び出せるようにする
-        playerRelics.hasRelicID2 = RelicID2;
-        playerRelics.hasRelicID3 = RelicID3;
-        playerRelics.hasRelicID4 = RelicID4;
-        playerRelics.hasRelicID5 = RelicID5;
-        playerRelics.hasRelicID6 = RelicID6;
-        playerRelics.hasRelicID7 = RelicID7;
-        playerRelics.hasRelicID8 = RelicID8;
-        playerRelics.hasRelicID9 = RelicID9;
-        playerRelics.hasRelicID10 = RelicID10;
-        playerRelics.hasRelicID11 = RelicID11;
-        playerRelics.hasRelicID12 = RelicID12;
+        playerScript.GetSetRelicStatus.hasRelicID2 = RelicID2;
+        playerScript.GetSetRelicStatus.hasRelicID3 = RelicID3;
+        playerScript.GetSetRelicStatus.hasRelicID4 = RelicID4;
+        playerScript.GetSetRelicStatus.hasRelicID5 = RelicID5;
+        playerScript.GetSetRelicStatus.hasRelicID6 = RelicID6;
+        playerScript.GetSetRelicStatus.hasRelicID7 = RelicID7;
+        playerScript.GetSetRelicStatus.hasRelicID8 = RelicID8;
+        playerScript.GetSetRelicStatus.hasRelicID9 = RelicID9;
+        playerScript.GetSetRelicStatus.hasRelicID10 = RelicID10;
+        playerScript.GetSetRelicStatus.hasRelicID11 = RelicID11;
+        playerScript.GetSetRelicStatus.hasRelicID12 = RelicID12;
     }
     public void StartRelicEffect() //戦闘開始時に発動するレリック効果
     {
-        var ps = playerScript;
-        var es = enemyScript;
-        var pr = playerRelics;
-        ps.GetSetCondition.upStrength = relicEffect.RelicID2(pr.hasRelicID2, ps.GetSetCondition.upStrength, es.GetSetCondition.upStrength).playerUpStrength;
-        es.GetSetCondition.upStrength = relicEffect.RelicID2(pr.hasRelicID2, ps.GetSetCondition.upStrength, es.GetSetCondition.upStrength).enemyUpStrength;
-        ps.GetSetConstAP = relicEffect.RelicID3(pr.hasRelicID3, ps.GetSetConstAP, ps.GetSetChargeAP).playerConstAP;
-        ps.GetSetConstAP = relicEffect.RelicID4(pr.hasRelicID4, ps.GetSetConstAP);
-        ps.GetSetConstAP = relicEffect.RelicID5(pr.hasRelicID5, ps.GetSetConstAP, ps.GetSetChargeAP).playerConstAP;
-        ps.GetSetCondition.burn = relicEffect.RelicID6(pr.hasRelicID6, ps.GetSetCondition.burn);
-        ps.GetSetHP = relicEffect.RelicID7(pr.hasRelicID7, ps.GetSetHP);
-        ps.GetSetGP = relicEffect.RelicID8(pr.hasRelicID8, ps.GetSetGP);
-        ps.GetSetCondition.upStrength = relicEffect.RelicID12(pr.hasRelicID12, "Slime", ps.GetSetCondition.upStrength);
-        Debug.Log("スタート時のレリックが呼び出されました: " + ps.GetSetConstAP + " to " + ps.GetSetChargeAP);
+        enemyScript = playerScript.StartRelicEffect(enemyScript, enemyName);
+        playerScript = enemyScript.StartRelicEffect(playerScript);
     }
     public void OnceEndRoundRelicEffect() //ラウンド終了時に一度だけ発動するレリック効果
     {
-        var ps = playerScript;
-        var pr = playerRelics;
-        ps.GetSetChargeAP = relicEffect.RelicID3(pr.hasRelicID3, ps.GetSetConstAP, ps.GetSetChargeAP).playerChargeAP;
-        ps.GetSetChargeAP = relicEffect.RelicID5(pr.hasRelicID5, ps.GetSetAP, ps.GetSetChargeAP).playerChargeAP;
+        playerScript.OnceEndRoundRelicEffect();
+        enemyScript.OnceEndRoundRelicEffect();
     }
     public void EndRoundRelicEffect() //ラウンド終了時に発動するレリック効果
     {
-        var ps = playerScript;
-        var pr = playerRelics;
-        var pc = ps.GetSetCondition;
-        (pc.curse, pc.impatience, pc.weakness, pc.burn, pc.poison) = relicEffect.RelicID11(pr.hasRelicID11, pc.curse, pc.impatience, pc.weakness, pc.burn, pc.poison);
+        playerScript.EndRoundRelicEffect();
+        enemyScript.EndRoundRelicEffect();
     }
     public void EndGameRelicEffect() //戦闘終了時に発動するレリック効果
     {
-        var ps = playerScript;
-        var pr = playerRelics;
         int money = 10;
-        money = relicEffect.RelicID9(playerRelics.hasRelicID9, money);
-        ps.GetSetCurrentHP = relicEffect.RelicID10(pr.hasRelicID10, ps.GetSetCurrentHP);
+        money = playerScript.EndGameRelicEffect();
     }
     public void TurnEnd() //行動終了ボタンを押した処理 
     {
@@ -357,7 +342,7 @@ public class BattleGameManager : MonoBehaviour
                     deckCard.cardDataManager._cardCost = 1;
                 }
             }
-            Text costText = child.transform.Find("CardInfo/Cost").GetComponentInChildren<Text>();
+            TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }
@@ -371,7 +356,7 @@ public class BattleGameManager : MonoBehaviour
             {
                 deckCard.cardDataManager._cardCost += accelerateValue * accelerateCount;
             }
-            Text costText = child.transform.Find("CardInfo/Cost").GetComponentInChildren<Text>();
+            TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }

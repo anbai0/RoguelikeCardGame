@@ -34,10 +34,6 @@ public class EnemyData : ScriptableObject
     /// </summary>
     public int dropMoney;
     /// <summary>
-    /// エネミーのデッキ
-    /// </summary>
-    public List<int> enemyDeckList;
-    /// <summary>
     /// エネミーのイメージ
     /// </summary>
     public Sprite enemyImage;

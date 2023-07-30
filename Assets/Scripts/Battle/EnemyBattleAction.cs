@@ -20,6 +20,7 @@ public class EnemyBattleAction : CharacterBattleAction
     [Header("技の名前")]
     [SerializeField] Text moveText;
     private EnemyAI enemyAI;
+    RelicEffectList relicEffect; //レリックの効果
     bool roundEnabled; //ラウンド中に一度だけ判定を設ける
     public bool GetSetRoundEnabled { get => roundEnabled; set => roundEnabled = value; }
     private string debugMoveName = "無し";
@@ -35,6 +36,9 @@ public class EnemyBattleAction : CharacterBattleAction
         UpdateText(enemyHPText, enemyAPText, enemyGPText, enemyHPSlider);
         moveText.text = "現在の技:" + debugMoveName;
     }
+    /// <summary>
+    /// エネミーの行動処理
+    /// </summary>
     public void Move()//エネミーの効果処理
     {
         var selectMove = enemyAI.SelectMove(GetSetCurrentAP);
@@ -45,7 +49,12 @@ public class EnemyBattleAction : CharacterBattleAction
         enemyAI.ActionMove(moveName);
         Debug.Log("エネミーの現在のAP:" + GetSetCurrentAP);
     }
-    public void SetStatus(EnemyDataManager enemyData)
+    /// <summary>
+    /// 各ステータスをセットする処理
+    /// </summary>
+    /// <param name="floor">現在の階層</param>
+    /// <param name="enemyData">選択されたエネミーデータ</param>
+    public void SetStatus(int floor, EnemyDataManager enemyData)
     {
         enemyNameText.text = enemyData._enemyName;
         enemyImage.sprite = enemyData._enemyImage;
@@ -59,6 +68,41 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetCondition = new ConditionStatus();
         GetSetInflictCondition = GetComponent<InflictCondition>();
         enemyAI = GetComponent<EnemyAI>();
-        enemyAI.SetEnemyState(enemyData._enemyName);
+        enemyAI.SetEnemyState(floor, enemyData._enemyName);
+    }
+    /// <summary>
+    /// 戦闘開始時に発動するレリック効果
+    /// </summary>
+    /// <param name="playerBattleAction">プレイヤーのステータス</param>
+    /// <returns>変更を加えたプレイヤーのステータス</returns>
+    public PlayerBattleAction StartRelicEffect(PlayerBattleAction playerBattleAction)
+    {
+        relicEffect = GetComponent<RelicEffectList>();
+        var ps = playerBattleAction;
+        var er = GetSetRelicStatus;
+        var relicEffectID2 = relicEffect.RelicID2(er.hasRelicID2, ps.GetSetCondition.upStrength, GetSetCondition.upStrength);
+        GetSetCondition.upStrength = relicEffectID2.enemyUpStrength;
+        ps.GetSetCondition.upStrength = relicEffectID2.playerUpStrength;
+        GetSetConstAP = relicEffect.RelicID3(er.hasRelicID3, GetSetConstAP, GetSetChargeAP).constAP;
+        ps.GetSetCondition.burn = relicEffect.RelicID6(er.hasRelicID6, ps.GetSetCondition.burn);
+        GetSetGP = relicEffect.RelicID8(er.hasRelicID8, GetSetGP);
+        Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
+        return ps;
+    }
+    /// <summary>
+    /// ラウンド終了時に一度だけ発動するレリック効果
+    /// </summary>
+    public void OnceEndRoundRelicEffect()
+    {
+        var er = GetSetRelicStatus;
+        GetSetChargeAP = relicEffect.RelicID3(er.hasRelicID3, GetSetConstAP, GetSetChargeAP).chargeAP;
+    }
+    /// <summary>
+    /// ラウンド終了時に発動するレリック効果
+    /// </summary>
+    public void EndRoundRelicEffect()
+    {
+        var er = GetSetRelicStatus;
+        GetSetCondition = relicEffect.RelicID11(er.hasRelicID11, GetSetCondition);
     }
 }
