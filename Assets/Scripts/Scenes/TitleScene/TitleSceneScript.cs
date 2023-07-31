@@ -17,7 +17,7 @@ public class TitleSceneScript : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             //SceneêÿÇËë÷Ç¶
-            sceneController.sceneChange("CharacterSelectionScene");
+            sceneController.sceneChange("CharacterSelectionScene","TitleScene");
         }
     }
 }

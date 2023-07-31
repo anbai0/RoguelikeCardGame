@@ -34,11 +34,25 @@ public class SceneController : MonoBehaviour
         fadeCanvas.GetComponent<FadeManager>().fadeIn();//フェードインフラグを立てる
     }
 
-    public async void sceneChange(string sceneName)//ボタン操作などで呼び出す
+    public async void sceneChange(string loadSceneName, string unLoadSceneName = "None")//ボタン操作などで呼び出す
     {
         fadeCanvas.SetActive(true);     //パネルが邪魔で消していたのここで表示させています
         fadeCanvas.GetComponent<FadeManager>().fadeOut();//フェードアウトフラグを立てる
         await Task.Delay(fadeDelay * 100);//暗転するまで待つ
-        SceneManager.LoadScene(sceneName);//シーンチェンジ
+        SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);//シーンチェンジ
+        if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));
+    }
+
+    IEnumerator CoUnload(string unLoadSceneName)
+    {
+        //指定したシーンをアンロード
+        var op = SceneManager.UnloadSceneAsync(unLoadSceneName);
+        yield return op;
+
+        //アンロード後の処理を書く
+
+        //必要に応じて不使用アセットをアンロードしてメモリを解放する
+        //けっこう重い処理なので、別に管理するのも手
+        yield return Resources.UnloadUnusedAssets();
     }
 }

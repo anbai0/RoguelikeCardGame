@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     GameObject player;
     public PlayerDataManager playerData;
 
+    bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
     //シングルトン
     public static GameManager Instance;
@@ -19,14 +20,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        // これでReadPlayerを呼び出してplayerDataを初期化できます
-        ReadPlayer("Warrior");
+        // 各シーンでデバッグするときにコメントを解除してください
+        // 一度も読み込んでいなければ
+        if (!isAlreadyRead) ReadPlayer("Warrior");
+
     }
 
 
 
     public void ReadPlayer(string playerJob)
     {
+        isAlreadyRead = true;
         if (playerJob == "Warrior")
         {
             playerData = new PlayerDataManager("Warrior");

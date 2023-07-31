@@ -69,17 +69,19 @@ public class RoomGenerator : MonoBehaviour
     {
         if (Random.Range(0,2) == 0)
         {
+            Debug.Log("2");
             player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-            Camera cam = Camera.main;
-            cam.transform.position = cameraPos2.transform.position;
+            Camera.main.transform.position = cameraPos2.transform.position;
+            Debug.Log(cameraPos2.name);
         }
         else
         {
+            Debug.Log("3");
             player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-            Camera cam = Camera.main;
-            cam.transform.position = cameraPos3.transform.position;
+            Camera.main.transform.position = cameraPos3.transform.position;
+            Debug.Log(cameraPos3.name);
         }
     }
 

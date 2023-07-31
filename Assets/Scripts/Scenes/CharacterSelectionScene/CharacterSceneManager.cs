@@ -13,12 +13,12 @@ public class CharacterSceneManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             //SceneêÿÇËë÷Ç¶
-            sceneController.sceneChange("TitleScene");
+            sceneController.sceneChange("TitleScene", "CharacterSelectionScene");
         }
     }
 
     public void FieldScene()
     {
-        sceneController.sceneChange("FieldScene");
+        sceneController.sceneChange("FieldScene", "CharacterSelectionScene");
     }
 }
