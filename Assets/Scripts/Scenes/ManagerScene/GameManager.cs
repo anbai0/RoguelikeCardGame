@@ -8,39 +8,29 @@ public class GameManager : MonoBehaviour
     GameObject player;
     public PlayerDataManager playerData;
 
+    bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
     //シングルトン
     public static GameManager Instance;
     private void Awake()
     {
+        // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-
-        }
-        else
-        {
-            Destroy(gameObject);
         }
 
-        Instance.ReadPlayer("Warrior");
-    }
-
-    void Start()
-    {
+        // 各シーンでデバッグするときにコメントを解除してください
+        // 一度も読み込んでいなければ
+        if (!isAlreadyRead) ReadPlayer("Warrior");
 
     }
 
-
-    void Update()
-    {
-        
-    }
 
 
     public void ReadPlayer(string playerJob)
     {
+        isAlreadyRead = true;
         if (playerJob == "Warrior")
         {
             playerData = new PlayerDataManager("Warrior");

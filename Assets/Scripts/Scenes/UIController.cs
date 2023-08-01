@@ -46,7 +46,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (!isDraggable) return;
 
-        canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
+        //canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
 
         // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
         canvasGroup.blocksRaycasts = false;
@@ -70,7 +70,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         if (!isDraggable) return;
 
-        canvasGroup.alpha = 1f;                         // 透明度を戻す
+        //canvasGroup.alpha = 1f;                         // 透明度を戻す
 
         // ドラッグ操作の終了時に、ドロップされたオブジェクトが再びユーザーの入力を受け付けるようにするためtrueに
         canvasGroup.blocksRaycasts = true;

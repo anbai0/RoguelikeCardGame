@@ -31,6 +31,7 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     private RoomStatus[] roomStatuses = new RoomStatus[12];
 
+    [SerializeField] private Camera cam;    // Main.cameraÇæÇ∆ê≥ÇµÇ≠éÊìæÇ≈Ç´Ç»Ç¢éûÇ™Ç†ÇÈÇΩÇﬂ
     [SerializeField] private GameObject cameraPos2, cameraPos3;
 
     enum RoomNum
@@ -71,14 +72,12 @@ public class RoomGenerator : MonoBehaviour
         {
             player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-            Camera cam = Camera.main;
             cam.transform.position = cameraPos2.transform.position;
         }
         else
         {
             player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -1.35f, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-            Camera cam = Camera.main;
             cam.transform.position = cameraPos3.transform.position;
         }
     }

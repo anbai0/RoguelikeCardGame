@@ -5467,8 +5467,9 @@ GameObject:
   m_Component:
   - component: {fileID: 999589707}
   - component: {fileID: 999589708}
+  - component: {fileID: 999589709}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: CharacterSceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5502,6 +5503,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneController: {fileID: 418362621}
+--- !u!114 &999589709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999589706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76d0e417d4105c4a80873e8a08d7807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1017501279
 GameObject:
   m_ObjectHideFlags: 0
@@ -10403,13 +10416,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  isDraggable: 0
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1158963690
@@ -15638,13 +15667,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  isDraggable: 0
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1748693079
@@ -15736,13 +15781,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ba662a1e21f144dbc7a55c92e4bede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  isDraggable: 0
+  onLeftClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onRightClick:
     m_PersistentCalls:
       m_Calls: []
   onEnter:
     m_PersistentCalls:
       m_Calls: []
   onExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onBeginDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrag:
+    m_PersistentCalls:
+      m_Calls: []
+  onDrop:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &2035411913

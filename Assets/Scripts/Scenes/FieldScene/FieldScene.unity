@@ -281,7 +281,7 @@ PrefabInstance:
     - target: {fileID: 4772437105650191014, guid: ae1be2665176c964a9cd16c7cab93cd1,
         type: 3}
       propertyPath: m_Name
-      value: CameraPos
+      value: CameraPos2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae1be2665176c964a9cd16c7cab93cd1, type: 3}
@@ -2207,7 +2207,7 @@ PrefabInstance:
     - target: {fileID: 4772437105650191014, guid: ae1be2665176c964a9cd16c7cab93cd1,
         type: 3}
       propertyPath: m_Name
-      value: CameraPos
+      value: CameraPos3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ae1be2665176c964a9cd16c7cab93cd1, type: 3}
@@ -2770,8 +2770,9 @@ GameObject:
   - component: {fileID: 1781982969}
   - component: {fileID: 1781982970}
   - component: {fileID: 1781982971}
+  - component: {fileID: 1781982972}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: FieldSceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2844,8 +2845,21 @@ MonoBehaviour:
   treasureBox: {fileID: 2750667469111246571, guid: 343135e6b52f4a7479ba779eb3664d59,
     type: 3}
   shop: {fileID: 6711205647773303621, guid: 2f6fcaa1df9f3a345ac6d7253a4e014e, type: 3}
+  cam: {fileID: 1136374009}
   cameraPos2: {fileID: 1774879490}
   cameraPos3: {fileID: 1387609689}
+--- !u!114 &1781982972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781982968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d76d0e417d4105c4a80873e8a08d7807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1870224440
 GameObject:
   m_ObjectHideFlags: 0

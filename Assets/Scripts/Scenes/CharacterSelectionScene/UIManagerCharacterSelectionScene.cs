@@ -82,6 +82,7 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
                 GameManager.Instance.ReadPlayer("Warrior");
             if (UIObject == wizard)
                 GameManager.Instance.ReadPlayer("Wizard");
+            isSelect = false;   // “ñ“x‰Ÿ‚³‚ê‚È‚¢‚æ‚¤‚Éfalse‚É‚µ‚Ü‚·
             sceneManager.FieldScene();
         }
     }

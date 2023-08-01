@@ -31,7 +31,7 @@ public class GateCollidar : MonoBehaviour
                 Transform cameraPos = nextroom.transform.GetChild(5);                                       // 子オブジェクトの６番目であるcameraPosのTransformを取得
                 cam.transform.position = cameraPos.position;                                                // 取得したTransformのPositionをカメラのPositionに代入
                 other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, -3.6f);     // Playerを次の部屋に移動させる
-                Debug.Log(nextroom);
+                //Debug.Log(nextroom);
 
             }
 
@@ -42,7 +42,7 @@ public class GateCollidar : MonoBehaviour
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
                 other.transform.position = nextroom.transform.position + new Vector3(-3.6f, -1.35f, 0);
-                Debug.Log(nextroom);
+                //Debug.Log(nextroom);
 
             }
 
@@ -53,7 +53,7 @@ public class GateCollidar : MonoBehaviour
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
                 other.transform.position = nextroom.transform.position + new Vector3(3.6f, -1.35f, 0);
-                Debug.Log(nextroom);
+                //Debug.Log(nextroom);
 
             }
 
@@ -64,7 +64,7 @@ public class GateCollidar : MonoBehaviour
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
                 other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, 3.6f);
-                Debug.Log(nextroom);
+                //Debug.Log(nextroom);
 
             }
 
