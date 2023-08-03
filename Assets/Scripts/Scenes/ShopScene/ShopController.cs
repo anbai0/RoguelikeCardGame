@@ -82,6 +82,18 @@ public class ShopController : MonoBehaviour
             Lottery.isInitialize = false;
         }
 
+        //if (Input.GetKeyDown(KeyCode.RightAlt))
+        //{
+        //    tmpID++;
+        //    if(tmpID == 12)
+        //    {
+        //        tmpID = 0;
+        //    }
+        //    shopRelicsID[2] = tmpID;
+
+        //    ShowItem();
+        //    uiManager.UIEventReload();
+        //}
 
         //// デバッグ用
         //if (Input.GetKeyDown(KeyCode.Space))
@@ -132,7 +144,7 @@ public class ShopController : MonoBehaviour
     void ShowItem()
     {
         // カード表示
-        for (int cardID = 0; cardID < shopCardsID.Count; cardID++) 
+        for (int cardID = 0; cardID < shopCardsID.Count; cardID++)
         {
             GameObject cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
             cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする

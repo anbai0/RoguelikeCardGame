@@ -4,16 +4,40 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float speed = 10f;
+
+    public float speed; //プレイヤーの動くスピード
+    public float rotationSpeed = 10f; //向きを変える速度
+
+    private Animator animator;
+
+    [SerializeField] float moveHorizontal;
+    [SerializeField] float moveVertical;
+
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void Update()
     {
-        // プレイヤーの移動
-        float moveHorizontal = Input.GetAxisRaw("Horizontal");      //コントローラなどの場合はGetAxisで書く
-        float moveVertical = Input.GetAxisRaw("Vertical");
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxisRaw("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical).normalized;    //正規化
-        transform.Translate(movement * speed * Time.deltaTime);
+        Vector3 movement = new Vector3(moveHorizontal, 0f, moveVertical).normalized;
+
+
+        if (movement.magnitude > 0.01f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
+            animator.SetBool("IsWalking", true); // 歩くアニメーションを再生
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+        }
+
+        transform.Translate(movement * speed * Time.deltaTime, Space.World);
     }
 }

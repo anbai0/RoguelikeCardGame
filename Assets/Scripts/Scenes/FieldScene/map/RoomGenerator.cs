@@ -34,6 +34,8 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] private Camera cam;    // Main.cameraÇæÇ∆ê≥ÇµÇ≠éÊìæÇ≈Ç´Ç»Ç¢éûÇ™Ç†ÇÈÇΩÇﬂ
     [SerializeField] private GameObject cameraPos2, cameraPos3;
 
+    float playerY = -2.33f;
+
     enum RoomNum
     {
         Room1 = 1,
@@ -70,13 +72,13 @@ public class RoomGenerator : MonoBehaviour
     {
         if (Random.Range(0,2) == 0)
         {
-            player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, -1.35f, 0);
+            player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, playerY, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             cam.transform.position = cameraPos2.transform.position;
         }
         else
         {
-            player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -1.35f, 0);
+            player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, playerY, 0);
             Instantiate(smallEnemy, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             cam.transform.position = cameraPos3.transform.position;
         }

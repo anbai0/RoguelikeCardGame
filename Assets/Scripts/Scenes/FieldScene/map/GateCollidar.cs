@@ -10,6 +10,8 @@ public class GateCollidar : MonoBehaviour
 
     private RoomGenerator roomGenerator;
 
+    float playerY = -2.33f;
+
     void Start()
     {
         roomGenerator = GameObject.FindObjectOfType<RoomGenerator>();
@@ -30,7 +32,7 @@ public class GateCollidar : MonoBehaviour
                 GameObject nextroom = roomGenerator.rooms[roomNumber];                                      // 当たった各gateに設定されているroomNumberのroomのオブジェクトを取得する
                 Transform cameraPos = nextroom.transform.GetChild(5);                                       // 子オブジェクトの６番目であるcameraPosのTransformを取得
                 cam.transform.position = cameraPos.position;                                                // 取得したTransformのPositionをカメラのPositionに代入
-                other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, -3.6f);     // Playerを次の部屋に移動させる
+                other.transform.position = nextroom.transform.position + new Vector3(0, playerY, -3.6f);     // Playerを次の部屋に移動させる
                 //Debug.Log(nextroom);
 
             }
@@ -41,7 +43,7 @@ public class GateCollidar : MonoBehaviour
                 GameObject nextroom = roomGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(-3.6f, -1.35f, 0);
+                other.transform.position = nextroom.transform.position + new Vector3(-3.6f, playerY, 0);
                 //Debug.Log(nextroom);
 
             }
@@ -52,7 +54,7 @@ public class GateCollidar : MonoBehaviour
                 GameObject nextroom = roomGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(3.6f, -1.35f, 0);
+                other.transform.position = nextroom.transform.position + new Vector3(3.6f, playerY, 0);
                 //Debug.Log(nextroom);
 
             }
@@ -63,7 +65,7 @@ public class GateCollidar : MonoBehaviour
                 GameObject nextroom = roomGenerator.rooms[roomNumber];
                 Transform cameraPos = nextroom.transform.GetChild(5);
                 cam.transform.position = cameraPos.position;
-                other.transform.position = nextroom.transform.position + new Vector3(0, -1.35f, 3.6f);
+                other.transform.position = nextroom.transform.position + new Vector3(0, playerY, 3.6f);
                 //Debug.Log(nextroom);
 
             }
