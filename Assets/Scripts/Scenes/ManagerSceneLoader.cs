@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections; // •K—v‚Èusing•¶‚ð’Ç‰Á
+using System.Collections;
 
 public class ManagerSceneLoader : MonoBehaviour
 {

@@ -22,6 +22,7 @@ public class AudioSetting : MonoBehaviour
     [SerializeField] private int maxSEVolume;
     [SerializeField] private int maxBGMVolume;
 
+
     void Start()
     {
         audioManager = GetComponent<AudioManager>();
@@ -37,9 +38,9 @@ public class AudioSetting : MonoBehaviour
         bgmVolumeSlider.value = audioManager.bgmVolume;
 
         // 現在の音量表示
-        overallVolumeText.text = audioManager.overallVolume.ToString();
-        seVolumeText.text = audioManager.seVolume.ToString();
-        bgmVolumeText.text = audioManager.bgmVolume.ToString();
+        overallVolumeText.text = (audioManager.overallVolume * 100).ToString();
+        seVolumeText.text = (audioManager.seVolume * 100).ToString();
+        bgmVolumeText.text = (audioManager.bgmVolume * 100).ToString();
 
         // リスナー登録
         overallVolumeSlider.onValueChanged.AddListener(OnOverallValueChanged);
@@ -53,20 +54,20 @@ public class AudioSetting : MonoBehaviour
         Debug.Log("全体の音量スライダーの値が変更されました: " + roundedValue);
 
         audioManager.overallVolume = roundedValue;
-        overallVolumeText.text = roundedValue.ToString();
+        overallVolumeText.text = (roundedValue * 100).ToString();
     }
 
     private void OnSEValueChanged(float value)
     {
         float roundedValue = Mathf.Floor(value * 100) / 100;
         audioManager.seVolume = roundedValue;
-        seVolumeText.text = roundedValue.ToString();
+        seVolumeText.text = (roundedValue * 100).ToString();
     }
 
     private void OnBGMValueChanged(float value)
     {
         float roundedValue = Mathf.Floor(value * 100) / 100;
         audioManager.bgmVolume = roundedValue;
-        bgmVolumeText.text = roundedValue.ToString();
+        bgmVolumeText.text = (roundedValue * 100).ToString();
     }
 }

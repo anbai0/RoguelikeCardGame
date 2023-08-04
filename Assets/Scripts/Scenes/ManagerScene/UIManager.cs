@@ -27,14 +27,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject titleBackButton;
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
+    [Space (10)]
+    [SerializeField] RelicController relicPrefab;
+    [SerializeField] Transform relicPlace;
 
+    [SerializeField] AudioManager audioManager;
+    [SerializeField] GameManager gameManager;
 
     bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
+    int maxRelics = 12;
 
     void Start()
     {
         UIEventsReload();
         //ChangeUI("OverlayOnly");
+        ShowRelics();
     }
 
     /// <summary>
@@ -111,6 +118,13 @@ public class UIManager : MonoBehaviour
             // タイトルへ戻る処理
 
         }
+
+        if (UIObject == overlayOptionButton)
+        {
+
+            audioManager.PlaySE("剣");
+            audioManager.PlayBGM("BGMの素材の名前");
+        }
     }
 
 
@@ -165,5 +179,19 @@ public class UIManager : MonoBehaviour
         }
 
         UIEventsReload();
+    }
+
+    private void ShowRelics()
+    {
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            if (gameManager.hasRelics.ContainsKey(RelicID) && gameManager.hasRelics[RelicID] >= 1)
+            {
+                RelicController relic = Instantiate(relicPrefab, relicPlace);
+                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+
+                //relicObject.transform.GetChild(1).text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
+            }
+        }
     }
 }

@@ -65,6 +65,7 @@ public class Lottery : MonoBehaviour
         }
 
         playerData = GameManager.Instance.playerData;
+        
 
         isInitialize = true;
     }

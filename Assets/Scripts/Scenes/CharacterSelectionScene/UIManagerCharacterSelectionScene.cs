@@ -76,6 +76,8 @@ public class UIManagerCharacterSelectionScene : MonoBehaviour
             selectWizard = true;
             image.sprite = redButton;
         }
+
+
         if (UIObject == button && isSelect)
         {
             if(UIObject == warrior)

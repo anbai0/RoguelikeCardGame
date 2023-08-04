@@ -18,19 +18,18 @@ public class UIManagerTitle : MonoBehaviour
 
     // 参照するUI
     [SerializeField] TitleSceneManager sceneManager;
-    [SerializeField] GameObject clickToStartText;
 
     // テキスト点滅させるために必要なもの
-    TextMeshProUGUI text;
+    [SerializeField] TextMeshProUGUI clickToStartText;
 
+    [SerializeField]
     [Range(0.1f, 10.0f)] float duration = 1.0f;  //テキストを点滅させる間隔
-    private Color32 startColor = new Color32(0, 0, 0, 255);
-    private Color32 endColor = new Color32(0, 0, 0, 60);
+    private Color32 startColor = new Color32(255, 255, 255, 255);
+    private Color32 endColor = new Color32(255, 255, 255, 20);
 
 
     void Start()
     {
-        text = clickToStartText.GetComponent<TextMeshProUGUI>();
         UIEventsReload();
     }
 
@@ -71,7 +70,7 @@ public class UIManagerTitle : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        if (UIObject == (UIObject.CompareTag("BackGround") || clickToStartText))
+        if (UIObject == UIObject.CompareTag("BackGround"))
         {
             sceneManager.CharaSelectScene();
         }
@@ -82,6 +81,6 @@ public class UIManagerTitle : MonoBehaviour
     void Update()
     {
         // テキストを点滅させる
-        text.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / duration, 1.0f));
+        clickToStartText.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / duration, 1.0f));
     }
 }
