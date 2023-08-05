@@ -13,6 +13,7 @@ public class PlayerBattleAction : CharacterBattleAction
     [SerializeField] Text playerAPText;
     [Header("プレイヤーGPテキスト")]
     [SerializeField] Text playerGPText;
+    public Dictionary<int, int> hasPlayerRelics = new Dictionary<int, int>();
     int playerMoney;//プレイヤーの所持金
     CardEffectList cardEffectList;//カードの効果スクリプト
     RelicEffectList relicEffect; //レリックの効果
@@ -48,7 +49,12 @@ public class PlayerBattleAction : CharacterBattleAction
         cardEffectList = GetComponent<CardEffectList>();
         GetSetCondition = new ConditionStatus();
         GetSetInflictCondition = GetComponent<InflictCondition>();
-        GetSetRelicStatus = new RelicStatus();
+        //hasPlayerRelics = GameManager.Instance.hasRelics;
+        //Debug用
+        for(int RelicID = 1; RelicID <= 12; RelicID++)
+        {
+            hasPlayerRelics[RelicID] = 0;
+        }
     }
     /// <summary>
     /// 戦闘開始時に発動するレリック効果
@@ -60,17 +66,16 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         relicEffect = GetComponent<RelicEffectList>();
         var es = enemyBattleAction;
-        var pr = GetSetRelicStatus;
-        var relicEffectID2 = relicEffect.RelicID2(pr.hasRelicID2, GetSetCondition.upStrength, es.GetSetCondition.upStrength);
+        var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2], GetSetCondition.upStrength, es.GetSetCondition.upStrength);
         GetSetCondition.upStrength = relicEffectID2.playerUpStrength;
         es.GetSetCondition.upStrength = relicEffectID2.enemyUpStrength;
-        GetSetConstAP = relicEffect.RelicID3(pr.hasRelicID3, GetSetConstAP, GetSetChargeAP).constAP;
-        GetSetConstAP = relicEffect.RelicID4(pr.hasRelicID4, GetSetConstAP);
-        GetSetConstAP = relicEffect.RelicID5(pr.hasRelicID5, GetSetConstAP, GetSetChargeAP).constAP;
-        es.GetSetCondition.burn = relicEffect.RelicID6(pr.hasRelicID6, es.GetSetCondition.burn);
-        GetSetHP = relicEffect.RelicID7(pr.hasRelicID7, GetSetHP);
-        GetSetGP = relicEffect.RelicID8(pr.hasRelicID8, GetSetGP);
-        GetSetCondition.upStrength = relicEffect.RelicID12(pr.hasRelicID12, enemyName, GetSetCondition.upStrength);
+        GetSetConstAP = relicEffect.RelicID3(hasPlayerRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
+        GetSetConstAP = relicEffect.RelicID4(hasPlayerRelics[4], GetSetConstAP);
+        GetSetConstAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetConstAP, GetSetChargeAP).constAP;
+        es.GetSetCondition.burn = relicEffect.RelicID6(hasPlayerRelics[6], es.GetSetCondition.burn);
+        GetSetHP = relicEffect.RelicID7(hasPlayerRelics[7], GetSetHP);
+        GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
+        GetSetCondition.upStrength = relicEffect.RelicID12(hasPlayerRelics[12], enemyName, GetSetCondition.upStrength);
         Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
         return es;
     }
@@ -79,17 +84,15 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void OnceEndRoundRelicEffect()
     {
-        var pr = GetSetRelicStatus;
-        GetSetChargeAP = relicEffect.RelicID3(pr.hasRelicID3, GetSetConstAP, GetSetChargeAP).chargeAP;
-        GetSetChargeAP = relicEffect.RelicID5(pr.hasRelicID5, GetSetAP, GetSetChargeAP).chargeAP;
+        GetSetChargeAP = relicEffect.RelicID3(hasPlayerRelics[3], GetSetConstAP, GetSetChargeAP).chargeAP;
+        GetSetChargeAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetAP, GetSetChargeAP).chargeAP;
     }
     /// <summary>
     /// ラウンド終了時に発動するレリック効果
     /// </summary>
     public void EndRoundRelicEffect()
     {
-        var pr = GetSetRelicStatus;
-        GetSetCondition = relicEffect.RelicID11(pr.hasRelicID11, GetSetCondition);
+        GetSetCondition = relicEffect.RelicID11(hasPlayerRelics[11], GetSetCondition);
     }
     /// <summary>
     /// 戦闘終了時に発動するレリック効果
@@ -97,13 +100,9 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <returns>戦闘終了後のゴールド獲得時に多く貰える数</returns>
     public int EndGameRelicEffect()
     {
-        var pr = GetSetRelicStatus;
         int money = 10;
-        money = relicEffect.RelicID9(pr.hasRelicID9, money);
-        GetSetCurrentHP = relicEffect.RelicID10(pr.hasRelicID10, GetSetCurrentHP);
+        money = relicEffect.RelicID9(hasPlayerRelics[9], money);
+        GetSetCurrentHP = relicEffect.RelicID10(hasPlayerRelics[10], GetSetCurrentHP);
         return money;
-    }
-    public void TakeMoney(int getMoney)
-    {
     }
 }

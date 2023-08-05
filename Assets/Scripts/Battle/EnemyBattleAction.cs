@@ -19,11 +19,25 @@ public class EnemyBattleAction : CharacterBattleAction
     [SerializeField] Text enemyGPText;
     [Header("技の名前")]
     [SerializeField] Text moveText;
+    public Dictionary<int, int> hasEnemyRelics = new Dictionary< int, int>(); //エネミーの所持しているレリック
+    const int maxRelics = 12;
     private EnemyAI enemyAI;
     RelicEffectList relicEffect; //レリックの効果
     bool roundEnabled; //ラウンド中に一度だけ判定を設ける
     public bool GetSetRoundEnabled { get => roundEnabled; set => roundEnabled = value; }
     private string debugMoveName = "無し";
+    void Awake()
+    {
+        InitializeRelics();
+    }
+
+    private void InitializeRelics()
+    {
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            hasEnemyRelics.Add(RelicID, 0);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -79,13 +93,12 @@ public class EnemyBattleAction : CharacterBattleAction
     {
         relicEffect = GetComponent<RelicEffectList>();
         var ps = playerBattleAction;
-        var er = GetSetRelicStatus;
-        var relicEffectID2 = relicEffect.RelicID2(er.hasRelicID2, ps.GetSetCondition.upStrength, GetSetCondition.upStrength);
+        var relicEffectID2 = relicEffect.RelicID2(hasEnemyRelics[2], ps.GetSetCondition.upStrength, GetSetCondition.upStrength);
         GetSetCondition.upStrength = relicEffectID2.enemyUpStrength;
         ps.GetSetCondition.upStrength = relicEffectID2.playerUpStrength;
-        GetSetConstAP = relicEffect.RelicID3(er.hasRelicID3, GetSetConstAP, GetSetChargeAP).constAP;
-        ps.GetSetCondition.burn = relicEffect.RelicID6(er.hasRelicID6, ps.GetSetCondition.burn);
-        GetSetGP = relicEffect.RelicID8(er.hasRelicID8, GetSetGP);
+        GetSetConstAP = relicEffect.RelicID3(hasEnemyRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
+        ps.GetSetCondition.burn = relicEffect.RelicID6(hasEnemyRelics[6], ps.GetSetCondition.burn);
+        GetSetGP = relicEffect.RelicID8(hasEnemyRelics[8], GetSetGP);
         Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
         return ps;
     }
@@ -94,15 +107,13 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     public void OnceEndRoundRelicEffect()
     {
-        var er = GetSetRelicStatus;
-        GetSetChargeAP = relicEffect.RelicID3(er.hasRelicID3, GetSetConstAP, GetSetChargeAP).chargeAP;
+        GetSetChargeAP = relicEffect.RelicID3(hasEnemyRelics[3], GetSetConstAP, GetSetChargeAP).chargeAP;
     }
     /// <summary>
     /// ラウンド終了時に発動するレリック効果
     /// </summary>
     public void EndRoundRelicEffect()
     {
-        var er = GetSetRelicStatus;
-        GetSetCondition = relicEffect.RelicID11(er.hasRelicID11, GetSetCondition);
+        GetSetCondition = relicEffect.RelicID11(hasEnemyRelics[11], GetSetCondition);
     }
 }
