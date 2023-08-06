@@ -12,9 +12,6 @@ using TMPro;
 public class ShopController : MonoBehaviour
 {
     GameManager gm;
-    CardController cardController;
-    RelicController relicController;
-    RelicStatus relicStatus;
 
     [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
@@ -64,7 +61,6 @@ public class ShopController : MonoBehaviour
     {
         // GameManager取得
         gm = msLoader.GetGameManager();
-        relicStatus = new RelicStatus();                       //後でGameManagerにプレイヤーのRelicStatusを作成して参照します
     }
 
     void Update()
@@ -150,7 +146,7 @@ public class ShopController : MonoBehaviour
         {
             GameObject cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
             cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
-            cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
+            CardController cardController = cardObject.GetComponent<CardController>();                                              // 生成したPrefabのCardControllerを取得
             cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
             cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
             shopCards.Add(cardObject);
@@ -161,7 +157,7 @@ public class ShopController : MonoBehaviour
         {
             GameObject relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
             relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
-            relicController = relicObject.GetComponent<RelicController>();                                                              // 生成したPrefabのRelicControllerを取得
+            RelicController relicController = relicObject.GetComponent<RelicController>();                                              // 生成したPrefabのRelicControllerを取得
             relicController.Init(shopRelicsID[relicID]);                                                                                // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
             relicObject.transform.Find("RelicPriceBG").gameObject.SetActive(true);                                                      // 値札を表示
             shopRelics.Add(relicObject);

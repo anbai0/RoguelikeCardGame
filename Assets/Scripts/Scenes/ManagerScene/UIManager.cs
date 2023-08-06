@@ -18,11 +18,14 @@ public class UIManager : MonoBehaviour
     private UIController[] UIs;
     private bool isRemoved = true;
 
+    [Header("参照するスクリプト")]
+    [SerializeField] AudioManager audioManager;
+    [SerializeField] GameManager gm;
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
     [SerializeField] GameObject optionScreen;
     [SerializeField] GameObject confirmationPanel;
-    [Space (10)]
+    [Header("クリック後に参照するUI")]
     [SerializeField] GameObject overlayOptionButton;
     [SerializeField] GameObject titleOptionButton;
     [SerializeField] GameObject closeOptionButton;
@@ -30,7 +33,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
     [Space(10)]
-    [SerializeField] AudioManager audioManager;
+    [SerializeField] Text myMoneyText;   //所持金を表示するテキスト
+
 
     private bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
     private int maxRelics = 12;
@@ -38,6 +42,11 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         UIEventsReload();
+    }
+
+    void Update()
+    {
+        RefreshMoneyText();
     }
 
     #region UIイベントリスナー関係の処理
@@ -178,5 +187,15 @@ public class UIManager : MonoBehaviour
             titleOptionButton.SetActive(false);
             titleBackButton.SetActive(true);
         }
+    }
+
+
+    /// <summary>
+    /// 所持金のテキストを更新するメソッドです。
+    /// </summary>
+    void RefreshMoneyText()
+    {
+        if (gm.playerData != null)
+            myMoneyText.text = gm.playerData._playerMoney.ToString();
     }
 }

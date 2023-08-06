@@ -10,8 +10,6 @@ public class Lottery : MonoBehaviour
 {
     GameManager gm;
     [SerializeField] ManagerSceneLoader msLoader;
-    CardDataManager cardData;       // カードのデータを処理
-    RelicDataManager relicData;     // レリックのデータを処理
 
     public static bool isInitialize = false;        // Startにある処理が遅いので処理が終わったらtrueに
     public bool fromShopController = false;         // ShopControllerから呼ばれた場合trueにします
@@ -27,7 +25,7 @@ public class Lottery : MonoBehaviour
     [SerializeField] List<int> relicRarity1List;
     [SerializeField] List<int> relicRarity2List;
     [SerializeField] List<int> shopCards = new List<int>();       // ショップに追加されたカード
-    [SerializeField] List<int> shopRelics = new List<int>();      // ショップに追加されたレリック
+    //[SerializeField] List<int> shopRelics = new List<int>();      // ショップに追加されたレリック
 
     void Start()
     {
@@ -36,7 +34,7 @@ public class Lottery : MonoBehaviour
 
         for (int i = 1; i <= MaxNumCards; i++)
         {
-            cardData = new CardDataManager(i);
+            CardDataManager cardData = gm.cardDataList[i];
 
             // 各カードのレアリティに分ける
             if (cardData._cardRarity == 1)
@@ -55,7 +53,7 @@ public class Lottery : MonoBehaviour
 
         for (int i = 1; i <= MaxNumRelics; i++)
         {
-            relicData = new RelicDataManager(i);
+            RelicDataManager relicData = gm.relicDataList[i];
 
             // 各レリックのレアリティに分ける
             if (relicData._relicRarity == 1)

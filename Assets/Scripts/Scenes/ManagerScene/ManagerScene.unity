@@ -209,7 +209,6 @@ GameObject:
   m_Component:
   - component: {fileID: 184355869}
   - component: {fileID: 184355870}
-  - component: {fileID: 184355871}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: UIManager
@@ -245,6 +244,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 933759228}
+  audioManager: {fileID: 1717233876}
+  gm: {fileID: 1717233873}
   overlay: {fileID: 225074112}
   optionScreen: {fileID: 1440745383}
   confirmationPanel: {fileID: 1825073206}
@@ -254,19 +255,6 @@ MonoBehaviour:
   titleBackButton: {fileID: 412841957}
   closeConfirmButton: {fileID: 1564527687}
   confirmTitleBackButton: {fileID: 725050579}
-  audioManager: {fileID: 1717233876}
---- !u!114 &184355871
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184355868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2bc434f44ff97748980f61310f41bd9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   myMoneyText: {fileID: 1456776706}
 --- !u!1 &225074112
 GameObject:
