@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 942776b148417504d8d161b41dffb67d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 722509697}
+  canvas: {fileID: 722509697}
   sceneManager: {fileID: 888711034}
   clickToStartText: {fileID: 1043017002}
   duration: 1.2
@@ -472,8 +472,7 @@ MonoBehaviour:
   m_text: Click to Start
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b885300c27223ce469fc8200aa5b3572, type: 2}
-  m_sharedMaterial: {fileID: 1796640031428904171, guid: b885300c27223ce469fc8200aa5b3572,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: a5afd8d0b0238984a87fa078f4b7c624, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -528,7 +527,7 @@ MonoBehaviour:
   m_horizontalMapping: 0
   m_verticalMapping: 0
   m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
+  m_geometrySortingOrder: 1
   m_IsTextObjectScaleStatic: 0
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
@@ -579,9 +578,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
-    m_PersistentCalls:
-      m_Calls: []
-  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1182048592
@@ -786,6 +782,7 @@ GameObject:
   - component: {fileID: 1193442259}
   - component: {fileID: 1193442261}
   - component: {fileID: 1193442260}
+  - component: {fileID: 1193442262}
   m_Layer: 5
   m_Name: TitleLogo
   m_TagString: Untagged
@@ -851,6 +848,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1193442258}
   m_CullTransparentMesh: 1
+--- !u!114 &1193442262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193442258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 3, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1425527251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,9 +1040,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDrop:
-    m_PersistentCalls:
-      m_Calls: []
-  onDropEmpty:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &2063608191

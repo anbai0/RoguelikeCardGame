@@ -1,8 +1,6 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using Unity.VisualScripting;
 
 
 /// <summary>
@@ -24,61 +22,10 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public UnityEvent onBeginDrag = null;
     public UnityEvent onDrag = null;
     public UnityEvent onDrop = null;
-    public UnityEvent onDropEmpty = null;
 
-
+    // ドラッグアンドドロップの処理に使います
     private RectTransform rectTransform;
-    private CanvasGroup canvasGroup; 
-    Vector3 initialPosition;        // ドラッグ前の位置を格納
-
-
-
-    #region ドラッグアンドドロップの処理
-    private void Awake()
-    {
-        if (!isDraggable) return;
-
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        if (!isDraggable) return;
-
-        //canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
-
-        // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
-        canvasGroup.blocksRaycasts = false;
-
-        onBeginDrag?.Invoke();
-
-        initialPosition = transform.position;        // ドラッグ前の位置を記録
-
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (!isDraggable) return;
-
-        onDrag?.Invoke();
-
-        transform.position = eventData.position;
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (!isDraggable) return;
-
-        //canvasGroup.alpha = 1f;                         // 透明度を戻す
-
-        // ドラッグ操作の終了時に、ドロップされたオブジェクトが再びユーザーの入力を受け付けるようにするためtrueに
-        canvasGroup.blocksRaycasts = true;
-
-        onDrop?.Invoke();
-
-    }
-    #endregion
+    private CanvasGroup canvasGroup;
 
 
 
@@ -109,6 +56,51 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         onExit?.Invoke();
     }
+
+
+    #region ドラッグアンドドロップの処理
+    private void Awake()
+    {
+        if (!isDraggable) return;
+
+        rectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (!isDraggable) return;
+
+        //canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
+
+        // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
+        canvasGroup.blocksRaycasts = false;
+
+        onBeginDrag?.Invoke();
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isDraggable) return;
+
+        onDrag?.Invoke();
+
+        transform.position = eventData.position;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (!isDraggable) return;
+
+        //canvasGroup.alpha = 1f;                         // 透明度を戻す
+
+        // ドラッグ操作の終了時に、ドロップされたオブジェクトが再びユーザーの入力を受け付けるようにするためtrueに
+        canvasGroup.blocksRaycasts = true;
+
+        onDrop?.Invoke();
+    }
+    #endregion
+
 
 
 

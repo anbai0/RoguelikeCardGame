@@ -8,14 +8,16 @@ using UnityEngine.UI;
 /// </summary>
 public class UIManagerBonfire : MonoBehaviour
 {
-    [SerializeField] private GameObject Canvas;
+    // UIManagerに最初から定義してある変数
+    [SerializeField] private GameObject canvas;
     private UIController[] UIs;
+    private bool isRemoved = true;
 
-    bool isClick = false;
-    GameObject lastClickedCards;
+    private bool isClick = false;
+    private GameObject lastClickedCards;
 
-    Vector3 scaleReset = Vector3.one * 0.25f;    // 元のスケールに戻すときに使います
-    Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
+    private Vector3 scaleReset = Vector3.one * 0.25f;    // 元のスケールに戻すときに使います
+    private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するスクリプト")]
     [SerializeField] private SceneController sceneController;
@@ -23,32 +25,37 @@ public class UIManagerBonfire : MonoBehaviour
     [SerializeField] private BonfireManager bonfireManager;
 
     [Header("表示を切り替えるUI")]
-    [SerializeField] GameObject BonfireUI;
-    [SerializeField] GameObject restUI;
+    [SerializeField] private GameObject BonfireUI;
+    [SerializeField] private GameObject restUI;
 
     [Header("クリック後に参照するUI")]
-    [SerializeField] GameObject enhanceButton;
-    [SerializeField] GameObject applyEnhance;
-    [SerializeField] GameObject closeEnhance;
-    [SerializeField] GameObject restButton;
-    [SerializeField] GameObject takeRestButton;
-    [SerializeField] GameObject noRestButton;
+    [SerializeField] private GameObject enhanceButton;
+    [SerializeField] private GameObject applyEnhance;
+    [SerializeField] private GameObject closeEnhance;
+    [SerializeField] private GameObject restButton;
+    [SerializeField] private GameObject takeRestButton;
+    [SerializeField] private GameObject noRestButton;
 
-    bool isRemoved = true;
 
     void Start()
     {
         restController.CheckRest("BonfireScene");
-        UIEventReload();
+        UIEventsReload();
     }
 
-    public void UIEventReload()
+
+    #region UIイベントリスナー関係の処理
+    /// <summary>
+    /// <para> UIイベントリスナーの登録、再登録を行います。</para>
+    /// <para>イベントの登録を行った後に、新しく生成したPrefabに対して処理を行いたい場合は、再度このメソッドを呼んでください。</para>
+    /// </summary>
+    public void UIEventsReload()
     {
         if(!isRemoved)
             RemoveListeners();
 
-        UIs = Canvas.GetComponentsInChildren<UIController>();       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
-        foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
+        UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        foreach (UIController UI in UIs)                                // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
@@ -67,6 +74,8 @@ public class UIManagerBonfire : MonoBehaviour
             UI.onExit.RemoveAllListeners();
         }
     }
+    #endregion
+
 
     void UILeftClick(GameObject UIObject)
     {
@@ -93,7 +102,7 @@ public class UIManagerBonfire : MonoBehaviour
                 restUI.SetActive(true);                             // 休憩UIを表示
 
                 restController.ChengeRestText("BonfireScene");      // 休憩textを更新
-                UIEventReload();
+                //UIEventsReload();
             }
         }
         #endregion
@@ -108,7 +117,7 @@ public class UIManagerBonfire : MonoBehaviour
             // 強化ボタン切り替え
             applyEnhance.SetActive(true);
             closeEnhance.SetActive(false);
-            UIEventReload();
+            //UIEventsReload();
 
             // カード選択状態の切り替え
             if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
@@ -131,13 +140,13 @@ public class UIManagerBonfire : MonoBehaviour
             // 強化ボタン切り替え
             applyEnhance.SetActive(false);
             closeEnhance.SetActive(true);
-            UIEventReload();
+            //UIEventsReload();
         }
 
         // "強化する"を押したら
         if (UIObject == applyEnhance && isClick)
         {
-            bonfireManager.CardEnhance(lastClickedCards);   // ボタンを前にクリックしたCardを引数に
+            bonfireManager.CardEnhance(lastClickedCards);   // ボタンを押す前にクリックしたCardを引数に
 
             sceneController.sceneChange("FieldScene");      // 強化したらフィールドに戻る
         }
@@ -146,7 +155,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject == closeEnhance)
         {
             BonfireUI.SetActive(true);          // 焚火画面に戻る
-            UIEventReload();
+            //UIEventsReload();
         }
         #endregion
 

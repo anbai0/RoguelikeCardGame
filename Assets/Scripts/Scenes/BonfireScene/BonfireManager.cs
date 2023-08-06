@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BonfireManager : MonoBehaviour
 {
-    PlayerDataManager playerData;
+    GameManager gm;
+    [SerializeField] ManagerSceneLoader msLoader;
 
     //カード
     [SerializeField] CardController cardPrefab;
@@ -17,14 +18,14 @@ public class BonfireManager : MonoBehaviour
 
     void Start()
     {
-        //playerData = GameManager.Instance.playerData;
-        playerData = new PlayerDataManager("Wizard");
+        // GameManager取得
+        gm = msLoader.GetGameManager();
         InitDeck();
     }
 
     private void InitDeck() //デッキ生成
     {
-        deckNumberList = playerData._deckList;
+        deckNumberList = gm.playerData._deckList;
         int distribute = DistributionOfCards(deckNumberList.Count);
         if (distribute <= 0) //デッキの枚数が0枚なら生成しない
             return;
@@ -85,7 +86,6 @@ public class BonfireManager : MonoBehaviour
     /// <param name="selectCard">選択されたCard</param>
     public void CardEnhance(GameObject selectCard)
     {
-        Debug.Log("カード強化！");
         int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
         for (int count = 0; count < deckNumberList.Count; count++)
         {

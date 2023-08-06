@@ -6,17 +6,19 @@ using UnityEngine.UI;
 /// ShopSceneのUIManagerです。
 /// ToDo: レリックがEnterされたときの処理はまだ書き終わってないので後でやります。
 /// </summary>
-public class UIManagerShopScene : MonoBehaviour
+public class UIManagerShop : MonoBehaviour
 {
-    [SerializeField] private GameObject Canvas;
+    // UIManagerに最初から定義してある変数
+    [SerializeField] private GameObject canvas;
     private UIController[] UIs;
+    private bool isRemoved = true;
 
-    bool isClick = false;
-    GameObject lastClickedItem;
+    private bool isClick = false;
+    private GameObject lastClickedItem;
 
-    Vector3 cardScaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
-    Vector3 relicScaleReset = Vector3.one * 2.5f;
-    Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
+    private Vector3 cardScaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
+    private Vector3 relicScaleReset = Vector3.one * 2.5f;
+    private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するスクリプト")]
     [SerializeField] private SceneController sceneController;
@@ -24,30 +26,35 @@ public class UIManagerShopScene : MonoBehaviour
     [SerializeField] private RestController restController;
 
     [Header("表示を切り替えるUI")]
-    [SerializeField] GameObject shopUI;
-    [SerializeField] GameObject restUI;
+    [SerializeField] private GameObject shopUI;
+    [SerializeField] private GameObject restUI;
 
     [Header("クリック後に参照するUI")]
-    [SerializeField] GameObject buyButton;
-    [SerializeField] GameObject closeShopping;
-    [SerializeField] GameObject restButton;
-    [SerializeField] GameObject takeRestButton;
-    [SerializeField] GameObject noRestButton;
+    [SerializeField] private GameObject buyButton;
+    [SerializeField] private GameObject closeShopping;
+    [SerializeField] private GameObject restButton;
+    [SerializeField] private GameObject takeRestButton;
+    [SerializeField] private GameObject noRestButton;
 
-    bool isRemoved = true;
 
     void Start()
     {
-        restController.CheckRest("ShopScene");
-        UIEventReload();
+        restController.CheckRest("ShopScene");      // 休憩のテキスト更新
+        UIEventsReload();
     }
 
-    public void UIEventReload()
+
+    #region UIイベントリスナー関係の処理
+    /// <summary>
+    /// <para> UIイベントリスナーの登録、再登録を行います。</para>
+    /// <para>イベントの登録を行った後に、新しく生成したPrefabに対して処理を行いたい場合は、再度このメソッドを呼んでください。</para>
+    /// </summary>
+    public void UIEventsReload()
     {
         if(!isRemoved)
             RemoveListeners();
 
-        UIs = Canvas.GetComponentsInChildren<UIController>();       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
@@ -67,6 +74,8 @@ public class UIManagerShopScene : MonoBehaviour
             UI.onExit.RemoveAllListeners();
         }
     }
+    #endregion
+
 
     void UILeftClick(GameObject UIObject)
     {
@@ -93,7 +102,6 @@ public class UIManagerShopScene : MonoBehaviour
                 restUI.SetActive(true);
 
                 restController.ChengeRestText("ShopScene");
-                UIEventReload();
             }
         }
         #endregion

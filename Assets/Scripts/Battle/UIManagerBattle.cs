@@ -10,26 +10,30 @@ using UnityEngine.UI;
 /// </summary>
 public class UIManagerBattle : MonoBehaviour
 {
-    [SerializeField] private GameObject parent;
+    // UIManagerに最初から定義してある変数
+    [SerializeField] private GameObject canvas;
     private UIController[] UIs;
+    private bool isRemoved = true;
 
-    bool isEventsReset = true;
-    bool isDragging;    // ドラッグ状態かを判定します
+    private bool isEventsReset = true;
+    private bool isDragging;    // ドラッグ状態かを判定します
 
     void Start()
     {
         UIEventsReload();
     }
 
+    #region UIイベントリスナー関係の処理
     /// <summary>
-    /// UIの表示、再表示を行います。
+    /// <para> UIイベントリスナーの登録、再登録を行います。</para>
+    /// <para>イベントの登録を行った後に、新しく生成したPrefabに対して処理を行いたい場合は、再度このメソッドを呼んでください。</para>
     /// </summary>
     public void UIEventsReload()
     {
         if(!isEventsReset)
             RemoveListeners();
 
-        UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        UIs = canvas.GetComponentsInChildren<UIController>(true);       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
@@ -56,6 +60,8 @@ public class UIManagerBattle : MonoBehaviour
             UI.onDrop.RemoveAllListeners();
         }
     }
+    #endregion
+
 
     /// <summary>
     /// ドラッグし始めたときに処理するメソッドです

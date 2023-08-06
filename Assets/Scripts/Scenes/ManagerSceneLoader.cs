@@ -6,6 +6,8 @@ public class ManagerSceneLoader : MonoBehaviour
 {
     private static bool Loaded { get; set; }
 
+    GameManager gameManager;
+
     void Awake()
     {
         if (Loaded)
@@ -13,8 +15,7 @@ public class ManagerSceneLoader : MonoBehaviour
             // 今いるシーンに応じてUIを切り替える
             GetCurrentSceneName();
             return;
-        }
-            
+        }       
 
         Loaded = true;
         StartCoroutine(LoadManagerScene()); // コルーチンの呼び出し
@@ -71,5 +72,18 @@ public class ManagerSceneLoader : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public GameManager GetGameManager()
+    {
+        Scene scene = SceneManager.GetSceneByName("ManagerScene");
+
+        foreach (var rootGameObject in scene.GetRootGameObjects())
+        {
+            gameManager = rootGameObject.GetComponent<GameManager>();
+            return gameManager;
+        }
+        Debug.LogError("GameManagerを取得できませんでした。");
+        return null;
     }
 }

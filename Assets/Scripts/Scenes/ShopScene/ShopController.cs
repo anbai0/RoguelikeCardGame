@@ -11,17 +11,18 @@ using TMPro;
 /// </summary>
 public class ShopController : MonoBehaviour
 {
-    PlayerDataManager playerData;
+    GameManager gm;
     CardController cardController;
     RelicController relicController;
     RelicStatus relicStatus;
 
-    [SerializeField] Lottery lottery;
-    [SerializeField] UIManagerShopScene uiManager;
+    [SerializeField] private Lottery lottery;
+    [SerializeField] private UIManagerShop uiManager;
+    [SerializeField] private ManagerSceneLoader msLoader;
 
-    const int healCardID = 3;                       // 回復カードのID
-    const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
-    Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
+    private const int healCardID = 3;                       // 回復カードのID
+    private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
+    private Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
 
     [Header("参照するUI")]
     [SerializeField] GameObject shoppingUI;
@@ -61,7 +62,8 @@ public class ShopController : MonoBehaviour
 
     private void Start()
     {
-        playerData = GameManager.Instance.playerData;
+        // GameManager取得
+        gm = msLoader.GetGameManager();
         relicStatus = new RelicStatus();                       //後でGameManagerにプレイヤーのRelicStatusを作成して参照します
     }
 
@@ -73,12 +75,12 @@ public class ShopController : MonoBehaviour
             ShopLottery();
             shopCardsID.Add(healCardID);                        // 回復カードを追加
             shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
-            Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
+            //Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
 
             // ショップに並ぶアイテムを表示
             ShowItem();
             
-            uiManager.UIEventReload();          // UIEvent更新      
+            uiManager.UIEventsReload();          // UIEvent更新      
             Lottery.isInitialize = false;
         }
 
@@ -92,7 +94,7 @@ public class ShopController : MonoBehaviour
         //    shopRelicsID[2] = tmpID;
 
         //    ShowItem();
-        //    uiManager.UIEventReload();
+        //    uiManager.UIEventsReload();
         //}
 
         //// デバッグ用
@@ -109,7 +111,7 @@ public class ShopController : MonoBehaviour
         //    // ショップに並ぶアイテムを表示
         //    ShowItem();
 
-        //    uiManager.UIEventReload();          // UIEvent更新      
+        //    uiManager.UIEventsReload();          // UIEvent更新      
         //    Lottery.isInitialize = false;
         //}
 
@@ -177,7 +179,7 @@ public class ShopController : MonoBehaviour
         for (int i = 0; i < shopCards.Count; i++)
         {
             CardController card = shopCards[i].GetComponent<CardController>();
-            if (playerData._playerMoney >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
+            if (gm.playerData._playerMoney >= card.cardDataManager._cardPrice)     // 所持金が足りるなら
             {
                 TextMeshProUGUI textComponent = shopCards[i].transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>();       // Price表示テキストを取得
                 textComponent.color = Color.white;                                                                                    // 白で表示
@@ -194,7 +196,7 @@ public class ShopController : MonoBehaviour
         for (int i = 0; i < shopRelics.Count; i++)
         {
             RelicController relic = shopRelics[i].GetComponent<RelicController>();
-            if (playerData._playerMoney >= relic.relicDataManager._relicPrice)
+            if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)
             {
                 TextMeshProUGUI textComponent = shopRelics[i].transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
                 textComponent.color = Color.white;
@@ -214,7 +216,7 @@ public class ShopController : MonoBehaviour
     /// <returns>持っている場合trueを返します</returns>
     public bool HasHealPotion()
     {
-        foreach(int cardsID in playerData._deckList)
+        foreach(int cardsID in gm.playerData._deckList)
         {
             if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
             {
@@ -240,19 +242,19 @@ public class ShopController : MonoBehaviour
             {
                 CardController card = shopCards[i].GetComponent<CardController>();
 
-                if (playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
+                if (gm.playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
                 {
                     if (shopCardsID[i] != shopCardsID[healCardID])                        // 選んだカードが回復カードではなかった場合
                     {
-                        playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                        playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
+                        gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                        gm.playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
 
                         selectedItem.SetActive(false);
 
                     } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
                     {
-                        playerData._playerMoney -= card.cardDataManager._cardPrice;
-                        playerData._deckList.Add(shopCardsID[i]);
+                        gm.playerData._playerMoney -= card.cardDataManager._cardPrice;
+                        gm.playerData._deckList.Add(shopCardsID[i]);
 
 
                         // 回復カードをグレーアウトにする
@@ -270,67 +272,18 @@ public class ShopController : MonoBehaviour
             {
                 RelicController relic = shopRelics[i].GetComponent<RelicController>();
 
-                if (playerData._playerMoney >= relic.relicDataManager._relicPrice)          // 所持金が足りるなら
+                if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)         // 所持金が足りるなら
                 {
-                    playerData._playerMoney -= relic.relicDataManager._relicPrice;          // 所持金から値段分のお金を引いて
-                    AddRelicStatus(shopRelicsID[i]);                                        //レリックステータスに加える
-                    //playerData._relicList.Add(shopRelicsID[i]);                             // レリックリストに加える
+                    gm.playerData._playerMoney -= relic.relicDataManager._relicPrice;         // 所持金から値段分のお金を引いて
+                    gm.hasRelics[shopRelicsID[i]]++;                                          // レリックを取得
                     selectedItem.transform.localScale = scaleReset;                           // スケールを戻す
 
                     selectedItem.SetActive(false);
                 }
             }
         }
-    }
 
-    /// <summary>
-    /// レリックを追加する処理です
-    /// </summary>
-    /// <param name="relicID">レリックのID</param>
-    void AddRelicStatus(int relicID)
-    {
-        switch (relicID) //レリックのIDに応じてrelicStatusに1つ追加する
-        {
-            case 1:
-                relicStatus.hasRelicID1++;
-                break;
-            case 2:
-                relicStatus.hasRelicID2++;
-                break;
-            case 3:
-                relicStatus.hasRelicID3++;
-                break;
-            case 4:
-                relicStatus.hasRelicID4++;
-                break;
-            case 5:
-                relicStatus.hasRelicID5++;
-                break;
-            case 6:
-                relicStatus.hasRelicID6++;
-                break;
-            case 7:
-                relicStatus.hasRelicID7++;
-                break;
-            case 8:
-                relicStatus.hasRelicID8++;
-                break;
-            case 9:
-                relicStatus.hasRelicID9++;
-                break;
-            case 10:
-                relicStatus.hasRelicID10++;
-                break;
-            case 11:
-                relicStatus.hasRelicID11++;
-                break;
-            case 12:
-                relicStatus.hasRelicID12++;
-                break;
-            default:
-                Debug.Assert(false);
-                break;
-        }
+        gm.ShowRelics();        // オーバーレイのレリック表示を更新
     }
 
 }

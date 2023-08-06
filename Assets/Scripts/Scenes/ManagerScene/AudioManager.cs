@@ -36,7 +36,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(seName + "という名前のaudioClipは存在しません。");
+            Debug.Log($"\"{seName}\"という名前のaudioClipは存在しません。");
         }
     }
 
@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(bgmName + "という名前のaudioClipは存在しません。");
+            Debug.LogError($"\"{bgmName}\"という名前のaudioClipは存在しません。");
         }
     }
 

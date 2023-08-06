@@ -3,6 +3,9 @@ using UnityEditor.Overlays;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+using DG.Tweening.Core.Easing;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -11,10 +14,9 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     // UIManagerに最初から定義してある変数
-    [Header("Canvasをアタッチ")]
-    [SerializeField] private GameObject parent;
+    [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    bool isRemoved = true;
+    private bool isRemoved = true;
 
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
@@ -27,32 +29,28 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject titleBackButton;
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
-    [Space (10)]
-    [SerializeField] RelicController relicPrefab;
-    [SerializeField] Transform relicPlace;
-
+    [Space(10)]
     [SerializeField] AudioManager audioManager;
-    [SerializeField] GameManager gameManager;
 
-    bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
-    int maxRelics = 12;
+    private bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
+    private int maxRelics = 12;
 
     void Start()
     {
         UIEventsReload();
-        //ChangeUI("OverlayOnly");
-        ShowRelics();
     }
 
+    #region UIイベントリスナー関係の処理
     /// <summary>
-    /// UIの表示、再表示を行います。
+    /// <para> UIイベントリスナーの登録、再登録を行います。</para>
+    /// <para>イベントの登録を行った後に、新しく生成したPrefabに対して処理を行いたい場合は、再度このメソッドを呼んでください。</para>
     /// </summary>
-    void UIEventsReload()
+    public void UIEventsReload()
     {
         if (!isRemoved)             // イベントの初期化
             RemoveListeners();
 
-        UIs = parent.GetComponentsInChildren<UIController>();       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        UIs = canvas.GetComponentsInChildren<UIController>(true);       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
@@ -77,7 +75,7 @@ public class UIManager : MonoBehaviour
             UI.onExit.RemoveAllListeners();
         }
     }
-
+    #endregion
 
     /// <summary>
     /// 左クリックされたときに処理するメソッドです。
@@ -85,13 +83,10 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        Debug.Log(UIObject.name);
-
         // オプション画面表示
         if (UIObject == (overlayOptionButton || titleOptionButton))
         {
             optionScreen.SetActive(true);
-            UIEventsReload();
         }
 
         // オプション画面非表示
@@ -104,7 +99,6 @@ public class UIManager : MonoBehaviour
         if (UIObject == titleBackButton)
         {
             confirmationPanel.SetActive(true);
-            UIEventsReload();
         }
 
         // タイトルへ戻るの確認画面非表示
@@ -134,7 +128,11 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
-        //Debug.Log("Entered UI: " + UIObject);
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            UIObject.transform.GetChild(5).gameObject.SetActive(true);
+        }
+        
     }
 
 
@@ -144,7 +142,10 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">カーソルが離れたObject</param>
     void UIExit(GameObject UIObject)
     {
-        //Debug.Log("Exited UI: " + UIObject);
+        if (UIObject == UIObject.CompareTag("Relics"))
+        {
+            UIObject.transform.GetChild(5).gameObject.SetActive(false);
+        }
     }
     
 
@@ -176,22 +177,6 @@ public class UIManager : MonoBehaviour
             overlay.SetActive(true);
             titleOptionButton.SetActive(false);
             titleBackButton.SetActive(true);
-        }
-
-        UIEventsReload();
-    }
-
-    private void ShowRelics()
-    {
-        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
-        {
-            if (gameManager.hasRelics.ContainsKey(RelicID) && gameManager.hasRelics[RelicID] >= 1)
-            {
-                RelicController relic = Instantiate(relicPrefab, relicPlace);
-                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
-
-                //relicObject.transform.GetChild(1).text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
-            }
         }
     }
 }

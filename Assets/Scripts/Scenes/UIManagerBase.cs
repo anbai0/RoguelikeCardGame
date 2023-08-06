@@ -1,6 +1,4 @@
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 // このスクリプトはコピーして使います。
@@ -13,10 +11,13 @@ using UnityEngine.UI;
 public class UIManagerBase : MonoBehaviour
 {
     // UIManagerに最初から定義してある変数
-    [Header ("Canvasをアタッチ")]
-    [SerializeField] private GameObject parent;
+    [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    bool isRemoved = true;
+    private bool isRemoved = true;
+
+    //[Header("参照するスクリプト")]
+    //[Header("表示を切り替えるUI")]
+    //[Header("クリック後に参照するUI")]
 
 
 
@@ -25,16 +26,18 @@ public class UIManagerBase : MonoBehaviour
         UIEventsReload();
     }
 
+    #region UIイベントリスナー関係の処理
     /// <summary>
-    /// UIの表示、再表示を行います。
+    /// <para> UIイベントリスナーの登録、再登録を行います。</para>
+    /// <para>イベントの登録を行った後に、新しく生成したPrefabに対して処理を行いたい場合は、再度このメソッドを呼んでください。</para>
     /// </summary>
     void UIEventsReload()
     {
         if (!isRemoved)             // イベントの初期化
             RemoveListeners();
 
-        UIs = parent.GetComponentsInChildren<UIController>();       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
-        foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
+        UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
+        foreach (UIController UI in UIs)                                // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
             UI.onRightClick.AddListener(() => UIRightClick(UI.gameObject));
@@ -66,7 +69,7 @@ public class UIManagerBase : MonoBehaviour
             UI.onDrop.RemoveAllListeners();
         }
     }
-
+    #endregion
 
 
     /// <summary>
@@ -85,7 +88,7 @@ public class UIManagerBase : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UIRightClick(GameObject UIObject)
     {
-        Debug.Log("RightClicked UI: " + UIObject);
+        
     }
 
 
@@ -95,7 +98,7 @@ public class UIManagerBase : MonoBehaviour
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
-        //Debug.Log("Entered UI: " + UIObject);
+        
     }
 
 
@@ -105,7 +108,7 @@ public class UIManagerBase : MonoBehaviour
     /// <param name="UIObject">カーソルが離れたObject</param>
     void UIExit(GameObject UIObject)
     {
-        //Debug.Log("Exited UI: " + UIObject);
+
     }
 
 
@@ -135,6 +138,6 @@ public class UIManagerBase : MonoBehaviour
     /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
     void UIDrop(GameObject UIObject)
     {
-        Debug.Log("DragAndDrop UI: " + UIObject);
+
     }
 }

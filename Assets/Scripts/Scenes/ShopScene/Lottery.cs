@@ -8,7 +8,8 @@ using UnityEngine;
 /// </summary>
 public class Lottery : MonoBehaviour
 {
-    PlayerDataManager playerData;   // プレイヤーデータのインスタンスを格納
+    GameManager gm;
+    [SerializeField] ManagerSceneLoader msLoader;
     CardDataManager cardData;       // カードのデータを処理
     RelicDataManager relicData;     // レリックのデータを処理
 
@@ -30,6 +31,9 @@ public class Lottery : MonoBehaviour
 
     void Start()
     {
+        // GameManager取得
+        gm = msLoader.GetGameManager();
+
         for (int i = 1; i <= MaxNumCards; i++)
         {
             cardData = new CardDataManager(i);
@@ -63,10 +67,7 @@ public class Lottery : MonoBehaviour
                 relicRarity2List.Add(relicData._relicID);
             }
         }
-
-        playerData = GameManager.Instance.playerData;
         
-
         isInitialize = true;
     }
 
@@ -97,7 +98,7 @@ public class Lottery : MonoBehaviour
         }
 
         // 所持カードとショップに出ているカードをDeckAndShopCardsへ追加
-        List<int> deckAndShopCards = new List<int>(playerData._deckList);
+        List<int> deckAndShopCards = new List<int>(gm.playerData._deckList);
         deckAndShopCards.AddRange(shopCards);
 
         int cardLottery = -1;
