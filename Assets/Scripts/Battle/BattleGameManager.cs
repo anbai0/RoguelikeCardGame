@@ -46,29 +46,6 @@ public class BattleGameManager : MonoBehaviour
     private int accelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
     public int roundCount;//何ラウンド目かを記録する
 
-    //Debug用
-    [SerializeField]
-    int RelicID2 = 0;
-    [SerializeField]
-    int RelicID3 = 0;
-    [SerializeField]
-    int RelicID4 = 0;
-    [SerializeField]
-    int RelicID5 = 0;
-    [SerializeField]
-    int RelicID6 = 0;
-    [SerializeField]
-    int RelicID7 = 0;
-    [SerializeField]
-    int RelicID8 = 0;
-    [SerializeField]
-    int RelicID9 = 0;
-    [SerializeField]
-    int RelicID10 = 0;
-    [SerializeField]
-    int RelicID11 = 0;
-    [SerializeField]
-    int RelicID12 = 0;
     public string enemyName = "Slime";
     [SerializeField]
     int floor = 1;
@@ -261,10 +238,9 @@ public class BattleGameManager : MonoBehaviour
         //プレイヤーのステータスを割り振る
         playerScript.SetStatus(player);
         deckNumberList = player._deckList;
-        SetRelics();
         //エネミーのステータスを割り振る
         enemyScript.SetStatus(floor, enemy);
-        enemyScript.GetSetRelicStatus = selectEnemyRelic.SetEnemyRelics(floor, enemyName);
+        enemyScript.hasEnemyRelics = selectEnemyRelic.SetEnemyRelics(enemyScript.hasEnemyRelics, floor, enemyName);
     }
     private void InitDeck() //デッキ生成
     {
@@ -282,21 +258,6 @@ public class BattleGameManager : MonoBehaviour
             pickCard.transform.Find("CardInfo").gameObject.SetActive(false); //非表示にしておく
             pickCard.GetComponent<CanvasGroup>().blocksRaycasts = false; //レイで選ばれないようにしておく
         }
-    }
-    private void SetRelics()
-    {
-        //Debug用に設定したもの、GameManagerからレリックのリストを受け取れるようになったら直接呼び出せるようにする
-        playerScript.GetSetRelicStatus.hasRelicID2 = RelicID2;
-        playerScript.GetSetRelicStatus.hasRelicID3 = RelicID3;
-        playerScript.GetSetRelicStatus.hasRelicID4 = RelicID4;
-        playerScript.GetSetRelicStatus.hasRelicID5 = RelicID5;
-        playerScript.GetSetRelicStatus.hasRelicID6 = RelicID6;
-        playerScript.GetSetRelicStatus.hasRelicID7 = RelicID7;
-        playerScript.GetSetRelicStatus.hasRelicID8 = RelicID8;
-        playerScript.GetSetRelicStatus.hasRelicID9 = RelicID9;
-        playerScript.GetSetRelicStatus.hasRelicID10 = RelicID10;
-        playerScript.GetSetRelicStatus.hasRelicID11 = RelicID11;
-        playerScript.GetSetRelicStatus.hasRelicID12 = RelicID12;
     }
     public void StartRelicEffect() //戦闘開始時に発動するレリック効果
     {
