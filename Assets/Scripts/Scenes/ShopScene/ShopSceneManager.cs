@@ -13,7 +13,7 @@ public class ShopSceneManager: MonoBehaviour
 
     public void FieldScene()
     {
-        sceneController.sceneChange("FieldScene");
+        sceneController.SceneChange("FieldScene");
     }
 
     

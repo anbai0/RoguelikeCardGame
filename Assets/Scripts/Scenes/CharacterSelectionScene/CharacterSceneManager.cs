@@ -12,13 +12,14 @@ public class CharacterSceneManager : MonoBehaviour
         //タイトル画面へ遷移
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //Scene切り替え
-            sceneController.sceneChange("TitleScene", "CharacterSelectionScene");
+            // キャラ選択シーンをアンロードし、タイトルシーンをAdditive
+            sceneController.SceneChange("TitleScene", "CharacterSelectionScene");
         }
     }
 
-    public void FieldScene()
+    public void LoadFieldScene()
     {
-        sceneController.sceneChange("FieldScene", "CharacterSelectionScene");
+        // キャラ選択シーンをアンロードし、フィールドシーンをAdditive
+        sceneController.SceneChange("FieldScene", "CharacterSelectionScene");
     }
 }

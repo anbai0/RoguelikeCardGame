@@ -91,7 +91,7 @@ public class UIManagerBonfire : MonoBehaviour
         // "休憩しない"を押したら
         if (UIObject == UIObject.CompareTag("ExitButton"))
         {
-            sceneController.sceneChange("FieldScene");          // フィールドに戻る
+            sceneController.SceneChange("FieldScene");          // フィールドに戻る
         }
 
         // "休憩"を押したら
@@ -148,7 +148,7 @@ public class UIManagerBonfire : MonoBehaviour
         {
             bonfireManager.CardEnhance(lastClickedCards);   // ボタンを押す前にクリックしたCardを引数に
 
-            sceneController.sceneChange("FieldScene");      // 強化したらフィールドに戻る
+            sceneController.SceneChange("FieldScene");      // 強化したらフィールドに戻る
         }
 
         // "強化しない"を押したら
@@ -166,7 +166,7 @@ public class UIManagerBonfire : MonoBehaviour
         {
             restController.Rest("BonfireScene");                // 回復する
             restUI.SetActive(false);
-            sceneController.sceneChange("FieldScene");          // フィールドに戻る
+            sceneController.SceneChange("FieldScene");          // フィールドに戻る
         }
         // "休憩しない"を押したら
         if (UIObject == noRestButton)

@@ -34,13 +34,25 @@ public class SceneController : MonoBehaviour
         fadeCanvas.GetComponent<FadeManager>().fadeIn();//フェードインフラグを立てる
     }
 
-    public async void sceneChange(string loadSceneName, string unLoadSceneName = "None")//ボタン操作などで呼び出す
+
+    /// <summary>
+    /// シーンのロードとアンロードを行います。
+    /// <para>シーンのロード、アンロードを同時に行う場合は、</para>
+    /// <code>SceneChange("ロードしたいシーンの名前", "アンロードしたいシーンの名前");</code>
+    /// <para>シーンのロードだけしたい場合は、</para>
+    /// <code>SceneChange("ロードしたいシーンの名前");</code>
+    /// <para>シーンのアンロードだけしたい場合は、</para>
+    /// <code>SceneChange(unLoadSceneName: "アンロードしたいシーンの名前");</code>
+    /// </summary>
+    /// <param name="loadSceneName"></param>
+    /// <param name="unLoadSceneName"></param>
+    public async void SceneChange(string loadSceneName = "None", string unLoadSceneName = "None")//ボタン操作などで呼び出す
     {
         fadeCanvas.SetActive(true);     //パネルが邪魔で消していたのここで表示させています
         fadeCanvas.GetComponent<FadeManager>().fadeOut();//フェードアウトフラグを立てる
         await Task.Delay(fadeDelay * 100);//暗転するまで待つ
-        SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);//シーンチェンジ
-        if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));
+        if (loadSceneName != "None") SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);    //シーンロード
+        if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));                           //アンロード
     }
 
     IEnumerator CoUnload(string unLoadSceneName)

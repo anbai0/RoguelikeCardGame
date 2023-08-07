@@ -9,17 +9,25 @@ public class BattleSceneScript : MonoBehaviour
     [SerializeField]
     private SceneController sceneController;
 
-    void Update()
+
+    public void SwitchSceneAfterVictory()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //Scene切り替え
-            sceneController.sceneChange("FieldScene");
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            //Scene切り替え
-            sceneController.sceneChange("ResultScene");
-        }
+        // バトルシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "BattleScene");
+    }
+
+    public void SwitchSceneAfterLose()
+    {
+        // バトルシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "BattleScene");
+
+        // フィールドシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "FieldScene");
+
+        // ショップシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "ShopScene");
+
+        // リザルトシーンをAdditive
+        sceneController.SceneChange("ResultScene");
     }
 }

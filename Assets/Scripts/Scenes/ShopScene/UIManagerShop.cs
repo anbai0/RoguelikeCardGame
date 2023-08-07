@@ -92,7 +92,7 @@ public class UIManagerShop : MonoBehaviour
         // "“X‚ğo‚é"‚ğ‰Ÿ‚µ‚½‚ç
         if (UIObject == UIObject.CompareTag("ExitButton"))
         {
-            sceneController.sceneChange("FieldScene");
+            sceneController.SceneChange("FieldScene");
         }
         // "‹xŒe"‚ğ‰Ÿ‚µ‚½‚ç
         if (UIObject == restButton)

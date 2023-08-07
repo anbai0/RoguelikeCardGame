@@ -14,7 +14,20 @@ public class ResultSceneScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             //Scene切り替え
-            sceneController.sceneChange("TitleScene");
+            sceneController.SceneChange("TitleScene");
         }
     }
+
+    public void LoadTitleScene()
+    {
+        // Managerシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "ManagerScene");
+
+        // リザルトシーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "ResultScene");
+
+        // TitleシーンをAdditive
+        sceneController.SceneChange("TitleScene");
+    }
+
 }

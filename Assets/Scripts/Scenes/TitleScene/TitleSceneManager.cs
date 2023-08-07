@@ -9,9 +9,9 @@ public class TitleSceneManager : MonoBehaviour
     private SceneController sceneController;
 
 
-    public void CharaSelectScene()
+    public void LoadCharaSelectScene()
     {
-        //Scene切り替え
-        sceneController.sceneChange("CharacterSelectionScene", "TitleScene");
+        // タイトルシーンをアンロードし、キャラ選択シーンをAdditive
+        sceneController.SceneChange("CharacterSelectionScene", "TitleScene");
     }
 }

@@ -8,12 +8,21 @@ public class FieldSceneScript : MonoBehaviour
     [SerializeField]
     private SceneController sceneController;
 
-    void Update()
+    public void LoadBattleScene()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            //Scene切り替え
-            sceneController.sceneChange("BattleScene");
-        }
+        // 戦闘シーンをAdditive
+        sceneController.SceneChange("BattleScene");
+    }
+
+    public void LoadBonfireScene()
+    {
+        // 焚火シーンをAdditive
+        sceneController.SceneChange("BonfireScene");
+    }
+
+    public void LoadShopScene()
+    {
+        // ショップシーンをAdditive
+        sceneController.SceneChange("ShopScene");
     }
 }

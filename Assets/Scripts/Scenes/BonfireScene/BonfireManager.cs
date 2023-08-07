@@ -5,7 +5,8 @@ using UnityEngine;
 public class BonfireManager : MonoBehaviour
 {
     GameManager gm;
-    [SerializeField] ManagerSceneLoader msLoader;
+    [SerializeField] ManagerSceneLoader msLoader; 
+    [SerializeField] private SceneController sceneController;
 
     //カード
     [SerializeField] CardController cardPrefab;
@@ -98,5 +99,12 @@ public class BonfireManager : MonoBehaviour
             }
             Debug.Log("現在のPlayerのデッキリストは：" + deckNumberList[count]);
         }
+    }
+
+
+    public void UnLoadBonfireScene()
+    {
+        // 焚火シーンをアンロード
+        sceneController.SceneChange(unLoadSceneName: "BonfireScene");
     }
 }

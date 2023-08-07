@@ -76,7 +76,7 @@ public class UIManagerTitle : MonoBehaviour
     {
         if (UIObject == UIObject.CompareTag("BackGround"))
         {
-            sceneManager.CharaSelectScene();
+            sceneManager.LoadCharaSelectScene();
         }
     }
 
