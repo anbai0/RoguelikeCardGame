@@ -97,6 +97,16 @@ public class Lottery : MonoBehaviour
 
         // 所持カードとショップに出ているカードをDeckAndShopCardsへ追加
         List<int> deckAndShopCards = new List<int>(gm.playerData._deckList);
+
+        // 強化済みカードがあれば対応する未強化のカードを除外
+        for (int num = 1; num <= deckAndShopCards.Count; num++)
+        {
+            if (deckAndShopCards[num] >= 101)
+            {
+                deckAndShopCards[num] -= 100;
+            }
+        }
+
         deckAndShopCards.AddRange(shopCards);
 
         int cardLottery = -1;
