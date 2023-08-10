@@ -1499,10 +1499,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1021673074}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e73f1a8b146c184fb7d0e9430ceca2f, type: 3}
+  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce, type: 3}
+  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
+    type: 3}
   fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
     type: 3}
 --- !u!114 &1021673079
@@ -2430,7 +2431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52d6a95b80c528d4aad3ec9cb3fa704e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneController: {fileID: 1021673078}
+  sceneFader: {fileID: 1021673078}
 --- !u!4 &1331905756
 Transform:
   m_ObjectHideFlags: 0

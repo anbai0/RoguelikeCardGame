@@ -5,20 +5,21 @@ using UnityEngine;
 public class CharacterSceneManager : MonoBehaviour
 {
     [SerializeField]
-    private SceneController sceneController;
+    private SceneFader sceneFader;
 
     void Update()
     {
         //タイトル画面へ遷移
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //Scene切り替え
-            sceneController.sceneChange("TitleScene", "CharacterSelectionScene");
+            // キャラ選択シーンをアンロードし、タイトルシーンをロード
+            sceneFader.SceneChange("TitleScene", "CharacterSelectionScene");
         }
     }
 
-    public void FieldScene()
+    public void LoadFieldScene()
     {
-        sceneController.sceneChange("FieldScene", "CharacterSelectionScene");
+        // キャラ選択シーンをアンロードし、フィールドシーンをロード
+        sceneFader.SceneChange("FieldScene", "CharacterSelectionScene");
     }
 }

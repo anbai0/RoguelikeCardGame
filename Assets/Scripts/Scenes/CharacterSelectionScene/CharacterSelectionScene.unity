@@ -5249,10 +5249,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 418362620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e73f1a8b146c184fb7d0e9430ceca2f, type: 3}
+  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce, type: 3}
+  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
+    type: 3}
   fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
     type: 3}
 --- !u!20 &418362622
@@ -5502,7 +5503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f367d4940c365243ba8acd6abfcffc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneController: {fileID: 418362621}
+  sceneFader: {fileID: 418362621}
 --- !u!114 &999589709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20693,9 +20694,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1158963690}
+  targetScale: 0.85
   warrior: {fileID: 1748693079}
   wizard: {fileID: 1020034179}
-  targetScale: 0.85
   button: {fileID: 1615129647}
   image: {fileID: 1615129650}
   redButton: {fileID: 21300000, guid: 32c4fcdaf0a77324d8be0fbd83e6b540, type: 3}

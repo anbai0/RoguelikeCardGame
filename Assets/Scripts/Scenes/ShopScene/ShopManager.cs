@@ -1,24 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using SelfMadeNamespace;
 
 /// <summary>
 /// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
 /// ToDo: HasHealPotion()メソッドの処理があんまり良くない感じがするので修正したい。
 /// </summary>
-public class ShopController : MonoBehaviour
+public class ShopManager : MonoBehaviour
 {
     GameManager gm;
-    CardController cardController;
-    RelicController relicController;
-    RelicStatus relicStatus;
 
     [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
     [SerializeField] private ManagerSceneLoader msLoader;
+    [SerializeField] private SceneFader sceneFader;
 
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
@@ -64,7 +62,6 @@ public class ShopController : MonoBehaviour
     {
         // GameManager取得
         gm = msLoader.GetGameManager();
-        relicStatus = new RelicStatus();                       //後でGameManagerにプレイヤーのRelicStatusを作成して参照します
     }
 
     void Update()
@@ -150,7 +147,7 @@ public class ShopController : MonoBehaviour
         {
             GameObject cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
             cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
-            cardController = cardObject.GetComponent<CardController>();                                                             // 生成したPrefabのCardControllerを取得
+            CardController cardController = cardObject.GetComponent<CardController>();                                              // 生成したPrefabのCardControllerを取得
             cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
             cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
             shopCards.Add(cardObject);
@@ -161,7 +158,7 @@ public class ShopController : MonoBehaviour
         {
             GameObject relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
             relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
-            relicController = relicObject.GetComponent<RelicController>();                                                              // 生成したPrefabのRelicControllerを取得
+            RelicController relicController = relicObject.GetComponent<RelicController>();                                              // 生成したPrefabのRelicControllerを取得
             relicController.Init(shopRelicsID[relicID]);                                                                                // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
             relicObject.transform.Find("RelicPriceBG").gameObject.SetActive(true);                                                      // 値札を表示
             shopRelics.Add(relicObject);
@@ -286,4 +283,12 @@ public class ShopController : MonoBehaviour
         gm.ShowRelics();        // オーバーレイのレリック表示を更新
     }
 
+    /// <summary>
+    /// 店から出る処理です。ショップシーンを非表示にします。
+    /// </summary>
+    public void ExitShop()
+    {
+        // フェードインフェードアウトをし、シーンを非表示に
+        sceneFader.ToggleSceneWithFade("ShopScene", false);
+    }
 }

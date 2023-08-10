@@ -6,14 +6,14 @@ public class ShopSceneManager: MonoBehaviour
 {
 
     [SerializeField]
-    private SceneController sceneController;
+    private SceneFader sceneController;
 
     
 
 
     public void FieldScene()
     {
-        sceneController.sceneChange("FieldScene");
+        sceneController.SceneChange("FieldScene");
     }
 
     

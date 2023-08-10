@@ -267,7 +267,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &387374075
 MonoBehaviour:
@@ -284,6 +284,7 @@ MonoBehaviour:
   lottery: {fileID: 387374076}
   uiManager: {fileID: 2100310164}
   msLoader: {fileID: 387374078}
+  sceneFader: {fileID: 1213055526}
   shoppingUI: {fileID: 1016566035}
   cardPrefab: {fileID: 7009455883766435924, guid: a4142022ac005bc4ca6b58bc9c35ccf9,
     type: 3}
@@ -323,7 +324,6 @@ MonoBehaviour:
   relicRarity1List: 
   relicRarity2List: 
   shopCards: 
-  shopRelics: 
 --- !u!114 &387374077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1857,10 +1857,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1213055520}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e73f1a8b146c184fb7d0e9430ceca2f, type: 3}
+  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce, type: 3}
+  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
+    type: 3}
   fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
     type: 3}
 --- !u!1 &1349941458
@@ -3746,8 +3747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1963204191}
-  sceneController: {fileID: 1213055526}
-  shopController: {fileID: 387374075}
+  shopManager: {fileID: 387374075}
   restController: {fileID: 387374077}
   shopUI: {fileID: 1182467483}
   restUI: {fileID: 2049788800}
@@ -3769,5 +3769,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

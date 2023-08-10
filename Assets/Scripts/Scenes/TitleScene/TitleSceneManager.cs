@@ -6,12 +6,13 @@ using UnityEngine;
 public class TitleSceneManager : MonoBehaviour
 {
     [SerializeField]
-    private SceneController sceneController;
+    private SceneFader sceneFader;
 
 
-    public void CharaSelectScene()
+    public void LoadCharaSelectScene()
     {
-        //Scene切り替え
-        sceneController.sceneChange("CharacterSelectionScene", "TitleScene");
+        // タイトルシーンをアンロードし、キャラ選択シーンをロード
+        sceneFader.SceneChange("CharacterSelectionScene", "TitleScene");
     }
+
 }

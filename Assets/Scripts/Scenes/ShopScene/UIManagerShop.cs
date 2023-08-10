@@ -20,9 +20,8 @@ public class UIManagerShop : MonoBehaviour
     private Vector3 relicScaleReset = Vector3.one * 2.5f;
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
-    [Header("参照するスクリプト")]
-    [SerializeField] private SceneController sceneController;
-    [SerializeField] private ShopController shopController;
+    [Header("参照するコンポーネント")]
+    [SerializeField] private ShopManager shopManager;
     [SerializeField] private RestController restController;
 
     [Header("表示を切り替えるUI")]
@@ -86,13 +85,13 @@ public class UIManagerShop : MonoBehaviour
         if (UIObject == buyButton)
         {
             shopUI.SetActive(false);
-            shopController.PriceTextCheck();
-            shopController.HasHealPotion();
+            shopManager.PriceTextCheck();
+            shopManager.HasHealPotion();
         }
         // "店を出る"を押したら
-        if (UIObject == UIObject.CompareTag("ExitButton"))
+        if (UIObject.CompareTag("ExitButton"))
         {
-            sceneController.sceneChange("FieldScene");
+            shopManager.ExitShop();     // ShopSceneを非表示
         }
         // "休憩"を押したら
         if (UIObject == restButton)
@@ -109,7 +108,7 @@ public class UIManagerShop : MonoBehaviour
         #region ShoppingUI内での処理
 
         // アイテムをクリックしたら
-        if (UIObject == UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
+        if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isClick = true;
 
@@ -117,13 +116,13 @@ public class UIManagerShop : MonoBehaviour
             if (lastClickedItem != null && lastClickedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
             {
                 // 最後にクリックしたアイテムの選択状態を解除する
-                if (lastClickedItem == lastClickedItem.CompareTag("Cards"))
+                if (lastClickedItem.CompareTag("Cards"))
                 {
                     lastClickedItem.transform.localScale = cardScaleReset;
                     lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 }
                     
-                if (lastClickedItem == lastClickedItem.CompareTag("Relics"))
+                if (lastClickedItem.CompareTag("Relics"))
                 {
                     lastClickedItem.transform.localScale = relicScaleReset;
                     lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
@@ -135,20 +134,20 @@ public class UIManagerShop : MonoBehaviour
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);
 
                 // 2回目に選択したアイテムがレリックだった場合、レリックの説明を表示
-                if (UIObject == UIObject.CompareTag("Relics"))
+                if (UIObject.CompareTag("Relics"))
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
 
             }
             else if (UIObject == lastClickedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
             {
                 // 選択したアイテムを買う
-                if (UIObject == UIObject.CompareTag("Cards"))
-                    shopController.BuyItem(UIObject, "Card");
+                if (UIObject.CompareTag("Cards"))
+                    shopManager.BuyItem(UIObject, "Card");
 
-                if (UIObject == UIObject.CompareTag("Relics"))
-                    shopController.BuyItem(UIObject, "Relic");
+                if (UIObject.CompareTag("Relics"))
+                    shopManager.BuyItem(UIObject, "Relic");
 
-                shopController.PriceTextCheck();            // 値段テキスト更新
+                shopManager.PriceTextCheck();            // 値段テキスト更新
 
                 lastClickedItem = null;                     // 選択状態リセット
                 isClick = false;
@@ -159,16 +158,16 @@ public class UIManagerShop : MonoBehaviour
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isClick && UIObject == UIObject.CompareTag("BackGround"))
+        if (isClick && UIObject.CompareTag("BackGround"))
         {
             // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastClickedItem == lastClickedItem.CompareTag("Cards"))
+            if (lastClickedItem.CompareTag("Cards"))
             {
                 lastClickedItem.transform.localScale = cardScaleReset;
                 lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
-            if (lastClickedItem == lastClickedItem.CompareTag("Relics"))
+            if (lastClickedItem.CompareTag("Relics"))
             {
                 lastClickedItem.transform.localScale = relicScaleReset;
                 lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
@@ -208,13 +207,13 @@ public class UIManagerShop : MonoBehaviour
     {
         if (!isClick)
         {
-            if (UIObject == UIObject.CompareTag("Cards"))
+            if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
 
-            if (UIObject == UIObject.CompareTag("Relics"))
+            if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
@@ -227,13 +226,13 @@ public class UIManagerShop : MonoBehaviour
     {
         if (!isClick)
         {
-            if (UIObject == UIObject.CompareTag("Cards"))
+            if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale = cardScaleReset;
                 UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
             }
 
-            if (UIObject == UIObject.CompareTag("Relics"))
+            if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale = relicScaleReset;
                 UIObject.transform.GetChild(0).gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する

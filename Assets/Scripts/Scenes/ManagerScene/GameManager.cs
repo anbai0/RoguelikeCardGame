@@ -6,11 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //プレイヤー
-    GameObject player;
     public PlayerDataManager playerData;
+    public List<CardDataManager> cardDataList { private set; get; } = new List<CardDataManager>();
     public List<RelicDataManager> relicDataList { private set; get; } = new List<RelicDataManager>();
-    public Dictionary<int, int> hasRelics = new Dictionary<int, int>();     // 所持しているレリックを格納    
-    int maxRelics = 12;
+    public Dictionary<int, int> hasRelics { private set; get; } = new Dictionary<int, int>();     // 所持しているレリックを格納    
+    public int maxCards { private set; get; } = 20;
+    public int maxRelics { private set; get; } = 12;
 
     bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
@@ -28,7 +29,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        InitializeRelics();
+        InitializeItemData();
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
@@ -38,16 +39,22 @@ public class GameManager : MonoBehaviour
 
     
     /// <summary>
-    /// レリックデータの初期化を行います。
+    /// アイテムデータの初期化を行います。
     /// </summary>
-    private void InitializeRelics()
+    private void InitializeItemData()
     {
-        relicDataList.Add(new RelicDataManager(1));     // ID順に管理したいため最初の要素だけ代入
-        for (int RelicID=1; RelicID <= maxRelics; RelicID++)
+        cardDataList.Add(new CardDataManager(1));       // ID順に管理したいため最初の要素だけ代入
+        for (int cardID = 1; cardID <= maxCards; cardID++)
         {
-            hasRelics.Add(RelicID,0);
+            cardDataList.Add(new CardDataManager(cardID));
+        }
 
-            relicDataList.Add(new RelicDataManager(RelicID));
+        relicDataList.Add(new RelicDataManager(1));     // ID順に管理したいため最初の要素だけ代入
+        for (int relicID=1; relicID <= maxRelics; relicID++)
+        {
+            hasRelics.Add(relicID,0);
+
+            relicDataList.Add(new RelicDataManager(relicID));
         }
     }
 
@@ -86,6 +93,7 @@ public class GameManager : MonoBehaviour
 
         for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
         {
+            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
             if (hasRelics.ContainsKey(RelicID) && hasRelics[RelicID] >= 1)
             {
                 RelicController relic = Instantiate(relicPrefab, relicPlace);
@@ -102,5 +110,20 @@ public class GameManager : MonoBehaviour
         }
 
         uiManager.UIEventsReload();
+    }
+
+    public void ResetGameData()
+    {
+        playerData = null;
+        isAlreadyRead = false;
+        Instance = null;
+
+        // 所持レリック初期化
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            hasRelics[RelicID] = 0; // キーと値を設定
+        }
+
+        ShowRelics();
     }
 }
