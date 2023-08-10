@@ -47,7 +47,10 @@ public class ManagerSceneLoader : MonoBehaviour
                 GetUIManager("Title");
                 break;
             case "CharacterSceneManager":
-                GetUIManager("Chara");
+                GetUIManager("None");
+                break;
+            case "ResultSceneManager":
+                GetUIManager("None");
                 break;
             default:
                 GetUIManager("OverlayOnly");
@@ -86,4 +89,5 @@ public class ManagerSceneLoader : MonoBehaviour
         Debug.LogError("GameManager‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
         return null;
     }
+
 }

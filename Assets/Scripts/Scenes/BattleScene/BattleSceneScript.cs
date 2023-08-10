@@ -1,33 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; // UnityEngine.SceneManagemntの機能を使用
+using UnityEngine.SceneManagement;
 
 
 public class BattleSceneScript : MonoBehaviour
 {
     [SerializeField]
-    private SceneController sceneController;
+    private SceneFader sceneFader;
 
 
     public void SwitchSceneAfterVictory()
     {
         // バトルシーンをアンロード
-        sceneController.SceneChange(unLoadSceneName: "BattleScene");
+        sceneFader.SceneChange(unLoadSceneName: "BattleScene");
     }
 
     public void SwitchSceneAfterLose()
     {
-        // バトルシーンをアンロード
-        sceneController.SceneChange(unLoadSceneName: "BattleScene");
-
         // フィールドシーンをアンロード
-        sceneController.SceneChange(unLoadSceneName: "FieldScene");
+        sceneFader.UnLoadScene("FieldScene");
 
         // ショップシーンをアンロード
-        sceneController.SceneChange(unLoadSceneName: "ShopScene");
+        sceneFader.UnLoadScene("ShopScene");
 
-        // リザルトシーンをAdditive
-        sceneController.SceneChange("ResultScene");
+        // バトルシーンをアンロード、リザルトシーンをロード
+        sceneFader.SceneChange("ResultScene", "BattleScene");
     }
 }

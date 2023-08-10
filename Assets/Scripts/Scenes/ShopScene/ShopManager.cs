@@ -1,21 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using SelfMadeNamespace;
 
 /// <summary>
 /// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
 /// ToDo: HasHealPotion()メソッドの処理があんまり良くない感じがするので修正したい。
 /// </summary>
-public class ShopController : MonoBehaviour
+public class ShopManager : MonoBehaviour
 {
     GameManager gm;
 
     [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
     [SerializeField] private ManagerSceneLoader msLoader;
+    [SerializeField] private SceneFader sceneFader;
 
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
@@ -282,4 +283,12 @@ public class ShopController : MonoBehaviour
         gm.ShowRelics();        // オーバーレイのレリック表示を更新
     }
 
+    /// <summary>
+    /// 店から出る処理です。ショップシーンを非表示にします。
+    /// </summary>
+    public void ExitShop()
+    {
+        // フェードインフェードアウトをし、シーンを非表示に
+        sceneFader.ToggleSceneWithFade("ShopScene", false);
+    }
 }

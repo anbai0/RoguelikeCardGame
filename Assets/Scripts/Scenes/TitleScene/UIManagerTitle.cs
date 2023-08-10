@@ -15,7 +15,7 @@ public class UIManagerTitle : MonoBehaviour
     private UIController[] UIs;
     private bool isRemoved = true;
 
-    [Header("参照するスクリプト")]
+    [Header("参照するコンポーネント")]
     [SerializeField] TitleSceneManager sceneManager;
 
     [Header("表示を切り替えるUI")]
@@ -74,7 +74,7 @@ public class UIManagerTitle : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        if (UIObject == UIObject.CompareTag("BackGround"))
+        if (UIObject.CompareTag("BackGround"))
         {
             sceneManager.LoadCharaSelectScene();
         }

@@ -1,10 +1,6 @@
-using UnityEditor;
-using UnityEditor.Overlays;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections.Generic;
 using DG.Tweening.Core.Easing;
 
 /// <summary>
@@ -18,7 +14,7 @@ public class UIManager : MonoBehaviour
     private UIController[] UIs;
     private bool isRemoved = true;
 
-    [Header("参照するスクリプト")]
+    [Header("参照するコンポーネント")]
     [SerializeField] AudioManager audioManager;
     [SerializeField] GameManager gm;
     [Header("参照するUI")]
@@ -33,7 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
     [Space(10)]
-    [SerializeField] Text myMoneyText;   //所持金を表示するテキスト
+    [SerializeField] TextMeshProUGUI myMoneyText;   //所持金を表示するテキスト
 
 
     private bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
@@ -137,11 +133,10 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
-        if (UIObject == UIObject.CompareTag("Relics"))
+        if (UIObject.CompareTag("Relics"))
         {
             UIObject.transform.GetChild(5).gameObject.SetActive(true);
-        }
-        
+        }     
     }
 
 
@@ -151,7 +146,7 @@ public class UIManager : MonoBehaviour
     /// <param name="UIObject">カーソルが離れたObject</param>
     void UIExit(GameObject UIObject)
     {
-        if (UIObject == UIObject.CompareTag("Relics"))
+        if (UIObject.CompareTag("Relics"))
         {
             UIObject.transform.GetChild(5).gameObject.SetActive(false);
         }
@@ -174,11 +169,11 @@ public class UIManager : MonoBehaviour
             titleBackButton.SetActive(false);
         }
 
-        if (type == "Chara")
+        if (type == "None")
         {
             overlay.SetActive(false);
             titleOptionButton.SetActive(false);
-            titleBackButton.SetActive(true);
+            titleBackButton.SetActive(false);
         }
 
         if (type == "OverlayOnly")

@@ -16,6 +16,7 @@ public class RestController : MonoBehaviour
     [Header("QÆ‚·‚éUI")]
     [SerializeField] GameObject restButton;
     [SerializeField] TextMeshProUGUI restText;
+    [Header ("ShopScene‚Ì‚¾‚¯g‚¤")]
     [SerializeField] TextMeshProUGUI restPriceText;
 
     private void Start()

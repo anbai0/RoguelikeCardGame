@@ -6,7 +6,7 @@ public class ShopSceneManager: MonoBehaviour
 {
 
     [SerializeField]
-    private SceneController sceneController;
+    private SceneFader sceneController;
 
     
 

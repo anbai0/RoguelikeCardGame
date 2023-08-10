@@ -1,18 +1,26 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
-public class BonfireManager : MonoBehaviour
+public class ResultSceneManager : MonoBehaviour
 {
     GameManager gm;
-    [SerializeField] ManagerSceneLoader msLoader; 
+    [SerializeField] ManagerSceneLoader msLoader;
     [SerializeField] private SceneFader sceneFader;
-
+    [SerializeField] UIManagerResult uiManager;
+    
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
     [SerializeField] Transform lowerCardPlace;
     List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
+
+    // レリック
+    [SerializeField] RelicController relicPrefab;
+    [SerializeField] Transform relicPlace;
 
     Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
@@ -21,10 +29,13 @@ public class BonfireManager : MonoBehaviour
     {
         // GameManager取得
         gm = msLoader.GetGameManager();
+
         InitDeck();
+        ShowRelics();
+        uiManager.UIEventsReload();
     }
 
-    private void InitDeck() //デッキ生成
+    public void InitDeck() //デッキ生成
     {
         deckNumberList = gm.playerData._deckList;
         int distribute = DistributionOfCards(deckNumberList.Count);
@@ -36,14 +47,14 @@ public class BonfireManager : MonoBehaviour
             {
                 CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
                 card.transform.localScale = CardScale;
-                card.name = "Deck" + (init-1).ToString();//生成したカードに名前を付ける
+                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
                 card.Init(deckNumberList[init - 1]);//デッキデータの表示
             }
             else //残りはlowerCardPlaceに生成する
             {
                 CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
                 card.transform.localScale = CardScale;
-                card.name = "Deck" + (init-1).ToString();//生成したカードに名前を付ける
+                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
                 card.Init(deckNumberList[init - 1]);//デッキデータの表示
             }
         }
@@ -54,7 +65,7 @@ public class BonfireManager : MonoBehaviour
     /// </summary>
     /// <param name="deckCount">デッキの枚数</param>
     /// <returns>上のCardPlaceに生成するカードの枚数</returns>
-    int DistributionOfCards(int deckCount) 
+    int DistributionOfCards(int deckCount)
     {
         int distribute = 0;
         if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
@@ -81,30 +92,41 @@ public class BonfireManager : MonoBehaviour
         return distribute;
     }
 
-    /// <summary>
-    /// カードの強化をするメソッドです
-    /// </summary>
-    /// <param name="selectCard">選択されたCard</param>
-    public void CardEnhance(GameObject selectCard)
+
+    public void ShowRelics()
     {
-        int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
-        for (int count = 0; count < deckNumberList.Count; count++)
+        // relicPlaceの子オブジェクトをすべてDestroy
+        Transform[] children = relicPlace.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < children.Length; i++)
         {
-            if (deckNumberList[count] == id) //デッキからIDのカードを探す 
-            {
-                if(deckNumberList[count] <= 20 && id != 3) //IDのカードが未強化で魔女の霊薬でなければ
-                {
-                    deckNumberList[count] += 100; //そのカードの強化版のIDに変更する
-                }
-            }
-            Debug.Log("現在のPlayerのデッキリストは：" + deckNumberList[count]);
+            Destroy(children[i].gameObject);
         }
+
+        for (int RelicID = 1; RelicID <= gm.maxRelics; RelicID++)
+        {
+            if (gm.hasRelics.ContainsKey(RelicID) && gm.hasRelics[RelicID] >= 1)
+            {
+                RelicController relic = Instantiate(relicPrefab, relicPlace);
+                //relic.transform.localScale = Vector3.one * 0.9f;                   // 生成したPrefabの大きさ調整
+                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+
+                relic.transform.GetChild(4).gameObject.SetActive(true);
+                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = gm.hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
+
+                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
+                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
+            }
+        }
+
+        uiManager.UIEventsReload();
     }
 
 
-    public void UnLoadBonfireScene()
+    public void SceneUnLoad()
     {
-        // 焚火シーンをアンロード
-        sceneFader.SceneChange(unLoadSceneName: "BonfireScene");
+        gm.ResetGameData();     // GameManagerのデータをリセット
+
+        // Resultシーンをアンロードし、タイトルシーンをロード
+        sceneFader.SceneChange("TitleScene", "ResultScene");
     }
 }

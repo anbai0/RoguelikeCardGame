@@ -1,6 +1,8 @@
+using SelfMadeNamespace;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,8 +15,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float moveHorizontal;
     [SerializeField] float moveVertical;
 
+    private FieldSceneManager fieldManager;
+    public GameObject bonfire { get; private set; }
+
     void Start()
     {
+        fieldManager = FindObjectOfType<FieldSceneManager>();
         animator = GetComponent<Animator>();
     }
 
@@ -39,5 +45,29 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bonfire"))
+        {
+            bonfire = collision.gameObject;
+            fieldManager.LoadBonfireScene();        // 焚火シーンをロード
+        }
+
+        if (collision.gameObject.CompareTag("Shop"))
+        {
+            // 指定した名前のシーンを取得
+            Scene sceneToHide = SceneManager.GetSceneByName("ShopScene");
+
+            // シーンが有効で、ロードされていない場合に処理を実行
+            if (!(sceneToHide.IsValid() && sceneToHide.isLoaded))
+            {
+                fieldManager.LoadShopScene();           // ショップシーンをロード
+            }
+
+            // ショップシーンがロードされていた場合、ショップシーンのオブジェクトを表示
+            fieldManager.ActivateShopScene();
+        }
     }
 }

@@ -63,37 +63,6 @@ public class UIManagerBattle : MonoBehaviour
     #endregion
 
 
-    /// <summary>
-    /// ドラッグし始めたときに処理するメソッドです
-    /// </summary>
-    void UIBeginDrag(GameObject UIObject)
-    {
-        if (UIObject.tag == "Cards")
-        {
-            UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
-        }
-    }
-    
-    /// <summary>
-    /// ドラッグ中に処理するメソッドです
-    /// </summary>
-    void UIDrag(GameObject UIObject)
-    {
-        
-    }
-
-    /// <summary>
-    /// ドラッグアンドドロップしたときに処理するメソッドです。
-    /// </summary>
-    /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
-    void UIDrop(GameObject UIObject)
-    {
-        if (UIObject.tag == "Cards")
-        {
-            UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
-        }
-
-    }
 
     /// <summary>
     /// 左クリックされたときに処理するメソッドです。
@@ -101,7 +70,7 @@ public class UIManagerBattle : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        Debug.Log("LeftClicked UI: " + UIObject);
+        
     }
 
     /// <summary>
@@ -131,6 +100,37 @@ public class UIManagerBattle : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// ドラッグし始めたときに処理するメソッドです
+    /// </summary>
+    void UIBeginDrag(GameObject UIObject)
+    {
+        if (UIObject.tag == "Cards")
+        {
+            UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
+        }
+    }
+
+    /// <summary>
+    /// ドラッグ中に処理するメソッドです
+    /// </summary>
+    void UIDrag(GameObject UIObject)
+    {
+
+    }
+
+    /// <summary>
+    /// ドラッグアンドドロップしたときに処理するメソッドです。
+    /// </summary>
+    /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
+    void UIDrop(GameObject UIObject)
+    {
+        if (UIObject.tag == "Cards")
+        {
+            UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
+        }
+
+    }
 }
 
 

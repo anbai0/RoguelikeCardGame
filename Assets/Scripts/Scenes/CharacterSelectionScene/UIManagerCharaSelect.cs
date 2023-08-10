@@ -44,7 +44,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     [SerializeField] private Transform warriorRelicPlace;
     [SerializeField] private Transform wizardRelicPlace;
 
-    [Header("参照するスクリプト")]
+    [Header("参照するコンポーネント")]
     [SerializeField] private CharacterSceneManager sceneManager;
     [SerializeField] private ManagerSceneLoader msLoader;
     private GameManager gm;
@@ -139,12 +139,12 @@ public class UIManagerCharaSelect : MonoBehaviour
     void UIEnter(GameObject UIObject)
     {
         // 戦士選択時に、レリックの説明文切り替え
-        if (UIObject == UIObject.CompareTag("Relics") && selectWarrior)
+        if (UIObject.CompareTag("Relics") && selectWarrior)
         {
             UIObject.transform.GetChild(6).gameObject.SetActive(true);
         }
         // 魔法使い選択時に、レリックの説明文切り替え
-        if (UIObject == UIObject.CompareTag("Relics") && selectWizard)
+        if (UIObject.CompareTag("Relics") && selectWizard)
         {
             UIObject.transform.GetChild(7).gameObject.SetActive(true);
         }
@@ -165,12 +165,12 @@ public class UIManagerCharaSelect : MonoBehaviour
     void UIExit(GameObject UIObject)
     {
         // 戦士選択時に、レリックの説明文切り替え
-        if (UIObject == UIObject.CompareTag("Relics") && selectWarrior)
+        if (UIObject.CompareTag("Relics") && selectWarrior)
         {
             UIObject.transform.GetChild(6).gameObject.SetActive(false);
         }
         // 魔法使い選択時に、レリックの説明文切り替え
-        if (UIObject == UIObject.CompareTag("Relics") && selectWizard)
+        if (UIObject.CompareTag("Relics") && selectWizard)
         {
             UIObject.transform.GetChild(7).gameObject.SetActive(false);
         }
