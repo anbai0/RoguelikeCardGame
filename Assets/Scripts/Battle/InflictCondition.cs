@@ -20,13 +20,12 @@ public class InflictCondition : MonoBehaviour
     /// バフ:自動回復
     /// 効果:行動後にHPを(1×このバフの数)回復する。
     /// </summary>
-    /// <param name="hp">現在のHP</param>
     /// <param name="autoHealing">自動回復</param>
-    /// <returns>回復した現在のHP</returns>
-    public int AutoHealing(int hp, int autoHealing)
+    /// <returns>自動回復の値</returns>
+    public int AutoHealing(int autoHealing)
     {
-        hp += autoHealing;
-        return hp;
+        //効果減衰などの処理があればここに書く
+        return autoHealing;
     }
     /// <summary>
     /// デバフ:状態異常無効
@@ -87,25 +86,20 @@ public class InflictCondition : MonoBehaviour
     /// デバフ:焦燥
     /// 効果:行動後にAPを(1×このデバフの数)消費する。
     /// </summary>
-    /// <param name="currentAP">現在のAP</param>
     /// <param name="impatience">焦燥</param>
     /// <param name="invalidBadStatus">状態異常無効</param>
-    /// <returns>減少した現在のAP,消費後の状態異常無効</returns>
-    public (int currentAP, int invalidBadStatus) Impatience(int currentAP, int impatience, int invalidBadStatus)
+    /// <returns>効果を発揮する焦燥の数,消費後の状態異常無効</returns>
+    public (int impatience, int invalidBadStatus) Impatience(int impatience, int invalidBadStatus)
     {
         //焦燥が0のときは効果を発動しない
         if (impatience <= 0)
         {
-            return (currentAP, invalidBadStatus);
+            return (impatience, invalidBadStatus);
         }
         var invalidImpatience = InvalidBadStatus(impatience, invalidBadStatus);
         int currentImpatience = invalidImpatience.badStatus;
-        currentAP -= currentImpatience;
-        if (currentAP < 0)
-        {
-            currentAP = 0;
-        }
-        return (currentAP, invalidImpatience.invalidBadStatus);
+
+        return (currentImpatience, invalidImpatience.invalidBadStatus);
     }
     /// <summary>
     /// デバフ:衰弱
@@ -135,49 +129,41 @@ public class InflictCondition : MonoBehaviour
     /// デバフ:火傷
     /// 効果:行動後に(1×このデバフの数)ダメージを受ける
     /// </summary>
-    /// <param name="currentHP">現在のHP</param>
     /// <param name="burn">火傷</param>
     /// <param name="invalidBadStatus">状態異常無効</param>
-    /// <returns>減少した現在のHP,消費後の状態異常無効</returns>
-    public (int currentHP, int invalidBadStatus) Burn(int currentHP, int burn, int invalidBadStatus)
+    /// <returns>受けるダメージ,消費後の状態異常無効</returns>
+    public (int damage, int invalidBadStatus) Burn(int burn, int invalidBadStatus)
     {
+        int damage = 0;
         //火傷が0のときは効果を発動しない
         if (burn <= 0)
         {
-            return (currentHP, invalidBadStatus);
+            return (damage, invalidBadStatus);
         }
         var invalidBurn = InvalidBadStatus(burn, invalidBadStatus);
         int currentBurn = invalidBurn.badStatus;
-        currentHP -= currentBurn;
-        if (currentHP < 0)
-        {
-            currentHP = 0;
-        }
-        return (currentHP, invalidBurn.invalidBadStatus);
+        damage = currentBurn;
+        return (damage, invalidBurn.invalidBadStatus);
     }
     /// <summary>
     /// デバフ:邪毒
     /// 効果:ラウンド終了時、ラウンド中の行動数＊邪毒の数のダメージを受ける
     /// </summary>
-    /// <param name="currentHP">現在のHP</param>
     /// <param name="poison">邪毒</param>
     /// <param name="invalidBadStatus">状態異常無効</param>
     /// <param name="moveCount">ラウンド中の行動回数</param>
-    /// <returns>減少した現在のHP,消費後の状態異常無効</returns>
-    public (int currentHP, int invalidBadStatus) Poison(int currentHP, int poison, int invalidBadStatus, int moveCount)
+    /// <returns>受けるダメージ,消費後の状態異常無効</returns>
+    public (int damage, int invalidBadStatus) Poison(int poison, int invalidBadStatus, int moveCount)
     {
+        int damage = 0;
         //邪毒が0のときは効果を発動しない
         if (poison <= 0)
         {
-            return (currentHP, invalidBadStatus);
+            return (damage, invalidBadStatus);
         }
         var invalidPoison = InvalidBadStatus(poison, invalidBadStatus);
         int currentPoison = invalidPoison.badStatus;
-        currentHP -= moveCount * currentPoison;
-        if (currentHP < 0)
-        {
-            currentHP = 0;
-        }
-        return (currentHP, invalidPoison.invalidBadStatus);
+        damage = moveCount * currentPoison;
+        return (damage, invalidPoison.invalidBadStatus);
     }
 }

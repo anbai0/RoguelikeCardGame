@@ -12,6 +12,7 @@ public class RelicEffectList : MonoBehaviour
     public void RelicID1(int ID1Quantity)
     {
     }
+
     /// <summary>
     ///  名前:諸刃の剣
     ///  効果:与えるダメージと受けるダメージを1増やす。
@@ -33,6 +34,7 @@ public class RelicEffectList : MonoBehaviour
         }
         return (playerUpStrength, enemyUpStrength);
     }
+
     /// <summary>
     /// 名前:虚栄の冠
     /// 効果:最大APを2増やすが、ラウンド終了時に増えるAPの上昇値が1少なくなる。(最大APが減ることはない)
@@ -51,6 +53,7 @@ public class RelicEffectList : MonoBehaviour
         }
         return (constAP, chargeAP);
     }
+
     /// <summary>
     /// 名前:神秘の髪飾り
     /// 効果:最大APを1増やす。
@@ -63,6 +66,7 @@ public class RelicEffectList : MonoBehaviour
         constAP += ID4Quantity;
         return constAP;
     }
+
     /// <summary>
     /// 名前:千里眼鏡
     /// 効果:最大APを1減らすが、ラウンド終了時、APの上昇値をさらに1増やす。レリック1つにつき最大5まで。
@@ -82,6 +86,7 @@ public class RelicEffectList : MonoBehaviour
         chargeAP += ID5Quantity;
         return (constAP, chargeAP);
     }
+
     /// <summary>
     /// 名前:太陽のお守り
     /// 効果:戦闘開始時、相手に火傷を1つ付与する。
@@ -101,6 +106,7 @@ public class RelicEffectList : MonoBehaviour
         }
         return burn;
     }
+
     /// <summary>
     /// 名前:心の器
     /// 効果:最大HPを5増やす。現在HPは変化しない。
@@ -113,6 +119,7 @@ public class RelicEffectList : MonoBehaviour
         HP += 5 * ID7Quantity;
         return HP;
     }
+
     /// <summary>
     /// 名前: 真円のお守り
     /// 効果:戦闘開始時にガードを3獲得する。
@@ -125,6 +132,7 @@ public class RelicEffectList : MonoBehaviour
         GP += 3 * ID8Quantity;
         return GP;
     }
+
     /// <summary>
     /// 名前:ご褒美袋
     /// 効果:戦闘終了後に獲得するゴールドを10増やす
@@ -137,6 +145,7 @@ public class RelicEffectList : MonoBehaviour
         money += 10 * ID9Quantity;
         return money;
     }
+
     /// <summary>
     /// 名前:ほかほかおにぎり
     /// 効果:戦闘終了時に自分のHPを5回復する。
@@ -149,6 +158,7 @@ public class RelicEffectList : MonoBehaviour
         currentHP += 5 * ID10Quantity;
         return currentHP;
     }
+
     /// <summary>
     /// 名前:断ち切り鋏
     /// 効果:ラウンド終了時にデバフを1つ解除する。
@@ -156,13 +166,13 @@ public class RelicEffectList : MonoBehaviour
     /// <param name="ID11Quantity">レリック番号11の個数</param>
     /// <param name="condition">状態異常のステータス</param>
     /// <returns>ランダムに減少したバッドステータス</returns>
-    public ConditionStatus RelicID11(int ID11Quantity, ConditionStatus condition)
+    public Dictionary<string, int> RelicID11(int ID11Quantity, Dictionary<string, int> condition)
     {
         //バッドステータスをリストに追加
-        List<int> badStatus = new List<int> { condition.curse, condition.impatience, condition.weakness, condition.burn, condition.poison };
+        List<int> badStatus = new List<int> { condition["Curse"], condition["Impatience"], condition["Weakness"], condition["Burn"], condition["Poison"] };
         Debug.Log("Relicの処理によるBurnの数：変更前：" + badStatus[3]);
         //解除できる数がバッドステータスの数より多い場合はバッドステータスの数だけ解除
-        int totalBadStatus = condition.curse + condition.impatience + condition.weakness + condition.burn + condition.poison;
+        int totalBadStatus = condition["Curse"] + condition["Impatience"] + condition["Weakness"] + condition["Burn"] + condition["Poison"];
         if (totalBadStatus < ID11Quantity)
         {
             ID11Quantity = totalBadStatus;
@@ -180,13 +190,14 @@ public class RelicEffectList : MonoBehaviour
         }
         Debug.Log("Relicの処理によるBurnの数：変更後：" + badStatus[3]);
         //減少後の数値を代入する
-        condition.curse = badStatus[0];
-        condition.impatience = badStatus[1];
-        condition.weakness = badStatus[2];
-        condition.burn = badStatus[3];
-        condition.poison = badStatus[4];
+        condition["Curse"] = badStatus[0];
+        condition["Impatience"] = badStatus[1];
+        condition["Weakness"] = badStatus[2];
+        condition["Burn"] = badStatus[3];
+        condition["Poison"] = badStatus[4];
         return condition;
     }
+
     /// <summary>
     /// 名前:銀の火薬
     /// 効果:ボスとの戦闘時、与えるダメージが1増加する。

@@ -292,14 +292,14 @@ public class EnemyAI : MonoBehaviour
     {
         if (enemyState == EnemyState.SLIME1)
         {
-            if (player.GetSetCondition.weakness > 0) //プレイヤーに衰弱が付与されているなら
+            if (player.playerCondition["Weakness"] > 0) //プレイヤーに衰弱が付与されているなら
             {
                 enemyMove[1].isUsable = false; //溶解液を使用不可に
             }
         }
         else if (enemyState == EnemyState.SLIME2 || enemyState == EnemyState.SLIME2)
         {
-            if (player.GetSetCondition.weakness > 0) //プレイヤーに衰弱が付与されてるなら
+            if (player.playerCondition["Weakness"] > 0) //プレイヤーに衰弱が付与されてるなら
             {
                 enemyMove[1].isUsable = false; //溶解液を使用不可に
             }
@@ -318,7 +318,7 @@ public class EnemyAI : MonoBehaviour
         }
         else if (enemyState == EnemyState.NAGA1 || enemyState == EnemyState.NAGA2 || enemyState == EnemyState.NAGA3)
         {
-            if (player.GetSetCondition.impatience > 0) //プレイヤーに焦燥が付与されているなら
+            if (player.playerCondition["Impatience"] > 0) //プレイヤーに焦燥が付与されているなら
             {
                 enemyMove[1].isUsable = false;//不気味な歌を使用不可に
             }
@@ -417,7 +417,7 @@ public class EnemyAI : MonoBehaviour
                 enemyMove[2].isUsable = false; //捨て身突進を使用不可に
             }
 
-            if (enemy.GetSetCondition.upStrength > 0) //エネミーに筋力増強が付与されているなら 
+            if (enemy.enemyCondition["UpStrength"] > 0) //エネミーに筋力増強が付与されているなら 
             {
                 enemyMove[4].isUsable = false; //鬨を使用不可に
             }
@@ -444,7 +444,7 @@ public class EnemyAI : MonoBehaviour
                 enemyMove[2].isUsable = false; //捨て身突進を使用不可に
             }
 
-            if (enemy.GetSetCondition.upStrength > 0) //エネミーに筋力増強が付与されているなら 
+            if (enemy.enemyCondition["UpStrength"] > 0) //エネミーに筋力増強が付与されているなら 
             {
                 enemyMove[4].isUsable = false; //鬨を使用不可に
             }
@@ -840,7 +840,6 @@ public class EnemyAI : MonoBehaviour
             EnemyAttacking(2);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：燃える息
@@ -973,7 +972,6 @@ public class EnemyAI : MonoBehaviour
             EnemyAttacking(5);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：巨拳
@@ -1042,7 +1040,6 @@ public class EnemyAI : MonoBehaviour
             EnemyAttacking(3);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：蠢く触手
@@ -1099,7 +1096,6 @@ public class EnemyAI : MonoBehaviour
             EnemyAttacking(3);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：頭蓋割

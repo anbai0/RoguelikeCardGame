@@ -59,10 +59,10 @@ public class CardMovement : MonoBehaviour
     public void CardDorp(GameObject Card)
     {
         transform.SetParent(cardParent, false);
-        GameObject.Find("CardPlace").GetComponent<SortDeck>().Sort();       // 名前順にソートをする
+        GameObject.Find("CardPlace").GetComponent<SortName>().Sort();       // 名前順にソートをする
 
 
-        GameObject.Find("PickCardPlace").GetComponent<SortDeck>().Sort();
+        GameObject.Find("PickCardPlace").GetComponent<SortName>().Sort();
     }
 
     public void CardEnter(GameObject Card)

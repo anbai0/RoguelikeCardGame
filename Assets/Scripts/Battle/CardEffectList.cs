@@ -11,22 +11,28 @@ public class CardEffectList : MonoBehaviour
     BattleGameManager bg;
     PlayerBattleAction player;
     EnemyBattleAction enemy;
+    FlashImage flash;
+    Color deepGreen = new Color(0.2f, 0.6f, 0.2f);
     int cardID;
     int cardAttackPower;
     int cardHealingPower;
     int cardGuardPoint;
 
+    /// <summary>
+    /// カードのIDに応じて処理を呼び出す処理
+    /// </summary>
+    /// <param name="card">PlayerBattleActionから受け取るカード</param>
     public void ActiveCardEffect(CardController card)
     {
         bg = BattleGameManager.Instance;
         player = GetComponent<PlayerBattleAction>();
         enemy = GetComponent<EnemyBattleAction>();
+        flash = GetComponent<FlashImage>();
         cardID = card.cardDataManager._cardID;
         cardAttackPower = card.cardDataManager._cardAttackPower;
         cardHealingPower = card.cardDataManager._cardHealingPower;
         cardGuardPoint = card.cardDataManager._cardGuardPoint;
         Debug.Log("Cardのナンバーは" + cardID);
-        //カードのIDに応じて処理を呼び出す
         switch (cardID)
         {
             case 1:
@@ -206,7 +212,6 @@ public class CardEffectList : MonoBehaviour
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：強化ツバメ返し
@@ -228,7 +233,6 @@ public class CardEffectList : MonoBehaviour
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：シールドバッシュ,強化シールドバッシュ
@@ -373,7 +377,6 @@ public class CardEffectList : MonoBehaviour
             PlayerAttacking(attackMethod);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：強化乱れ鞭
@@ -394,7 +397,6 @@ public class CardEffectList : MonoBehaviour
             PlayerAttacking(attackMethod);
         }
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：フルバースト
@@ -436,6 +438,7 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(cardAttackPower);
         //火傷を2付与
         enemy.AddConditionStatus("Burn", 2);
+        flash.StartFlash(deepGreen, 0.2f);
     }
     /// <summary>
     /// 技名：強化ハイボルケーノ 
@@ -447,6 +450,7 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(cardAttackPower);
         //火傷を4付与
         enemy.AddConditionStatus("Burn", 4);
+        flash.StartFlash(deepGreen, 0.2f);
     }
     /// <summary>
     /// 技名：デビルドレイン,強化デビルドレイン
@@ -454,14 +458,31 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID15(CardController card)
     {
-        //エネミーを攻撃
-        PlayerAttacking(cardAttackPower);
-        //HPを回復
-        PlayerHealing(cardHealingPower);
-        //エネミーに衰弱を1付与
-        enemy.AddConditionStatus("Weakness", 1);
+        ////エネミーを攻撃
+        //PlayerAttacking(cardAttackPower);
+        ////HPを回復
+        //PlayerHealing(cardHealingPower);
+        ////エネミーに衰弱を1付与
+        //enemy.AddConditionStatus("Weakness", 1);
+        //flash.StartFlash(deepGreen, 0.2f);
+        StartCoroutine(ID15Move());
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 1;
+    }
+
+    IEnumerator ID15Move()
+    {
+        bg.isCoroutine = true;
+        //エネミーを攻撃
+        PlayerAttacking(cardAttackPower);
+        yield return new WaitForSeconds(0.5f);
+        //HPを回復
+        PlayerHealing(cardHealingPower);
+        yield return new WaitForSeconds(0.5f);
+        //エネミーに衰弱を1付与
+        enemy.AddConditionStatus("Weakness", 1);
+        flash.StartFlash(deepGreen, 0.2f);
+        bg.isCoroutine = false;
     }
     /// <summary>
     /// 技名：ガラティーン,強化ガラティーン
@@ -469,10 +490,10 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID16()
     {
-        if (enemy.GetSetCondition.burn > 0)//エネミーが火傷状態だった場合
+        if (enemy.enemyCondition["Burn"] > 0)//エネミーが火傷状態だった場合
         {
             //火傷の3倍のダメージでエネミーを攻撃
-            PlayerAttacking(enemy.GetSetCondition.burn * 3);
+            PlayerAttacking(enemy.enemyCondition["Burn"] * 3);
         }
         else
         {
@@ -515,7 +536,6 @@ public class CardEffectList : MonoBehaviour
         //プレイヤーのAPを7回復する
         player.HealingAP(7);
         bg.isCoroutine = false;
-        bg.TurnCalc();
     }
     /// <summary>
     /// 技名：アヴァロンヴェール,強化アヴァロンヴェール
@@ -538,6 +558,7 @@ public class CardEffectList : MonoBehaviour
     {
         //火傷を1付与
         enemy.AddConditionStatus("Burn", 1);
+        flash.StartFlash(deepGreen, 0.2f);
     }
     /// <summary>
     /// 技名：強化鬼火
@@ -547,28 +568,49 @@ public class CardEffectList : MonoBehaviour
     {
         //火傷を1付与
         enemy.AddConditionStatus("Burn", 2);
+        flash.StartFlash(deepGreen, 0.2f);
     }
-    private void PlayerAttacking(int attackMethod)//エネミーへの攻撃処理 
+    /// <summary>
+    /// エネミーへの攻撃処理 
+    /// </summary>
+    /// <param name="attackMethod">攻撃力</param>
+    private void PlayerAttacking(int attackMethod)
     {
         attackMethod = ChangeAttackPower(attackMethod);
         Debug.Log("計算後の攻撃力は" + attackMethod);
         enemy.TakeDamage(attackMethod);
     }
-    private int ChangeAttackPower(int attackPower) //状態異常による攻撃力の増減
+    /// <summary>
+    /// 状態異常による攻撃力の増減の処理
+    /// </summary>
+    /// <param name="attackPower">元の攻撃力</param>
+    /// <returns>増加または減少した攻撃力</returns>
+    private int ChangeAttackPower(int attackPower) 
     {
         attackPower = player.UpStrength(attackPower);
         attackPower = player.Weakness(attackPower);
         return attackPower;
     }
-    private void PlayerHealing(int healingPower)//プレイヤーのHP回復処理
+    /// <summary>
+    /// プレイヤーのHP回復処理
+    /// </summary>
+    /// <param name="healingPower">回復量</param>
+    private void PlayerHealing(int healingPower) 
     {
         player.HealingHP(healingPower);
     }
-    private void PlayerAddGP(int addGP)//プレイヤーにガードを追加
+    /// <summary>
+    /// プレイヤーにガードを追加する処理
+    /// </summary>
+    /// <param name="addGP">ガードの個数</param>
+    private void PlayerAddGP(int addGP)
     {
         player.AddGP(addGP);
     }
-    private void PlayerReleaseBadStatus()//プレイヤーに付与されたデバフの解除
+    /// <summary>
+    /// プレイヤーに付与されたデバフの解除する処理
+    /// </summary>
+    private void PlayerReleaseBadStatus()
     {
         player.ReleaseBadStatus();
     }

@@ -16,8 +16,6 @@ public class CharacterBattleAction : MonoBehaviour
     int chargeAP; //ラウンドが進むごとに増加するAPの値
     int roundStartAP; //ラウンド開始時の最大AP(IsCurseの判定に用いる)
     int GP; //ダメージを防げるガードポイント
-    ConditionStatus condition; //状態異常ステータス
-    InflictCondition inflictCondition; //状態異常の効果
     public int GetSetHP { get => HP; set => HP = value; }
     public int GetSetCurrentHP { get => currentHP; set => currentHP = value; }
     public int GetSetAP { get => AP; set => AP = value; }
@@ -25,23 +23,42 @@ public class CharacterBattleAction : MonoBehaviour
     public int GetSetCurrentAP { get => currentAP; set => currentAP = value; }
     public int GetSetChargeAP { get => chargeAP; set => chargeAP = value; }
     public int GetSetGP { get => GP; set => GP = value; }
-    public ConditionStatus GetSetCondition { get => condition; set => condition = value; }
+
+    Dictionary<string, int> condition = new Dictionary<string, int>(); //付与されている状態異常
+    InflictCondition inflictCondition; //状態異常の効果
+    public Dictionary<string, int> GetSetCondition { get => condition; set => condition = value; }
     public InflictCondition GetSetInflictCondition { get => inflictCondition; set => inflictCondition = value; }
-    // Start is called before the first frame update
+
+    bool isGardAppeared; //ガードのアイコンが表示されているか判定
+
     void Start()
     {
         chargeAP = 0;
+        isGardAppeared = false;
     }
+    
     /// <summary>
     /// ラウンド開始時のAP計算
     /// </summary>
     public void SetUpAP() 
     {
-        var curse = inflictCondition.Curse(constAP, chargeAP, condition.curse, condition.invalidBadStatus);
+        Debug.Log("現在のconstAPは" + constAP + "で、chargeAPは" + chargeAP);
+        var curse = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]);
         AP = curse.nextRoundAP;
         currentAP = AP;
-        condition.invalidBadStatus = curse.invalidBadStatus;
+        condition["InvalidBadStatus"] = curse.invalidBadStatus;
     }
+
+    /// <summary>
+    /// 呪縛状態の時のAPを更新する処理
+    /// </summary>
+    public void CursedUpdateAP()
+    {
+        var curse = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]);
+        AP = curse.nextRoundAP;
+        condition["InvalidBadStatus"] = curse.invalidBadStatus;
+    }
+    
     /// <summary>
     /// APを0にして行動不能にする
     /// </summary>
@@ -49,6 +66,7 @@ public class CharacterBattleAction : MonoBehaviour
     {
         currentAP = 0;
     }
+    
     /// <summary>
     /// テキストの更新
     /// </summary>
@@ -73,9 +91,36 @@ public class CharacterBattleAction : MonoBehaviour
         APText.text = currentAP + "/" + AP;
         //GPの値は0以上
         GP = GP < 0 ? 0 : GP;
+        //GPが無ければガードアイコンは表示しない
+        var GPIcon = GPText.transform.parent.gameObject;
+        if (GP == 0)
+        {
+            GPIcon.SetActive(false);
+            isGardAppeared = false;
+        }
+        else
+        {
+            GPIcon.SetActive(true);
+            if (!isGardAppeared)
+            {
+                isGardAppeared = true;
+                GPIconAppearance(GPIcon);
+            }
+        }
         //GPの表示
         GPText.text = GP.ToString();
     }
+    
+    /// <summary>
+    /// ガードアイコンを出現させるときに動かすアニメーション
+    /// </summary>
+    /// <param name="_GPIcon">各キャラクターのGPアイコン</param>
+    private void GPIconAppearance(GameObject _GPIcon)
+    {
+        _GPIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
+        _GPIcon.GetComponent<IconAnimation>().StartAnimation();
+    }
+    
     /// <summary>
     /// ラウンド終了時のAP増加
     /// </summary>
@@ -83,6 +128,7 @@ public class CharacterBattleAction : MonoBehaviour
     {
         chargeAP++;
     }
+    
     /// <summary>
     /// 死亡かどうか判定
     /// </summary>
@@ -91,6 +137,7 @@ public class CharacterBattleAction : MonoBehaviour
     {
         return currentHP <= 0 ? true : false;
     }
+    
     /// <summary>
     /// ラウンド開始時のAPを保存しておく(Curseの計算用)
     /// </summary>
@@ -98,6 +145,7 @@ public class CharacterBattleAction : MonoBehaviour
     {
         roundStartAP = AP;
     }
+    
     /// <summary>
     /// 呪縛状態になっているか判定
     /// </summary>
@@ -105,11 +153,12 @@ public class CharacterBattleAction : MonoBehaviour
     public bool IsCurse() 
     {
         //ターン終了時の最大AP
-        int currentMaxAP = inflictCondition.Curse(constAP, chargeAP, condition.curse, condition.invalidBadStatus).nextRoundAP;
+        int currentMaxAP = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]).nextRoundAP;
         return roundStartAP > currentMaxAP ? true : false;
     }
 
     //以下、状態異常の呼び出し
+    
     /// <summary>
     /// 筋力増強の呼び出し
     /// </summary>
@@ -117,25 +166,20 @@ public class CharacterBattleAction : MonoBehaviour
     /// <returns>増加した攻撃力</returns>
     public int UpStrength(int attackPower)
     {
-        attackPower = inflictCondition.UpStrength(attackPower, condition.upStrength);
+        attackPower = inflictCondition.UpStrength(attackPower, condition["UpStrength"]);
         return attackPower;
     }
-    /// <summary>
-    /// 自動回復の呼び出し
-    /// </summary>
-    public void AutoHealing()
-    {
-        currentHP = inflictCondition.AutoHealing(currentHP, condition.autoHealing);
-    }
+    
     /// <summary>
     /// 焦燥の呼び出し
     /// </summary>
     public void Impatience()
     {
-        var impatience = inflictCondition.Impatience(currentAP, condition.impatience, condition.invalidBadStatus);
-        currentAP = impatience.currentAP;
-        condition.invalidBadStatus = impatience.invalidBadStatus;
+        var impatience = inflictCondition.Impatience(condition["Impatience"], condition["InvalidBadStatus"]);
+        currentAP -= impatience.impatience;
+        condition["InvalidBadStatus"] = impatience.invalidBadStatus;
     }
+    
     /// <summary>
     /// 衰弱の呼び出し
     /// </summary>
@@ -143,60 +187,13 @@ public class CharacterBattleAction : MonoBehaviour
     /// <returns>減少した攻撃力</returns>
     public int Weakness(int attackPower)
     {
-        var weakness = inflictCondition.Weakness(attackPower, condition.weakness, condition.invalidBadStatus);
+        var weakness = inflictCondition.Weakness(attackPower, condition["Weakness"], condition["InvalidBadStatus"]);
         attackPower = weakness.attackPower;
-        condition.invalidBadStatus = weakness.invalidBadStatus;
+        condition["InvalidBadStatus"] = weakness.invalidBadStatus;
         return attackPower;
-    }
-    /// <summary>
-    /// 火傷の呼び出し
-    /// </summary>
-    public void Burn()
-    {
-        var burn = inflictCondition.Burn(currentHP, condition.burn, condition.invalidBadStatus);
-        currentHP = burn.currentHP;
-        condition.invalidBadStatus = burn.invalidBadStatus;
-    }
-    /// <summary>
-    /// 邪毒の呼び出し
-    /// </summary>
-    /// <param name="moveCount">行動回数</param>
-    public void Poison(int moveCount)
-    {
-        var poison = inflictCondition.Poison(currentHP, condition.poison, condition.invalidBadStatus, moveCount);
-        currentHP = poison.currentHP;
-        condition.invalidBadStatus = poison.invalidBadStatus;
     }
 
     //以下、カードや技の効果
-    /// <summary>
-    /// ダメージを受けたときの処理
-    /// </summary>
-    /// <param name="damage">受けるダメージ</param>
-    public void TakeDamage(int damage) 
-    {
-        int deductedDamage = 0;
-        if (GP > 0) //ガードポイントがあったら
-        {
-            //ガードポイントの分だけダメージを軽減する
-            deductedDamage = damage - GP;
-            deductedDamage = deductedDamage < 0 ? 0 : deductedDamage;
-            GP -= damage;
-        }
-        else
-        {
-            deductedDamage = damage;
-        }
-        currentHP -= deductedDamage;
-    }
-    /// <summary>
-    /// HPの回復
-    /// </summary>
-    /// <param name="healingHPPower">HPの回復量</param>
-    public void HealingHP(int healingHPPower) 
-    {
-        currentHP += healingHPPower;
-    }
     /// <summary>
     /// APの回復
     /// </summary>
@@ -205,6 +202,7 @@ public class CharacterBattleAction : MonoBehaviour
     {
         currentAP += healingAPPower;
     }
+    
     /// <summary>
     /// GPの追加
     /// </summary>
@@ -213,26 +211,29 @@ public class CharacterBattleAction : MonoBehaviour
     {
         GP += addGP;
     }
+    
     /// <summary>
     /// バッドステータスを解除する
     /// </summary>
     public void ReleaseBadStatus() 
     {
-        condition.curse = 0;
-        condition.impatience = 0;
-        condition.weakness = 0;
-        condition.burn = 0;
-        condition.poison = 0;
+        condition["Curse"] = 0;
+        condition["Impatience"] = 0;
+        condition["Weakness"] = 0;
+        condition["Burn"] = 0;
+        condition["Poison"] = 0;
     }
+    
     /// <summary>
     /// バフステータスを解除する
     /// </summary>
     public void ReleaseBuffStatus() 
     {
-        condition.upStrength = 0;
-        condition.autoHealing = 0;
-        condition.invalidBadStatus = 0;
+        condition["UpStrength"] = 0;
+        condition["AutoHealing"] = 0;
+        condition["InvalidBadStatus"] = 0;
     }
+    
     /// <summary>
     /// バッドステータスがあるかチェックする
     /// </summary>
@@ -240,9 +241,10 @@ public class CharacterBattleAction : MonoBehaviour
     public int CheckBadStatus() 
     {
         var charaC = condition;
-        int badStatus = charaC.curse + charaC.impatience + charaC.weakness + charaC.burn + charaC.poison;
+        int badStatus = charaC["Curse"] + charaC["Impatience"] + charaC["Weakness"] + charaC["Burn"] + charaC["Poison"];
         return badStatus;
     }
+    
     /// <summary>
     /// バフステータスがあるかチェックする
     /// </summary>
@@ -250,9 +252,10 @@ public class CharacterBattleAction : MonoBehaviour
     public int CheckBuffStatus() 
     {
         var charaC = condition;
-        int buffStatus = charaC.upStrength + charaC.autoHealing + charaC.invalidBadStatus;
+        int buffStatus = charaC["UpStrength"] + charaC["AutoHealing"] + charaC["InvalidBadStatus"];
         return buffStatus;
     }
+    
     /// <summary>
     /// 状態異常を追加する
     /// </summary>
@@ -262,35 +265,35 @@ public class CharacterBattleAction : MonoBehaviour
     {
         if (status == "UpStrength")
         {
-            condition.upStrength += count;
+            condition["UpStrength"] += count;
         }
         else if (status == "AutoHealing")
         {
-            condition.autoHealing += count;
+            condition["AutoHealing"] += count;
         }
         else if (status == "InvalidBadStatus")
         {
-            condition.invalidBadStatus += count;
+            condition["InvalidBadStatus"] += count;
         }
         else if (status == "Curse")
         {
-            condition.curse += count;
+            condition["Curse"] += count;
         }
         else if (status == "Impatience")
         {
-            condition.impatience += count;
+            condition["Impatience"] += count;
         }
         else if (status == "Weakness")
         {
-            condition.weakness += count;
+            condition["Weakness"] += count;
         }
         else if (status == "Burn")
         {
-            condition.burn += count;
+            condition["Burn"] += count;
         }
         else if (status == "Poison")
         {
-            condition.poison += count;
+            condition["Poison"] += count;
         }
     }
 }

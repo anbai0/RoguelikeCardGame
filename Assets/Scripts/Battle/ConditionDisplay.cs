@@ -25,7 +25,7 @@ public class ConditionDisplay : MonoBehaviour
     bool isDisplayPoison = false;
     public int DebugNum = 0;
     [SerializeField]
-    SortDeck sortIcon;
+    SortName sortIcon;
     enum conditionState
     {
         UPSTRENGTH = 0,

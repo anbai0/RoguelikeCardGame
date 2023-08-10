@@ -13,15 +13,11 @@ public class BattleGameManager : MonoBehaviour
     PlayerDataManager playerData;
     [SerializeField] 
     Image playerTurnDisplay;
-    [SerializeField]
-    ConditionDisplay playerConditionDisplay;
 
     //エネミー
     EnemyDataManager enemyData;
     [SerializeField] 
     Image enemyTurnDisplay;
-    [SerializeField]
-    ConditionDisplay enemyConditionDisplay;
     SelectEnemyData selectEnemyData;
     SelectEnemyRelic selectEnemyRelic;
 
@@ -39,12 +35,14 @@ public class BattleGameManager : MonoBehaviour
     private bool isDecelerate;//カード＜アクセラレート＞の効果を無効かしたか判定//TurnCalc()で使用
     private bool isFirstCall;//最初のラウンドのときに呼ぶ判定//EndRound()で使用
     public bool isCoroutine;//コルーチンが動作中か判定//PlayerMove(),EnemyMove()で使用
+    public bool isEnemyMoving;//エネミーのアクションが続いているか判定//PlayerMove(),EnemyMove()で使用
     public float turnTime = 1.0f;//ターンの切り替え時間
     public float roundTime = 2.0f;//ラウンドの切り替え時間
     private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     private int accelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
     public int roundCount;//何ラウンド目かを記録する
+    private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
 
     public string enemyName = "Slime";
     [SerializeField]
@@ -58,6 +56,7 @@ public class BattleGameManager : MonoBehaviour
             Instance = this;
         }
     }
+
     private void Start()
     {
         //enemyName = GameManager.instance.EnemyName;
@@ -72,6 +71,8 @@ public class BattleGameManager : MonoBehaviour
         isDecelerate = false;
         isFirstCall = false;
         isCoroutine = false;
+        isEnemyMoving = false;
+        isOnceEndRound = true;
         playerMoveCount = 0;
         enemyMoveCount = 0;
         accelerateCount = 0;
@@ -85,7 +86,11 @@ public class BattleGameManager : MonoBehaviour
         InitDeck();
         StartRound();
     }
-    private void StartRound() //ラウンド開始時の効果処理
+
+    /// <summary>
+    /// ラウンド開始時の効果処理
+    /// </summary>
+    private void StartRound() 
     {
         roundCount++;//ラウンド数を加算する
         if (isDecelerate) //アクセラレートの効果を初期化
@@ -100,9 +105,15 @@ public class BattleGameManager : MonoBehaviour
         enemyScript.SetUpAP();
         enemyScript.GetSetRoundEnabled = false;
         enemyScript.SaveRoundAP();
+
+        isOnceEndRound = true;
         TurnCalc();
     }
-    public void TurnCalc() //行動順を決める
+
+    /// <summary>
+    /// プレイヤーとエネミーの行動順を決める処理
+    /// </summary>
+    public void TurnCalc() 
     {
         if (IsGameEnd()) //戦闘の終了条件を満たしていないか確認する
         {
@@ -110,8 +121,8 @@ public class BattleGameManager : MonoBehaviour
             return;
         }
 
-        playerConditionDisplay.ViewIcon(playerScript.GetSetCondition); //プレイヤーの状態異常アイコンの更新
-        enemyConditionDisplay.ViewIcon(enemyScript.GetSetCondition); //エネミーの状態異常アイコンの更新
+        playerScript.ViewConditionIcon(); //プレイヤーの状態異常アイコンの更新
+        enemyScript.ViewConditionIcon(); //エネミーの状態異常アイコンの更新
 
         if (isAccelerate)
         {
@@ -120,6 +131,7 @@ public class BattleGameManager : MonoBehaviour
             isAccelerate = false;
             isDecelerate = true;
         }
+
         int playerCurrentAP = playerScript.GetSetCurrentAP;
         int enemyCurrentAP = enemyScript.GetSetCurrentAP;
         if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
@@ -129,7 +141,9 @@ public class BattleGameManager : MonoBehaviour
                 if (playerScript.IsCurse()) //呪縛になっていたら 
                 {
                     //Curseの処理で減ったAPの更新
-                    playerScript.SetUpAP();
+                    playerScript.CursedUpdateAP();
+                    //変化したAPの値を保存
+                    playerScript.SaveRoundAP();
                 }
                 //プレイヤーの行動
                 isPlayerTurn = true;
@@ -142,7 +156,9 @@ public class BattleGameManager : MonoBehaviour
                 if (enemyScript.IsCurse()) //呪縛になっていたら 
                 {
                     //Curseの処理で減ったAPの更新
-                    enemyScript.SetUpAP();
+                    enemyScript.CursedUpdateAP();
+                    //変化したAPの値を保存
+                    enemyScript.SaveRoundAP();
                 }
                 //エネミーの行動
                 isPlayerTurn = false;
@@ -156,10 +172,19 @@ public class BattleGameManager : MonoBehaviour
             //ラウンドを終了する
             playerTurnDisplay.enabled = false;
             enemyTurnDisplay.enabled = false;
-            Invoke("EndRound", roundTime);
+            if (isOnceEndRound)
+            {
+                isOnceEndRound = false;
+                Invoke("EndRound", roundTime);
+            }
         }
     }
-    public void PlayerMove(CardController card) //プレイヤーの効果処理
+
+    /// <summary>
+    /// プレイヤーの効果処理
+    /// </summary>
+    /// <param name="card">ドロップされたカード</param>
+    public void PlayerMove(CardController card) 
     {
         if (isCoroutine) //コルーチンが動いているときに回ってきたらPlayerMoveは動かさない
             return;
@@ -175,21 +200,30 @@ public class BattleGameManager : MonoBehaviour
         playerScript.Burn();
         TurnCalc();
     }
-    private void EnemyMove() //エネミーの効果処理
+
+    /// <summary>
+    /// エネミーの効果処理
+    /// </summary>
+    private void EnemyMove() 
     {
         if (isCoroutine) //コルーチンが動いているときに回ってきたらEnemyMoveは動かさない
             return;
         enemyScript.Move();
         enemyMoveCount++;
-        enemyScript.AutoHealing();
-        enemyScript.Impatience();
-        enemyScript.Burn();
+        //enemyScript.AutoHealing();
+        //enemyScript.Impatience();
+        //enemyScript.Burn();
         //playerScript.AddConditionStatus("Burn", 1);
-        playerScript.AddConditionStatus("InvalidBadStatus", 1);
+        //playerScript.AddConditionStatus("InvalidBadStatus", 1);
         Invoke("TurnCalc", turnTime);
     }
-    private void EndRound() //ラウンド終了時の効果処理
+
+    /// <summary>
+    /// ラウンド終了時の効果処理
+    /// </summary>
+    private void EndRound() 
     {
+        Debug.Log("EndRoundが呼び出された");
         playerScript.Poison(playerMoveCount);
         enemyScript.Poison(enemyMoveCount);
         playerScript.ChargeAP();
@@ -199,6 +233,11 @@ public class BattleGameManager : MonoBehaviour
         isTurnEnd = false;//行動終了ボタンの復活
         StartRound();
     }
+
+    /// <summary>
+    /// 戦闘終了時の処理
+    /// </summary>
+    /// <returns>いずれかのHPがなくなったときにtrueを返す</returns>
     private bool IsGameEnd()
     {
         if (playerScript.CheckHP()) //プレイヤーのHPがなくなったら
@@ -217,8 +256,12 @@ public class BattleGameManager : MonoBehaviour
         return false;
     }
     //ここまでがゲームループ
-    //以下は関数(メソッド)
-    private void ReadPlayer(GameObject player) //プレイヤーのデータを読み取る
+
+    /// <summary>
+    /// プレイヤーのデータを読み取る処理
+    /// </summary>
+    /// <param name="player">プレイヤーのオブジェクト</param>
+    private void ReadPlayer(GameObject player) 
     {
         if (player.CompareTag("Warrior"))
         {
@@ -229,7 +272,12 @@ public class BattleGameManager : MonoBehaviour
             playerData = new PlayerDataManager("Wizard");
         }
     }
-    private void ReadEnemy(string enemyName) //エネミーのデータを読み取る
+
+    /// <summary>
+    /// エネミーのデータを読み取る
+    /// </summary>
+    /// <param name="enemyName">エネミーの名前</param>
+    private void ReadEnemy(string enemyName) 
     {
         enemyData = selectEnemyData.SetEnemyDataManager(floor, enemyName);
     }
@@ -242,7 +290,11 @@ public class BattleGameManager : MonoBehaviour
         enemyScript.SetStatus(floor, enemy);
         enemyScript.hasEnemyRelics = selectEnemyRelic.SetEnemyRelics(enemyScript.hasEnemyRelics, floor, enemyName);
     }
-    private void InitDeck() //デッキ生成
+
+    /// <summary>
+    /// プレイヤーのデッキを生成する処理
+    /// </summary>
+    private void InitDeck() 
     {
         deckNumberList = playerData._deckList;
         for (int init = 0; init < deckNumberList.Count; init++)// デッキの枚数分
@@ -259,27 +311,47 @@ public class BattleGameManager : MonoBehaviour
             pickCard.GetComponent<CanvasGroup>().blocksRaycasts = false; //レイで選ばれないようにしておく
         }
     }
-    public void StartRelicEffect() //戦闘開始時に発動するレリック効果
+
+    /// <summary>
+    /// 戦闘開始時に発動するレリック効果の処理
+    /// </summary>
+    public void StartRelicEffect() 
     {
         enemyScript = playerScript.StartRelicEffect(enemyScript, enemyName);
         playerScript = enemyScript.StartRelicEffect(playerScript);
     }
-    public void OnceEndRoundRelicEffect() //ラウンド終了時に一度だけ発動するレリック効果
+
+    /// <summary>
+    /// ラウンド終了時に一度だけ発動するレリック効果の処理
+    /// </summary>
+    public void OnceEndRoundRelicEffect() 
     {
         playerScript.OnceEndRoundRelicEffect();
         enemyScript.OnceEndRoundRelicEffect();
     }
-    public void EndRoundRelicEffect() //ラウンド終了時に発動するレリック効果
+
+    /// <summary>
+    /// ラウンド終了時に発動するレリック効果の処理
+    /// </summary>
+    public void EndRoundRelicEffect() 
     {
         playerScript.EndRoundRelicEffect();
         enemyScript.EndRoundRelicEffect();
     }
-    public void EndGameRelicEffect() //戦闘終了時に発動するレリック効果
+
+    /// <summary>
+    /// 戦闘終了時に発動するレリック効果の処理
+    /// </summary>
+    public void EndGameRelicEffect() 
     {
         int money = 10;
         money = playerScript.EndGameRelicEffect();
     }
-    public void TurnEnd() //行動終了ボタンを押した処理 
+
+    /// <summary>
+    /// 行動終了ボタンを押した処理 
+    /// </summary>
+    public void TurnEnd() 
     {
         if (!isTurnEnd && !isPlayerMove) //まだボタンが押されていなかったら押すことが出来る
         {
@@ -288,7 +360,11 @@ public class BattleGameManager : MonoBehaviour
             TurnCalc();
         }
     }
-    private void CardCostDown() //CardEffectListのアクセラレートが発動時の処理
+
+    /// <summary>
+    /// CardEffectListのアクセラレートでカードのコストを変化させる処理
+    /// </summary>
+    private void CardCostDown() 
     {
         Transform deck = GameObject.Find("CardPlace").transform; //全てのデッキを探索
         foreach (Transform child in deck)
@@ -307,7 +383,11 @@ public class BattleGameManager : MonoBehaviour
             costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }
-    private void UndoCardCost() //アクセラレートの効果を無効
+
+    /// <summary>
+    /// アクセラレートで変化した値を戻す処理
+    /// </summary>
+    private void UndoCardCost() 
     {
         Transform deck = GameObject.Find("CardPlace").transform;
         foreach (Transform child in deck)
