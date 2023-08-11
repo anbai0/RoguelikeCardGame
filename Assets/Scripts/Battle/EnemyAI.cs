@@ -107,15 +107,15 @@ public class EnemyAI : MonoBehaviour
         {
             enemyState = EnemyState.NAGA3;
         }
-        else if (enemyName == "キメラ" && floor == 1)
+        else if (enemyName == "キマイラ" && floor == 1)
         {
             enemyState = EnemyState.CHIMERA1;
         }
-        else if (enemyName == "キメラ" && floor == 2)
+        else if (enemyName == "キマイラ" && floor == 2)
         {
             enemyState = EnemyState.CHIMERA2;
         }
-        else if (enemyName == "キメラ" && floor == 3)
+        else if (enemyName == "キマイラ" && floor == 3)
         {
             enemyState = EnemyState.CHIMERA3;
         }

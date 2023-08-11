@@ -299,4 +299,23 @@ public class EnemyBattleAction : CharacterBattleAction
     {
         enemyCondition = relicEffect.RelicID11(hasEnemyRelics[11], enemyCondition);
     }
+
+    /// <summary>
+    /// 負けたときのアニメーション
+    /// </summary>
+    public void EnemyDefeated()
+    {
+        StartCoroutine(EnemyDefeatedAnimation());
+    }
+    IEnumerator EnemyDefeatedAnimation()
+    {
+        yield return new WaitForSeconds(0.5f);
+        flash.StartFlash(Color.white, 0.5f);
+        yield return new WaitForSeconds(1.0f);
+        flash.StartFlash(Color.white, 0.5f);
+        yield return new WaitForSeconds(1.0f);
+        flash.StartFlash(Color.white, 1.0f);
+        yield return new WaitForSeconds(1.0f);
+        Destroy(enemyImage);
+    }
 }

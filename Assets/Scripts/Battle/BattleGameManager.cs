@@ -8,6 +8,7 @@ public class BattleGameManager : MonoBehaviour
 {
     PlayerBattleAction playerScript;
     EnemyBattleAction enemyScript;
+
     //プレイヤー
     GameObject player;
     PlayerDataManager playerData;
@@ -18,14 +19,26 @@ public class BattleGameManager : MonoBehaviour
     EnemyDataManager enemyData;
     [SerializeField] 
     Image enemyTurnDisplay;
+    SelectEnemyName selectEnemyName;
     SelectEnemyData selectEnemyData;
     SelectEnemyRelic selectEnemyRelic;
-
+    public string enemyType = "Enemy";
+    string enemyName;
+    
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
     [SerializeField] Transform PickCardPlace;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
+
+    //リザルト
+    [SerializeField]
+    BattleRewardManager battleRewardManager;
+    ResultAnimation resultAnimation;
+    [SerializeField]
+    GameObject uiManagerBR;
+    [SerializeField]
+    GameObject uiManagerBattle;
 
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
@@ -44,7 +57,6 @@ public class BattleGameManager : MonoBehaviour
     public int roundCount;//何ラウンド目かを記録する
     private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
 
-    public string enemyName = "Slime";
     [SerializeField]
     int floor = 1;
 
@@ -62,8 +74,10 @@ public class BattleGameManager : MonoBehaviour
         //enemyName = GameManager.instance.EnemyName;
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
+        selectEnemyName = GetComponent<SelectEnemyName>();
         selectEnemyData = GetComponent<SelectEnemyData>();
         selectEnemyRelic = GetComponent<SelectEnemyRelic>();
+        resultAnimation = GetComponent<ResultAnimation>();
         //初期化
         isPlayerTurn = false;
         isTurnEnd = false;
@@ -79,6 +93,7 @@ public class BattleGameManager : MonoBehaviour
         accelerateValue = 0;
         roundCount = 0;
         player = GameObject.Find("TestPlayer");
+        enemyName = selectEnemyName.DecideEnemyName(floor, enemyType);
         ReadPlayer(player);
         ReadEnemy(enemyName);
         SetStatus(playerData, enemyData);
@@ -243,17 +258,43 @@ public class BattleGameManager : MonoBehaviour
         if (playerScript.CheckHP()) //プレイヤーのHPがなくなったら
         {
             //エネミーの勝利演出
-            Debug.Log("Enemyの勝利");
+            StartCoroutine(LoseAnimation());
             return true;
         }
         if (enemyScript.CheckHP()) //エネミーのHPがなくなったら
         {
-            EndGameRelicEffect();
             //プレイヤーの勝利演出
-            Debug.Log("Playerの勝利");
+            StartCoroutine(WinAnimation());
+            EndGameRelicEffect();
             return true;
         }
         return false;
+    }
+
+    IEnumerator WinAnimation()
+    {
+        Debug.Log("Playerの勝利");
+        enemyScript.EnemyDefeated(); //エネミーのやられた演出
+        yield return new WaitForSeconds(4.0f);
+        resultAnimation.StartAnimation("Victory"); //勝利の文字を表示
+        yield return new WaitForSeconds(1.0f);
+        Destroy(uiManagerBattle);
+        //uiManagerBattle.SetActive(false); //UIManagerBattleを使用不可に
+        uiManagerBR.SetActive(true);　//UIManagerBattleRewardを使用可能に
+        if (enemyType == "StrongEnemy" || enemyType == "Boss") //エネミーが強敵以上なら
+        {
+            uiManagerBR.GetComponent<UIManagerBattleReward>().isDisplayRelics = true; //報酬としてレリックも選択できるようにする
+        }
+        resultAnimation.DisappearResult(); //勝利の文字を消す
+        battleRewardManager.ShowReward(enemyType); //報酬を表示
+        uiManagerBR.GetComponent<UIManagerBattleReward>().UIEventsReload();
+    }
+
+    IEnumerator LoseAnimation()
+    {
+        Debug.Log("Enemyの勝利");
+        yield return new WaitForSeconds(1.0f);
+        resultAnimation.StartAnimation("Defeated");
     }
     //ここまでがゲームループ
 
@@ -317,7 +358,7 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     public void StartRelicEffect() 
     {
-        enemyScript = playerScript.StartRelicEffect(enemyScript, enemyName);
+        enemyScript = playerScript.StartRelicEffect(enemyScript, enemyType);
         playerScript = enemyScript.StartRelicEffect(playerScript);
     }
 

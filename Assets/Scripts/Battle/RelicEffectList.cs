@@ -203,10 +203,10 @@ public class RelicEffectList : MonoBehaviour
     /// 効果:ボスとの戦闘時、与えるダメージが1増加する。
     /// </summary>
     /// <param name="ID12Quantity">レリック番号12の個数</param>
-    /// <param name="tag">エネミーのタグ</param>
-    public int RelicID12(int ID12Quantity, string tag, int playerUpStrength)
+    /// <param name="tag">エネミーの種類</param>
+    public int RelicID12(int ID12Quantity, string type, int playerUpStrength)
     {
-        if (ID12Quantity <= 0 || !(tag == "Boss"))
+        if (ID12Quantity <= 0 || !(type == "Boss"))
         {
             return playerUpStrength;
         }

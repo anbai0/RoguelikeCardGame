@@ -200,9 +200,9 @@ public class PlayerBattleAction : CharacterBattleAction
     /// 戦闘開始時に発動するレリック効果
     /// </summary>
     /// <param name="enemyBattleAction">エネミーのステータス</param>
-    /// <param name="enemyName">エネミーの名前</param>
+    /// <param name="enemyType">エネミーの種類</param>
     /// <returns>変更を加えたエネミーのステータス</returns>
-    public EnemyBattleAction StartRelicEffect(EnemyBattleAction enemyBattleAction, string enemyName)
+    public EnemyBattleAction StartRelicEffect(EnemyBattleAction enemyBattleAction, string enemyType)
     {
         relicEffect = GetComponent<RelicEffectList>();
         var es = enemyBattleAction;
@@ -216,7 +216,7 @@ public class PlayerBattleAction : CharacterBattleAction
         es.enemyCondition["Burn"] = relicEffect.RelicID6(hasPlayerRelics[6], es.enemyCondition["Burn"]);
         GetSetHP = relicEffect.RelicID7(hasPlayerRelics[7], GetSetHP);
         GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
-        playerCondition["UpStrength"] = relicEffect.RelicID12(hasPlayerRelics[12], enemyName, playerCondition["UpStrength"]);
+        playerCondition["UpStrength"] = relicEffect.RelicID12(hasPlayerRelics[12], enemyType, playerCondition["UpStrength"]);
         Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
         return es;
     }

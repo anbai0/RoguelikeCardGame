@@ -47,7 +47,7 @@ public class PickCard : MonoBehaviour
         pickCard.GetComponent<CardController>().cardDataManager._cardState = deckData._cardState;
         Debug.Log("pickCard name is: " + pickCard);
         //カード情報を表示する
-        pickCard.transform.GetChild(0).gameObject.SetActive(true);
+        pickCard.transform.Find("CardInfo").gameObject.SetActive(true);
         pickCard.GetComponent<CardState>().isActive = true;
         return pickCard;
     }
