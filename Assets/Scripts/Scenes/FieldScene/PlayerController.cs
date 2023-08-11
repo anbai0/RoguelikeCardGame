@@ -6,14 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-
     public float speed; //プレイヤーの動くスピード
     public float rotationSpeed = 10f; //向きを変える速度
 
     private Animator animator;
 
-    [SerializeField] float moveHorizontal;
-    [SerializeField] float moveVertical;
+    private float moveHorizontal;
+    private float moveVertical;
+
+    public static bool isPlayerActive = true;
 
     private FieldSceneManager fieldManager;
     public GameObject bonfire { get; private set; }
@@ -25,6 +26,14 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update()
+    {
+        if (isPlayerActive)
+        {
+            PlayerMove();
+        }
+    }
+
+    private void PlayerMove()
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
@@ -51,12 +60,18 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bonfire"))
         {
+            isPlayerActive = false;
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+
             bonfire = collision.gameObject;
             fieldManager.LoadBonfireScene();        // 焚火シーンをロード
         }
 
         if (collision.gameObject.CompareTag("Shop"))
         {
+            isPlayerActive = false;
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+
             // 指定した名前のシーンを取得
             Scene sceneToHide = SceneManager.GetSceneByName("ShopScene");
 

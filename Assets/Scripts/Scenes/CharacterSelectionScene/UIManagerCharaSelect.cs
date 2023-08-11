@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,12 +8,12 @@ public class UIManagerCharaSelect : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
+    private bool isClick = false;
 
+    private bool isSelected = false;
 
     private bool selectWarrior = false;
     private bool selectWizard = false;
-
-    private bool isSelect = false;
 
     private Color32 originalColor;
     private Color32 targetColor;
@@ -105,7 +104,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     {
         if (UIObject == warrior)
         {
-            isSelect = true;
+            isSelected = true;
             selectWarrior = true;
             selectWizard = false;
             warriorRelicPlace.gameObject.SetActive(true);
@@ -114,7 +113,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
         if (UIObject == wizard)
         {
-            isSelect = true;
+            isSelected = true;
             selectWarrior = false;
             selectWizard = true;
             warriorRelicPlace.gameObject.SetActive(false);
@@ -123,14 +122,15 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
 
 
-        if (UIObject == button && isSelect)
+        if (UIObject == button && isSelected && !isClick)
         {
+            isClick = true;
+
             if (selectWarrior)
                 gm.ReadPlayer("Warrior");
             if (selectWizard)
                 gm.ReadPlayer("Wizard");
 
-            isSelect = false;   // “ñ“x‰Ÿ‚³‚ê‚È‚¢‚æ‚¤‚Éfalse‚É‚µ‚Ü‚·
             sceneManager.LoadFieldScene();
         }
     }
@@ -150,7 +150,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
 
 
-        if (isSelect) return;
+        if (isSelected) return;
 
         if (UIObject == warrior)
         {
@@ -176,7 +176,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
 
 
-        if (isSelect) return;
+        if (isSelected) return;
 
         if (UIObject == warrior)
         {

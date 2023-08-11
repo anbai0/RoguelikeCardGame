@@ -14,11 +14,9 @@ public class UIManagerResult : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
-
     private bool isClick = false;
-    private GameObject lastClickedCards;
 
-    GameManager gm;
+    private GameManager gm;
 
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 元のスケールに戻すときに使います
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
@@ -88,33 +86,10 @@ public class UIManagerResult : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        // カードをクリックしたら
-        if (UIObject.CompareTag("Cards"))
+        if (UIObject == titleBackButton && !isClick)
         {
             isClick = true;
 
-            // カード選択状態の切り替え
-            if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
-            {
-                lastClickedCards.transform.localScale = scaleReset;
-                UIObject.transform.localScale += scaleBoost;
-            }
-
-            lastClickedCards = UIObject;
-
-        }
-
-        // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isClick && UIObject.CompareTag("BackGround"))
-        {
-            lastClickedCards.transform.localScale = scaleReset;
-            lastClickedCards = null;
-            isClick = false;
-
-        }
-
-        if (UIObject == titleBackButton)
-        {
             // タイトルに戻る処理
             resultSceneManager.SceneUnLoad();
         }
@@ -127,17 +102,16 @@ public class UIManagerResult : MonoBehaviour
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
+        // カードを拡大
+        if (UIObject.CompareTag("Cards"))
+        {
+            UIObject.transform.localScale += scaleBoost;
+        }
+
+        // レリックの説明を表示
         if (UIObject.CompareTag("Relics"))
         {
             UIObject.transform.GetChild(5).gameObject.SetActive(true);
-        }
-
-        if (!isClick)
-        {
-            if (UIObject.CompareTag("Cards"))
-            {
-                UIObject.transform.localScale += scaleBoost;
-            }
         }
     }
 
@@ -148,17 +122,16 @@ public class UIManagerResult : MonoBehaviour
     /// <param name="UIObject">カーソルが離れたObject</param>
     void UIExit(GameObject UIObject)
     {
+        // カードを元のサイズに
+        if (UIObject.CompareTag("Cards"))
+        {
+            UIObject.transform.localScale = scaleReset;
+        }
+
+        // レリックの説明を非表示
         if (UIObject.CompareTag("Relics"))
         {
             UIObject.transform.GetChild(5).gameObject.SetActive(false);
-        }
-
-        if (!isClick)
-        {
-            if (UIObject.CompareTag("Cards"))
-            {
-                UIObject.transform.localScale = scaleReset;
-            }
         }
     }
 

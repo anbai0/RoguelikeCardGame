@@ -99,7 +99,7 @@ public class Lottery : MonoBehaviour
         List<int> deckAndShopCards = new List<int>(gm.playerData._deckList);
 
         // 強化済みカードがあれば対応する未強化のカードを除外
-        for (int num = 1; num <= deckAndShopCards.Count; num++)
+        for (int num = 0; num < deckAndShopCards.Count; num++)
         {
             if (deckAndShopCards[num] >= 101)
             {

@@ -14,6 +14,7 @@ public class UIManagerTitle : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
+    private bool isClick = false;
 
     [Header("参照するコンポーネント")]
     [SerializeField] TitleSceneManager sceneManager;
@@ -74,8 +75,9 @@ public class UIManagerTitle : MonoBehaviour
     /// <param name="UIObject">クリックされたObject</param>
     void UILeftClick(GameObject UIObject)
     {
-        if (UIObject.CompareTag("BackGround"))
+        if (UIObject.CompareTag("BackGround") && !isClick)
         {
+            isClick = true;
             sceneManager.LoadCharaSelectScene();
         }
     }

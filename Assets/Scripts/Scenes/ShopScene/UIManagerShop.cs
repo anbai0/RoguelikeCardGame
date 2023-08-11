@@ -1,4 +1,6 @@
 using DG.Tweening;
+using SelfMadeNamespace;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +14,9 @@ public class UIManagerShop : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
-
     private bool isClick = false;
+
+    private bool isSelected = false;
     private GameObject lastClickedItem;
 
     private Vector3 cardScaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
@@ -89,9 +92,15 @@ public class UIManagerShop : MonoBehaviour
             shopManager.HasHealPotion();
         }
         // "店を出る"を押したら
-        if (UIObject.CompareTag("ExitButton"))
+        if (UIObject.CompareTag("ExitButton") && !isClick)
         {
+            isClick = true;
             shopManager.ExitShop();     // ShopSceneを非表示
+
+            // フィールドシーンのプレイヤーを動けるようにする
+            PlayerController.isPlayerActive = true;
+
+            isClick = false;
         }
         // "休憩"を押したら
         if (UIObject == restButton)
@@ -110,7 +119,7 @@ public class UIManagerShop : MonoBehaviour
         // アイテムをクリックしたら
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
-            isClick = true;
+            isSelected = true;
 
             // アイテム選択状態の切り替え
             if (lastClickedItem != null && lastClickedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
@@ -150,7 +159,7 @@ public class UIManagerShop : MonoBehaviour
                 shopManager.PriceTextCheck();            // 値段テキスト更新
 
                 lastClickedItem = null;                     // 選択状態リセット
-                isClick = false;
+                isSelected = false;
             }
 
             lastClickedItem = UIObject;
@@ -158,7 +167,7 @@ public class UIManagerShop : MonoBehaviour
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isClick && UIObject.CompareTag("BackGround"))
+        if (isSelected && UIObject.CompareTag("BackGround"))
         {
             // 最後にクリックしたアイテムの選択状態を解除する
             if (lastClickedItem.CompareTag("Cards"))
@@ -174,7 +183,7 @@ public class UIManagerShop : MonoBehaviour
             }
 
             lastClickedItem = null;         // 選択状態リセット
-            isClick = false;
+            isSelected = false;
         }
 
         // "買い物を終える"を押したら
@@ -205,7 +214,7 @@ public class UIManagerShop : MonoBehaviour
 
     void UIEnter(GameObject UIObject)
     {
-        if (!isClick)
+        if (!isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {
@@ -224,7 +233,7 @@ public class UIManagerShop : MonoBehaviour
 
     void UIExit(GameObject UIObject)
     {
-        if (!isClick)
+        if (!isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {

@@ -1,3 +1,4 @@
+using SelfMadeNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,11 +8,12 @@ public class BattleSceneScript : MonoBehaviour
     [SerializeField]
     private SceneFader sceneFader;
 
-
     public void SwitchSceneAfterVictory()
     {
         // バトルシーンをアンロード
         sceneFader.SceneChange(unLoadSceneName: "BattleScene");
+
+        PlayerController.isPlayerActive = true;     // プレイヤーを動けるようにする
     }
 
     public void SwitchSceneAfterLose()
@@ -24,5 +26,7 @@ public class BattleSceneScript : MonoBehaviour
 
         // バトルシーンをアンロード、リザルトシーンをロード
         sceneFader.SceneChange("ResultScene", "BattleScene");
+
+        PlayerController.isPlayerActive = true;
     }
 }

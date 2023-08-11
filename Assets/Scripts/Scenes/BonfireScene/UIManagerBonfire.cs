@@ -13,14 +13,15 @@ public class UIManagerBonfire : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
-
     private bool isClick = false;
-    private GameObject lastClickedCards;
+
+    PlayerController playerController;
+
+    private bool isSelected = false;
+    private GameObject lastSelectedCards;
 
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 元のスケールに戻すときに使います
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
-
-    private GameObject bonfire;     // プレイヤーが当たった焚火
 
     [Header("参照するコンポーネント")]
     [SerializeField] private SceneFader sceneController;
@@ -48,14 +49,12 @@ public class UIManagerBonfire : MonoBehaviour
 
     private void Update()
     {
-        // Startだと取得できなかったのでUpdateに記述
-        if (bonfire == null)
+        if (playerController == null)
         {
-            // プレイヤーが当たった焚火を取得
-            bonfire = "FieldScene".GetComponentInScene<PlayerController>().bonfire;
+            playerController = "FieldScene".GetComponentInScene<PlayerController>();
         }
-
     }
+
 
     #region UIイベントリスナー関係の処理
     /// <summary>
@@ -102,9 +101,12 @@ public class UIManagerBonfire : MonoBehaviour
         }
 
         // "休憩しない"を押したら
-        if (UIObject.CompareTag("ExitButton"))
+        if (UIObject.CompareTag("ExitButton") && !isClick)
         {
+            isClick = true;
+            
             bonfireManager.UnLoadBonfireScene();          // フィールドに戻る
+            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
         }
 
         // "休憩"を押したら
@@ -125,29 +127,29 @@ public class UIManagerBonfire : MonoBehaviour
         // カードをクリックしたら
         if (UIObject.CompareTag("Cards"))
         {
-            isClick = true;
+            isSelected = true;
 
             // 強化ボタン切り替え
             applyEnhance.SetActive(true);
             closeEnhance.SetActive(false);
 
             // カード選択状態の切り替え
-            if (lastClickedCards != null && lastClickedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
+            if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
             {
-                lastClickedCards.transform.localScale = scaleReset;
+                lastSelectedCards.transform.localScale = scaleReset;
                 UIObject.transform.localScale += scaleBoost;
             }
 
-            lastClickedCards = UIObject;
+            lastSelectedCards = UIObject;
 
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isClick && UIObject.CompareTag("BackGround"))
+        if (isSelected && UIObject.CompareTag("BackGround"))
         {
-            lastClickedCards.transform.localScale = scaleReset;
-            lastClickedCards = null;
-            isClick = false;
+            lastSelectedCards.transform.localScale = scaleReset;
+            lastSelectedCards = null;
+            isSelected = false;
 
             // 強化ボタン切り替え
             applyEnhance.SetActive(false);
@@ -156,13 +158,16 @@ public class UIManagerBonfire : MonoBehaviour
         }
 
         // "強化する"を押したら
-        if (UIObject == applyEnhance && isClick)
+        if (UIObject == applyEnhance && isSelected && !isClick)
         {
-            bonfireManager.CardEnhance(lastClickedCards);   // カード強化
+            isClick = true;
+
+            bonfireManager.CardEnhance(lastSelectedCards);   // カード強化
 
             PutOutCampfire();       // 焚火の火を消す
 
             bonfireManager.UnLoadBonfireScene();      // 強化したらフィールドに戻る
+            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
         }
 
         // "強化しない"を押したら
@@ -176,14 +181,17 @@ public class UIManagerBonfire : MonoBehaviour
         #region RestUI内での処理
 
         // "休憩する"を押したら
-        if (UIObject == takeRestButton)
+        if (UIObject == takeRestButton && !isClick)
         {
+            isClick = true;
+
             restController.Rest("BonfireScene");                // 回復する
             restUI.SetActive(false);
 
             PutOutCampfire();       // 焚火の火を消す
 
             bonfireManager.UnLoadBonfireScene();          // 休憩したらフィールドに戻る
+            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
         }
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
@@ -196,7 +204,7 @@ public class UIManagerBonfire : MonoBehaviour
 
     void UIEnter(GameObject UIObject)
     {
-        if (!isClick)
+        if (!isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {
@@ -207,7 +215,7 @@ public class UIManagerBonfire : MonoBehaviour
 
     void UIExit(GameObject UIObject)
     {
-        if (!isClick)
+        if (!isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {
@@ -223,11 +231,11 @@ public class UIManagerBonfire : MonoBehaviour
     void PutOutCampfire()
     {
         // 焚火の火を消す
-        //ParticleSystem particle = bonfire.GetComponent<ParticleSystem>();
+        //ParticleSystem particle = playerController.bonfire.GetComponent<ParticleSystem>();
         //particle.Stop();
 
         // 焚火の当たり判定を消す。
-        BoxCollider boxCol = bonfire.GetComponent<BoxCollider>();
+        BoxCollider boxCol = playerController.bonfire.GetComponent<BoxCollider>();
         boxCol.enabled = false;
     }
 }

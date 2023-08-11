@@ -14,6 +14,7 @@ public class UIManagerBase : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
+    private bool isClick = false;
 
     //[Header("参照するスクリプト")]
     //[Header("表示を切り替えるUI")]
