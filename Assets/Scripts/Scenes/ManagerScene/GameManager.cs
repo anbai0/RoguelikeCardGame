@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,8 +11,10 @@ public class GameManager : MonoBehaviour
     public List<CardDataManager> cardDataList { private set; get; } = new List<CardDataManager>();
     public List<RelicDataManager> relicDataList { private set; get; } = new List<RelicDataManager>();
     public Dictionary<int, int> hasRelics { private set; get; } = new Dictionary<int, int>();     // 所持しているレリックを格納    
-    public int maxCards { private set; get; } = 20;
-    public int maxRelics { private set; get; } = 12;
+    public int maxCards { get; private set; } = 20;
+    public int maxRelics { get; private set; } = 12;
+    private const int defaultDeckSize = 3;
+    private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
     bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
         }
 
         relicDataList.Add(new RelicDataManager(1));     // ID順に管理したいため最初の要素だけ代入
-        for (int relicID=1; relicID <= maxRelics; relicID++)
+        for (int relicID = 1; relicID <= maxRelics; relicID++)
         {
             hasRelics.Add(relicID,0);
 
@@ -112,6 +115,32 @@ public class GameManager : MonoBehaviour
         uiManager.UIEventsReload();
     }
 
+
+    /// <summary>
+    /// 所持カードがデッキ上限に達しているかを判定し、
+    /// <para>上限に達している場合、カード破棄画面に遷移します。</para>
+    /// <para></para>
+    /// </summary>
+    /// <returns>
+    /// デッキ上限に達している場合、true
+    /// <para>デッキ上限に達していない場合、false</para>
+    /// </returns>
+    public bool CheckDeckFull()
+    {
+        int maxDeckSize = defaultDeckSize + hasRelics[ariadnesThreadID];
+        if (playerData._deckList.Count >= maxDeckSize)
+        {
+            uiManager.ToggleDiscardScreen(true);        // カード破棄画面     
+
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// ゲームデータのリセットをします。
+    /// <para>現状リザルトシーンからタイトルシーンに戻るときのみにしか使えないため後で書き換えます。</para>
+    /// </summary>
     public void ResetGameData()
     {
         playerData = null;

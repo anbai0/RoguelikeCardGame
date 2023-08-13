@@ -25,8 +25,12 @@ public class AudioManager : MonoBehaviour
         // AudioSourceのコンポーネント取得
         audioSource = GetComponent<AudioSource>();
     }
-
-    // 効果音を再生する
+            
+    /// <summary>
+    /// 指定されたSEを流します。
+    /// <code>audioManager.PlaySE("SEの素材の名前");</code>
+    /// </summary>
+    /// <param name="seName"></param>
     public void PlaySE(string seName)
     {
         int seIndex = GetSEIndex(seName);
@@ -36,11 +40,15 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"\"{seName}\"という名前のaudioClipは存在しません。");
+            Debug.LogError($"\"{seName}\"という名前のaudioClipは存在しません。");
         }
     }
 
-    // BGMを再生する
+    /// <summary>
+    /// 指定されたBGMを流します。
+    /// <code>audioManager.PlayBGM("BGMの素材の名前");</code>
+    /// </summary>
+    /// <param name="bgmName"></param>
     public void PlayBGM(string bgmName)
     {
         int bgmIndex = GetBGMIndex(bgmName);

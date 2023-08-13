@@ -8,7 +8,7 @@ public class BonfireManager : MonoBehaviour
     [SerializeField] ManagerSceneLoader msLoader; 
     [SerializeField] private SceneFader sceneFader;
 
-    //カード
+    // カード表示
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
     [SerializeField] Transform lowerCardPlace;

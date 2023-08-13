@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using SelfMadeNamespace;
+using System.Collections;
 
 /// <summary>
 /// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
@@ -21,6 +22,8 @@ public class ShopManager : MonoBehaviour
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
     private Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
+    private bool cardDiscardState = false;                  // カード破棄画面にいるときにtrue
+    private GameObject buyCard;                             // カードを買うときに一時的に格納
 
     [Header("参照するUI")]
     [SerializeField] GameObject shoppingUI;
@@ -79,6 +82,16 @@ public class ShopManager : MonoBehaviour
             
             uiManager.UIEventsReload();          // UIEvent更新      
             Lottery.isInitialize = false;
+        }
+
+        if (cardDiscardState && UIManager.cancelDiscard)
+        {
+
+        }
+
+        if (UIManager.isShowingCardDiscard && UIManager.cancelDiscard)
+        {
+
         }
 
         //if (Input.GetKeyDown(KeyCode.RightAlt))
@@ -168,7 +181,7 @@ public class ShopManager : MonoBehaviour
     /// <summary>
     /// 値段テキストを更新します。
     /// アイテムを買えるかどうかを判定し、
-    /// 変えなかった場合値段を赤く表示します
+    /// 買えない場合値段を赤く表示します
     /// </summary>
     public void PriceTextCheck()
     {
@@ -215,7 +228,7 @@ public class ShopManager : MonoBehaviour
     {
         foreach(int cardsID in gm.playerData._deckList)
         {
-            if(cardsID == shopCardsID[healCardID])      // 回復カードを持っている場合
+            if(cardsID == healCardID)      // 回復カードを持っている場合
             {
                 // 回復カードをグレーアウトにする
                 shopCards[healCardNum].transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
@@ -233,54 +246,69 @@ public class ShopManager : MonoBehaviour
     public void BuyItem(GameObject selectedItem, string itemType)
     {
         if (itemType == "Card")
-        for (int i = 0; i < shopCards.Count; i++)
         {
-            if (selectedItem == shopCards[i])         // クリックしたカードとショップに並んでるカードが一致したら
+            CardController card = selectedItem.GetComponent<CardController>();
+            int selectedCardID = card.cardDataManager._cardID; // 選択されたカードのIDを取得
+
+            if (gm.playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
             {
-                CardController card = shopCards[i].GetComponent<CardController>();
-
-                if (gm.playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
+                // デッキ上限チェック
+                if (gm.CheckDeckFull())     // デッキ上限に達している場合
                 {
-                    if (shopCardsID[i] != shopCardsID[healCardID])                        // 選んだカードが回復カードではなかった場合
-                    {
-                        gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                        gm.playerData._deckList.Add(shopCardsID[i]);                         // デッキに加える
+                    buyCard = selectedItem;     // カード破棄画面に移るため一時的に格納
+                    cardDiscardState = true;
 
-                        selectedItem.SetActive(false);
+                    // アイテムの見た目の選択状態を解除
+                    selectedItem.transform.localScale = scaleReset;
+                    selectedItem.transform.GetChild(0).gameObject.SetActive(false);       
+                    // 選択状態リセット
+                    uiManager.lastSelectedItem = null;
+                    uiManager.isSelected = false;
+                    return;
+                }
 
-                    } else if (!HasHealPotion())   // 選んだカードが回復カードで、回復カードを所持していない場合
-                    {
-                        gm.playerData._playerMoney -= card.cardDataManager._cardPrice;
-                        gm.playerData._deckList.Add(shopCardsID[i]);
 
 
-                        // 回復カードをグレーアウトにする
-                        selectedItem.transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
-                        selectedItem.transform.localScale = scaleReset;
-                    }
-                }               
-            }
-        }
-
-        if (itemType == "Relic")
-        for (int i = 0; i < shopRelics.Count; i++)
-        {
-            if (selectedItem == shopRelics[i])         // クリックしたレリックとショップに並んでるレリックが一致したら
-            {
-                RelicController relic = shopRelics[i].GetComponent<RelicController>();
-
-                if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)         // 所持金が足りるなら
+                if (selectedCardID != healCardID)   // 選んだカードが回復カードではなかった場合
                 {
-                    gm.playerData._playerMoney -= relic.relicDataManager._relicPrice;         // 所持金から値段分のお金を引いて
-                    gm.hasRelics[shopRelicsID[i]]++;                                          // レリックを取得
-                    selectedItem.transform.localScale = scaleReset;                           // スケールを戻す
+                    gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                    gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
 
                     selectedItem.SetActive(false);
+                }
+                else if (!HasHealPotion())          // 選んだカードが回復カードで、回復カードを所持していない場合
+                {
+                    gm.playerData._playerMoney -= card.cardDataManager._cardPrice;
+                    gm.playerData._deckList.Add(selectedCardID);
+
+                    // 回復カードをグレーアウトにする
+                    selectedItem.transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
+                    selectedItem.transform.localScale = scaleReset;
                 }
             }
         }
 
+
+        if (itemType == "Relic")
+        {
+            RelicController relic = selectedItem.GetComponent<RelicController>();
+            int selectedRelicID = relic.relicDataManager._relicID; // 選択されたカードのIDを取得     
+
+            if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)         // 所持金が足りるなら
+            {
+                gm.playerData._playerMoney -= relic.relicDataManager._relicPrice;         // 所持金から値段分のお金を引いて
+                gm.hasRelics[selectedRelicID]++;                                          // レリックを取得
+
+                selectedItem.SetActive(false);
+            }
+        }
+
         gm.ShowRelics();        // オーバーレイのレリック表示を更新
+    }
+
+    private IEnumerator WaitForCondition(bool waitForCompletion)
+    {
+        yield return new WaitUntil(() => !waitForCompletion);
     }
 
     /// <summary>

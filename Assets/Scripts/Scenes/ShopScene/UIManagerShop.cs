@@ -16,8 +16,8 @@ public class UIManagerShop : MonoBehaviour
     private bool isRemoved = true;
     private bool isClick = false;
 
-    private bool isSelected = false;
-    private GameObject lastClickedItem;
+    public bool isSelected = false;
+    public GameObject lastSelectedItem;
 
     private Vector3 cardScaleReset = Vector3.one * 0.37f;    // 元のスケールに戻すときに使います
     private Vector3 relicScaleReset = Vector3.one * 2.5f;
@@ -122,20 +122,20 @@ public class UIManagerShop : MonoBehaviour
             isSelected = true;
 
             // アイテム選択状態の切り替え
-            if (lastClickedItem != null && lastClickedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
+            if (lastSelectedItem != null && lastSelectedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
             {
                 // 最後にクリックしたアイテムの選択状態を解除する
-                if (lastClickedItem.CompareTag("Cards"))
+                if (lastSelectedItem.CompareTag("Cards"))
                 {
-                    lastClickedItem.transform.localScale = cardScaleReset;
-                    lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                    lastSelectedItem.transform.localScale = cardScaleReset;
+                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 }
                     
-                if (lastClickedItem.CompareTag("Relics"))
+                if (lastSelectedItem.CompareTag("Relics"))
                 {
-                    lastClickedItem.transform.localScale = relicScaleReset;
-                    lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
-                    lastClickedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+                    lastSelectedItem.transform.localScale = relicScaleReset;
+                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                    lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
                 }
 
                 // 2回目に選択したアイテムを選択状態にする
@@ -147,7 +147,7 @@ public class UIManagerShop : MonoBehaviour
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
 
             }
-            else if (UIObject == lastClickedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
+            else if (UIObject == lastSelectedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
             {
                 // 選択したアイテムを買う
                 if (UIObject.CompareTag("Cards"))
@@ -158,11 +158,11 @@ public class UIManagerShop : MonoBehaviour
 
                 shopManager.PriceTextCheck();            // 値段テキスト更新
 
-                lastClickedItem = null;                     // 選択状態リセット
+                lastSelectedItem = null;                     // 選択状態リセット
                 isSelected = false;
             }
 
-            lastClickedItem = UIObject;
+            lastSelectedItem = UIObject;
 
         }
 
@@ -170,19 +170,19 @@ public class UIManagerShop : MonoBehaviour
         if (isSelected && UIObject.CompareTag("BackGround"))
         {
             // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastClickedItem.CompareTag("Cards"))
+            if (lastSelectedItem.CompareTag("Cards"))
             {
-                lastClickedItem.transform.localScale = cardScaleReset;
-                lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                lastSelectedItem.transform.localScale = cardScaleReset;
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
-            if (lastClickedItem.CompareTag("Relics"))
+            if (lastSelectedItem.CompareTag("Relics"))
             {
-                lastClickedItem.transform.localScale = relicScaleReset;
-                lastClickedItem.transform.GetChild(0).gameObject.SetActive(false);
+                lastSelectedItem.transform.localScale = relicScaleReset;
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
             }
 
-            lastClickedItem = null;         // 選択状態リセット
+            lastSelectedItem = null;         // 選択状態リセット
             isSelected = false;
         }
 
