@@ -18,7 +18,7 @@ namespace SelfMadeNamespace
 
             if (!scene.isLoaded)
             {
-                Debug.LogError("指定したシーンがロードされていません。");
+                Debug.LogError($"指定した{sceneName}というシーンはロードされていません。");
                 return null;
             }
 

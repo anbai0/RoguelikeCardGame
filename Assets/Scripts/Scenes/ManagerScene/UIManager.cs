@@ -1,11 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using DG.Tweening.Core.Easing;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using System.Linq;
-using System.Collections;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -41,7 +37,8 @@ public class UIManager : MonoBehaviour
 
     private bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
     public static bool isShowingCardDiscard { get; private set; } = false;  // カード破棄画面を表示しているときだけtrue
-    public static bool cancelDiscard { get; private set; } = false;         // カード破棄画面で戻るボタンを押したときにtrue
+    //public static bool cancelDiscard { get; private set; } = false;         // カード破棄画面で戻るボタンを押したときにtrue
+    //public static bool discardButtonClicked { get; private set; } = false;  // カード破棄画面で破棄ボタンを押したときにtrue
 
     private bool isSelected = false;
     private GameObject lastSelectedCards;
@@ -188,13 +185,14 @@ public class UIManager : MonoBehaviour
             // カード破棄画面を非表示に
             if(UIObject == returnButton)
             {
-                cancelDiscard = true;
                 ToggleDiscardScreen(false);
             }
 
             // カードを選んだ後、破棄ボタンを押すと、そのカードを破棄
             if (UIObject == discardButton && lastSelectedCards != null)
             {
+                discardButtonClicked = true;
+
                 int selectedCardID = lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID; // 選択されたカードのIDを取得
 
                 for (int cardIndex = 0; cardIndex < gm.playerData._deckList.Count; cardIndex++) {

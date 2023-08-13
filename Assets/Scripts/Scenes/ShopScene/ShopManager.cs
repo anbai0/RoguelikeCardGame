@@ -22,7 +22,7 @@ public class ShopManager : MonoBehaviour
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
     private Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
-    private bool cardDiscardState = false;                  // カード破棄画面にいるときにtrue
+    private bool cardDiscardState = false;                  // ショップ画面からカード破棄画面に遷移したときにtrue
     private GameObject buyCard;                             // カードを買うときに一時的に格納
 
     [Header("参照するUI")]
@@ -84,14 +84,20 @@ public class ShopManager : MonoBehaviour
             Lottery.isInitialize = false;
         }
 
+        // カード破棄画面で"戻る"ボタンを押したら
         if (cardDiscardState && UIManager.cancelDiscard)
         {
-
+            Debug.Log("戻る");
+            cardDiscardState = false;
         }
 
-        if (UIManager.isShowingCardDiscard && UIManager.cancelDiscard)
+        // カード破棄画面で"破棄"ボタンを押したら
+        if (cardDiscardState && UIManager.discardButtonClicked)
         {
-
+            Debug.Log("破棄");
+            cardDiscardState = false;
+            BuyItem(buyCard,"Card");
+            buyCard = null;
         }
 
         //if (Input.GetKeyDown(KeyCode.RightAlt))
