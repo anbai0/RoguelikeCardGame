@@ -87,7 +87,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         #region BattleRewardUI内での処理
 
         // アイテムをクリックしたら
-        if (UIObject == UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
+        if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isSelected = true;
 
@@ -101,13 +101,13 @@ public class UIManagerTreasureBox : MonoBehaviour
             if (lastSelectedItem != null && lastSelectedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
             {
                 // 最後にクリックしたアイテムの選択状態を解除する
-                if (lastSelectedItem == lastSelectedItem.CompareTag("Cards"))
+                if (lastSelectedItem.CompareTag("Cards"))
                 {
                     lastSelectedItem.transform.localScale = cardScaleReset;
                     lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 }
 
-                if (lastSelectedItem == lastSelectedItem.CompareTag("Relics"))
+                if (lastSelectedItem.CompareTag("Relics"))
                 {
                     lastSelectedItem.transform.localScale = relicScaleReset;
                     lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
@@ -115,14 +115,14 @@ public class UIManagerTreasureBox : MonoBehaviour
                 }
 
                 // 2回目に選択したアイテムがカードだった場合、カードを選択状態にする
-                if (UIObject == UIObject.CompareTag("Cards"))
+                if (UIObject.CompareTag("Cards"))
                 {
                     UIObject.transform.localScale += scaleBoost;
                     UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);
                 }
 
                 // 2回目に選択したアイテムがレリックだった場合、レリックを選択状態にして説明を表示
-                if (UIObject == UIObject.CompareTag("Relics"))
+                if (UIObject.CompareTag("Relics"))
                 {
                     UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
@@ -135,16 +135,16 @@ public class UIManagerTreasureBox : MonoBehaviour
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isSelected && UIObject == UIObject.CompareTag("BackGround"))
+        if (isSelected && UIObject.CompareTag("BackGround"))
         {
             // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastSelectedItem == lastSelectedItem.CompareTag("Cards"))
+            if (lastSelectedItem.CompareTag("Cards"))
             {
                 lastSelectedItem.transform.localScale = cardScaleReset;
                 lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
-            if (lastSelectedItem == lastSelectedItem.CompareTag("Relics"))
+            if (lastSelectedItem.CompareTag("Relics"))
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
                 lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
@@ -175,13 +175,13 @@ public class UIManagerTreasureBox : MonoBehaviour
             //}
 
             // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastSelectedItem == lastSelectedItem.CompareTag("Cards"))
+            if (lastSelectedItem.CompareTag("Cards"))
             {
                 lastSelectedItem.transform.localScale = cardScaleReset;
                 lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
-            if (lastSelectedItem == lastSelectedItem.CompareTag("Relics"))
+            if (lastSelectedItem.CompareTag("Relics"))
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
                 lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
@@ -246,13 +246,13 @@ public class UIManagerTreasureBox : MonoBehaviour
     {
         if (!isSelected)
         {
-            if (UIObject == UIObject.CompareTag("Cards"))
+            if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
 
-            if (UIObject == UIObject.CompareTag("Relics"))
+            if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
@@ -265,14 +265,14 @@ public class UIManagerTreasureBox : MonoBehaviour
     {
         if (!isSelected)
         {
-            if (UIObject == UIObject.CompareTag("Cards"))
+            if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale = cardScaleReset;
                 UIObject.transform.Find("CardSelectImage").gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
 
             }
 
-            if (UIObject == UIObject.CompareTag("Relics"))
+            if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale = relicScaleReset;
                 UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
