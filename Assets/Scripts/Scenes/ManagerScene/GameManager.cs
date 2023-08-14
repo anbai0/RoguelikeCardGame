@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private const int defaultDeckSize = 3;
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
-    public event Action Ondiscard;      // カードの破棄を実行した場合に発火するイベント
+    public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
 
     bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
@@ -140,10 +140,22 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-    public void TriggerDiscardDelegate(bool isDiscard)
+    /// <summary>
+    /// カードを破棄した場合、メソッド内のイベントを発火させます。
+    /// </summary>
+    /// <param name="isDiscard">カードを破棄した場合、true,破棄しなかった場合、false</param>
+    public void TriggerDiscardAction(bool isDiscard)
     {
-        Ondiscard?.Invoke();
+        if (isDiscard)
+        {
+            OnCardDiscard?.Invoke();
+            OnCardDiscard = null;
+        }
+        else
+        {
+            OnCardDiscard = null;
+            return;
+        }
     }
 
     /// <summary>

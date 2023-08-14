@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
-using DG.Tweening.Core.Easing;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -35,24 +35,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI myMoneyText;   //所持金を表示するテキスト
 
 
-    private bool isTitleScreen = false; // タイトル画面にいるときにtrueにする
-    public static bool isShowingCardDiscard { get; private set; } = false;  // カード破棄画面を表示しているときだけtrue
-    //public static bool cancelDiscard { get; private set; } = false;         // カード破棄画面で戻るボタンを押したときにtrue
-    //public static bool discardButtonClicked { get; private set; } = false;  // カード破棄画面で破棄ボタンを押したときにtrue
+    private bool isShowingCardDiscard = false;  // カード破棄画面を表示しているときだけtrue
 
     private bool isSelected = false;
     private GameObject lastSelectedCards;
-
-    private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
-
-    private int maxRelics = 12;
 
     [Header("カード表示関係")]
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
     [SerializeField] Transform lowerCardPlace;
-    private Vector3 cardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
-    private List<int> deckNumberList;                    // プレイヤーのもつデッキナンバーのリスト
+    private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
+    private Vector3 scaleReset = Vector3.one * 0.25f;     // 生成するカードのスケール
+    private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
 
     void Start()
     {      
@@ -161,7 +155,7 @@ public class UIManager : MonoBehaviour
                 // カード選択状態の切り替え
                 if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
                 {
-                    lastSelectedCards.transform.localScale = cardScale;
+                    lastSelectedCards.transform.localScale = scaleReset;
                     UIObject.transform.localScale += scaleBoost;
                 }
 
@@ -172,27 +166,25 @@ public class UIManager : MonoBehaviour
             // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
             if (isSelected && UIObject.CompareTag("BackGround"))
             {
-                lastSelectedCards.transform.localScale = cardScale;
+                lastSelectedCards.transform.localScale = scaleReset;
                 lastSelectedCards = null;
                 isSelected = false;
 
                 // 強化ボタン切り替え
                 returnButton.SetActive(true);
                 discardButton.SetActive(false);
-
             }
 
             // カード破棄画面を非表示に
-            if(UIObject == returnButton)
+            if (!isSelected && UIObject == returnButton)
             {
                 ToggleDiscardScreen(false);
+                gm.TriggerDiscardAction(false);
             }
 
             // カードを選んだ後、破棄ボタンを押すと、そのカードを破棄
-            if (UIObject == discardButton && lastSelectedCards != null)
+            if (lastSelectedCards != null && UIObject == discardButton)
             {
-                discardButtonClicked = true;
-
                 int selectedCardID = lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID; // 選択されたカードのIDを取得
 
                 for (int cardIndex = 0; cardIndex < gm.playerData._deckList.Count; cardIndex++) {
@@ -201,9 +193,14 @@ public class UIManager : MonoBehaviour
                     {
                         // カードを破棄
                         gm.playerData._deckList.RemoveAt(cardIndex);
+                        break;
                     }
                 }
+                lastSelectedCards.transform.localScale = scaleReset;
+                lastSelectedCards = null;
+                isSelected = false;
                 ToggleDiscardScreen(false);
+                gm.TriggerDiscardAction(true);
             }
         
         }
@@ -252,7 +249,7 @@ public class UIManager : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
-                UIObject.transform.localScale = cardScale;
+                UIObject.transform.localScale = scaleReset;
             }
         }
     }
@@ -322,12 +319,13 @@ public class UIManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
 
-            cardDiscardScreen.SetActive(true);
+            cardDiscardScreen.SetActive(true);      // カード破棄画面を表示
             ShowDeck();
             UIEventsReload();
         }
         else
         {
+
             isShowingCardDiscard = false;
             cardDiscardScreen.SetActive(false);
         }
@@ -347,14 +345,14 @@ public class UIManager : MonoBehaviour
             if (init <= distribute) //決められた数をupperCardPlaceに生成する
             {
                 CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
-                card.transform.localScale = cardScale;
+                card.transform.localScale = scaleReset;
                 card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
                 card.Init(deckNumberList[init - 1]);//デッキデータの表示
             }
             else //残りはlowerCardPlaceに生成する
             {
                 CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
-                card.transform.localScale = cardScale;
+                card.transform.localScale = scaleReset;
                 card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
                 card.Init(deckNumberList[init - 1]);//デッキデータの表示
             }

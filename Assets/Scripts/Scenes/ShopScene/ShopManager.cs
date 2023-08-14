@@ -22,7 +22,6 @@ public class ShopManager : MonoBehaviour
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
     private Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
-    private bool cardDiscardState = false;                  // ショップ画面からカード破棄画面に遷移したときにtrue
     private GameObject buyCard;                             // カードを買うときに一時的に格納
 
     [Header("参照するUI")]
@@ -84,35 +83,6 @@ public class ShopManager : MonoBehaviour
             Lottery.isInitialize = false;
         }
 
-        // カード破棄画面で"戻る"ボタンを押したら
-        if (cardDiscardState && UIManager.cancelDiscard)
-        {
-            Debug.Log("戻る");
-            cardDiscardState = false;
-        }
-
-        // カード破棄画面で"破棄"ボタンを押したら
-        if (cardDiscardState && UIManager.discardButtonClicked)
-        {
-            Debug.Log("破棄");
-            cardDiscardState = false;
-            BuyItem(buyCard,"Card");
-            buyCard = null;
-        }
-
-        //if (Input.GetKeyDown(KeyCode.RightAlt))
-        //{
-        //    tmpID++;
-        //    if(tmpID == 12)
-        //    {
-        //        tmpID = 0;
-        //    }
-        //    shopRelicsID[2] = tmpID;
-
-        //    ShowItem();
-        //    uiManager.UIEventsReload();
-        //}
-
         //// デバッグ用
         //if (Input.GetKeyDown(KeyCode.Space))
         //{    
@@ -140,6 +110,19 @@ public class ShopManager : MonoBehaviour
 
         //    cardController.Init(tmpID);
         //    //DebugLottery();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.RightAlt))
+        //{
+        //    tmpID++;
+        //    if(tmpID == 12)
+        //    {
+        //        tmpID = 0;
+        //    }
+        //    shopRelicsID[2] = tmpID;
+
+        //    ShowItem();
+        //    uiManager.UIEventsReload();
         //}
 
     }
@@ -261,8 +244,9 @@ public class ShopManager : MonoBehaviour
                 // デッキ上限チェック
                 if (gm.CheckDeckFull())     // デッキ上限に達している場合
                 {
-                    buyCard = selectedItem;     // カード破棄画面に移るため一時的に格納
-                    cardDiscardState = true;
+                    gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
+
+                    buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納
 
                     // アイテムの見た目の選択状態を解除
                     selectedItem.transform.localScale = scaleReset;
@@ -310,6 +294,16 @@ public class ShopManager : MonoBehaviour
         }
 
         gm.ShowRelics();        // オーバーレイのレリック表示を更新
+    }
+
+
+    /// <summary>
+    /// カード破棄画面でカードを破棄した後呼び出されるメソッドです。
+    /// </summary>
+    public void RetryBuyItem()
+    {
+        BuyItem(buyCard, "Card");
+        buyCard = null;                     // 一時的に格納していただけなのでnullにします。
     }
 
     private IEnumerator WaitForCondition(bool waitForCompletion)

@@ -16,7 +16,6 @@ public class BonfireManager : MonoBehaviour
 
     Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
-
     void Start()
     {
         // GameManager取得

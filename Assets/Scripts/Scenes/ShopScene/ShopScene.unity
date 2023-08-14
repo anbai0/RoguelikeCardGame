@@ -2240,7 +2240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1382373204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3747,6 +3747,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1963204191}
+  isSelected: 0
+  lastSelectedItem: {fileID: 0}
   shopManager: {fileID: 387374075}
   restController: {fileID: 387374077}
   shopUI: {fileID: 1182467483}

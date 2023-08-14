@@ -145,9 +145,9 @@ public class UIManagerShop : MonoBehaviour
                 // 2回目に選択したアイテムがレリックだった場合、レリックの説明を表示
                 if (UIObject.CompareTag("Relics"))
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
-
+                
             }
-            else if (UIObject == lastSelectedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
+            if (UIObject == lastSelectedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
             {
                 // 選択したアイテムを買う
                 if (UIObject.CompareTag("Cards"))
@@ -161,9 +161,10 @@ public class UIManagerShop : MonoBehaviour
                 lastSelectedItem = null;                     // 選択状態リセット
                 isSelected = false;
             }
-
-            lastSelectedItem = UIObject;
-
+            else
+            {
+                lastSelectedItem = UIObject;    // 最後にクリックしたアイテムを更新
+            }
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
