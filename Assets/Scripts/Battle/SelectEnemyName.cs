@@ -16,7 +16,7 @@ public class SelectEnemyName : MonoBehaviour
     public string DecideEnemyName(int floor, string type)
     {
         string enemyName = null;
-        if(type == "Enemy")
+        if(type == "SmallEnemy")
         {
             enemyName = SelectEnemy();
         }

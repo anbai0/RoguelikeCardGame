@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
 
     private FieldSceneManager fieldManager;
     public GameObject bonfire { get; private set; }
+    public GameObject treasureBox { get; private set; }
+    public GameObject enemy { get; private set; }
+    public string enemyTag { get; private set; }
 
     void Start()
     {
@@ -67,6 +70,15 @@ public class PlayerController : MonoBehaviour
             fieldManager.LoadBonfireScene();        // 焚火シーンをロード
         }
 
+        if (collision.gameObject.CompareTag("TreasureBox"))
+        {
+            isPlayerActive = false;
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+
+            treasureBox = collision.gameObject;
+            fieldManager.LoadTreasureBoxScene();   //宝箱シーンをロード
+        }
+
         if (collision.gameObject.CompareTag("Shop"))
         {
             isPlayerActive = false;
@@ -83,6 +95,16 @@ public class PlayerController : MonoBehaviour
 
             // ショップシーンがロードされていた場合、ショップシーンのオブジェクトを表示
             fieldManager.ActivateShopScene();
+        }
+
+        if (collision.gameObject.CompareTag("SmallEnemy") || collision.gameObject.CompareTag("StrongEnemy"))
+        {
+            isPlayerActive = false;
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+
+            enemy = collision.gameObject;
+            enemyTag = collision.gameObject.tag;
+            fieldManager.LoadBattleScene();   //戦闘シーンをロード
         }
     }
 }

@@ -57,7 +57,7 @@ public class BattleRewardManager : MonoBehaviour
     /// <param name="type">エネミーの種類</param>
     void SelectRewardByCards(string type)
     {
-        if (type == "Enemy")
+        if (type == "SmallEnemy")
         {
             rewardCardID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
         }

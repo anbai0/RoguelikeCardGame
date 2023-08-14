@@ -42,10 +42,10 @@ public class UIManagerBattleReward : MonoBehaviour
 
     private void Update()
     {
-        //if (playerController == null)
-        //{
-        //    playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        //}
+        if (playerController == null)
+        {
+            playerController = "FieldScene".GetComponentInScene<PlayerController>();
+        }
     }
 
 
@@ -202,19 +202,32 @@ public class UIManagerBattleReward : MonoBehaviour
             else
             {
                 Debug.Log("フィールドシーンへ移行");
-                battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
-                //battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-                //PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
+                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                playerController.enemy.SetActive(false);      // エネミーを消す
             }
         }
 
         // "入手しない"を押したら
         if (UIObject == closeGetItem)
         {
-            Debug.Log("フィールドシーンへ移行");
-            battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
-            //battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-            //PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+            //レリックの報酬も必要なら
+            if (isDisplayRelics)
+            {
+                battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                StartCoroutine(ShowRelicReward());
+                isDisplayRelics = false;
+            }
+            else
+            {
+                Debug.Log("フィールドシーンへ移行");
+                //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
+                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                playerController.enemy.SetActive(false);      // エネミーを消す
+            }
         }
 
         #endregion

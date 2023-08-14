@@ -92,8 +92,8 @@ public class TreasureBoxManager : MonoBehaviour
     /// <summary>
     /// 宝箱シーンをアンロード
     /// </summary>
-    public void UnLoadTreasureChestScene()
+    public void UnLoadTreasureBoxScene()
     {
-        sceneFader.SceneChange(unLoadSceneName: "TreasureChestScene");
+        sceneFader.SceneChange(unLoadSceneName: "TreasureBoxScene");
     }
 }

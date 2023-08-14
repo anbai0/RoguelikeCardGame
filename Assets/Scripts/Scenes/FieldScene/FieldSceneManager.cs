@@ -20,6 +20,12 @@ public class FieldSceneManager : MonoBehaviour
         sceneFader.SceneChange("BonfireScene");
     }
 
+    public void LoadTreasureBoxScene()
+    {
+        // 宝箱シーンをロード
+        sceneFader.SceneChange("TreasureBoxScene");
+    }
+
     public void LoadShopScene()
     {
         // ショップシーンをロード

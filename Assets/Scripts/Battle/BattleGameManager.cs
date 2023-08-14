@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using SelfMadeNamespace;
 
 public class BattleGameManager : MonoBehaviour
 {
+    PlayerController playerController;
     PlayerBattleAction playerScript;
     EnemyBattleAction enemyScript;
 
@@ -22,7 +24,7 @@ public class BattleGameManager : MonoBehaviour
     SelectEnemyName selectEnemyName;
     SelectEnemyData selectEnemyData;
     SelectEnemyRelic selectEnemyRelic;
-    public string enemyType = "Enemy";
+    public string enemyType = "SmallEnemy";
     string enemyName;
     
     //ÉJÅ[Éh
@@ -71,7 +73,11 @@ public class BattleGameManager : MonoBehaviour
 
     private void Start()
     {
-        //enemyName = GameManager.instance.EnemyName;
+        if (playerController == null)
+        {
+            playerController = "FieldScene".GetComponentInScene<PlayerController>();
+        }
+        enemyType = playerController.enemyTag;
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
         selectEnemyName = GetComponent<SelectEnemyName>();

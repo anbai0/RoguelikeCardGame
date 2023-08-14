@@ -193,18 +193,17 @@ public class UIManagerTreasureBox : MonoBehaviour
             //レリックの報酬も必要なら
             if (isDisplayRelics)
             {
-                //treasureChestUI.SetActive(false);
                 isClick = false; //applyGetItemをもう一度クリック出来るようにする
-                StartCoroutine(ShowRelicReward());
+                StartCoroutine(ShowRelicTreasure());
                 isDisplayRelics = false;
             }
             else
             {
                 //treasureChestUI.SetActive(false);
                 Debug.Log("フィールドシーンへ移行");
-                TBManager.UnLoadTreasureChestScene(); // フィールドに戻る
-                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                //playerController.treasureChest.SetActive(false); //宝箱を消す
+                TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
+                playerController.treasureBox.SetActive(false); //宝箱を消す
             }
         }
 
@@ -214,25 +213,23 @@ public class UIManagerTreasureBox : MonoBehaviour
             //レリックの報酬も必要なら
             if (isDisplayRelics)
             {
-                //treasureChestUI.SetActive(false);
                 isClick = false; //applyGetItemをもう一度クリック出来るようにする
-                StartCoroutine(ShowRelicReward());
+                StartCoroutine(ShowRelicTreasure());
                 isDisplayRelics = false;
             }
             else
             {
-                //treasureChestUI.SetActive(false);
                 Debug.Log("フィールドシーンへ移行");
-                TBManager.UnLoadTreasureChestScene(); // フィールドに戻る
-                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                //playerController.treasureChest.SetActive(false); //宝箱を消す
+                TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
+                playerController.treasureBox.SetActive(false); //宝箱を消す
             }
         }
 
         #endregion
     }
 
-    IEnumerator ShowRelicReward()
+    IEnumerator ShowRelicTreasure()
     {
         // 入手ボタン切り替え
         applyGetTreasure.SetActive(false);
