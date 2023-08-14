@@ -1,10 +1,9 @@
-using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using SelfMadeNamespace;
 
-public class UIManagerBattleReward : MonoBehaviour
+public class UIManagerTreasureBox : MonoBehaviour
 {
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
@@ -21,18 +20,18 @@ public class UIManagerBattleReward : MonoBehaviour
     private Vector3 relicScaleReset = Vector3.one * 2.5f;    // レリックを元のスケールに戻すときに使います
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
-    public bool isDisplayRelics = false; //レリックの報酬を表示するか判定
+    private bool isDisplayRelics = true; //レリックの報酬を表示するか判定
 
     [Header("参照するコンポーネント")]
     [SerializeField] private SceneFader sceneController;
-    [SerializeField] private BattleRewardManager battleRewardManager;
+    [SerializeField] private TreasureBoxManager TBManager;
 
     [Header("クリック後に参照するUI")]
-    [SerializeField] private GameObject battleRewardUI;
-    [SerializeField] private GameObject cardRewardPlace;
-    [SerializeField] private GameObject relicRewardPlace;
-    [SerializeField] private GameObject applyGetItem;
-    [SerializeField] private GameObject closeGetItem;
+    [SerializeField] private GameObject treasureBoxUI;
+    [SerializeField] private GameObject treasureCardPlace;
+    [SerializeField] private GameObject treasureRelicPlace;
+    [SerializeField] private GameObject applyGetTreasure;
+    [SerializeField] private GameObject closeGetTreasure;
 
 
     void Start()
@@ -42,10 +41,10 @@ public class UIManagerBattleReward : MonoBehaviour
 
     private void Update()
     {
-        //if (playerController == null)
-        //{
-        //    playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        //}
+        if (playerController == null)
+        {
+            playerController = "FieldScene".GetComponentInScene<PlayerController>();
+        }
     }
 
 
@@ -93,8 +92,8 @@ public class UIManagerBattleReward : MonoBehaviour
             isSelected = true;
 
             // 入手ボタン切り替え
-            applyGetItem.SetActive(true);
-            closeGetItem.SetActive(false);
+            applyGetTreasure.SetActive(true);
+            closeGetTreasure.SetActive(false);
             //UIEventsReload();
 
             // カード選択状態の切り替え
@@ -111,7 +110,7 @@ public class UIManagerBattleReward : MonoBehaviour
                 if (lastSelectedItem == lastSelectedItem.CompareTag("Relics"))
                 {
                     lastSelectedItem.transform.localScale = relicScaleReset;
-                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                    lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
                     lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
                 }
 
@@ -155,13 +154,13 @@ public class UIManagerBattleReward : MonoBehaviour
             isSelected = false;
 
             // 入手ボタン切り替え
-            applyGetItem.SetActive(false);
-            closeGetItem.SetActive(true);
+            applyGetTreasure.SetActive(false);
+            closeGetTreasure.SetActive(true);
             //UIEventsReload();
         }
 
         // "入手する"を押したら
-        if (UIObject == applyGetItem && isSelected && !isClick)
+        if (UIObject == applyGetTreasure && isSelected && !isClick)
         {
             isClick = true;
             //if (UIObject.CompareTag("Cards"))
@@ -194,27 +193,40 @@ public class UIManagerBattleReward : MonoBehaviour
             //レリックの報酬も必要なら
             if (isDisplayRelics)
             {
-                battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                //treasureChestUI.SetActive(false);
                 isClick = false; //applyGetItemをもう一度クリック出来るようにする
                 StartCoroutine(ShowRelicReward());
                 isDisplayRelics = false;
             }
             else
             {
+                //treasureChestUI.SetActive(false);
                 Debug.Log("フィールドシーンへ移行");
-                battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
-                //battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-                //PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                TBManager.UnLoadTreasureChestScene(); // フィールドに戻る
+                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                //playerController.treasureChest.SetActive(false); //宝箱を消す
             }
         }
 
         // "入手しない"を押したら
-        if (UIObject == closeGetItem)
+        if (UIObject == closeGetTreasure)
         {
-            Debug.Log("フィールドシーンへ移行");
-            battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
-            //battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-            //PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+            //レリックの報酬も必要なら
+            if (isDisplayRelics)
+            {
+                //treasureChestUI.SetActive(false);
+                isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                StartCoroutine(ShowRelicReward());
+                isDisplayRelics = false;
+            }
+            else
+            {
+                //treasureChestUI.SetActive(false);
+                Debug.Log("フィールドシーンへ移行");
+                TBManager.UnLoadTreasureChestScene(); // フィールドに戻る
+                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                //playerController.treasureChest.SetActive(false); //宝箱を消す
+            }
         }
 
         #endregion
@@ -223,14 +235,14 @@ public class UIManagerBattleReward : MonoBehaviour
     IEnumerator ShowRelicReward()
     {
         // 入手ボタン切り替え
-        applyGetItem.SetActive(false);
-        closeGetItem.SetActive(true);
+        applyGetTreasure.SetActive(false);
+        closeGetTreasure.SetActive(true);
         //報酬画面切り替え
-        relicRewardPlace.SetActive(true);
-        cardRewardPlace.SetActive(false);
+        treasureRelicPlace.SetActive(true);
+        treasureCardPlace.SetActive(false);
         yield return new WaitForSeconds(0.2f);
         //画面のポップアップ
-        battleRewardUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+        treasureBoxUI.SetActive(true);
     }
 
     void UIEnter(GameObject UIObject)
@@ -239,11 +251,8 @@ public class UIManagerBattleReward : MonoBehaviour
         {
             if (UIObject == UIObject.CompareTag("Cards"))
             {
-                if(UIObject.GetComponent<CardController>().cardDataManager._cardState == -1)             //報酬用のカードだったら
-                {
-                    UIObject.transform.localScale += scaleBoost;
-                    UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
-                }
+                UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
 
             if (UIObject == UIObject.CompareTag("Relics"))
@@ -261,12 +270,9 @@ public class UIManagerBattleReward : MonoBehaviour
         {
             if (UIObject == UIObject.CompareTag("Cards"))
             {
-                if (UIObject.GetComponent<CardController>().cardDataManager._cardState == -1)           //報酬用のカードだったら
-                {
-                    UIObject.transform.localScale = cardScaleReset;
-                    UIObject.transform.Find("CardSelectImage").gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
-                } 
-                    
+                UIObject.transform.localScale = cardScaleReset;
+                UIObject.transform.Find("CardSelectImage").gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
+
             }
 
             if (UIObject == UIObject.CompareTag("Relics"))
