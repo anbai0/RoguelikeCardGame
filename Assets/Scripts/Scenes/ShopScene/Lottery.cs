@@ -8,14 +8,14 @@ using UnityEngine;
 /// </summary>
 public class Lottery : MonoBehaviour
 {
-    GameManager gm;
+    private GameManager gm;
     [SerializeField] ManagerSceneLoader msLoader;
 
     public static bool isInitialize = false;        // Startにある処理が遅いので処理が終わったらtrueに
     public bool fromShopController = false;         // ShopControllerから呼ばれた場合trueにします
 
-    const int MaxNumCards = 20;       // 全カードの枚数
-    const int MaxNumRelics = 11;      // 全レリックの数
+    private const int MaxNumCards = 20;       // 全カードの枚数
+    private const int MaxNumRelics = 11;      // 全レリックの数
 
     [Header("ここから下はデバッグ用に表示させてます")]
     //各レアリティのリスト
@@ -29,8 +29,8 @@ public class Lottery : MonoBehaviour
 
     void Start()
     {
-        // GameManager取得
-        gm = msLoader.GetGameManager();
+        // GameManager取得(変数名省略)
+        gm = GameManager.Instance;
 
         for (int i = 1; i <= MaxNumCards; i++)
         {

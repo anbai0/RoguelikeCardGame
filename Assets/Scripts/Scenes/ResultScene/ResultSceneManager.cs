@@ -7,28 +7,28 @@ using UnityEngine.SceneManagement;
 
 public class ResultSceneManager : MonoBehaviour
 {
-    GameManager gm;
+    private GameManager gm;
     [SerializeField] ManagerSceneLoader msLoader;
-    [SerializeField] private SceneFader sceneFader;
+    [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerResult uiManager;
     
-    //カード
+    // カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
     [SerializeField] Transform lowerCardPlace;
-    List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
+    private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
     // レリック
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
 
-    Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
+    private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
 
     void Start()
     {
-        // GameManager取得
-        gm = msLoader.GetGameManager();
+        // GameManager取得(変数名省略)
+        gm = GameManager.Instance;
 
         InitDeck();
         ShowRelics();

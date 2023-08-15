@@ -14,9 +14,10 @@ public class UIManager : MonoBehaviour
     private UIController[] UIs;
     private bool isRemoved = true;
 
+    private GameManager gm;
+
     [Header("参照するコンポーネント")]
-    [SerializeField] AudioManager audioManager;
-    [SerializeField] GameManager gm;
+    [SerializeField] AudioManager audioManager;  
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
     [SerializeField] GameObject optionScreen;
@@ -49,7 +50,10 @@ public class UIManager : MonoBehaviour
     private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
 
     void Start()
-    {      
+    {
+        // GameManager取得(変数名省略)
+        gm = GameManager.Instance;
+
         UIEventsReload();
     }
 

@@ -12,7 +12,7 @@ using System.Collections;
 /// </summary>
 public class ShopManager : MonoBehaviour
 {
-    GameManager gm;
+    private GameManager gm;
 
     [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
@@ -58,12 +58,12 @@ public class ShopManager : MonoBehaviour
     [SerializeField] List<GameObject> shopRelics = null;
 
 
-    [SerializeField]    int tmpID = 0;      // デバッグ用
+    [SerializeField] int tmpID = 0;      // デバッグ用
 
     private void Start()
     {
-        // GameManager取得
-        gm = msLoader.GetGameManager();
+        // GameManager取得(変数名省略)
+        gm = GameManager.Instance;
     }
 
     void Update()

@@ -34,8 +34,8 @@ public class UIManagerResult : MonoBehaviour
 
     void Start()
     {
-        // GameManageræ“¾
-        gm = msLoader.GetGameManager();
+        // GameManageræ“¾(•Ï”–¼È—ª)
+        gm = GameManager.Instance;
 
         RefreshMoneyText();
         UIEventsReload();

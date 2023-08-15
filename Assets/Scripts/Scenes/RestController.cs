@@ -9,10 +9,10 @@ using TMPro;
 /// </summary>
 public class RestController : MonoBehaviour
 {
-    GameManager gm;
+    private GameManager gm;
     [SerializeField] ManagerSceneLoader msLoader;
 
-    const int restPrice = 70;                       // ‹xŒe‚Ì’l’i
+    private const int restPrice = 70;          // ‹xŒe‚Ì’l’i
     [Header("QÆ‚·‚éUI")]
     [SerializeField] GameObject restButton;
     [SerializeField] TextMeshProUGUI restText;
@@ -21,8 +21,8 @@ public class RestController : MonoBehaviour
 
     private void Start()
     {
-        // GameManageræ“¾
-        gm = msLoader.GetGameManager();
+        // GameManageræ“¾(•Ï”–¼È—ª)
+        gm = GameManager.Instance;
     }
 
 

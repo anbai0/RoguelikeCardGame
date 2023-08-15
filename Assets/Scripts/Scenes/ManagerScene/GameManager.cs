@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    //プレイヤー
+    // プレイヤー
     public PlayerDataManager playerData;
     public List<CardDataManager> cardDataList { private set; get; } = new List<CardDataManager>();
     public List<RelicDataManager> relicDataList { private set; get; } = new List<RelicDataManager>();
@@ -18,14 +17,14 @@ public class GameManager : MonoBehaviour
 
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
 
-    bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
+    private bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
 
-    //シングルトン
-    public static GameManager Instance;
+    
+    public static GameManager Instance;     // シングルトン
     private void Awake()
     {
         // シングルトンインスタンスをセットアップ

@@ -4,28 +4,25 @@ using UnityEngine;
 
 public class BonfireManager : MonoBehaviour
 {
-    GameManager gm;
     [SerializeField] ManagerSceneLoader msLoader; 
-    [SerializeField] private SceneFader sceneFader;
+    [SerializeField] SceneFader sceneFader;
 
     // カード表示
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
     [SerializeField] Transform lowerCardPlace;
-    List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
+    private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
-    Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
+    private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
     void Start()
     {
-        // GameManager取得
-        gm = msLoader.GetGameManager();
         InitDeck();
     }
 
     private void InitDeck() //デッキ生成
     {
-        deckNumberList = gm.playerData._deckList;
+        deckNumberList = GameManager.Instance.playerData._deckList;
         int distribute = DistributionOfCards(deckNumberList.Count);
         if (distribute <= 0) //デッキの枚数が0枚なら生成しない
             return;

@@ -34,8 +34,8 @@ public class UIManagerCharaSelect : MonoBehaviour
     private int[] wizardRelic = new int[] { 5, 9 };
 
     // QÆ‚·‚éUI
-    [SerializeField] GameObject warrior;
-    [SerializeField] GameObject wizard;
+    [SerializeField] private GameObject warrior;
+    [SerializeField] private GameObject wizard;
     [SerializeField] private GameObject button;
     [SerializeField] private Image image;
     [SerializeField] private Sprite redButton;
@@ -52,8 +52,8 @@ public class UIManagerCharaSelect : MonoBehaviour
 
     void Start()
     {
-        // GameManageræ“¾
-        gm = msLoader.GetGameManager();
+        // GameManageræ“¾(•Ï”–¼È—ª)
+        gm = GameManager.Instance;
 
         // ‰Šú‚ÌF
         originalColor = new Color32(60, 60, 60, 255);

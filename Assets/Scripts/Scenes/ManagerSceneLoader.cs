@@ -6,8 +6,6 @@ public class ManagerSceneLoader : MonoBehaviour
 {
     private static bool Loaded { get; set; }
 
-    GameManager gameManager;
-
     void Awake()
     {
         if (Loaded)
@@ -76,18 +74,4 @@ public class ManagerSceneLoader : MonoBehaviour
             }
         }
     }
-
-    public GameManager GetGameManager()
-    {
-        Scene scene = SceneManager.GetSceneByName("ManagerScene");
-
-        foreach (var rootGameObject in scene.GetRootGameObjects())
-        {
-            gameManager = rootGameObject.GetComponent<GameManager>();
-            return gameManager;
-        }
-        Debug.LogError("GameManager‚ğæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B");
-        return null;
-    }
-
 }
