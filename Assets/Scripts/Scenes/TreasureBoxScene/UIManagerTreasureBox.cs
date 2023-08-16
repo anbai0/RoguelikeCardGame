@@ -20,7 +20,6 @@ public class UIManagerTreasureBox : MonoBehaviour
     private bool isDisplayRelics = true; //レリックの報酬を表示するか判定
 
     [Header("参照するコンポーネント")]
-    [SerializeField] private SceneFader sceneFader;
     [SerializeField] private TreasureBoxManager TBManager;
 
     [Header("クリック後に参照するUI")]

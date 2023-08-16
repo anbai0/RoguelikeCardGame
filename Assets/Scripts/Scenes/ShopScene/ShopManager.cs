@@ -129,9 +129,10 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     void ShopLottery()
     {
-        lottery.fromShopController = true;
         //(Card1, Card2, Card3) = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });     // ƒƒ‚: ƒ^ƒvƒ‹‚ÆŒ¾‚Á‚Ä•¡”‚Ì–ß‚è’l‚ğó‚¯æ‚ê‚é
+        lottery.fromShopController = true;
         shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
+        lottery.fromShopController = true;
         shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
 
     }

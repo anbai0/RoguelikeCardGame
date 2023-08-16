@@ -7,7 +7,7 @@ using TMPro;
 /// </summary>
 public class RestController : MonoBehaviour
 {
-    public GameManager gm {private get; set; }
+    public GameManager gm;
 
     private const int restPrice = 70;          // ‹xŒe‚Ì’l’i
     [Header("QÆ‚·‚éUI")]

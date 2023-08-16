@@ -828,7 +828,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 2116548784}
-  sceneController: {fileID: 2116599019}
   TBManager: {fileID: 1024490951}
   treasureBoxUI: {fileID: 1518560746}
   treasureCardPlace: {fileID: 675931293}
@@ -1175,7 +1174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  msLoader: {fileID: 1024490953}
+  gm: {fileID: 0}
   fromShopController: 0
   cardRarity1List: 
   cardRarity2List: 
