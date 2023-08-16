@@ -1,8 +1,5 @@
-using DG.Tweening;
-using SelfMadeNamespace;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 /// <summary>
 /// ShopSceneÇÃUIManagerÇ≈Ç∑ÅB

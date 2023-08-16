@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -174,5 +175,22 @@ public class GameManager : MonoBehaviour
         }
 
         ShowRelics();
+    }
+
+
+    /// <summary>
+    /// ManagerScene以外のシーンをアンロードし、アセットを
+    /// </summary>
+    public void UnloadAllScenes()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.isLoaded && scene.name != "ManagerScene")
+            {
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+        Resources.UnloadUnusedAssets();
     }
 }

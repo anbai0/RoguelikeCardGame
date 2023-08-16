@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using SelfMadeNamespace;
 
@@ -11,8 +10,6 @@ public class UIManagerTreasureBox : MonoBehaviour
     private bool isRemoved = true;
     private bool isClick = false;
 
-    PlayerController playerController;
-
     private bool isSelected = false;
     private GameObject lastSelectedItem;
 
@@ -23,7 +20,7 @@ public class UIManagerTreasureBox : MonoBehaviour
     private bool isDisplayRelics = true; //レリックの報酬を表示するか判定
 
     [Header("参照するコンポーネント")]
-    [SerializeField] private SceneFader sceneController;
+    [SerializeField] private SceneFader sceneFader;
     [SerializeField] private TreasureBoxManager TBManager;
 
     [Header("クリック後に参照するUI")]
@@ -37,14 +34,6 @@ public class UIManagerTreasureBox : MonoBehaviour
     void Start()
     {
         UIEventsReload();
-    }
-
-    private void Update()
-    {
-        if (playerController == null)
-        {
-            playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        }
     }
 
 
@@ -202,6 +191,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                 //treasureChestUI.SetActive(false);
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
                 PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
                 playerController.treasureBox.SetActive(false); //宝箱を消す
             }
@@ -221,6 +211,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
                 PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
                 playerController.treasureBox.SetActive(false); //宝箱を消す
             }

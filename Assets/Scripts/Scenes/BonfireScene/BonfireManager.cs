@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BonfireManager : MonoBehaviour
 {
-    [SerializeField] ManagerSceneLoader msLoader; 
     [SerializeField] SceneFader sceneFader;
 
     // カード表示
@@ -100,6 +99,8 @@ public class BonfireManager : MonoBehaviour
 
     public void UnLoadBonfireScene()
     {
+        deckNumberList = null;      // 参照解除
+
         // 焚火シーンをアンロード
         sceneFader.SceneChange(unLoadSceneName: "BonfireScene");
     }

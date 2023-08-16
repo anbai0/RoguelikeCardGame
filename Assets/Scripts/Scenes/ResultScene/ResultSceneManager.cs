@@ -1,14 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 
 public class ResultSceneManager : MonoBehaviour
 {
     private GameManager gm;
-    [SerializeField] ManagerSceneLoader msLoader;
     [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerResult uiManager;
     
@@ -125,6 +122,8 @@ public class ResultSceneManager : MonoBehaviour
     public void SceneUnLoad()
     {
         gm.ResetGameData();     // GameManagerのデータをリセット
+
+        gm = null;      // 参照解除
 
         // Resultシーンをアンロードし、タイトルシーンをロード
         sceneFader.SceneChange("TitleScene", "ResultScene");

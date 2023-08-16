@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement;
-using SelfMadeNamespace;
 using System.Collections;
 
 /// <summary>
@@ -16,7 +14,6 @@ public class ShopManager : MonoBehaviour
 
     [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
-    [SerializeField] private ManagerSceneLoader msLoader;
     [SerializeField] private SceneFader sceneFader;
 
     private const int healCardID = 3;                       // 回復カードのID
@@ -316,6 +313,9 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void ExitShop()
     {
+        gm = null;      // 参照解除
+        lottery.gm = null;
+
         // フェードインフェードアウトをし、シーンを非表示に
         sceneFader.ToggleSceneWithFade("ShopScene", false);
     }

@@ -1,33 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TreasureBoxManager : MonoBehaviour
 {
     [Header("宝箱獲得画面用UI")]
-    [SerializeField]
-    GameObject treasureBoxUI;
+    [SerializeField] GameObject treasureBoxUI;
 
     [Header("参照するコンポーネント")]
-    [SerializeField]
-    Lottery lottery;
-    [SerializeField]
-    SceneFader sceneFader;
-    [SerializeField]
-    UIManagerTreasureBox uiManagerTB;
+    [SerializeField] Lottery lottery;
+    [SerializeField] SceneFader sceneFader;
+    [SerializeField] UIManagerTreasureBox uiManagerTB;
 
     [Header("生成するカードオブジェクト")]
-    [SerializeField]
-    GameObject cardPrefab;
+    [SerializeField] GameObject cardPrefab;
     [Header("生成するレリックオブジェクト")]
-    [SerializeField]
-    GameObject relicPrefab;
+    [SerializeField] GameObject relicPrefab;
     [Header("カードの生成場所")]
-    [SerializeField]
-    Transform cardPlace;
+    [SerializeField] Transform cardPlace;
     [Header("レリックの生成場所")]
-    [SerializeField]
-    Transform relicPlace;
+    [SerializeField] Transform relicPlace;
 
     CardController cardController;
     RelicController relicController;
@@ -94,6 +85,8 @@ public class TreasureBoxManager : MonoBehaviour
     /// </summary>
     public void UnLoadTreasureBoxScene()
     {
+        lottery.gm = null;     // 参照解除
+
         sceneFader.SceneChange(unLoadSceneName: "TreasureBoxScene");
     }
 }

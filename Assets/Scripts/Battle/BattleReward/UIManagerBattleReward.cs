@@ -24,7 +24,7 @@ public class UIManagerBattleReward : MonoBehaviour
     public bool isDisplayRelics = false; //レリックの報酬を表示するか判定
 
     [Header("参照するコンポーネント")]
-    [SerializeField] private SceneFader sceneController;
+    [SerializeField] private SceneFader sceneFader;
     [SerializeField] private BattleRewardManager battleRewardManager;
 
     [Header("クリック後に参照するUI")]

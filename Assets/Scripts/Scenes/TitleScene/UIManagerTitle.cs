@@ -1,8 +1,5 @@
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -28,8 +25,6 @@ public class UIManagerTitle : MonoBehaviour
     private Color32 endColor = new Color32(255, 255, 255, 20);
 
     //[Header("クリック後に参照するUI")]
-
-
 
     void Start()
     {

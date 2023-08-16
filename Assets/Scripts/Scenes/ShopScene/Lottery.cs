@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Lottery : MonoBehaviour
 {
-    private GameManager gm;
-    [SerializeField] ManagerSceneLoader msLoader;
+    public GameManager gm;
 
     public static bool isInitialize = false;        // Start‚É‚ ‚éˆ—‚ª’x‚¢‚Ì‚Åˆ—‚ªI‚í‚Á‚½‚çtrue‚É
     public bool fromShopController = false;         // ShopController‚©‚çŒÄ‚Î‚ê‚½ê‡true‚É‚µ‚Ü‚·

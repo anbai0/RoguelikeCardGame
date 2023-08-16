@@ -1,6 +1,4 @@
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 using SelfMadeNamespace;
 
 /// <summary>
@@ -15,8 +13,6 @@ public class UIManagerBonfire : MonoBehaviour
     private bool isRemoved = true;
     private bool isClick = false;
 
-    PlayerController playerController;
-
     private bool isSelected = false;
     private GameObject lastSelectedCards;
 
@@ -24,7 +20,6 @@ public class UIManagerBonfire : MonoBehaviour
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するコンポーネント")]
-    [SerializeField] private SceneFader sceneController;
     [SerializeField] private RestController restController;
     [SerializeField] private BonfireManager bonfireManager;
 
@@ -45,14 +40,6 @@ public class UIManagerBonfire : MonoBehaviour
     {
         restController.CheckRest("BonfireScene");
         UIEventsReload();
-    }
-
-    private void Update()
-    {
-        if (playerController == null)
-        {
-            playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        }
     }
 
 
@@ -230,6 +217,8 @@ public class UIManagerBonfire : MonoBehaviour
     /// </summary>
     void PutOutCampfire()
     {
+        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
+
         // 焚火の火を消す
         //ParticleSystem particle = playerController.bonfire.GetComponent<ParticleSystem>();
         //particle.Stop();
@@ -237,5 +226,7 @@ public class UIManagerBonfire : MonoBehaviour
         // 焚火の当たり判定を消す。
         BoxCollider boxCol = playerController.bonfire.GetComponent<BoxCollider>();
         boxCol.enabled = false;
+
+        playerController = null;        // 参照を解除
     }
 }

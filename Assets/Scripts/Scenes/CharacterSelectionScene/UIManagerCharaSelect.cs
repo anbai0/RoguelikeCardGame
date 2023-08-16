@@ -45,7 +45,6 @@ public class UIManagerCharaSelect : MonoBehaviour
 
     [Header("参照するコンポーネント")]
     [SerializeField] private CharacterSceneManager sceneManager;
-    [SerializeField] private ManagerSceneLoader msLoader;
     private GameManager gm;
     //[Header("表示を切り替えるUI")]
     //[Header("クリック後に参照するUI")]
@@ -130,6 +129,8 @@ public class UIManagerCharaSelect : MonoBehaviour
                 gm.ReadPlayer("Warrior");
             if (selectWizard)
                 gm.ReadPlayer("Wizard");
+
+            gm = null;      // 参照解除
 
             sceneManager.LoadFieldScene();
         }

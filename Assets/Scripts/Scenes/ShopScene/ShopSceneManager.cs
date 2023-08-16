@@ -1,20 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopSceneManager: MonoBehaviour
 {
-
     [SerializeField]
-    private SceneFader sceneController;
-
-    
-
+    private SceneFader sceneFader;
 
     public void FieldScene()
     {
-        sceneController.SceneChange("FieldScene");
-    }
-
-    
+        sceneFader.SceneChange("FieldScene");
+    }  
 }

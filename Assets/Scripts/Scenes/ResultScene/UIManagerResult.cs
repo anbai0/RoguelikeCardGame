@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 // ほぼManagerSceneのUIManagerと処理が被っているので後でまとめます
@@ -22,7 +21,6 @@ public class UIManagerResult : MonoBehaviour
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
     [Header("参照するコンポーネント")]
-    [SerializeField] ManagerSceneLoader msLoader;
     [SerializeField] ResultSceneManager resultSceneManager;
 
     [Header("表示を切り替えるUI")]
@@ -142,5 +140,7 @@ public class UIManagerResult : MonoBehaviour
     {
         if (gm.playerData != null)
             myMoneyText.text = gm.playerData._playerMoney.ToString();
+
+        gm = null;      // 参照解除
     }
 }

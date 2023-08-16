@@ -1,6 +1,3 @@
-using SelfMadeNamespace;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public static bool isPlayerActive = true;
 
-    private FieldSceneManager fieldManager;
+    [SerializeField] FieldSceneManager fieldManager;
     public GameObject bonfire { get; private set; }
     public GameObject treasureBox { get; private set; }
     public GameObject enemy { get; private set; }
@@ -24,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        fieldManager = FindObjectOfType<FieldSceneManager>();
         animator = GetComponent<Animator>();
     }
 
