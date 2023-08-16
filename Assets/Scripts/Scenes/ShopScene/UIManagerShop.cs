@@ -22,7 +22,7 @@ public class UIManagerShop : MonoBehaviour
 
     [Header("参照するコンポーネント")]
     [SerializeField] private ShopManager shopManager;
-    [SerializeField] private RestController restController;
+    [SerializeField] public RestController restController;
 
     [Header("表示を切り替えるUI")]
     [SerializeField] private GameObject shopUI;

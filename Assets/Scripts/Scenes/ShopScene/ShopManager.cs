@@ -313,8 +313,9 @@ public class ShopManager : MonoBehaviour
     /// </summary>
     public void ExitShop()
     {
-        gm = null;      // 参照解除
+        gm = null;              // 参照解除
         lottery.gm = null;
+        uiManager.restController = null;
 
         // フェードインフェードアウトをし、シーンを非表示に
         sceneFader.ToggleSceneWithFade("ShopScene", false);

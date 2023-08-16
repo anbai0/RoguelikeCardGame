@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,8 +7,7 @@ using TMPro;
 /// </summary>
 public class RestController : MonoBehaviour
 {
-    private GameManager gm;
-    [SerializeField] ManagerSceneLoader msLoader;
+    public GameManager gm {private get; set; }
 
     private const int restPrice = 70;          // ãxåeÇÃílíi
     [Header("éQè∆Ç∑ÇÈUI")]

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class Lottery : MonoBehaviour
 {
-    public GameManager gm;
+    public GameManager gm { private get; set; }
 
     public static bool isInitialize = false;        // Start‚É‚ ‚éˆ—‚ª’x‚¢‚Ì‚Åˆ—‚ªI‚í‚Á‚½‚çtrue‚É
     public bool fromShopController = false;         // ShopController‚©‚çŒÄ‚Î‚ê‚½ê‡true‚É‚µ‚Ü‚·
