@@ -1353,7 +1353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  msLoader: {fileID: 562602476}
+  gm: {fileID: 0}
   fromShopController: 0
   cardRarity1List: 
   cardRarity2List: 
@@ -1585,7 +1585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 559416478}
   isDisplayRelics: 0
-  sceneController: {fileID: 1021673078}
+  sceneFader: {fileID: 0}
   battleRewardManager: {fileID: 562602478}
   battleRewardUI: {fileID: 160689628}
   cardRewardPlace: {fileID: 2087548279}
@@ -3569,6 +3569,7 @@ GameObject:
   - component: {fileID: 1522913955}
   - component: {fileID: 1522913957}
   - component: {fileID: 1522913959}
+  - component: {fileID: 1522913960}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -3622,6 +3623,7 @@ MonoBehaviour:
     type: 3}
   CardPlace: {fileID: 203011022}
   PickCardPlace: {fileID: 1051905017}
+  cardCostChange: {fileID: 1522913960}
   battleRewardManager: {fileID: 562602478}
   uiManagerBR: {fileID: 870591700}
   uiManagerBattle: {fileID: 1237742747}
@@ -3796,6 +3798,19 @@ MonoBehaviour:
   resultPlace: {fileID: 559416482}
   enlargeScale: 2
   animationDuration: 0.5
+--- !u!114 &1522913960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522913944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f9635a9fc83d96489bf27b050913881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardPlace: {fileID: 203011022}
 --- !u!1 &1524366522
 GameObject:
   m_ObjectHideFlags: 0
