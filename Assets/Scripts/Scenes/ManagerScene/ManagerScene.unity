@@ -245,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 933759228}
   audioManager: {fileID: 1717233876}
-  gm: {fileID: 1717233873}
+  sceneFader: {fileID: 0}
   overlay: {fileID: 225074112}
   optionScreen: {fileID: 1440745383}
   confirmationPanel: {fileID: 1825073206}
@@ -3265,6 +3265,7 @@ GameObject:
   - component: {fileID: 1717233875}
   - component: {fileID: 1717233876}
   - component: {fileID: 1717233877}
+  - component: {fileID: 1717233878}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -3284,10 +3285,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc2667500f64d24ea8cbb34c0ae524f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 1883137710}
   uiManager: {fileID: 184355870}
   relicPrefab: {fileID: 8617353695134665228, guid: 8058af89149049d4a90531c9f26d62e2,
     type: 3}
   relicPlace: {fileID: 737367922}
+  sceneFader: {fileID: 1717233878}
 --- !u!4 &1717233874
 Transform:
   m_ObjectHideFlags: 0
@@ -3441,6 +3444,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1717233878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717233872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
+    type: 3}
+  fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
+    type: 3}
 --- !u!1 &1729058822
 GameObject:
   m_ObjectHideFlags: 0
@@ -4015,7 +4034,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1883137707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 884.45593, y: 502.18518, z: 7.6401978}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

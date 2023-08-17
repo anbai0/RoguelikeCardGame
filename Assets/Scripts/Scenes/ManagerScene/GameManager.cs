@@ -20,9 +20,11 @@ public class GameManager : MonoBehaviour
 
     private bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
+    [SerializeField] Camera cam;
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
+    [SerializeField] SceneFader sceneFader;
 
     
     public static GameManager Instance;     // シングルトン
@@ -38,8 +40,7 @@ public class GameManager : MonoBehaviour
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
-        if (!isAlreadyRead) ReadPlayer("Warrior");
-        
+        //if (!isAlreadyRead) ReadPlayer("Warrior");
     }
 
     
@@ -179,18 +180,37 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// ManagerScene以外のシーンをアンロードし、アセットを
+    /// ManagerScene以外のシーンをアンロードし、メモリの開放を行い、タイトルシーンをロードします。
     /// </summary>
     public void UnloadAllScenes()
     {
-        for (int i = 0; i < SceneManager.sceneCount; i++)
-        {
-            Scene scene = SceneManager.GetSceneAt(i);
-            if (scene.isLoaded && scene.name != "ManagerScene")
-            {
-                SceneManager.UnloadSceneAsync(scene);
-            }
-        }
+        cam.gameObject.SetActive(true);     // フェードアウトさせるためにカメラをアクティブにしています
+
+        //for (int i = 0; i < SceneManager.sceneCount; i++)
+        //{
+        //    Scene scene = SceneManager.GetSceneAt(i);
+        //    if (scene.isLoaded && scene.name != "ManagerScene" && scene.name != "FieldScene")
+        //    {
+        //        SceneManager.UnloadSceneAsync(scene);
+        //    }
+        //}
+
+        // フィールドシーンがロードされている場合取得して、最後にアンロードする。
+        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
+        string targetSceneName = "None";
+        if (fieldScene.isLoaded)
+                targetSceneName = fieldScene.name;
+
+        sceneFader.SceneChange("TitleScene", targetSceneName);
         Resources.UnloadUnusedAssets();
+
+        //ResetGameData();
+
+        Invoke("CameraNotActive", 1f);
+    }
+
+    void CameraNotActive()
+    {
+        cam.gameObject.SetActive(false);
     }
 }

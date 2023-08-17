@@ -26,7 +26,7 @@ public class SceneFader : MonoBehaviour
         fadeDelay = fadeManager.fadeSpeed;
         fadeDuration = fadeManager.fadeDurationMultiplier;
 
-        if (!FadeEffectController.isFadeInstance)        // FadePrefabが生成されていない場合生成
+        if (!FadeEffectController.isFadeInstance && gameObject.scene.name == "ManagerScene")        // FadePrefabが生成されていない場合生成
         {
             Instantiate(fadePrefab);
         }
@@ -59,8 +59,14 @@ public class SceneFader : MonoBehaviour
         fade.GetComponent<FadeEffectController>().fadeOut();         // フェードアウト
         await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 暗転するまで待つ(ミリ秒単位)
 
-        if (loadSceneName != "None") SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);    // シーンロード
-        if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));                           // アンロード
+        //if (loadSceneName != "None") SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);    // シーンロード
+        //if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));                           // アンロード
+
+        if (loadSceneName != "None")
+            await LoadSceneAsync(loadSceneName);
+
+        if (unLoadSceneName != "None")
+            StartCoroutine(CoUnload(unLoadSceneName));
 
         // アンロードだけ行った場合、またはシーン名が指定されなかった場合
         if (loadSceneName == "None" && (unLoadSceneName != "None" || unLoadSceneName == "None"))
@@ -77,12 +83,21 @@ public class SceneFader : MonoBehaviour
         fade.SetActive(true);     // パネルが邪魔で消していたのここで表示させています
 
         fade.GetComponent<FadeEffectController>().fadeOut();         // フェードアウト
-
         await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 暗転するまで待つ(ミリ秒単位)
 
         toggleSceneName.ToggleSceneDisplay(isSceneActive);      // シーンの表示切替
 
         fade.GetComponent<FadeEffectController>().fadeIn();      // フェードイン
+    }
+
+
+    private async Task LoadSceneAsync(string sceneName)
+    {
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!loadOperation.isDone)
+        {
+            await Task.Yield();
+        }
     }
 
     /// <summary>

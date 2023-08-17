@@ -203,7 +203,6 @@ GameObject:
   m_Component:
   - component: {fileID: 131898648}
   - component: {fileID: 131898647}
-  - component: {fileID: 131898646}
   - component: {fileID: 131898650}
   - component: {fileID: 131898649}
   m_Layer: 0
@@ -213,14 +212,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &131898646
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131898645}
-  m_Enabled: 1
 --- !u!20 &131898647
 Camera:
   m_ObjectHideFlags: 0
@@ -484,7 +475,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 1881813563}
-  msLoader: {fileID: 986282980}
   resultSceneManager: {fileID: 986282978}
   myMoneyText: {fileID: 1246144110}
   titleBackButton: {fileID: 1683454645}
@@ -796,7 +786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321433980209f0541a1a77b87e481b20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  msLoader: {fileID: 986282980}
   sceneFader: {fileID: 131898649}
   uiManager: {fileID: 518997565}
   cardPrefab: {fileID: 7009455883766435928, guid: a4142022ac005bc4ca6b58bc9c35ccf9,

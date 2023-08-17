@@ -191,4 +191,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeSpeed: 0.7
-  fadeDurationMultiplier: 1.2
+  fadeDurationMultiplier: 1.5

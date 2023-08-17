@@ -221,7 +221,7 @@ public class UIManagerBonfire : MonoBehaviour
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
 
         // •°‰Î‚Ì‰Î‚ğÁ‚·
-        //ParticleSystem particle = playerController.bonfire.GetComponent<ParticleSystem>();
+        //ParticleSystem particle = playerController.bonfirePrefab.GetComponent<ParticleSystem>();
         //particle.Stop();
 
         // •°‰Î‚Ì“–‚½‚è”»’è‚ğÁ‚·B

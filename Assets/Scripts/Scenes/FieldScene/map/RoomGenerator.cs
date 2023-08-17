@@ -13,24 +13,26 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField]
     public GameObject[] rooms;
     [SerializeField]
-    private GameObject player;
+    private GameObject playerPrefab;
     [SerializeField]
-    private GameObject bonfire;
+    private GameObject bonfirePrefab;
     [SerializeField]
-    private GameObject smallEnemy;
+    private GameObject smallEnemyPrefab;
     [SerializeField]
-    private GameObject strongEnemy;
+    private GameObject strongEnemyPrefab;
     [SerializeField]
-    private GameObject bossEnemy;
+    private GameObject bossEnemyPrefab;
     [SerializeField]
-    private GameObject treasureBox;
+    private GameObject treasureBoxPrefab;
     [SerializeField]
-    private GameObject shop;
+    private GameObject shopPrefab;
     [SerializeField]
     private RoomStatus[] roomStatuses = new RoomStatus[12];
 
     [SerializeField] private Camera cam;    // Main.cameraだと正しく取得できない時があるため
     [SerializeField] private GameObject cameraPos2, cameraPos3;
+    [SerializeField] private GameObject objectParent;
+    [SerializeField] private GameObject enemyParent;
 
     float playerY = -2.33f;
 
@@ -68,16 +70,19 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     private void PlayerSpawn()
     {
+        GameObject enemy;
         if (Random.Range(0,2) == 0)
         {
-            player.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, playerY, 0);
-            Instantiate(smallEnemy, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+            playerPrefab.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, playerY, 0);
+            enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+            enemy.transform.SetParent(enemyParent.transform);
             cam.transform.position = cameraPos2.transform.position;
         }
         else
         {
-            player.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, playerY, 0);
-            Instantiate(smallEnemy, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+            playerPrefab.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, playerY, 0);
+            enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+            enemy.transform.SetParent(enemyParent.transform);
             cam.transform.position = cameraPos3.transform.position;
         }
     }
@@ -88,13 +93,16 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     void TreasureBoxOrBonfire()
     {
+        GameObject treasureBox;
+        GameObject bonfire;
+
         if (Random.Range(0, 2) == 0)
         {
             // 宝箱が右のパターン
 
 
             // 宝箱 + 遮蔽
-            Instantiate(treasureBox, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
+            treasureBox = Instantiate(treasureBoxPrefab, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
 
             rooms[(int)RoomNum.Room7].transform.GetChild(2).GetComponent<BoxCollider>().enabled = false;                                            // gateRightのコライダーを無効化
             rooms[(int)RoomNum.Room7].transform.GetChild(2).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
@@ -103,7 +111,7 @@ public class RoomGenerator : MonoBehaviour
             rooms[(int)RoomNum.Room8].transform.GetChild(1).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
 
             // 焚火
-            Instantiate(bonfire, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
+            bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
 
         }
         else
@@ -112,7 +120,7 @@ public class RoomGenerator : MonoBehaviour
 
 
             // 宝箱 + 遮蔽
-            Instantiate(treasureBox, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
+            treasureBox = Instantiate(treasureBoxPrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
 
             rooms[(int)RoomNum.Room5].transform.GetChild(2).GetComponent<BoxCollider>().enabled = false;                                            // gateRightのコライダーを無効化
             rooms[(int)RoomNum.Room5].transform.GetChild(2).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
@@ -122,9 +130,12 @@ public class RoomGenerator : MonoBehaviour
 
 
             // 焚火
-            Instantiate(bonfire, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
+            bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
 
         }
+
+        treasureBox.transform.SetParent(objectParent.transform);
+        bonfire.transform.SetParent(objectParent.transform);
     }
 
     /// <summary>
@@ -133,13 +144,17 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     void ShopOrBonfire()
     {
+        GameObject shop;
+        GameObject bonfire;
+        GameObject enemy;
+
         if (Random.Range(0, 2) == 0)
         {
             // ショップが右のパターン 
 
 
             // ショップ + 遮蔽
-            Instantiate(shop, rooms[(int)RoomNum.Room12].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));    // ショップ生成
+            shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));    // ショップ生成
 
             rooms[(int)RoomNum.BossRoom2].transform.GetChild(4).GetComponent<BoxCollider>().enabled = false;                                    // gateBackのコライダーを無効化
 
@@ -147,8 +162,8 @@ public class RoomGenerator : MonoBehaviour
             rooms[(int)RoomNum.Room12].transform.GetChild(3).GetChild(1).gameObject.SetActive(true);                                            // ドアを表示
 
             // 焚火
-            Instantiate(bonfire, rooms[(int)RoomNum.Room9].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                               // 焚火生成
-            Instantiate(bossEnemy, rooms[(int)RoomNum.BossRoom1].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // 焚火が生成されている次の部屋にBossを生成
+            bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                               // 焚火生成
+            enemy = Instantiate(bossEnemyPrefab, rooms[(int)RoomNum.BossRoom1].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // 焚火が生成されている次の部屋にBossを生成
 
         }
         else
@@ -157,7 +172,7 @@ public class RoomGenerator : MonoBehaviour
 
 
             // ショップ + 遮蔽
-            Instantiate(shop, rooms[(int)RoomNum.Room9].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));     // ショップ生成
+            shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));     // ショップ生成
 
             rooms[(int)RoomNum.BossRoom1].transform.GetChild(4).GetComponent<BoxCollider>().enabled = false;                                    // gateBackのコライダーを無効化
 
@@ -165,10 +180,14 @@ public class RoomGenerator : MonoBehaviour
             rooms[(int)RoomNum.Room9].transform.GetChild(3).GetChild(1).gameObject.SetActive(true);                                             // ドアを表示
 
             // 焚火
-            Instantiate(bonfire, rooms[(int)RoomNum.Room12].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                              // 焚火生成
-            Instantiate(bossEnemy, rooms[(int)RoomNum.BossRoom2].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // 焚火が生成されている次の部屋にBossを生成
+            bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                              // 焚火生成
+            enemy = Instantiate(bossEnemyPrefab, rooms[(int)RoomNum.BossRoom2].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // 焚火が生成されている次の部屋にBossを生成
 
         }
+        
+        shop.transform.SetParent(objectParent.transform);
+        bonfire.transform.SetParent(objectParent.transform);
+        enemy.transform.SetParent(enemyParent.transform);
     }
 
 
@@ -177,10 +196,15 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     private void SmallEnemySpawn()
     {
-        Instantiate(smallEnemy, rooms[(int)RoomNum.Room1].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-        Instantiate(smallEnemy, rooms[(int)RoomNum.Room4].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-        Instantiate(smallEnemy, rooms[(int)RoomNum.Room6].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
-        Instantiate(smallEnemy, rooms[(int)RoomNum.Room7].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+        GameObject enemy;
+        enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room1].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
+        enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room4].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
+        enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room6].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
+        enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room7].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
     }
 
     /// <summary>
@@ -188,7 +212,10 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     private void StrongEnemySpawn()
     {
-        Instantiate(strongEnemy, rooms[(int)RoomNum.Room10].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));
-        Instantiate(strongEnemy, rooms[(int)RoomNum.Room11].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));
+        GameObject enemy;
+        enemy = Instantiate(strongEnemyPrefab, rooms[(int)RoomNum.Room10].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
+        enemy = Instantiate(strongEnemyPrefab, rooms[(int)RoomNum.Room11].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));
+        enemy.transform.SetParent(enemyParent.transform);
     }
 }

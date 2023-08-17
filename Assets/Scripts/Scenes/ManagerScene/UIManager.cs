@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
     private GameManager gm;
 
     [Header("参照するコンポーネント")]
-    [SerializeField] AudioManager audioManager;  
+    [SerializeField] AudioManager audioManager;
+    [SerializeField] SceneFader sceneFader;
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
     [SerializeField] GameObject optionScreen;
@@ -109,14 +110,12 @@ public class UIManager : MonoBehaviour
         // オプション画面表示
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
-            Debug.Log(UIObject);
             optionScreen.SetActive(true);
         }
 
         // オプション画面非表示
         if (UIObject == closeOptionButton)
         {
-            Debug.Log(UIObject);
             optionScreen.SetActive(false);
         }
 
@@ -135,7 +134,9 @@ public class UIManager : MonoBehaviour
         if (UIObject == confirmTitleBackButton)
         {
             // タイトルへ戻る処理
-
+            gm.UnloadAllScenes();
+            confirmationPanel.SetActive(false);
+            optionScreen.SetActive(false);
         }
 
         #endregion
