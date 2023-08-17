@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void UnloadAllScenes()
     {
-        cam.gameObject.SetActive(true);     // フェードアウトさせるためにカメラをアクティブにしています
+        //cam.gameObject.SetActive(true);     // フェードアウトさせるためにカメラをアクティブにしています
 
         //for (int i = 0; i < SceneManager.sceneCount; i++)
         //{
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
 
         //ResetGameData();
 
-        Invoke("CameraNotActive", 1f);
+        //Invoke("CameraNotActive", 1f);
     }
 
     void CameraNotActive()

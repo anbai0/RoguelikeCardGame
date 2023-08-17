@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using SelfMadeNamespace;
-using System;
 
 // 基本はMain Cameraにアタッチしてください
 public class SceneFader : MonoBehaviour
