@@ -7,7 +7,6 @@ using SelfMadeNamespace;
 
 public class BattleGameManager : MonoBehaviour
 {
-    PlayerController playerController;
     PlayerBattleAction playerScript;
     EnemyBattleAction enemyScript;
 
@@ -73,10 +72,7 @@ public class BattleGameManager : MonoBehaviour
 
     private void Start()
     {
-        if (playerController == null)
-        {
-            playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        }
+        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
