@@ -85,8 +85,6 @@ public class TreasureBoxManager : MonoBehaviour
     /// </summary>
     public void UnLoadTreasureBoxScene()
     {
-        lottery.gm = null;     // QÆ‰ğœ
-
         sceneFader.SceneChange(unLoadSceneName: "TreasureBoxScene");
     }
 }

@@ -140,7 +140,5 @@ public class UIManagerResult : MonoBehaviour
     {
         if (gm.playerData != null)
             myMoneyText.text = gm.playerData._playerMoney.ToString();
-
-        gm = null;      // QÆ‰ğœ
     }
 }

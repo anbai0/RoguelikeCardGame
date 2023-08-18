@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform relicPlace;
     [SerializeField] SceneFader sceneFader;
 
-    
     public static GameManager Instance;     // シングルトン
     private void Awake()
     {
@@ -88,6 +88,9 @@ public class GameManager : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Overlayに所持レリックを表示します。
+    /// </summary>
     public void ShowRelics()
     {
         // relicPlaceの子オブジェクトをすべてDestroy
@@ -163,11 +166,10 @@ public class GameManager : MonoBehaviour
     /// ゲームデータのリセットをします。
     /// <para>現状リザルトシーンからタイトルシーンに戻るときのみにしか使えないため後で書き換えます。</para>
     /// </summary>
-    public void ResetGameData()
+    private void ResetGameData()
     {
+        PlayerController.isPlayerActive = true;
         playerData = null;
-        isAlreadyRead = false;
-        Instance = null;
 
         // 所持レリック初期化
         for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
@@ -180,37 +182,46 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// ManagerScene以外のシーンをアンロードし、メモリの開放を行い、タイトルシーンをロードします。
+    /// UnloadAllScenesメソッドをFadeOutInWrapperメソッドに渡して実行します。
     /// </summary>
-    public void UnloadAllScenes()
+    public void UnloadAllScene()
     {
-        //cam.gameObject.SetActive(true);     // フェードアウトさせるためにカメラをアクティブにしています
-
-        //for (int i = 0; i < SceneManager.sceneCount; i++)
-        //{
-        //    Scene scene = SceneManager.GetSceneAt(i);
-        //    if (scene.isLoaded && scene.name != "ManagerScene" && scene.name != "FieldScene")
-        //    {
-        //        SceneManager.UnloadSceneAsync(scene);
-        //    }
-        //}
-
-        // フィールドシーンがロードされている場合取得して、最後にアンロードする。
-        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
-        string targetSceneName = "None";
-        if (fieldScene.isLoaded)
-                targetSceneName = fieldScene.name;
-
-        sceneFader.SceneChange("TitleScene", targetSceneName);
-        Resources.UnloadUnusedAssets();
-
-        //ResetGameData();
-
-        //Invoke("CameraNotActive", 1f);
+        sceneFader.FadeOutInWrapper(UnloadAllScenes);
     }
 
-    void CameraNotActive()
+    /// <summary>
+    /// ManagerScene以外のシーンをアンロードし、メモリの開放を行い、データをリセットして、
+    /// タイトルシーンをロードします。
+    /// </summary>
+    public async Task UnloadAllScenes()
     {
-        cam.gameObject.SetActive(false);
+        AsyncOperation asyncOperation;
+
+        // フィールドシーンとマネージャーシーンを除外してアンロード
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.isLoaded && scene.name != "ManagerScene" && scene.name != "FieldScene")
+            {
+                asyncOperation = SceneManager.UnloadSceneAsync(scene);
+                while (!asyncOperation.isDone) await Task.Yield();
+            }
+        }
+
+        // 参照解除の関係でフィールドシーンを最後にアンロードする。
+        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
+        if (fieldScene.isLoaded)
+        {
+            asyncOperation = SceneManager.UnloadSceneAsync(fieldScene);
+            while (!asyncOperation.isDone) await Task.Yield();
+        }
+
+        // タイトルシーンロード
+        asyncOperation = asyncOperation = SceneManager.LoadSceneAsync("TitleScene", LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        Resources.UnloadUnusedAssets();
+
+        ResetGameData();
     }
 }

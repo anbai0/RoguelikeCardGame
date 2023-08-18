@@ -130,8 +130,6 @@ public class UIManagerCharaSelect : MonoBehaviour
             if (selectWizard)
                 gm.ReadPlayer("Wizard");
 
-            gm = null;      // QÆ‰ğœ
-
             sceneManager.LoadFieldScene();
         }
     }

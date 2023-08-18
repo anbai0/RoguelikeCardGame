@@ -21,7 +21,6 @@ public class UIManagerBase : MonoBehaviour
     //[Header("クリック後に参照するUI")]
 
 
-
     void Start()
     {
         UIEventsReload();

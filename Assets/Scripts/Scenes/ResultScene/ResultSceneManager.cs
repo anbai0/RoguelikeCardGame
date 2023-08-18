@@ -121,11 +121,6 @@ public class ResultSceneManager : MonoBehaviour
 
     public void SceneUnLoad()
     {
-        gm.ResetGameData();     // GameManagerのデータをリセット
-
-        gm = null;      // 参照解除
-
-        // Resultシーンをアンロードし、タイトルシーンをロード
-        sceneFader.SceneChange("TitleScene", "ResultScene");
+        gm.UnloadAllScene();     // GameManagerのデータをリセット
     }
 }

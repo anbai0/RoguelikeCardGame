@@ -1,8 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using SelfMadeNamespace;
+using System;
 
 // 基本はMain Cameraにアタッチしてください
 public class SceneFader : MonoBehaviour
@@ -13,7 +13,7 @@ public class SceneFader : MonoBehaviour
 
     [SerializeField]
     [Header("FadePrefabのScript")]
-    private FadeEffectController fadeManager;
+    private FadeController fadeManager;
 
     private GameObject fade;        // DontDestroyされたFadePrefabを格納
 
@@ -25,18 +25,17 @@ public class SceneFader : MonoBehaviour
         fadeDelay = fadeManager.fadeSpeed;
         fadeDuration = fadeManager.fadeDurationMultiplier;
 
-        if (!FadeEffectController.isFadeInstance && gameObject.scene.name == "ManagerScene")        // FadePrefabが生成されていない場合生成
+        if (!FadeController.isFadeInstance && gameObject.scene.name == "ManagerScene")        // FadePrefabが生成されていない場合生成
         {
             Instantiate(fadePrefab);
         }
-
-        Invoke("findFadeObject", fadeManager.fadeSpeed / 10f);      // 起動時用にCanvasの生成をちょっと待つ
+        Invoke("findFadeObject", fadeDelay * fadeDuration / 10f);      // 起動時用にCanvasの生成をちょっと待つ
     }
 
     void findFadeObject()
     {
         fade = GameObject.FindGameObjectWithTag("Fade");            // Canvasをみつける
-        fade.GetComponent<FadeEffectController>().fadeIn();         // フェードインフラグを立てる
+        fade.GetComponent<FadeController>().fadeIn();         // フェードインフラグを立てる
     }
 
 
@@ -53,24 +52,31 @@ public class SceneFader : MonoBehaviour
     /// <param name="unLoadSceneName"></param>
     public async void SceneChange(string loadSceneName = "None", string unLoadSceneName = "None")
     {
-        fade.SetActive(true);     // パネルが邪魔で消していたのここで表示させています
+        fade.SetActive(true);   // パネルが邪魔で消していたのここで表示させています
 
-        fade.GetComponent<FadeEffectController>().fadeOut();         // フェードアウト
-        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 暗転するまで待つ(ミリ秒単位)
+        FadeController fadeController = fade.GetComponent<FadeController>();
 
-        //if (loadSceneName != "None") SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);    // シーンロード
-        //if (unLoadSceneName != "None") StartCoroutine(CoUnload(unLoadSceneName));                           // アンロード
+        // フェードアウトしフェードアウトが終わるまで待機
+        await fadeController.fadeOut();
 
-        if (loadSceneName != "None")
-            await LoadSceneAsync(loadSceneName);
+        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));       // 一定の長さ暗転させる(ミリ秒単位)
 
-        if (unLoadSceneName != "None")
-            StartCoroutine(CoUnload(unLoadSceneName));
+        // ロードシーンが指定されていた場合、シーンをロード
+        if (loadSceneName != "None") await LoadSceneAsyncTask(loadSceneName);
 
-        // アンロードだけ行った場合、またはシーン名が指定されなかった場合
-        if (loadSceneName == "None" && (unLoadSceneName != "None" || unLoadSceneName == "None"))
-            fade.GetComponent<FadeEffectController>().fadeIn();      // フェードイン
+        // アンロードシーンが指定されていた場合、シーンをアンロード
+        if (unLoadSceneName != "None") await UnLoadSceneAsyncTask(unLoadSceneName);
+
+        // アンロードだけ行う場合ここでフェードインをする
+        if (loadSceneName == "None")
+        {
+            Debug.Log("fadeIn");
+            // フェードインしフェードインが終わるまで待機
+            await fadeController.fadeIn();
+        }
+
     }
+
 
     /// <summary>
     /// 指定したシーンの表示を切り替え、フェードイン、アウトをします。
@@ -81,42 +87,57 @@ public class SceneFader : MonoBehaviour
     {
         fade.SetActive(true);     // パネルが邪魔で消していたのここで表示させています
 
-        fade.GetComponent<FadeEffectController>().fadeOut();         // フェードアウト
-        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 暗転するまで待つ(ミリ秒単位)
+        FadeController fadeController = fade.GetComponent<FadeController>();
+
+        // フェードアウトしフェードアウトが終わるまで待機
+        await fadeController.fadeOut();
+
+        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 一定の長さ暗転させる(ミリ秒単位)
 
         toggleSceneName.ToggleSceneDisplay(isSceneActive);      // シーンの表示切替
 
-        fade.GetComponent<FadeEffectController>().fadeIn();      // フェードイン
-    }
+        // フェードインしフェードインが終わるまで待機
+        await fadeController.fadeIn();
 
-
-    private async Task LoadSceneAsync(string sceneName)
-    {
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        while (!loadOperation.isDone)
-        {
-            await Task.Yield();
-        }
     }
 
     /// <summary>
-    /// フェードは行わず、
-    /// stringで指定されたシーンをアンロードします。
+    /// すべてのシーンをアンロードするときに使います。
+    /// メソッドを受け取りフェードイン、アウトをします。
     /// </summary>
-    public void UnLoadScene(string unLoadSceneName)
+    public async void FadeOutInWrapper(Func<Task> method)
     {
-        StartCoroutine(CoUnload(unLoadSceneName));
+        fade.SetActive(true);     // パネルが邪魔で消していたのここで表示させています
+
+        FadeController fadeController = fade.GetComponent<FadeController>();
+
+        // フェードアウトしフェードアウトが終わるまで待機
+        await fadeController.fadeOut();
+
+        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 一定の長さ暗転させる(ミリ秒単位)
+
+        await method?.Invoke();
+
+        await Task.Delay((int)(fadeDelay * fadeDuration * 1000));    // 一定の長さ暗転させる(ミリ秒単位)
+
+        // フェードインしフェードインが終わるまで待機
+        await fadeController.fadeIn();
     }
 
-    IEnumerator CoUnload(string unLoadSceneName)
+    private async Task LoadSceneAsyncTask(string loadSceneName)
     {
-        // 指定したシーンをアンロード
-        var op = SceneManager.UnloadSceneAsync(unLoadSceneName);
-        yield return op;
-
-        // アンロード後の処理を書く
-
-        // 必要に応じて不使用アセットをアンロードしてメモリを解放する
-        yield return Resources.UnloadUnusedAssets();
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
     }
+
+    private async Task UnLoadSceneAsyncTask(string unLoadSceneName)
+    {
+        AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(unLoadSceneName);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        Resources.UnloadUnusedAssets();
+    }
+
+
+
 }

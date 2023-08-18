@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 // Fadeという名前のPrefabにアタッチしてください
-public class FadeEffectController : MonoBehaviour
+public class FadeController : MonoBehaviour
 {
     [Header("フェードに掛かる時間")]
     public float fadeSpeed = 0.7f;
@@ -15,6 +16,9 @@ public class FadeEffectController : MonoBehaviour
 
     private float alpha = 0.0f;     // 透過率
     private Image fadeImage;
+
+    public bool fadeInDone = false;
+    public bool fadeOutDone = false;
 
     void Start()
     {
@@ -41,6 +45,7 @@ public class FadeEffectController : MonoBehaviour
             {
                 isFadeIn = false;
                 alpha = 0.0f;
+                fadeInDone = true;
                 gameObject.SetActive(false);    //パネルが邪魔になるので一時的に消しています
             }
             fadeImage.color = new Color(0.0f, 0.0f, 0.0f, alpha);
@@ -52,20 +57,25 @@ public class FadeEffectController : MonoBehaviour
             {
                 isFadeOut = false;
                 alpha = 1.0f;
+                fadeOutDone = true;
             }
             fadeImage.color = new Color(0.0f, 0.0f, 0.0f, alpha);
         }
     }
 
-    public void fadeIn()
+    public async Task fadeIn()
     {
         isFadeIn = true;
         isFadeOut = false;
+        while (!fadeInDone) await Task.Yield(); // 同期メソッドの実行を一時的に中断
+        fadeInDone = false;
     }
 
-    public void fadeOut()
+    public async Task fadeOut()
     {
         isFadeOut = true;
         isFadeIn = false;
+        while (!fadeOutDone) await Task.Yield();
+        fadeOutDone = false;
     }
 }

@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == confirmTitleBackButton)
         {
             // ƒ^ƒCƒgƒ‹‚Ö–ß‚éˆ—
-            gm.UnloadAllScenes();
+            gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
             optionScreen.SetActive(false);
         }

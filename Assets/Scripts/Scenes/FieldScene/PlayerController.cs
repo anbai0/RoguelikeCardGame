@@ -59,8 +59,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Bonfire"))
         {
+            // playerを動けなくする処理
             isPlayerActive = false;
-            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+            animator.SetBool("IsWalking", false);
 
             bonfire = collision.gameObject;
             fieldManager.LoadBonfireScene();        // 焚火シーンをロード
@@ -68,8 +69,9 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("TreasureBox"))
         {
+            // playerを動けなくする処理
             isPlayerActive = false;
-            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+            animator.SetBool("IsWalking", false);
 
             treasureBox = collision.gameObject;
             fieldManager.LoadTreasureBoxScene();   //宝箱シーンをロード
@@ -77,20 +79,22 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Shop"))
         {
+            // playerを動けくする処理
             isPlayerActive = false;
-            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
+            animator.SetBool("IsWalking", false);
 
             // 指定した名前のシーンを取得
             Scene sceneToHide = SceneManager.GetSceneByName("ShopScene");
 
-            // シーンが有効で、ロードされていない場合に処理を実行
-            if (!(sceneToHide.IsValid() && sceneToHide.isLoaded))
+            // ロードされていない場合に処理を実行
+            if (!sceneToHide.isLoaded)
             {
                 fieldManager.LoadShopScene();           // ショップシーンをロード
+            } else
+            {
+                // ショップシーンがロードされていた場合、ショップシーンのオブジェクトを表示
+                fieldManager.ActivateShopScene();
             }
-
-            // ショップシーンがロードされていた場合、ショップシーンのオブジェクトを表示
-            fieldManager.ActivateShopScene();
         }
 
         if (collision.gameObject.CompareTag("SmallEnemy") || collision.gameObject.CompareTag("StrongEnemy"))

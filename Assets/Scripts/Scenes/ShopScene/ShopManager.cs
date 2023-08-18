@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
@@ -304,20 +305,11 @@ public class ShopManager : MonoBehaviour
         buyCard = null;                     // 一時的に格納していただけなのでnullにします。
     }
 
-    private IEnumerator WaitForCondition(bool waitForCompletion)
-    {
-        yield return new WaitUntil(() => !waitForCompletion);
-    }
-
     /// <summary>
     /// 店から出る処理です。ショップシーンを非表示にします。
     /// </summary>
     public void ExitShop()
     {
-        gm = null;              // 参照解除
-        lottery.gm = null;
-        uiManager.restController = null;
-
         // フェードインフェードアウトをし、シーンを非表示に
         sceneFader.ToggleSceneWithFade("ShopScene", false);
     }

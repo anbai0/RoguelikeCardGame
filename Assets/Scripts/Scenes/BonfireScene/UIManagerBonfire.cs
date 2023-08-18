@@ -177,7 +177,6 @@ public class UIManagerBonfire : MonoBehaviour
 
             PutOutCampfire();       // 焚火の火を消す
 
-            restController.gm = null;      // 参照解除
             bonfireManager.UnLoadBonfireScene();          // 休憩したらフィールドに戻る
             PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
         }
@@ -227,7 +226,5 @@ public class UIManagerBonfire : MonoBehaviour
         // 焚火の当たり判定を消す。
         BoxCollider boxCol = playerController.bonfire.GetComponent<BoxCollider>();
         boxCol.enabled = false;
-
-        playerController = null;        // 参照を解除
     }
 }

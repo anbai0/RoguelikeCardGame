@@ -18,15 +18,7 @@ public class BattleSceneScript : MonoBehaviour
 
     public void SwitchSceneAfterLose()
     {
-        // フィールドシーンをアンロード
-        sceneFader.UnLoadScene("FieldScene");
-
-        // ショップシーンをアンロード
-        sceneFader.UnLoadScene("ShopScene");
-
         // バトルシーンをアンロード、リザルトシーンをロード
         sceneFader.SceneChange("ResultScene", "BattleScene");
-
-        PlayerController.isPlayerActive = true;
     }
 }
