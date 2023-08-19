@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SelfMadeNamespace;
+using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 
 public class BattleRewardManager : MonoBehaviour
 {
@@ -132,6 +134,8 @@ public class BattleRewardManager : MonoBehaviour
         }
     }
 
+    private string unloadSceneName = null; //ロードするシーンの名前
+
     public void UnLoadBattleScene()
     {
         if (bg.enemyType == "StrongEnemy")
@@ -139,13 +143,13 @@ public class BattleRewardManager : MonoBehaviour
             if (gm.floor < 3) //階層が3階まで到達していない場合
             {
                 gm.floor++; //階層を1つ上げる
-                // バトルシーンをアンロードし、フィールドシーンをロード
-                sceneFader.SceneChange("FieldScene", "BattleScene");
+                unloadSceneName = "FieldScene"; //ロードするシーンをフィールドシーンに設定
+                TransitionAfterBattle();
             }
             else
             {
-                // バトルシーンをアンロードし、リザルトシーンをロード
-                sceneFader.SceneChange("ResultScene", "BattleScene");
+                unloadSceneName = "ResultScene"; //ロードするシーンをリザルトシーンに設定
+                TransitionAfterBattle();
             }
         }
         else
@@ -157,5 +161,44 @@ public class BattleRewardManager : MonoBehaviour
             playerController.enemy.SetActive(false);      // エネミーを消す
             playerController = null;
         }
+    }
+
+    /// <summary>
+    /// 戦闘終了後に遷移する際の処理
+    /// TransitionAfterBattleScenesメソッドをFadeOutInWrapperメソッドに渡して実行
+    /// </summary>
+    public void TransitionAfterBattle()
+    {
+        sceneFader.FadeOutInWrapper(TransitionAfterBattleScenes);
+    }
+
+    /// <summary>
+    /// バトルシーンとフィールドにあるシーンをすべてアンロードし、選択されたシーンをロードする
+    /// </summary>
+    public async Task TransitionAfterBattleScenes()
+    {
+        AsyncOperation asyncOperation;
+
+        //バトルシーンをアンロード
+        Scene battleScene = SceneManager.GetSceneByName("BattleScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(battleScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        //ショップシーンがロードされていればアンロードする
+        Scene shopScene = SceneManager.GetSceneByName("ShopScene");
+        if (shopScene.isLoaded)
+        {
+            asyncOperation = SceneManager.UnloadSceneAsync(shopScene);
+            while (!asyncOperation.isDone) await Task.Yield();
+        }
+
+        // 参照解除の関係でフィールドシーンを最後にアンロード
+        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(fieldScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        // フィールドシーンかリザルトシーンをロード
+        asyncOperation = SceneManager.LoadSceneAsync(unloadSceneName, LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
     }
 }

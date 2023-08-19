@@ -182,6 +182,8 @@ public class GameManager : MonoBehaviour
         }
 
         ShowRelics();
+
+        floor = 1; //ŠK‘w‚ð1‚É–ß‚·
     }
 
 

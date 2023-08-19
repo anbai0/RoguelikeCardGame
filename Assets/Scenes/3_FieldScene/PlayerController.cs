@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
             enemy = collision.gameObject;
             enemyTag = collision.gameObject.tag;
-            fieldManager.LoadBattleScene(enemyTag);   //戦闘シーンをロード
+            fieldManager.LoadBattleScene();   //戦闘シーンをロード
         }
     }
 }

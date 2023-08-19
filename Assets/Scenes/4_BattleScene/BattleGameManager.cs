@@ -150,7 +150,6 @@ public class BattleGameManager : MonoBehaviour
             //どちらかが先に戦闘不能になった場合、戦闘を止める
             return;
         }
-
         playerScript.ViewConditionIcon(); //プレイヤーの状態異常アイコンの更新
         enemyScript.ViewConditionIcon(); //エネミーの状態異常アイコンの更新
 

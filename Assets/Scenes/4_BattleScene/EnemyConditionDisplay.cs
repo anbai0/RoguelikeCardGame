@@ -32,6 +32,8 @@ public class EnemyConditionDisplay : MonoBehaviour
     [SerializeField]
     SortName sortIcon;
     private Dictionary<string, int> saveCondition;
+    WaitForSeconds waitFor1milliSec = new WaitForSeconds(0.1f);
+
     /// <summary>
     /// 状態異常の有無に合わせてアイコンの表示・非表示を行う処理
     /// </summary>
@@ -51,25 +53,25 @@ public class EnemyConditionDisplay : MonoBehaviour
         {
             if (saveCondition != null && saveCondition["UpStrength"] != _condition["UpStrength"])
                 ViewUpStrength(_condition["UpStrength"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["AutoHealing"] != _condition["AutoHealing"])
                 ViewAutoHealing(_condition["AutoHealing"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["InvalidBadStatus"] != _condition["InvalidBadStatus"])
                 ViewInvalidBadStatus(_condition["InvalidBadStatus"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["Curse"] != _condition["Curse"])
                 ViewCurse(_condition["Curse"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["Impatience"] != _condition["Impatience"])
                 ViewImpatience(_condition["Impatience"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["Weakness"] != _condition["Weakness"])
                 ViewWeakness(_condition["Weakness"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["Burn"] != _condition["Burn"])
                 ViewBurn(_condition["Burn"]);
-            yield return new WaitForSeconds(0.1f);
+            yield return waitFor1milliSec;
             if (saveCondition != null && saveCondition["Poison"] != _condition["Poison"])
                 ViewPoison(_condition["Poison"]);
         }
