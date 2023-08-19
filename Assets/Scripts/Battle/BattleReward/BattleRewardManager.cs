@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using SelfMadeNamespace;
 
 public class BattleRewardManager : MonoBehaviour
 {
@@ -34,8 +35,13 @@ public class BattleRewardManager : MonoBehaviour
     List<int> rewardRelicID = null; //報酬として選ばれたレリックのID
     const int RelicID1 = 1; //アリアドネの糸(レアリティ３)
 
+    GameManager gm;
+    BattleGameManager bg;
+
     void Start()
     {
+        gm = GameManager.Instance;
+        bg = BattleGameManager.Instance;
         battleRewardUI.SetActive(false);
     }
 
@@ -128,7 +134,28 @@ public class BattleRewardManager : MonoBehaviour
 
     public void UnLoadBattleScene()
     {
-        // バトルシーンをアンロード
-        sceneFader.SceneChange(unLoadSceneName: "BattleScene");
-    } 
+        if (bg.enemyType == "StrongEnemy")
+        {
+            if (gm.floor < 3) //階層が3階まで到達していない場合
+            {
+                gm.floor++; //階層を1つ上げる
+                // バトルシーンをアンロードし、フィールドシーンをロード
+                sceneFader.SceneChange("FieldScene", "BattleScene");
+            }
+            else
+            {
+                // バトルシーンをアンロードし、リザルトシーンをロード
+                sceneFader.SceneChange("ResultScene", "BattleScene");
+            }
+        }
+        else
+        {
+            // バトルシーンをアンロード
+            sceneFader.SceneChange(unLoadSceneName: "BattleScene");
+            PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
+            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+            playerController.enemy.SetActive(false);      // エネミーを消す
+            playerController = null;
+        }
+    }
 }

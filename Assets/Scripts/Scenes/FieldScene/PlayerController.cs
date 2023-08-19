@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        isPlayerActive = true;
     }
 
     void Update()
@@ -104,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
             enemy = collision.gameObject;
             enemyTag = collision.gameObject.tag;
-            fieldManager.LoadBattleScene();   //戦闘シーンをロード
+            fieldManager.LoadBattleScene(enemyTag);   //戦闘シーンをロード
         }
     }
 }

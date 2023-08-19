@@ -208,6 +208,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID5Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
@@ -227,6 +228,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID105Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
@@ -370,6 +372,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID12Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         for (int count = 0; count < 3; count++)
         {
@@ -390,6 +393,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID112Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         for (int count = 0; count < 4; count++)
         {
@@ -458,13 +462,6 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID15(CardController card)
     {
-        ////エネミーを攻撃
-        //PlayerAttacking(cardAttackPower);
-        ////HPを回復
-        //PlayerHealing(cardHealingPower);
-        ////エネミーに衰弱を1付与
-        //enemy.AddConditionStatus("Weakness", 1);
-        //flash.StartFlash(deepGreen, 0.2f);
         StartCoroutine(ID15Move());
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 1;
@@ -473,6 +470,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID15Move()
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
         yield return new WaitForSeconds(0.5f);
@@ -511,8 +509,8 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(cardAttackPower);
         //エネミーを行動不能にする
         enemy.TurnEnd();
-        //この戦闘中カードを使用不可にする
-        card.cardDataManager._cardState = 2;
+        //この戦闘中カードを使用不可にする(デバッグ中、元に戻す予定)
+        //card.cardDataManager._cardState = 2;
     }
     /// <summary>
     /// 技名：エクスカリバー,強化エクスカリバー
@@ -532,6 +530,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID18APHealing(float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         yield return new WaitForSeconds(attackInterval);
         //プレイヤーのAPを7回復する
         player.HealingAP(7);

@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using SelfMadeNamespace;
 
 public class BattleGameManager : MonoBehaviour
 {
-    PlayerController playerController;
     PlayerBattleAction playerScript;
     EnemyBattleAction enemyScript;
 
@@ -31,6 +29,7 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
     [SerializeField] Transform PickCardPlace;
+    [SerializeField] CardCostChange cardCostChange;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
 
     //リザルト
@@ -50,17 +49,15 @@ public class BattleGameManager : MonoBehaviour
     private bool isDecelerate;//カード＜アクセラレート＞の効果を無効かしたか判定//TurnCalc()で使用
     private bool isFirstCall;//最初のラウンドのときに呼ぶ判定//EndRound()で使用
     public bool isCoroutine;//コルーチンが動作中か判定//PlayerMove(),EnemyMove()で使用
+    public bool isCoroutineEnabled;//動いているコルーチンが存在しているか判定//Update()で使用
     public bool isEnemyMoving;//エネミーのアクションが続いているか判定//PlayerMove(),EnemyMove()で使用
     public float turnTime = 1.0f;//ターンの切り替え時間
     public float roundTime = 2.0f;//ラウンドの切り替え時間
     private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
-    private int accelerateCount;//ラウンド中にプレイヤーが何回アクセラレートを使用したか記録する
     public int roundCount;//何ラウンド目かを記録する
     private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
-
-    [SerializeField]
-    int floor = 1;
+    public int floor = 1; //現在の階層
 
     public static BattleGameManager Instance;
     private void Awake()
@@ -73,10 +70,9 @@ public class BattleGameManager : MonoBehaviour
 
     private void Start()
     {
-        if (playerController == null)
-        {
-            playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        }
+        GameManager gm = GameManager.Instance;
+        floor = gm.floor;
+        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
@@ -91,11 +87,11 @@ public class BattleGameManager : MonoBehaviour
         isDecelerate = false;
         isFirstCall = false;
         isCoroutine = false;
+        isCoroutineEnabled = false;
         isEnemyMoving = false;
         isOnceEndRound = true;
         playerMoveCount = 0;
         enemyMoveCount = 0;
-        accelerateCount = 0;
         accelerateValue = 0;
         roundCount = 0;
         player = GameObject.Find("TestPlayer");
@@ -116,9 +112,8 @@ public class BattleGameManager : MonoBehaviour
         roundCount++;//ラウンド数を加算する
         if (isDecelerate) //アクセラレートの効果を初期化
         {
-            UndoCardCost();
+            cardCostChange.UndoCardCost();
             isDecelerate = false;
-            accelerateCount = 0;
         }
         //ChageAPとCurseを加味してAPを決める
         playerScript.SetUpAP();
@@ -131,11 +126,25 @@ public class BattleGameManager : MonoBehaviour
         TurnCalc();
     }
 
+    void Update()
+    {
+        if (isCoroutineEnabled == true && isCoroutine == false) //動いているコルーチンが存在しており、コルーチンが終了していた場合
+        {
+            isCoroutineEnabled = false; //動いているコルーチンは無し
+            //一回だけTurnCalc()を呼ぶ
+            TurnCalc();
+        }
+    }
+
     /// <summary>
     /// プレイヤーとエネミーの行動順を決める処理
     /// </summary>
     public void TurnCalc() 
     {
+        if (isCoroutine) //コルーチンが回っているときはTurnCalc()を回さない
+        {
+            return;
+        }
         if (IsGameEnd()) //戦闘の終了条件を満たしていないか確認する
         {
             //どちらかが先に戦闘不能になった場合、戦闘を止める
@@ -147,8 +156,7 @@ public class BattleGameManager : MonoBehaviour
 
         if (isAccelerate)
         {
-            CardCostDown();
-            accelerateCount++;
+            cardCostChange.CardCostDown(accelerateValue);
             isAccelerate = false;
             isDecelerate = true;
         }
@@ -207,8 +215,6 @@ public class BattleGameManager : MonoBehaviour
     /// <param name="card">ドロップされたカード</param>
     public void PlayerMove(CardController card) 
     {
-        if (isCoroutine) //コルーチンが動いているときに回ってきたらPlayerMoveは動かさない
-            return;
         if (playerScript.GetSetCurrentAP < card.cardDataManager._cardCost) //カードのコストがプレイヤーのAPを超えたら何もしない
         {
             return;
@@ -227,15 +233,8 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     private void EnemyMove() 
     {
-        if (isCoroutine) //コルーチンが動いているときに回ってきたらEnemyMoveは動かさない
-            return;
         enemyScript.Move();
         enemyMoveCount++;
-        //enemyScript.AutoHealing();
-        //enemyScript.Impatience();
-        //enemyScript.Burn();
-        //playerScript.AddConditionStatus("Burn", 1);
-        //playerScript.AddConditionStatus("InvalidBadStatus", 1);
         Invoke("TurnCalc", turnTime);
     }
 
@@ -271,7 +270,6 @@ public class BattleGameManager : MonoBehaviour
         {
             //プレイヤーの勝利演出
             StartCoroutine(WinAnimation());
-            EndGameRelicEffect();
             return true;
         }
         return false;
@@ -282,6 +280,8 @@ public class BattleGameManager : MonoBehaviour
         Debug.Log("Playerの勝利");
         enemyScript.EnemyDefeated(); //エネミーのやられた演出
         yield return new WaitForSeconds(4.0f);
+        EndGameRelicEffect();
+        yield return new WaitForSeconds(0.5f);
         resultAnimation.StartAnimation("Victory"); //勝利の文字を表示
         yield return new WaitForSeconds(1.0f);
         Destroy(uiManagerBattle);
@@ -391,8 +391,7 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     public void EndGameRelicEffect() 
     {
-        int money = 10;
-        money = playerScript.EndGameRelicEffect();
+        enemyScript.GetSetDropMoney += playerScript.EndGameRelicEffect();
     }
 
     /// <summary>
@@ -405,47 +404,6 @@ public class BattleGameManager : MonoBehaviour
             isTurnEnd = true;
             playerScript.TurnEnd();
             TurnCalc();
-        }
-    }
-
-    /// <summary>
-    /// CardEffectListのアクセラレートでカードのコストを変化させる処理
-    /// </summary>
-    private void CardCostDown() 
-    {
-        Transform deck = GameObject.Find("CardPlace").transform; //全てのデッキを探索
-        foreach (Transform child in deck)
-        {
-            CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardType == "Attack") //カードのタイプがAttackなら
-            {
-                //カードのコストを下げる
-                deckCard.cardDataManager._cardCost -= accelerateValue;
-                if (deckCard.cardDataManager._cardCost < 1)
-                {
-                    deckCard.cardDataManager._cardCost = 1;
-                }
-            }
-            TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
-            costText.text = deckCard.cardDataManager._cardCost.ToString();
-        }
-    }
-
-    /// <summary>
-    /// アクセラレートで変化した値を戻す処理
-    /// </summary>
-    private void UndoCardCost() 
-    {
-        Transform deck = GameObject.Find("CardPlace").transform;
-        foreach (Transform child in deck)
-        {
-            CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardType == "Attack")
-            {
-                deckCard.cardDataManager._cardCost += accelerateValue * accelerateCount;
-            }
-            TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
-            costText.text = deckCard.cardDataManager._cardCost.ToString();
         }
     }
 }

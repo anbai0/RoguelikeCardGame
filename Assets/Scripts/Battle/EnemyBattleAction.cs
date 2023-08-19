@@ -39,7 +39,10 @@ public class EnemyBattleAction : CharacterBattleAction
     RelicEffectList relicEffect; //レリックの効果
 
     public Dictionary<string, int> enemyCondition = new Dictionary<string, int>(); //エネミーに付与されている状態異常
-    
+
+    int dropMoney = 0;
+    public int GetSetDropMoney { get => dropMoney; set => dropMoney = value; } //エネミーが落とすコインの枚数
+
     EnemyAI enemyAI; //敵の行動スクリプト
 
     FlashImage flash; //敵行動時の演出
@@ -131,6 +134,7 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetAP = enemyData._enemyAP;
         GetSetCurrentAP = GetSetAP;
         GetSetGP = enemyData._enemyGP;
+        dropMoney = enemyData._dropMoney;
         //enemyCondition = GetCondition;
         InitializedCondition();
         GetSetCondition = enemyCondition;
@@ -177,16 +181,14 @@ public class EnemyBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
-            StartCoroutine(DamageFlash());
-            ViewDamage(deductedDamage);
+            StartCoroutine(DamageFlash(deductedDamage));
         }
     }
-    IEnumerator DamageFlash()
+    IEnumerator DamageFlash(int deductedDamage)
     {
-        bg.isCoroutine = true;
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.1f);
-        bg.isCoroutine = false;
+        ViewDamage(deductedDamage);
         yield break;
     }
 

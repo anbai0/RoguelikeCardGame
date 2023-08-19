@@ -1,15 +1,42 @@
+using System.Collections;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class FieldSceneManager : MonoBehaviour
 {
     [SerializeField]
     private SceneFader sceneFader;
 
-    public void LoadBattleScene()
+    string sceneNameToCheck = "ShopScene";
+
+    public void LoadBattleScene(string enemyType)
     {
-        // 戦闘シーンをロード
+        if(enemyType == "StrongEnemy")
+        {
+            StartCoroutine(WaitUnLoadFieldScene());
+        }
+        else
+        {
+            // 戦闘シーンをロード
+            sceneFader.SceneChange("BattleScene");
+        }
+    }
+
+    IEnumerator WaitUnLoadFieldScene()
+    {
+        // バトルシーンをロード
         sceneFader.SceneChange("BattleScene");
+
+        yield return new WaitForSeconds(1.0f);
+
+        //フィールドシーンをアンロード
+        sceneFader.SceneChange(unLoadSceneName: "FieldScene");
+
+        if (SceneUtility.GetBuildIndexByScenePath("ShopScene") != -1) //ショップシーンがロードされていた場合
+        {
+            //ショップシーンをアンロード
+            sceneFader.SceneChange(unLoadSceneName: "ShopScene");
+        }
     }
 
     public void LoadBonfireScene()
