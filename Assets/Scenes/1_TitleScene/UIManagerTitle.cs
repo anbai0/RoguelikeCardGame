@@ -11,7 +11,7 @@ public class UIManagerTitle : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isRemoved = true;
-    private bool isClick = false;
+    [SerializeField] private bool isClick = false;
 
     [Header("参照するコンポーネント")]
     [SerializeField] TitleSceneManager sceneManager;
@@ -73,6 +73,7 @@ public class UIManagerTitle : MonoBehaviour
         if (UIObject.CompareTag("BackGround") && !isClick)
         {
             isClick = true;
+            Debug.Log("a");
             sceneManager.LoadCharaSelectScene();
         }
     }
