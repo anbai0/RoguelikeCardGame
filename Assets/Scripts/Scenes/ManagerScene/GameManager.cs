@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
 
     private bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
 
+    //フィールド
+
+    public int floor = 1; //階層
+
     [SerializeField] Camera cam;
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;

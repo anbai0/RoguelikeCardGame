@@ -462,13 +462,6 @@ public class CardEffectList : MonoBehaviour
     /// </summary>
     private void CardID15(CardController card)
     {
-        ////エネミーを攻撃
-        //PlayerAttacking(cardAttackPower);
-        ////HPを回復
-        //PlayerHealing(cardHealingPower);
-        ////エネミーに衰弱を1付与
-        //enemy.AddConditionStatus("Weakness", 1);
-        //flash.StartFlash(deepGreen, 0.2f);
         StartCoroutine(ID15Move());
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 1;
@@ -516,8 +509,8 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(cardAttackPower);
         //エネミーを行動不能にする
         enemy.TurnEnd();
-        //この戦闘中カードを使用不可にする
-        card.cardDataManager._cardState = 2;
+        //この戦闘中カードを使用不可にする(デバッグ中、元に戻す予定)
+        //card.cardDataManager._cardState = 2;
     }
     /// <summary>
     /// 技名：エクスカリバー,強化エクスカリバー

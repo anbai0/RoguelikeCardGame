@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using SelfMadeNamespace;
 
 public class UIManagerBattleReward : MonoBehaviour
 {
@@ -31,7 +30,6 @@ public class UIManagerBattleReward : MonoBehaviour
     [SerializeField] private GameObject closeGetItem;
 
     GameManager gm;
-
 
     void Start()
     {
@@ -206,8 +204,6 @@ public class UIManagerBattleReward : MonoBehaviour
                     Debug.Log("フィールドシーンへ移行");
                     //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
                     battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-                    PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                    ExitBattle();
                 }
             }
         }
@@ -228,8 +224,6 @@ public class UIManagerBattleReward : MonoBehaviour
                 Debug.Log("フィールドシーンへ移行");
                 //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
                 battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                ExitBattle();
             }
         }
 
@@ -278,8 +272,6 @@ public class UIManagerBattleReward : MonoBehaviour
             Debug.Log("フィールドシーンへ移行");
             //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
             battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-            ExitBattle();
         }
     }
 
@@ -326,13 +318,5 @@ public class UIManagerBattleReward : MonoBehaviour
                 UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);                    // レリックの説明を非表示
             }
         }
-    }
-
-    void ExitBattle()
-    {
-        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        playerController.enemy.SetActive(false);      // エネミーを消す
-        playerController = null;
-        gm = null;
     }
 }

@@ -181,16 +181,14 @@ public class EnemyBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
-            StartCoroutine(DamageFlash());
-            ViewDamage(deductedDamage);
+            StartCoroutine(DamageFlash(deductedDamage));
         }
     }
-    IEnumerator DamageFlash()
+    IEnumerator DamageFlash(int deductedDamage)
     {
-        bg.isCoroutine = true;
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.1f);
-        bg.isCoroutine = false;
+        ViewDamage(deductedDamage);
         yield break;
     }
 

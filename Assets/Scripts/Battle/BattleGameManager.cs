@@ -57,9 +57,7 @@ public class BattleGameManager : MonoBehaviour
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     public int roundCount;//何ラウンド目かを記録する
     private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
-
-    [SerializeField]
-    int floor = 1;
+    public int floor = 1; //現在の階層
 
     public static BattleGameManager Instance;
     private void Awake()
@@ -72,6 +70,8 @@ public class BattleGameManager : MonoBehaviour
 
     private void Start()
     {
+        GameManager gm = GameManager.Instance;
+        floor = gm.floor;
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         playerScript = GetComponent<PlayerBattleAction>();

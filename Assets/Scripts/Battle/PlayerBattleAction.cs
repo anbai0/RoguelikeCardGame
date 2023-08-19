@@ -76,6 +76,7 @@ public class PlayerBattleAction : CharacterBattleAction
         cardEffectList = GetComponent<CardEffectList>();
         GetSetInflictCondition = GetComponent<InflictCondition>();
         hasPlayerRelics = GameManager.Instance.hasRelics;
+        hasPlayerRelics[4] += 3;
     }
 
     /// <summary>
@@ -201,7 +202,6 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         relicEffect = GetComponent<RelicEffectList>();
         var es = enemyBattleAction;
-        Debug.Log(playerCondition.ContainsKey("UpStrength"));
         var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2], playerCondition["UpStrength"], es.enemyCondition["UpStrength"]);
         playerCondition["UpStrength"] = relicEffectID2.playerUpStrength;
         es.enemyCondition["UpStrength"] = relicEffectID2.enemyUpStrength;
