@@ -833,6 +833,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator RampageEnumerator(int startCount, int endCount)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         int attackCount = Random.Range(startCount, endCount);
         for (int count = 0; count < attackCount; count++)
         {
@@ -965,6 +966,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator RandomPoundingEnumerator()
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         int attackCount = Random.Range(1, 3);
         for (int count = 0; count < attackCount; count++)
         {
@@ -1033,6 +1035,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator ChewAndCrushEnumerator()
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         int attackCount = 6;
         for (int count = 0; count < attackCount; count++)
         {
@@ -1089,6 +1092,7 @@ public class EnemyAI : MonoBehaviour
     IEnumerator ThrowingEnumerator()
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         int attackCount = 5;
         for (int count = 0; count < attackCount; count++)
         {

@@ -29,10 +29,12 @@ public class UIManagerTreasureBox : MonoBehaviour
     [SerializeField] private GameObject applyGetTreasure;
     [SerializeField] private GameObject closeGetTreasure;
 
+    GameManager gm;
 
     void Start()
     {
         UIEventsReload();
+        gm = GameManager.Instance;
     }
 
 
@@ -72,7 +74,7 @@ public class UIManagerTreasureBox : MonoBehaviour
     void UILeftClick(GameObject UIObject)
     {
 
-        #region BattleRewardUI内での処理
+        #region TreasureBoxUI内での処理
 
         // アイテムをクリックしたら
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
@@ -151,17 +153,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         if (UIObject == applyGetTreasure && isSelected && !isClick)
         {
             isClick = true;
-            //if (UIObject.CompareTag("Cards"))
-            //{
-            //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-            //    GameManager.Instance.playerData._deckList.Add(cardID);
-            //}
-            //if (UIObject.CompareTag("Relics"))
-            //{
-            //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
-            //    GameManager.Instance.hasRelics[relicID] += 1;
-            //}
-
+            
             // 最後にクリックしたアイテムの選択状態を解除する
             if (lastSelectedItem.CompareTag("Cards"))
             {
@@ -178,22 +170,45 @@ public class UIManagerTreasureBox : MonoBehaviour
             lastSelectedItem = null;
             isSelected = false;
 
-            //レリックの報酬も必要なら
-            if (isDisplayRelics)
+            if (gm.CheckDeckFull()) //デッキの上限に達している場合
             {
+                //破棄画面を呼び出し
+                gm.OnCardDiscard += ReGetTreasure;
+                // 入手ボタン切り替え
+                applyGetTreasure.SetActive(false);
+                closeGetTreasure.SetActive(true);
                 isClick = false; //applyGetItemをもう一度クリック出来るようにする
-                StartCoroutine(ShowRelicTreasure());
-                isDisplayRelics = false;
             }
             else
             {
-                //treasureChestUI.SetActive(false);
-                Debug.Log("フィールドシーンへ移行");
-                TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-                PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
-                playerController.treasureBox.SetActive(false); //宝箱を消す
+                //if (UIObject.CompareTag("Cards"))
+                //{
+                //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+                //    GameManager.Instance.playerData._deckList.Add(cardID);
+                //}
+                //if (UIObject.CompareTag("Relics"))
+                //{
+                //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+                //    GameManager.Instance.hasRelics[relicID] += 1;
+                //}
+
+                //レリックの報酬も必要なら
+                if (isDisplayRelics)
+                {
+                    isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                    StartCoroutine(ShowRelicTreasure());
+                    isDisplayRelics = false;
+                }
+                else
+                {
+                    //treasureChestUI.SetActive(false);
+                    Debug.Log("フィールドシーンへ移行");
+                    TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                    PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
+                    ExitTreasureBox();
+                }
             }
+            
         }
 
         // "入手しない"を押したら
@@ -210,9 +225,8 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
                 PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
-                playerController.treasureBox.SetActive(false); //宝箱を消す
+                ExitTreasureBox();
             }
         }
 
@@ -230,6 +244,39 @@ public class UIManagerTreasureBox : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //画面のポップアップ
         treasureBoxUI.SetActive(true);
+    }
+
+    /// <summary>
+    ///  デッキ破棄画面が呼ばれた際にもう一度宝箱獲得画面を表示
+    /// </summary>
+    void ReGetTreasure()
+    {
+        //if (UIObject.CompareTag("Cards"))
+        //{
+        //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+        //    GameManager.Instance.playerData._deckList.Add(cardID);
+        //}
+        //if (UIObject.CompareTag("Relics"))
+        //{
+        //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+        //    GameManager.Instance.hasRelics[relicID] += 1;
+        //}
+
+        //レリックの報酬も必要なら
+        if (isDisplayRelics)
+        {
+            isClick = false; //applyGetItemをもう一度クリック出来るようにする
+            StartCoroutine(ShowRelicTreasure());
+            isDisplayRelics = false;
+        }
+        else
+        {
+            //treasureChestUI.SetActive(false);
+            Debug.Log("フィールドシーンへ移行");
+            TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+            PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
+            ExitTreasureBox();
+        }
     }
 
     void UIEnter(GameObject UIObject)
@@ -269,5 +316,13 @@ public class UIManagerTreasureBox : MonoBehaviour
                 UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);                    // レリックの説明を非表示
             }
         }
+    }
+
+    void ExitTreasureBox()
+    {
+        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
+        playerController.treasureBox.SetActive(false); //宝箱を消す
+        playerController = null;
+        gm = null;
     }
 }

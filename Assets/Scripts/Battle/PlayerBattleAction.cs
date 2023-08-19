@@ -75,12 +75,7 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetCondition = playerCondition;
         cardEffectList = GetComponent<CardEffectList>();
         GetSetInflictCondition = GetComponent<InflictCondition>();
-        //hasPlayerRelics = GameManager.Instance.hasRelics;
-        //Debugóp
-        for(int RelicID = 1; RelicID <= maxRelics; RelicID++)
-        {
-            hasPlayerRelics[RelicID] = 0;
-        }
+        hasPlayerRelics = GameManager.Instance.hasRelics;
     }
 
     /// <summary>
@@ -246,7 +241,8 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         int money = 10;
         money = relicEffect.RelicID9(hasPlayerRelics[9], money);
-        GetSetCurrentHP = relicEffect.RelicID10(hasPlayerRelics[10], GetSetCurrentHP);
+        HealingHP(relicEffect.RelicID10(hasPlayerRelics[10]));
+        hasPlayerRelics = null; //GameManagerÇÃéQè∆ÇäOÇµÇƒÇ®Ç≠
         return money;
     }
 }

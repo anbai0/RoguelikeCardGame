@@ -148,15 +148,15 @@ public class RelicEffectList : MonoBehaviour
 
     /// <summary>
     /// 名前:ほかほかおにぎり
-    /// 効果:戦闘終了時に自分のHPを5回復する。
+    /// 効果:戦闘終了時に自分の現在のHPを5回復する。
     /// </summary>
     /// <param name="ID10Quantity">レリック番号10の個数</param>
-    /// <param name="currentHP">現在のHP</param>
-    /// <returns>回復した現在のHP</returns>
-    public int RelicID10(int ID10Quantity, int currentHP)
+    /// <returns>戦闘終了時に回復する量</returns>
+    public int RelicID10(int ID10Quantity)
     {
-        currentHP += 5 * ID10Quantity;
-        return currentHP;
+        int healingPower = 0;
+        healingPower += 5 * ID10Quantity;
+        return healingPower;
     }
 
     /// <summary>

@@ -1,7 +1,5 @@
-using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 using SelfMadeNamespace;
 
 public class UIManagerBattleReward : MonoBehaviour
@@ -11,8 +9,6 @@ public class UIManagerBattleReward : MonoBehaviour
     private UIController[] UIs;
     private bool isRemoved = true;
     private bool isClick = false;
-
-    PlayerController playerController;
 
     private bool isSelected = false;
     private GameObject lastSelectedItem;
@@ -34,20 +30,14 @@ public class UIManagerBattleReward : MonoBehaviour
     [SerializeField] private GameObject applyGetItem;
     [SerializeField] private GameObject closeGetItem;
 
+    GameManager gm;
+
 
     void Start()
     {
         UIEventsReload();
+        gm = GameManager.Instance;
     }
-
-    private void Update()
-    {
-        if (playerController == null)
-        {
-            playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        }
-    }
-
 
     #region UIイベントリスナー関係の処理
     /// <summary>
@@ -164,16 +154,6 @@ public class UIManagerBattleReward : MonoBehaviour
         if (UIObject == applyGetItem && isSelected && !isClick)
         {
             isClick = true;
-            //if (UIObject.CompareTag("Cards"))
-            //{
-            //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-            //    GameManager.Instance.playerData._deckList.Add(cardID);
-            //}
-            //if (UIObject.CompareTag("Relics"))
-            //{
-            //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
-            //    GameManager.Instance.hasRelics[relicID] += 1;
-            //}
 
             // 最後にクリックしたアイテムの選択状態を解除する
             if (lastSelectedItem.CompareTag("Cards"))
@@ -191,21 +171,44 @@ public class UIManagerBattleReward : MonoBehaviour
             lastSelectedItem = null;
             isSelected = false;
 
-            //レリックの報酬も必要なら
-            if (isDisplayRelics)
+            if (gm.CheckDeckFull()) //デッキの上限に達している場合
             {
-                battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                //破棄画面を呼び出し
+                gm.OnCardDiscard += ReGetReward;
+                // 入手ボタン切り替え
+                applyGetItem.SetActive(false);
+                closeGetItem.SetActive(true);
                 isClick = false; //applyGetItemをもう一度クリック出来るようにする
-                StartCoroutine(ShowRelicReward());
-                isDisplayRelics = false;
             }
             else
             {
-                Debug.Log("フィールドシーンへ移行");
-                //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
-                battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
-                PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                playerController.enemy.SetActive(false);      // エネミーを消す
+                //if (UIObject.CompareTag("Cards"))
+                //{
+                //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+                //    GameManager.Instance.playerData._deckList.Add(cardID);
+                //}
+                //if (UIObject.CompareTag("Relics"))
+                //{
+                //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+                //    GameManager.Instance.hasRelics[relicID] += 1;
+                //}
+
+                //レリックの報酬も必要なら
+                if (isDisplayRelics)
+                {
+                    battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                    isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                    StartCoroutine(ShowRelicReward());
+                    isDisplayRelics = false;
+                }
+                else
+                {
+                    Debug.Log("フィールドシーンへ移行");
+                    //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+                    battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
+                    PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+                    ExitBattle();
+                }
             }
         }
 
@@ -226,7 +229,7 @@ public class UIManagerBattleReward : MonoBehaviour
                 //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
                 battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
                 PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
-                playerController.enemy.SetActive(false);      // エネミーを消す
+                ExitBattle();
             }
         }
 
@@ -244,6 +247,40 @@ public class UIManagerBattleReward : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         //画面のポップアップ
         battleRewardUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+    }
+
+    /// <summary>
+    /// デッキ破棄画面が呼ばれた際にもう一度報酬画面を表示
+    /// </summary>
+    void ReGetReward()
+    {
+        //if (UIObject.CompareTag("Cards"))
+        //{
+        //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+        //    GameManager.Instance.playerData._deckList.Add(cardID);
+        //}
+        //if (UIObject.CompareTag("Relics"))
+        //{
+        //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+        //    GameManager.Instance.hasRelics[relicID] += 1;
+        //}
+
+        //レリックの報酬も必要なら
+        if (isDisplayRelics)
+        {
+            battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+            isClick = false; //applyGetItemをもう一度クリック出来るようにする
+            StartCoroutine(ShowRelicReward());
+            isDisplayRelics = false;
+        }
+        else
+        {
+            Debug.Log("フィールドシーンへ移行");
+            //battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
+            battleRewardManager.UnLoadBattleScene();      // フィールドに戻る
+            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+            ExitBattle();
+        }
     }
 
     void UIEnter(GameObject UIObject)
@@ -289,5 +326,13 @@ public class UIManagerBattleReward : MonoBehaviour
                 UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);                    // レリックの説明を非表示
             }
         }
+    }
+
+    void ExitBattle()
+    {
+        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
+        playerController.enemy.SetActive(false);      // エネミーを消す
+        playerController = null;
+        gm = null;
     }
 }

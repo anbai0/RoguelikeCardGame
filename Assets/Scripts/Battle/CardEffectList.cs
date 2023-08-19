@@ -208,6 +208,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID5Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
@@ -227,6 +228,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID105Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
@@ -370,6 +372,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID12Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         for (int count = 0; count < 3; count++)
         {
@@ -390,6 +393,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID112Attacking(int attackMethod, float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         PlayerAttacking(attackMethod);
         for (int count = 0; count < 4; count++)
         {
@@ -473,6 +477,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID15Move()
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
         yield return new WaitForSeconds(0.5f);
@@ -532,6 +537,7 @@ public class CardEffectList : MonoBehaviour
     IEnumerator ID18APHealing(float attackInterval)
     {
         bg.isCoroutine = true;
+        bg.isCoroutineEnabled = true;
         yield return new WaitForSeconds(attackInterval);
         //プレイヤーのAPを7回復する
         player.HealingAP(7);
