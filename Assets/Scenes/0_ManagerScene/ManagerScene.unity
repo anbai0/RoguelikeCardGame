@@ -245,7 +245,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 933759228}
   audioManager: {fileID: 1717233876}
-  sceneFader: {fileID: 0}
   overlay: {fileID: 225074112}
   optionScreen: {fileID: 1440745383}
   confirmationPanel: {fileID: 1825073206}
@@ -665,6 +664,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352038930}
   m_CullTransparentMesh: 1
+--- !u!1 &392542851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 392542853}
+  - component: {fileID: 392542852}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &392542852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392542851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4921e8f7f8a74d498ec70baa60519c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &392542853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392542851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.162577, y: -3.4456122, z: 1.073736}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &412841957
 GameObject:
   m_ObjectHideFlags: 0
@@ -3285,6 +3328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc2667500f64d24ea8cbb34c0ae524f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  floor: 1
   cam: {fileID: 1883137710}
   uiManager: {fileID: 184355870}
   relicPrefab: {fileID: 8617353695134665228, guid: 8058af89149049d4a90531c9f26d62e2,
@@ -3339,15 +3383,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a11b4c786f30048b68984a3ca75913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overallVolume: 1
   seAudioClips:
   - {fileID: 8300000, guid: 29a9e5987e8b34742a783ea10ed8d30a, type: 3}
   seAudioVolumes:
   - 1
-  seVolume: 0.5
   bgmAudioClips: []
   bgmAudioVolumes: []
-  bgmVolume: 0.5
 --- !u!82 &1717233877
 AudioSource:
   m_ObjectHideFlags: 0
