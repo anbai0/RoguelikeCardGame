@@ -11,13 +11,12 @@ public class UIManager : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
+    private bool isEventsReset = true;
 
     private GameManager gm;
 
     [Header("参照するコンポーネント")]
     [SerializeField] AudioManager audioManager;
-    [SerializeField] SceneFader sceneFader;
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
     [SerializeField] GameObject optionScreen;
@@ -69,7 +68,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
-        if (!isRemoved)             // イベントの初期化
+        if (!isEventsReset)             // イベントの初期化
             RemoveListeners();
 
         UIs = canvas.GetComponentsInChildren<UIController>(true);       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -81,7 +80,7 @@ public class UIManager : MonoBehaviour
 
         }
 
-        isRemoved = false;
+        isEventsReset = false;
     }
 
     /// <summary>

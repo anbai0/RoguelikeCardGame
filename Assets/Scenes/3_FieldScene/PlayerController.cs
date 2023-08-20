@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     public static bool isPlayerActive = true;
 
-    [SerializeField] FieldSceneManager fieldManager;
+    FieldSceneManager fieldManager;
     public GameObject bonfire { get; private set; }
     public GameObject treasureBox { get; private set; }
     public GameObject enemy { get; private set; }
@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        fieldManager = FindObjectOfType<FieldSceneManager>();
         animator = GetComponent<Animator>();
         isPlayerActive = true;
     }

@@ -13,9 +13,8 @@ public class UIManagerBattle : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
-
     private bool isEventsReset = true;
+
     private bool isDragging;    // ドラッグ状態かを判定します
 
     void Start()

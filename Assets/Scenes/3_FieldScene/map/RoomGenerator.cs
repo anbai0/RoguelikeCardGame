@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoomStatus
 {
@@ -10,31 +11,24 @@ public class RoomStatus
 
 public class RoomGenerator : MonoBehaviour
 {
-    [SerializeField]
-    public GameObject[] rooms;
-    [SerializeField]
-    private GameObject playerPrefab;
-    [SerializeField]
-    private GameObject bonfirePrefab;
-    [SerializeField]
-    private GameObject smallEnemyPrefab;
-    [SerializeField]
-    private GameObject strongEnemyPrefab;
-    [SerializeField]
-    private GameObject bossEnemyPrefab;
-    [SerializeField]
-    private GameObject treasureBoxPrefab;
-    [SerializeField]
-    private GameObject shopPrefab;
-    [SerializeField]
-    private RoomStatus[] roomStatuses = new RoomStatus[12];
+    [SerializeField] public GameObject[] rooms;
+    [SerializeField] private GameObject warriorPrefab;
+    [SerializeField] private GameObject wizardPrefab;
+    [SerializeField] private GameObject bonfirePrefab;
+    [SerializeField] private GameObject smallEnemyPrefab;
+    [SerializeField] private GameObject strongEnemyPrefab;
+    [SerializeField] private GameObject bossEnemyPrefab;
+    [SerializeField] private GameObject treasureBoxPrefab;
+    [SerializeField] private GameObject shopPrefab;
+    [SerializeField] private RoomStatus[] roomStatuses = new RoomStatus[12];
 
     [SerializeField] private Camera cam;    // Main.cameraだと正しく取得できない時があるため
     [SerializeField] private GameObject cameraPos2, cameraPos3;
     [SerializeField] private GameObject objectParent;
     [SerializeField] private GameObject enemyParent;
 
-    float playerY = -2.33f;
+    float warriorY = -2.34f;
+    float wizardY = -2.37f;
 
     enum RoomNum
     {
@@ -70,19 +64,54 @@ public class RoomGenerator : MonoBehaviour
     /// </summary>
     private void PlayerSpawn()
     {
+        Scene targetScene = SceneManager.GetSceneByName("FieldScene");
         GameObject enemy;
         if (Random.Range(0,2) == 0)
         {
-            playerPrefab.transform.position = rooms[(int)RoomNum.Room2].transform.position + new Vector3 (0, playerY, 0);
+            // キャラ選択で選択されたキャラのモデルを生成
+            if (GameManager.Instance.playerData._playerName == "戦士")
+            {
+                // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+                GameObject warrior = Instantiate(warriorPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity);
+                warrior.transform.SetParent(objectParent.transform);
+                warrior.transform.SetParent(null);
+            }            
+            if (GameManager.Instance.playerData._playerName == "魔法使い")
+            {
+                // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+                GameObject wizard = Instantiate(wizardPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity);
+                wizard.transform.SetParent(objectParent.transform);
+                wizard.transform.SetParent(null);
+            }
+
+            // 隣の部屋に敵生成
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             enemy.transform.SetParent(enemyParent.transform);
+            // カメラの位置を変更
             cam.transform.position = cameraPos2.transform.position;
         }
         else
         {
-            playerPrefab.transform.position = rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, playerY, 0);
+            // キャラ選択で選択されたキャラのモデルを生成
+            if (GameManager.Instance.playerData._playerName == "戦士")
+            {
+                // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+                GameObject warrior = Instantiate(warriorPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity);
+                warrior.transform.SetParent(objectParent.transform);
+                warrior.transform.SetParent(null);
+            }
+            if (GameManager.Instance.playerData._playerName == "魔法使い")
+            {
+                // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+                GameObject wizard = Instantiate(wizardPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity);
+                wizard.transform.SetParent(objectParent.transform);
+                wizard.transform.SetParent(null);
+            }
+
+            // 隣の部屋に敵生成
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             enemy.transform.SetParent(enemyParent.transform);
+            // カメラの位置を変更
             cam.transform.position = cameraPos3.transform.position;
         }
     }

@@ -7,7 +7,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
+    private bool isEventsReset = true;
     private bool isClick = false;
 
     private bool isSelected = false;
@@ -75,6 +75,9 @@ public class UIManagerCharaSelect : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
+        if (!isEventsReset)             // イベントの初期化
+            RemoveListeners();
+
         UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            // UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
@@ -82,6 +85,8 @@ public class UIManagerCharaSelect : MonoBehaviour
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
         }
+
+        isEventsReset = false;
     }
 
     /// <summary>
@@ -129,7 +134,7 @@ public class UIManagerCharaSelect : MonoBehaviour
                 gm.ReadPlayer("Warrior");
             if (selectWizard)
                 gm.ReadPlayer("Wizard");
-
+            
             sceneManager.LoadFieldScene();
         }
     }

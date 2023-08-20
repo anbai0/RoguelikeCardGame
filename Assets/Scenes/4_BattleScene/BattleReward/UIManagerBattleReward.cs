@@ -6,7 +6,7 @@ public class UIManagerBattleReward : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
+    private bool isEventsReset = true;
     private bool isClick = false;
 
     private bool isSelected = false;
@@ -44,7 +44,7 @@ public class UIManagerBattleReward : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
-        if (!isRemoved)
+        if (!isEventsReset)
             RemoveListeners();
 
         UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -55,7 +55,7 @@ public class UIManagerBattleReward : MonoBehaviour
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
         }
 
-        isRemoved = false;
+        isEventsReset = false;
     }
 
     private void RemoveListeners()

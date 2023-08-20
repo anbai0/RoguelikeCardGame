@@ -12,7 +12,7 @@ public class UIManagerResult : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
+    private bool isEventsReset = true;
     private bool isClick = false;
 
     private GameManager gm;
@@ -47,7 +47,7 @@ public class UIManagerResult : MonoBehaviour
     /// </summary>
     public void UIEventsReload()
     {
-        if (!isRemoved)             // イベントの初期化
+        if (!isEventsReset)             // イベントの初期化
             RemoveListeners();
 
         UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -59,7 +59,7 @@ public class UIManagerResult : MonoBehaviour
 
         }
 
-        isRemoved = false;
+        isEventsReset = false;
     }
 
     /// <summary>

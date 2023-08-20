@@ -1,29 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
     private AudioSource audioSource;
-
-    [Header("全体音量")]
-    [SerializeField, Range(0f, 1f)] public float overallVolume = 1f;
+    private AudioSetting audioSetting;
 
     [Header("SE関係")]
     [SerializeField] private AudioClip[] seAudioClips;
     [SerializeField] private float[] seAudioVolumes;
-    [SerializeField, Range(0f, 1f)] public float seVolume = 0.5f;
 
     [Header("BGM関係")]
     [SerializeField] private AudioClip[] bgmAudioClips;
     [SerializeField] private float[] bgmAudioVolumes;
-    [SerializeField, Range(0f, 1f)] public float bgmVolume = 0.5f;
 
 
     void Start()
     {
-        // AudioSourceのコンポーネント取得
+        // コンポーネント取得
         audioSource = GetComponent<AudioSource>();
+        audioSetting = GetComponent<AudioSetting>();
     }
             
     /// <summary>
@@ -36,7 +31,7 @@ public class AudioManager : MonoBehaviour
         int seIndex = GetSEIndex(seName);
         if (seIndex >= 0)
         {
-            audioSource.PlayOneShot(seAudioClips[seIndex], seAudioVolumes[seIndex] * overallVolume * seVolume);
+            audioSource.PlayOneShot(seAudioClips[seIndex], seAudioVolumes[seIndex] * audioSetting.overallVolume * audioSetting.seVolume);
         }
         else
         {
@@ -54,7 +49,7 @@ public class AudioManager : MonoBehaviour
         int bgmIndex = GetBGMIndex(bgmName);
         if (bgmIndex >= 0)
         {
-            audioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * overallVolume * bgmVolume);
+            audioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume);
         }
         else
         {

@@ -10,7 +10,7 @@ public class UIManagerTitle : MonoBehaviour
     // UIManagerに最初から定義してある変数
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
-    private bool isRemoved = true;
+    private bool isEventsReset = true;
     [SerializeField] private bool isClick = false;
 
     [Header("参照するコンポーネント")]
@@ -38,7 +38,7 @@ public class UIManagerTitle : MonoBehaviour
     /// </summary>
     void UIEventsReload()
     {
-        if (!isRemoved)             // イベントの初期化
+        if (!isEventsReset)             // イベントの初期化
             RemoveListeners();
 
         UIs = canvas.GetComponentsInChildren<UIController>(true);       // 指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
@@ -47,7 +47,7 @@ public class UIManagerTitle : MonoBehaviour
             UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         // UIがクリックされたら、クリックされたUIを関数に渡す
         }
 
-        isRemoved = false;
+        isEventsReset = false;
     }
 
     /// <summary>
