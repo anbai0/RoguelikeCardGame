@@ -298,11 +298,20 @@ public class CardEffectList : MonoBehaviour
         string text = cardText.text;
         for (int i = 0; i < text.Length; i++)
         {
-            if (char.IsDigit(text[i]))
+            if(char.IsDigit(text[i]) && char.IsDigit(text[i + 1])) //UŒ‚—Í‚ª2Œ…‚Ìê‡
             {
-                // Å‰‚Ì”¼Šp”Žš‚Ì‚Ý‚ð+1‚µ‚½”Žš‚É•ÏX
-                text = text.Remove(i, 1).Insert(i, card.cardDataManager._cardAttackPower.ToString());
+                // Å‰‚Ì2Œ…‚Ì”¼Šp”Žš‚Ì‚Ý‚ð+1‚µ‚½”Žš‚É•ÏX
+                text = text.Remove(i, 2).Insert(i, card.cardDataManager._cardAttackPower.ToString());
                 break;
+            }
+            else
+            {
+                if (char.IsDigit(text[i])) //UŒ‚—Í‚ª1Œ…‚Ìê‡
+                {
+                    // Å‰‚Ì1Œ…‚Ì”¼Šp”Žš‚Ì‚Ý‚ð+1‚µ‚½”Žš‚É•ÏX
+                    text = text.Remove(i, 1).Insert(i, card.cardDataManager._cardAttackPower.ToString());
+                    break;
+                }
             }
         }
         cardText.text = text; //ƒJ[ƒh‚ÌText‚É”½‰f
