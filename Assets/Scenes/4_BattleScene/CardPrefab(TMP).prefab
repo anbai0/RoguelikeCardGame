@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 7009455883766435930}
   - component: {fileID: 9011603321754467495}
   - component: {fileID: -582579477788359337}
+  - component: {fileID: 2120973842117400485}
   m_Layer: 5
   m_Name: CardPrefab(TMP)
   m_TagString: Cards
@@ -531,6 +532,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78034ebcc2600e4a997aa61070a5a71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2120973842117400485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7009455883766435924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3b922085e97547886a0ddcaf039a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardController: {fileID: 7009455883766435928}
+  costText: {fileID: 7009455884139392006}
 --- !u!1 &7009455884139392000
 GameObject:
   m_ObjectHideFlags: 0

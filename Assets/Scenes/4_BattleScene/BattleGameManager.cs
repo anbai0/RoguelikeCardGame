@@ -41,6 +41,12 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField]
     GameObject uiManagerBattle;
 
+    //ラウンド
+    [SerializeField]
+    RoundTextAnimation roundTextAnimation;
+    [SerializeField]
+    GameObject turnEndBlackPanel;
+
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
     private bool isTurnEnd;//行動終了ボタンを押したか判定//TurnEnd()で使用
@@ -96,6 +102,7 @@ public class BattleGameManager : MonoBehaviour
         enemyMoveCount = 0;
         accelerateValue = 0;
         roundCount = 0;
+        turnEndBlackPanel.SetActive(false);
         player = GameObject.Find("TestPlayer");
         enemyName = selectEnemyName.DecideEnemyName(floor, enemyType);
         //ReadPlayer(player);
@@ -113,6 +120,8 @@ public class BattleGameManager : MonoBehaviour
     private void StartRound() 
     {
         roundCount++;//ラウンド数を加算する
+        var roundText = "Round" + roundCount.ToString(); //ラウンド数を表すテキスト
+        roundTextAnimation.StartAnimation(roundText); //ラウンド数を表示
         if (isDecelerate) //アクセラレートの効果を初期化
         {
             cardCostChange.UndoCardCost();
@@ -253,6 +262,7 @@ public class BattleGameManager : MonoBehaviour
         if (!isFirstCall) { isFirstCall = true; OnceEndRoundRelicEffect(); }
         EndRoundRelicEffect();
         isTurnEnd = false;//行動終了ボタンの復活
+        turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
         StartRound();
     }
 
@@ -407,6 +417,7 @@ public class BattleGameManager : MonoBehaviour
         {
             isTurnEnd = true;
             playerScript.TurnEnd();
+            turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
             TurnCalc();
         }
     }
