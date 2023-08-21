@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public GameObject enemy { get; private set; }
     public string enemyTag { get; private set; }
 
+    GameObject currentRoom;
+
     void Start()
     {
         fieldManager = FindObjectOfType<FieldSceneManager>();
@@ -32,6 +34,8 @@ public class PlayerController : MonoBehaviour
         {
             PlayerMove();
         }
+
+        Debug.Log(currentRoom);
     }
 
     private void PlayerMove()
@@ -55,6 +59,56 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+
+
+        switch (other.name) {
+            case "RoomSet1":
+                Debug.Log(other.name);
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet2":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet3":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet4":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet5":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet6":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet7":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet8":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet9":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet10":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet11":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet12":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet13":
+                currentRoom = other.gameObject;
+                break;
+            case "RoomSet14":
+                currentRoom = other.gameObject;
+                break;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -524,7 +524,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: fd3a7fc17c7e8d94fb806de3d52da127,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 13
+      value: RoomSet13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd3a7fc17c7e8d94fb806de3d52da127, type: 3}
@@ -617,7 +617,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: a0077c291dbdce745a649b80fe75d446,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 6
+      value: RoomSet6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0077c291dbdce745a649b80fe75d446, type: 3}
@@ -760,7 +760,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 7dc4de05d73f38d4ca15ec76af32580b,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 2
+      value: RoomSet2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7dc4de05d73f38d4ca15ec76af32580b, type: 3}
@@ -853,7 +853,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 20864d4e0ab4304449393e43e237da11,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 11
+      value: RoomSet11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20864d4e0ab4304449393e43e237da11, type: 3}
@@ -991,7 +991,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 7680595ef9d493143875361f1038f002,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 5
+      value: RoomSet5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7680595ef9d493143875361f1038f002, type: 3}
@@ -1129,7 +1129,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: e99a1cefc3c5e1942b407ccf305a676f,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 8
+      value: RoomSet8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e99a1cefc3c5e1942b407ccf305a676f, type: 3}
@@ -1564,7 +1564,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: e86bd05f7bb3a844985d2aa4cb8e2761,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 14
+      value: RoomSet14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e86bd05f7bb3a844985d2aa4cb8e2761, type: 3}
@@ -1702,7 +1702,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 400c5703123a5124592eadc7717d32bd,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 12
+      value: RoomSet12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 400c5703123a5124592eadc7717d32bd, type: 3}
@@ -1921,7 +1921,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 3c20904ff1d82864b93800e51073beb5,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 1
+      value: RoomSet1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c20904ff1d82864b93800e51073beb5, type: 3}
@@ -2146,7 +2146,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: e073abea4abf920498071b9c16bf8412,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 7
+      value: RoomSet7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e073abea4abf920498071b9c16bf8412, type: 3}
@@ -2296,7 +2296,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: ed989000b2939074aac4ac1a761ac840,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 9
+      value: RoomSet9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed989000b2939074aac4ac1a761ac840, type: 3}
@@ -2465,7 +2465,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: b3a410f628839b949befd36992173ccd,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 4
+      value: RoomSet4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b3a410f628839b949befd36992173ccd, type: 3}
@@ -2774,7 +2774,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: 495e8a43843185d4b8952d3378626939,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 3
+      value: RoomSet3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 495e8a43843185d4b8952d3378626939, type: 3}
@@ -2912,7 +2912,7 @@ PrefabInstance:
     - target: {fileID: 8050949166751267412, guid: b4a80601acaeece47bf3548f9ce6a371,
         type: 3}
       propertyPath: m_Name
-      value: RoomSet 10
+      value: RoomSet10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4a80601acaeece47bf3548f9ce6a371, type: 3}
