@@ -167,7 +167,7 @@ public class UIManagerBattleReward : MonoBehaviour
                 lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
             }
 
-            if (UIObject.CompareTag("Cards"))
+            if (lastSelectedItem.CompareTag("Cards"))
             {
                 if (gm.CheckDeckFull()) //デッキの上限に達している場合
                 {
@@ -181,13 +181,13 @@ public class UIManagerBattleReward : MonoBehaviour
                 }
                 else
                 {
-                    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+                    var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
                     gm.playerData._deckList.Add(cardID);
                 }
             }
-            if (UIObject.CompareTag("Relics"))
+            if (lastSelectedItem.CompareTag("Relics"))
             {
-                var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+                var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
                 gm.hasRelics[relicID]++;
                 gm.ShowRelics();
             }

@@ -500,7 +500,7 @@ public class CardEffectList : MonoBehaviour
         if (enemy.enemyCondition["Burn"] > 0)//エネミーが火傷状態だった場合
         {
             //火傷の3倍のダメージでエネミーを攻撃
-            PlayerAttacking(enemy.enemyCondition["Burn"] * 3);
+            PlayerAttacking(cardAttackPower * 3);
         }
         else
         {

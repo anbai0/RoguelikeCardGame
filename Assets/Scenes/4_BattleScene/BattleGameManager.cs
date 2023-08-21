@@ -303,6 +303,8 @@ public class BattleGameManager : MonoBehaviour
         Debug.Log("Enemy‚ÌŸ—˜");
         yield return new WaitForSeconds(1.0f);
         resultAnimation.StartAnimation("Defeated");
+        yield return new WaitForSeconds(2.0f);
+        battleRewardManager.TransitionLoseBattle();
     }
     //‚±‚±‚Ü‚Å‚ªƒQ[ƒ€ƒ‹[ƒv
 

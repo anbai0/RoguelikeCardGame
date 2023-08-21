@@ -238,7 +238,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <returns>戦闘終了後のゴールド獲得時に多く貰える数</returns>
     public int EndGameRelicEffect()
     {
-        int money = 10;
+        int money = 0;
         money = relicEffect.RelicID9(hasPlayerRelics[9], money);
         HealingHP(relicEffect.RelicID10(hasPlayerRelics[10]));
         hasPlayerRelics = null; //GameManagerの参照を外しておく

@@ -201,4 +201,36 @@ public class BattleRewardManager : MonoBehaviour
         asyncOperation = SceneManager.LoadSceneAsync(unloadSceneName, LoadSceneMode.Additive);
         while (!asyncOperation.isDone) await Task.Yield();
     }
+
+    public void TransitionLoseBattle()
+    {
+        sceneFader.FadeOutInWrapper(TransitionLoseBattleScenes);
+    }
+
+    public async Task TransitionLoseBattleScenes()
+    {
+        AsyncOperation asyncOperation;
+
+        //バトルシーンをアンロード
+        Scene battleScene = SceneManager.GetSceneByName("BattleScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(battleScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        //ショップシーンがロードされていればアンロードする
+        Scene shopScene = SceneManager.GetSceneByName("ShopScene");
+        if (shopScene.isLoaded)
+        {
+            asyncOperation = SceneManager.UnloadSceneAsync(shopScene);
+            while (!asyncOperation.isDone) await Task.Yield();
+        }
+
+        // 参照解除の関係でフィールドシーンを最後にアンロード
+        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(fieldScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        // リザルトシーンをロード
+        asyncOperation = SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
+    }
 }
