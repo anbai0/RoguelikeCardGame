@@ -59,6 +59,8 @@ public class BattleGameManager : MonoBehaviour
     private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
     public int floor = 1; //現在の階層
 
+    GameManager gm;
+
     public static BattleGameManager Instance;
     private void Awake()
     {
@@ -70,7 +72,7 @@ public class BattleGameManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager gm = GameManager.Instance;
+        gm = GameManager.Instance;
         floor = gm.floor;
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
@@ -96,7 +98,8 @@ public class BattleGameManager : MonoBehaviour
         roundCount = 0;
         player = GameObject.Find("TestPlayer");
         enemyName = selectEnemyName.DecideEnemyName(floor, enemyType);
-        ReadPlayer(player);
+        //ReadPlayer(player);
+        playerData = gm.playerData;
         ReadEnemy(enemyName);
         SetStatus(playerData, enemyData);
         StartRelicEffect();
@@ -282,9 +285,9 @@ public class BattleGameManager : MonoBehaviour
         EndGameRelicEffect();
         yield return new WaitForSeconds(0.5f);
         resultAnimation.StartAnimation("Victory"); //勝利の文字を表示
+        ReturnPlayerData();
         yield return new WaitForSeconds(1.0f);
         Destroy(uiManagerBattle);
-        //uiManagerBattle.SetActive(false); //UIManagerBattleを使用不可に
         uiManagerBR.SetActive(true);　//UIManagerBattleRewardを使用可能に
         if (enemyType == "StrongEnemy" || enemyType == "Boss") //エネミーが強敵以上なら
         {
@@ -404,5 +407,17 @@ public class BattleGameManager : MonoBehaviour
             playerScript.TurnEnd();
             TurnCalc();
         }
+    }
+
+    /// <summary>
+    /// 戦闘終了後に戦闘で変化したプレイヤーデータをGameManagerに返す
+    /// </summary>
+    void ReturnPlayerData()
+    {
+        if (playerScript.GetSetCurrentHP < gm.playerData._playerHP) //戦闘終了時の体力が元のプレイヤーの体力を上回っていなければ
+        {
+            gm.playerData._playerCurrentHP = playerScript.GetSetCurrentHP; //戦闘終了時の体力を返す
+        }
+        playerData._playerMoney += enemyScript.GetSetDropMoney; //コインを獲得
     }
 }

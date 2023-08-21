@@ -76,7 +76,6 @@ public class PlayerBattleAction : CharacterBattleAction
         cardEffectList = GetComponent<CardEffectList>();
         GetSetInflictCondition = GetComponent<InflictCondition>();
         hasPlayerRelics = GameManager.Instance.hasRelics;
-        hasPlayerRelics[4] += 3;
     }
 
     /// <summary>

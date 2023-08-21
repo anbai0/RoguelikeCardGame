@@ -89,6 +89,12 @@ public class GameManager : MonoBehaviour
             hasRelics[9] += 2;     // 富豪の金貨袋
             ShowRelics();
         }
+
+        playerData._deckList.Clear(); //デッキリストを空にする
+        //開始時に配布されるカードを追加する
+        playerData._deckList.Add(1); //スイング
+        playerData._deckList.Add(2); //ヒール
+        playerData._deckList.Add(4); //ガード
     }
 
 

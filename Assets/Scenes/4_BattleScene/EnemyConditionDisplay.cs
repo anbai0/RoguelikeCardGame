@@ -31,8 +31,28 @@ public class EnemyConditionDisplay : MonoBehaviour
     public int DebugNum = 0;
     [SerializeField]
     SortName sortIcon;
-    private Dictionary<string, int> saveCondition;
+    private Dictionary<string, int> saveCondition = new Dictionary<string, int>();
     WaitForSeconds waitFor1milliSec = new WaitForSeconds(0.1f);
+
+    private void Awake()
+    {
+        InitializedSaveCondition();
+    }
+
+    /// <summary>
+    /// saveConditionに格納する状態異常の名前と所持数を初期化しておく処理
+    /// </summary>
+    void InitializedSaveCondition()
+    {
+        saveCondition.Add("UpStrength", 0);
+        saveCondition.Add("AutoHealing", 0);
+        saveCondition.Add("InvalidBadStatus", 0);
+        saveCondition.Add("Curse", 0);
+        saveCondition.Add("Impatience", 0);
+        saveCondition.Add("Weakness", 0);
+        saveCondition.Add("Burn", 0);
+        saveCondition.Add("Poison", 0);
+    }
 
     /// <summary>
     /// 状態異常の有無に合わせてアイコンの表示・非表示を行う処理
