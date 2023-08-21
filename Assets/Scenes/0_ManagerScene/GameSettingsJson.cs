@@ -5,42 +5,43 @@ using UnityEditor;  //AssetDatabaseを使うために追加
 using System.IO;  //StreamWriterなどを使うために追加
 using System.Linq;  //Selectを使うために追加
 
-public class JsonScript : MonoBehaviour
+// ゲームの設定のデータです。
+[System.Serializable]
+public class GameSettings
+{
+    public float overallVolume;
+    public float seVolume;
+    public float bgmVolume;
+}
+
+public class GameSettingsJson : MonoBehaviour
 {
     //保存先
-    string datapath;
+    string datapath => Application.dataPath + "/GameSettingsJson.json";
 
-    void Awake()
-    {
-        //保存先の計算をする
-        //これはAssets直下を指定. /以降にファイル名
-        datapath = Application.dataPath + "/TestJson.json";
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
-        //playerデータを取得
-        Player player = new Player();
+        //GameSettingsデータを取得
+        GameSettings gameSettings = new GameSettings();
 
         //JSONファイルがあればロード, なければ初期化関数へ
         if (FindJsonfile())
         {
-            player = loadPlayerData();
+            gameSettings = loadGameSettingsData();
         }
         else
         {
-            Initialize(player);
+            Initialize(gameSettings);
         }
     }
 
     //セーブするための関数
-    public void savePlayerData(Player player)
+    public void saveGameSettingsData(GameSettings gameSettings)
     {
         StreamWriter writer;
 
-        //playerデータをJSONに変換
-        string jsonstr = JsonUtility.ToJson(player);
+        //gameSettingsデータをJSONに変換
+        string jsonstr = JsonUtility.ToJson(gameSettings);
 
         //JSONファイルに書き込み
         writer = new StreamWriter(datapath, false);
@@ -50,7 +51,7 @@ public class JsonScript : MonoBehaviour
     }
 
     //JSONファイルを読み込み, ロードするための関数
-    public Player loadPlayerData()
+    public GameSettings loadGameSettingsData()
     {
         string datastr = "";
         StreamReader reader;
@@ -58,19 +59,20 @@ public class JsonScript : MonoBehaviour
         datastr = reader.ReadToEnd();
         reader.Close();
 
-        return JsonUtility.FromJson<Player>(datastr);
+        return JsonUtility.FromJson<GameSettings>(datastr);
     }
+
+
 
     //JSONファイルがない場合に呼び出す初期化関数
     //初期値をセーブし, JSONファイルを生成する
-    public void Initialize(Player player)
+    public void Initialize(GameSettings gameSettings)
     {
-        player.name = "aaa";
-        player.hp = 12;
-        player.attack = 6;
-        player.defense = 5;
+        gameSettings.overallVolume = 1f;
+        gameSettings.seVolume = 0.5f;
+        gameSettings.bgmVolume = 0.5f;
 
-        savePlayerData(player);
+        saveGameSettingsData(gameSettings);
     }
 
     //JSONファイルの有無を判定するための関数
@@ -90,14 +92,4 @@ public class JsonScript : MonoBehaviour
             return false;
         }
     }
-}
-
-//Playerのデータとなるクラスの定義
-[System.Serializable]
-public class Player
-{
-    public string name;
-    public int hp;
-    public int attack;
-    public int defense;
 }

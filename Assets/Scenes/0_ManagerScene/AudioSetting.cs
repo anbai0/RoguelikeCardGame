@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class AudioSetting : MonoBehaviour
 {
-    private AudioManager audioManager;
+    private GameSettingsJson gameSettingsJson;
+    private GameSettings gameSettings;
 
     [Header("各音量調整スライダー")]
     [SerializeField] private Slider overallVolumeSlider;
@@ -22,50 +22,30 @@ public class AudioSetting : MonoBehaviour
     [SerializeField] private int maxSEVolume;
     [SerializeField] private int maxBGMVolume;
 
-    public float overallVolume { get; private set; } = 1f;
-    public float seVolume { get; private set; } = 0.5f;
-    public float bgmVolume { get; private set; } = 0.5f;
-
-    private GameSettings gameSettings;
-    //private void Start()
-    //{
-
-
-    //    SaveLoadManager.DataSave(gameSettings);
-    //}
+    // 各音量
+    public float overallVolume { get; private set; }
+    public float seVolume { get; private set; }
+    public float bgmVolume { get; private set; }
 
     void Start()
     {
-        gameSettings = SaveLoadManager.DataLoad();      // Jsonロード
-        audioManager = GetComponent<AudioManager>();
-
-        if (gameSettings == null)
-        {
-            Debug.LogError("Loaded game settings are null.");
-        }
-        else
-        {
-            Debug.Log("Loaded game settings: " + JsonUtility.ToJson(gameSettings));
-            // 以下の代入処理...
-        }
-
-        gameSettings.overallVolume = overallVolume;
-        gameSettings.seVolume = seVolume;
-        gameSettings.bgmVolume = bgmVolume;
-
-        //SaveLoadManager.DataSave(gameSettings);
+        gameSettingsJson = GetComponent<GameSettingsJson>();
+        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
 
         // 最大音量設定
         overallVolumeSlider.maxValue = maxOverallVolume;
         seVolumeSlider.maxValue = maxSEVolume;
         bgmVolumeSlider.maxValue = maxBGMVolume;
 
-        
+        // ゲーム設定のデータから値を取得
+        overallVolume = gameSettings.overallVolume;
+        seVolume = gameSettings.seVolume;
+        bgmVolume = gameSettings.bgmVolume;
 
-        // 現在の音量を設定
-        //overallVolumeSlider.value = gameSettings.overallVolume;
-        //seVolumeSlider.value = gameSettings.bgmVolume;
-        //bgmVolumeSlider.value = gameSettings.seVolume;
+        // スライダーの現在の音量を設定
+        overallVolumeSlider.value = overallVolume;
+        seVolumeSlider.value = seVolume;
+        bgmVolumeSlider.value = bgmVolume;
 
         // 現在の音量表示
         overallVolumeText.text = (overallVolume * 100).ToString();
@@ -76,15 +56,16 @@ public class AudioSetting : MonoBehaviour
         overallVolumeSlider.onValueChanged.AddListener(OnOverallValueChanged);
         seVolumeSlider.onValueChanged.AddListener(OnSEValueChanged);
         bgmVolumeSlider.onValueChanged.AddListener(OnBGMValueChanged);
+    }
 
-        SaveLoadManager.DataSave(gameSettings);
+    private void Update()
+    {
+        Debug.Log(overallVolume);
     }
 
     private void OnOverallValueChanged(float value)
     {
         float roundedValue = Mathf.Floor(value * 100) / 100; // 小数点第二位を切り捨てる
-        Debug.Log("全体の音量スライダーの値が変更されました: " + roundedValue);
-
         overallVolume = roundedValue;
         overallVolumeText.text = (roundedValue * 100).ToString();
     }
@@ -101,5 +82,14 @@ public class AudioSetting : MonoBehaviour
         float roundedValue = Mathf.Floor(value * 100) / 100;
         bgmVolume = roundedValue;
         bgmVolumeText.text = (roundedValue * 100).ToString();
+    }
+
+    public void SaveAudioSetting()
+    {
+        gameSettings.overallVolume = overallVolume;
+        gameSettings.seVolume = seVolume;
+        gameSettings.bgmVolume = bgmVolume;
+
+        gameSettingsJson.saveGameSettingsData(gameSettings);      // ゲーム設定のセーブ
     }
 }

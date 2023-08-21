@@ -5,6 +5,7 @@ public class AudioManager : MonoBehaviour
     private AudioSource audioSource;
     private AudioSetting audioSetting;
 
+
     [Header("SEŠÖŒW")]
     [SerializeField] private AudioClip[] seAudioClips;
     [SerializeField] private float[] seAudioVolumes;

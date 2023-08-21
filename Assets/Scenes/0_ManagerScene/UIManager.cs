@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     private GameManager gm;
 
     [Header("参照するコンポーネント")]
-    [SerializeField] AudioManager audioManager;
+    [SerializeField] AudioSetting audioSetting;
     [Header("参照するUI")]
     [SerializeField] GameObject overlay;
     [SerializeField] GameObject optionScreen;
@@ -115,6 +115,7 @@ public class UIManager : MonoBehaviour
         // オプション画面非表示
         if (UIObject == closeOptionButton)
         {
+            audioSetting.SaveAudioSetting();    // 音量設定のデータをセーブ
             optionScreen.SetActive(false);
         }
 
