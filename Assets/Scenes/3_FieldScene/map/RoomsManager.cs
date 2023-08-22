@@ -86,6 +86,9 @@ public class RoomsManager : MonoBehaviour
                 wizard.transform.SetParent(null);
             }
 
+            // ”à‚ğŠJ‚¯‚é
+            EnableRoomDoorAccess((int)RoomNum.Room2);
+
             // —×‚Ì•”‰®‚É“G¶¬
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             enemy.transform.SetParent(enemyParent.transform);
@@ -109,6 +112,9 @@ public class RoomsManager : MonoBehaviour
                 wizard.transform.SetParent(objectParent.transform);
                 wizard.transform.SetParent(null);
             }
+
+            // ”à‚ğŠJ‚¯‚é
+            EnableRoomDoorAccess((int)RoomNum.Room3);
 
             // —×‚Ì•”‰®‚É“G¶¬
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
