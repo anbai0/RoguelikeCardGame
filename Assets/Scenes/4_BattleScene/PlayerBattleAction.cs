@@ -65,7 +65,7 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         playerNameText.text = "Œ»İ‚ÌƒLƒƒƒ‰:" + playerData._playerName;
         GetSetHP = playerData._playerHP;
-        GetSetCurrentHP = GetSetHP;
+        GetSetCurrentHP = playerData._playerCurrentHP;
         GetSetAP = playerData._playerAP;
         GetSetConstAP = playerData._playerAP;
         GetSetCurrentAP = GetSetAP;
