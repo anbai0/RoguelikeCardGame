@@ -19,7 +19,7 @@ public class GameSettingsJson : MonoBehaviour
     //•Û‘¶æ
     string datapath => Application.dataPath + "/GameSettingsJson.json";
 
-    void Start()
+    private void Awake()
     {
         //GameSettingsƒf[ƒ^‚ğæ“¾
         GameSettings gameSettings = new GameSettings();

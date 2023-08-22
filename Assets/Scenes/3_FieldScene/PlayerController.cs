@@ -1,31 +1,36 @@
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed; //プレイヤーの動くスピード
-    public float rotationSpeed = 10f; //向きを変える速度
+    public static bool isPlayerActive = true;
 
-    private Animator animator;
-
+    public float speed;                     //プレイヤーの動くスピード
+    public float rotationSpeed = 10f;       //向きを変える速度
     private float moveHorizontal;
     private float moveVertical;
 
-    public static bool isPlayerActive = true;
+    private Animator animator;   
 
-    FieldSceneManager fieldManager;
-    [SerializeField] RoomsManager roomsManager;
+    // 部屋関係
+    private FieldSceneManager fieldManager;
+    private RoomsManager roomsM;
     public GameObject bonfire { get; private set; }
     public GameObject treasureBox { get; private set; }
     public GameObject enemy { get; private set; }
     public string enemyTag { get; private set; }
-
-    public int lastRoomNum;    // プレイヤーが最後にいた部屋の番号
+    // 部屋の移動
+    private Vector3 pPos;
+    public int lastRoomNum;     // プレイヤーが最後にいた部屋の番号
 
     void Start()
     {
+        pPos = gameObject.transform.position;
+
         fieldManager = FindObjectOfType<FieldSceneManager>();
-        roomsManager = FindObjectOfType<RoomsManager>();
+        roomsM = FindObjectOfType<RoomsManager>();
         animator = GetComponent<Animator>();
         isPlayerActive = true;
     }
@@ -69,6 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        #region シーン遷移
         if (collision.gameObject.CompareTag("Bonfire"))
         {
             // playerを動けなくする処理
@@ -102,7 +108,8 @@ public class PlayerController : MonoBehaviour
             if (!sceneToHide.isLoaded)
             {
                 fieldManager.LoadShopScene();           // ショップシーンをロード
-            } else
+            }
+            else
             {
                 // ショップシーンがロードされていた場合、ショップシーンのオブジェクトを表示
                 fieldManager.ActivateShopScene();
@@ -118,26 +125,63 @@ public class PlayerController : MonoBehaviour
             enemyTag = collision.gameObject.tag;
             fieldManager.LoadBattleScene();   //戦闘シーンをロード
         }
+        #endregion
     }
 
 
     private void OnTriggerStay(Collider other)
     {
-        if (roomsManager == null) return;
+        if (roomsM == null) return;
 
-        // 今いる部屋を特定する処理
+        #region 今いる部屋を特定する処理
         // lastRoomと今いる部屋が違う場合
-        if (roomsManager.rooms[lastRoomNum] != other.gameObject)
+        if (roomsM.rooms[lastRoomNum] != other.gameObject)
         {
-            for (int roomNum = 1; roomNum <= roomsManager.rooms.Length-1; roomNum++)
+            for (int roomNum = 1; roomNum <= roomsM.rooms.Length - 1; roomNum++)
             {
-                if (roomsManager.rooms[roomNum] == other.gameObject)
+                if (roomsM.rooms[roomNum] == other.gameObject)
                 {
                     lastRoomNum = roomNum;         // lastRoomを更新
                     break;
                 }
             }
         }
+        #endregion
+
+        
+        #region 部屋移動処理
+        if (other.gameObject.CompareTag("GateForward"))
+        {
+            GameObject nextRoom = roomsM.rooms[lastRoomNum + 4];                                              // 次の部屋を取得
+            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;                    // カメラを次の部屋に移動
+            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ライトを次の部屋に移動
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, -3.6f);      // Playerを次の部屋に移動
+        }
+
+        if (other.gameObject.CompareTag("GateRight"))
+        {
+            GameObject nextRoom = roomsM.rooms[lastRoomNum + 1];
+            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
+            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, pPos.y, 0);
+        }
+
+        if (other.gameObject.CompareTag("GateLeft"))
+        {
+            GameObject nextRoom = roomsM.rooms[lastRoomNum - 1];
+            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
+            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, pPos.y, 0);
+        }
+
+        if (other.gameObject.CompareTag("GateBack"))
+        {
+            GameObject nextRoom = roomsM.rooms[lastRoomNum - 4];
+            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
+            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, 3.6f);
+        }
+        #endregion
     }
 
 
@@ -146,6 +190,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public void AccessDoorAfterWin()
     {
-        roomsManager.EnableRoomDoorAccess(lastRoomNum);
+        roomsM.EnableRoomDoorAccess(lastRoomNum);
     }
 }

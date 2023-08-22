@@ -109,7 +109,6 @@ public class UIManager : MonoBehaviour
         // オプション画面表示
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
-            AudioManager.Instance.PlaySE("剣");
             optionScreen.SetActive(true);
         }
 

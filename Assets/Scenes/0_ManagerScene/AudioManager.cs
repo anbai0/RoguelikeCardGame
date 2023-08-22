@@ -36,13 +36,10 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
-
-    void Start()
-    {
         // コンポーネント取得
         audioSetting = GetComponent<AudioSetting>();
     }
+
 
     //private void Update()
     //{

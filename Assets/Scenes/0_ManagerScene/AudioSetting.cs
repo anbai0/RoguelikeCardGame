@@ -27,7 +27,7 @@ public class AudioSetting : MonoBehaviour
     public float seVolume { get; private set; }
     public float bgmVolume { get; private set; }
 
-    void Start()
+    void Awake()
     {
         gameSettingsJson = GetComponent<GameSettingsJson>();
         gameSettings = gameSettingsJson.loadGameSettingsData();     // ƒQ[ƒ€İ’è‚Ìƒ[ƒh
