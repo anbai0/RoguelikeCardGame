@@ -51,7 +51,7 @@ public class RoomsManager : MonoBehaviour
 
     void Start()
     {
-        OpenAllDoors();       // すべてのドアを開けるメソッド。デバッグに使います。
+        //OpenAllDoors();       // すべてのドアを開けるメソッド。デバッグに使います。
 
         TreasureBoxOrBonfire();
         ShopOrBonfire();
