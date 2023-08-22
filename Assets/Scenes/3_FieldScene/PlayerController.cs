@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     public static bool isPlayerActive = true;
 
-    public float speed;                     //プレイヤーの動くスピード
+    public float moveSpeed;                     //プレイヤーの動くスピード
     public float rotationSpeed = 10f;       //向きを変える速度
     private float moveHorizontal;
     private float moveVertical;
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
         }
 
-        transform.Translate(movement * speed * Time.deltaTime, Space.World);
+        transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
     }
 
 
@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour
         #region 部屋移動処理
         if (other.gameObject.CompareTag("GateForward"))
         {
+            AudioManager.Instance.PlaySE("マップ切り替え");                                                   // SE再生
             GameObject nextRoom = roomsM.rooms[lastRoomNum + 4];                                              // 次の部屋を取得
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;                    // カメラを次の部屋に移動
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ライトを次の部屋に移動
@@ -160,6 +161,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateRight"))
         {
+            AudioManager.Instance.PlaySE("マップ切り替え");
             GameObject nextRoom = roomsM.rooms[lastRoomNum + 1];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
@@ -168,6 +170,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateLeft"))
         {
+            AudioManager.Instance.PlaySE("マップ切り替え");
             GameObject nextRoom = roomsM.rooms[lastRoomNum - 1];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
@@ -176,6 +179,7 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateBack"))
         {
+            AudioManager.Instance.PlaySE("マップ切り替え");
             GameObject nextRoom = roomsM.rooms[lastRoomNum - 4];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;

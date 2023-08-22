@@ -109,12 +109,14 @@ public class UIManager : MonoBehaviour
         // オプション画面表示
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             optionScreen.SetActive(true);
         }
 
         // オプション画面非表示
         if (UIObject == closeOptionButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             audioSetting.SaveAudioSetting();    // 音量設定のデータをセーブ
             optionScreen.SetActive(false);
         }
@@ -122,17 +124,20 @@ public class UIManager : MonoBehaviour
         // タイトルへ戻るの確認画面表示
         if (UIObject == titleBackButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             confirmationPanel.SetActive(true);
         }
 
         // タイトルへ戻るの確認画面非表示
         if (UIObject == closeConfirmButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             confirmationPanel.SetActive(false);
         }
 
         if (UIObject == confirmTitleBackButton)
         {
+            AudioManager.Instance.PlaySE("選択音2");
             // タイトルへ戻る処理
             gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
@@ -182,6 +187,7 @@ public class UIManager : MonoBehaviour
             // カード破棄画面を非表示に
             if (!isSelected && UIObject == returnButton)
             {
+                AudioManager.Instance.PlaySE("選択音1");
                 ToggleDiscardScreen(false);
                 gm.TriggerDiscardAction(false);
             }
@@ -189,6 +195,7 @@ public class UIManager : MonoBehaviour
             // カードを選んだ後、破棄ボタンを押すと、そのカードを破棄
             if (lastSelectedCards != null && UIObject == discardButton)
             {
+                AudioManager.Instance.PlaySE("選択音1");
                 int selectedCardID = lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID; // 選択されたカードのIDを取得
 
                 for (int cardIndex = 0; cardIndex < gm.playerData._deckList.Count; cardIndex++) {

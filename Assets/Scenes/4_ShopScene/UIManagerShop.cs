@@ -84,6 +84,7 @@ public class UIManagerShop : MonoBehaviour
         // "購入"を押したら
         if (UIObject == buyButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             shopUI.SetActive(false);
             shopManager.PriceTextCheck();
             shopManager.HasHealPotion();
@@ -92,6 +93,7 @@ public class UIManagerShop : MonoBehaviour
         if (UIObject.CompareTag("ExitButton") && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("選択音1");
             shopManager.ExitShop();     // ShopSceneを非表示
 
             // フィールドシーンのプレイヤーを動けるようにする
@@ -107,6 +109,8 @@ public class UIManagerShop : MonoBehaviour
                 restUI.SetActive(true);
 
                 restController.ChengeRestText("ShopScene");
+
+                AudioManager.Instance.PlaySE("選択音1");
             }
         }
         #endregion
@@ -187,6 +191,7 @@ public class UIManagerShop : MonoBehaviour
         // "買い物を終える"を押したら
         if (UIObject == closeShopping)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             shopUI.SetActive(true);
             restController.CheckRest("ShopScene");
         }
@@ -197,6 +202,7 @@ public class UIManagerShop : MonoBehaviour
         // "休憩する"を押したら
         if (UIObject == takeRestButton)
         {
+            AudioManager.Instance.PlaySE("回復");
             restController.Rest("ShopScene");      // 回復する
             restController.CheckRest("ShopScene");
             restUI.SetActive(false);
@@ -204,6 +210,7 @@ public class UIManagerShop : MonoBehaviour
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             restUI.SetActive(false);
         }
 

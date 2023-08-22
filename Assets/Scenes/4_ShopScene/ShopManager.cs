@@ -260,6 +260,7 @@ public class ShopManager : MonoBehaviour
 
                 if (selectedCardID != healCardID)   // 選んだカードが回復カードではなかった場合
                 {
+                    AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                     gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
 
@@ -267,6 +268,7 @@ public class ShopManager : MonoBehaviour
                 }
                 else if (!HasHealPotion())          // 選んだカードが回復カードで、回復カードを所持していない場合
                 {
+                    AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;
                     gm.playerData._deckList.Add(selectedCardID);
 
@@ -285,6 +287,7 @@ public class ShopManager : MonoBehaviour
 
             if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)         // 所持金が足りるなら
             {
+                AudioManager.Instance.PlaySE("買い物");
                 gm.playerData._playerMoney -= relic.relicDataManager._relicPrice;         // 所持金から値段分のお金を引いて
                 gm.hasRelics[selectedRelicID]++;                                          // レリックを取得
 
