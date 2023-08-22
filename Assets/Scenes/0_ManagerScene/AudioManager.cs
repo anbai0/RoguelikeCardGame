@@ -7,7 +7,10 @@ using UnityEngine;
 /// AudioManager.Instance.PlayBGM("BGMの名前");
 /// 音を消すときは、
 /// AudioManager.Instance.seAudioSource.Stop();
-/// AudioManager.Instance.bgmAudioSource.Stop();  
+/// AudioManager.Instance.bgmAudioSource.Stop();
+/// 一時停止、停止解除は、
+/// bgmAudioSource.Pause
+/// bgmAudioSource.UnPause
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
