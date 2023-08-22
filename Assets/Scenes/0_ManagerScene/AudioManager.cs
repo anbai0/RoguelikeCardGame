@@ -1,8 +1,18 @@
 using UnityEngine;
 
+/// <summary>
+/// SE,BGMを管理します。
+/// 音を流すときは、
+/// AudioManager.Instance.PlaySE("SEの名前");
+/// AudioManager.Instance.PlayBGM("BGMの名前");
+/// 音を消すときは、
+/// AudioManager.Instance.seAudioSource.Stop();
+/// AudioManager.Instance.bgmAudioSource.Stop();  
+/// </summary>
 public class AudioManager : MonoBehaviour
 {
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource seAudioSource;      // SE用のAudioSource
+    [SerializeField] private AudioSource bgmAudioSource;     // BGM用のAudioSource
     private AudioSetting audioSetting;
 
 
@@ -15,13 +25,75 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private float[] bgmAudioVolumes;
 
 
+    public static AudioManager Instance;     // シングルトン
+    private void Awake()
+    {
+        // シングルトンインスタンスをセットアップ
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     void Start()
     {
         // コンポーネント取得
-        audioSource = GetComponent<AudioSource>();
         audioSetting = GetComponent<AudioSetting>();
     }
-            
+
+    //private void Update()
+    //{
+    //    // SEチェック
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //        PlaySE("タイトル画面");
+    //    if (Input.GetKeyDown(KeyCode.Alpha2))
+    //        PlaySE("選択音");
+    //    if (Input.GetKeyDown(KeyCode.Alpha3))
+    //        PlaySE("買い物");
+    //    if (Input.GetKeyDown(KeyCode.Alpha4))
+    //        PlaySE("マップ切り替え");
+    //    if (Input.GetKeyDown(KeyCode.Alpha5))
+    //        PlaySE("攻撃1");
+    //    if (Input.GetKeyDown(KeyCode.Alpha6))
+    //        PlaySE("回復");
+    //    if (Input.GetKeyDown(KeyCode.Alpha7))
+    //        PlaySE("バフ");
+    //    if (Input.GetKeyDown(KeyCode.Alpha8))
+    //        PlaySE("デバフ");
+    //    if (Input.GetKeyDown(KeyCode.Alpha9))
+    //        PlaySE("");
+    //    if (Input.GetKeyDown(KeyCode.Alpha0))
+    //        PlaySE("");
+
+    //    // BGMチェック
+    //    if (Input.GetKeyDown(KeyCode.Q))
+    //        PlayBGM("Field1");
+    //    if (Input.GetKeyDown(KeyCode.W))
+    //        PlayBGM("Field2");
+    //    if (Input.GetKeyDown(KeyCode.E))
+    //        PlayBGM("Result");
+    //    if (Input.GetKeyDown(KeyCode.R))
+    //        PlayBGM("it's my turn");
+    //    if (Input.GetKeyDown(KeyCode.T))
+    //        PlayBGM("Social Documentary02");
+    //    if (Input.GetKeyDown(KeyCode.Y))
+    //        PlayBGM("ファニーエイリアン");
+    //    if (Input.GetKeyDown(KeyCode.U))
+    //        PlayBGM("深淵を覗く者");
+    //    if (Input.GetKeyDown(KeyCode.I))
+    //        PlayBGM("");
+    //    if (Input.GetKeyDown(KeyCode.O))
+    //        PlayBGM("");
+    //    if (Input.GetKeyDown(KeyCode.P))
+    //        PlayBGM("");
+
+    //    if (Input.GetKeyDown(KeyCode.S))
+    //    {
+    //        seAudioSource.Stop();
+    //        bgmAudioSource.Stop();
+    //    }         
+    //}
+
     /// <summary>
     /// 指定されたSEを流します。
     /// <code>audioManager.PlaySE("SEの素材の名前");</code>
@@ -32,7 +104,7 @@ public class AudioManager : MonoBehaviour
         int seIndex = GetSEIndex(seName);
         if (seIndex >= 0)
         {
-            audioSource.PlayOneShot(seAudioClips[seIndex], seAudioVolumes[seIndex] * audioSetting.overallVolume * audioSetting.seVolume);
+            seAudioSource.PlayOneShot(seAudioClips[seIndex], seAudioVolumes[seIndex] * audioSetting.overallVolume * audioSetting.seVolume);
         }
         else
         {
@@ -50,7 +122,12 @@ public class AudioManager : MonoBehaviour
         int bgmIndex = GetBGMIndex(bgmName);
         if (bgmIndex >= 0)
         {
-            audioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume);
+            bgmAudioSource.Stop();
+            bgmAudioSource.clip = bgmAudioClips[bgmIndex];      // 使用する音声ファイルを設定
+            bgmAudioSource.volume = bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume;    // 音量を変更
+            bgmAudioSource.Play();      // BGM再生開始
+
+            //bgmAudioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume);
         }
         else
         {

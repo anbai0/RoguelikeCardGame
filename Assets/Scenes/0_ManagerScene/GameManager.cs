@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 
     public int floor = 1; //ŠK‘w
 
-    [SerializeField] Camera cam;
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
