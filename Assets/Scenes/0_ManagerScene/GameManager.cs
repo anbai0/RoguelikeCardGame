@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour
 
     public int floor = 1; //階層
 
-    [SerializeField] Camera cam;
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
@@ -44,7 +43,7 @@ public class GameManager : MonoBehaviour
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
-        //if (!isAlreadyRead) ReadPlayer("Warrior");
+        if (!isAlreadyRead) ReadPlayer("Warrior");
     }
 
     

@@ -14,14 +14,18 @@ public class PlayerController : MonoBehaviour
     public static bool isPlayerActive = true;
 
     FieldSceneManager fieldManager;
+    [SerializeField] RoomsManager roomsManager;
     public GameObject bonfire { get; private set; }
     public GameObject treasureBox { get; private set; }
     public GameObject enemy { get; private set; }
     public string enemyTag { get; private set; }
 
+    public int lastRoomNum;    // プレイヤーが最後にいた部屋の番号
+
     void Start()
     {
         fieldManager = FindObjectOfType<FieldSceneManager>();
+        roomsManager = FindObjectOfType<RoomsManager>();
         animator = GetComponent<Animator>();
         isPlayerActive = true;
     }
@@ -31,6 +35,11 @@ public class PlayerController : MonoBehaviour
         if (isPlayerActive)
         {
             PlayerMove();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AccessDoorAfterWin();
         }
     }
 
@@ -57,6 +66,7 @@ public class PlayerController : MonoBehaviour
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
     }
 
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bonfire"))
@@ -81,7 +91,7 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Shop"))
         {
-            // playerを動けくする処理
+            // playerを動けなくする処理
             isPlayerActive = false;
             animator.SetBool("IsWalking", false);
 
@@ -108,5 +118,34 @@ public class PlayerController : MonoBehaviour
             enemyTag = collision.gameObject.tag;
             fieldManager.LoadBattleScene();   //戦闘シーンをロード
         }
+    }
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (roomsManager == null) return;
+
+        // 今いる部屋を特定する処理
+        // lastRoomと今いる部屋が違う場合
+        if (roomsManager.rooms[lastRoomNum] != other.gameObject)
+        {
+            for (int roomNum = 1; roomNum <= roomsManager.rooms.Length-1; roomNum++)
+            {
+                if (roomsManager.rooms[roomNum] == other.gameObject)
+                {
+                    lastRoomNum = roomNum;         // lastRoomを更新
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// EnableRoomDoorAccessメソッドを使い、今いる部屋の扉をすべて開けます。
+    /// </summary>
+    public void AccessDoorAfterWin()
+    {
+        roomsManager.EnableRoomDoorAccess(lastRoomNum);
     }
 }
