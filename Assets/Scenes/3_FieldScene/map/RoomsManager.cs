@@ -9,7 +9,7 @@ public class RoomStatus
     public GameObject stopLeft;
 }
 
-public class RoomGenerator : MonoBehaviour
+public class RoomsManager : MonoBehaviour
 {
     [SerializeField] public GameObject[] rooms;
     [SerializeField] private GameObject warriorPrefab;
@@ -51,6 +51,8 @@ public class RoomGenerator : MonoBehaviour
 
     void Start()
     {
+        CloseAllDoors();
+
         TreasureBoxOrBonfire();
         ShopOrBonfire();
         SmallEnemySpawn();
@@ -246,5 +248,64 @@ public class RoomGenerator : MonoBehaviour
         enemy.transform.SetParent(enemyParent.transform);
         enemy = Instantiate(strongEnemyPrefab, rooms[(int)RoomNum.Room11].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));
         enemy.transform.SetParent(enemyParent.transform);
+    }
+    
+    /// <summary>
+    /// 指定した部屋の扉をすべて開きます。
+    /// </summary>
+    /// <param name="roomNum">扉を開きたい部屋の番号</param>
+    public void EnableRoomDoorAccess(int roomNum)
+    {
+        // 1がgateLeft,2がgateRight,3がForward
+        for(int i = 1; i <= 3; i++)
+        {
+            // ゲートがアクティブの場合
+            if (rooms[roomNum].transform.GetChild(i).gameObject.activeSelf)
+            {
+                // ドアの見た目がアクティブの場合(ドアが閉まっている場合)
+                if (rooms[roomNum].transform.GetChild(i).GetChild(1).gameObject.activeSelf)
+                {
+                    // ドアを非表示(ドアを開ける)
+                    rooms[roomNum].transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
+
+                    // ドアのコライダーをtrueに
+                    rooms[roomNum].transform.GetChild(i).GetComponent<BoxCollider>().enabled = true;
+
+
+                    // gateLeftだった場合、左隣の部屋のgateRightの扉を開ける
+                    if(i == 1)
+                    {
+                        rooms[roomNum - 1].transform.GetChild(2).GetChild(1).gameObject.SetActive(false);
+                        rooms[roomNum - 1].transform.GetChild(2).GetComponent<BoxCollider>().enabled = true;
+                    }
+                    // gateRightだった場合、右隣の部屋のgateLeftの扉を開ける
+                    if(i == 2)
+                    {
+                        rooms[roomNum + 1].transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
+                        rooms[roomNum + 1].transform.GetChild(1).GetComponent<BoxCollider>().enabled = true;
+                    }
+                }
+            }
+        }
+    }
+
+
+    /// <summary>
+    /// すべてのドアを閉めます。
+    /// デバッグに使います。
+    /// </summary>
+    public void CloseAllDoors()
+    {
+        for (int roomNum = 1; roomNum <= rooms.Length - 1; roomNum++)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                // ドアを閉める
+                rooms[roomNum].transform.GetChild(i).GetChild(1).gameObject.SetActive(true);
+
+                // ドアのコライダーをfalseに
+                rooms[roomNum].transform.GetChild(i).GetComponent<BoxCollider>().enabled = false;
+            }
+        }
     }
 }

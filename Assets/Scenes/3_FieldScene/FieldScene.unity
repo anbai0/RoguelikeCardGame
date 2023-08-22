@@ -1863,6 +1863,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1870224441}
     m_Modifications:
+    - target: {fileID: 4135521744609005412, guid: 3c20904ff1d82864b93800e51073beb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4135521745568833012, guid: 3c20904ff1d82864b93800e51073beb5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6923348124334265861, guid: 3c20904ff1d82864b93800e51073beb5,
         type: 3}
       propertyPath: m_RootOrder
@@ -2600,7 +2610,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1781982968}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ece48531074baa4e978811c6de99b70, type: 3}
+  m_Script: {fileID: 11500000, guid: 12710c3f44acc5d46a7d18ea28e1cfc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rooms:

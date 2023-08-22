@@ -58,11 +58,6 @@ public class AudioSetting : MonoBehaviour
         bgmVolumeSlider.onValueChanged.AddListener(OnBGMValueChanged);
     }
 
-    private void Update()
-    {
-        Debug.Log(overallVolume);
-    }
-
     private void OnOverallValueChanged(float value)
     {
         float roundedValue = Mathf.Floor(value * 100) / 100; // ¬”“_‘æ“ñˆÊ‚ğØ‚èÌ‚Ä‚é
