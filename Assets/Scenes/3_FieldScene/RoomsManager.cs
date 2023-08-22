@@ -31,7 +31,7 @@ public class RoomsManager : MonoBehaviour
     public Vector3 roomCam = new Vector3(0, 10, -10);      // 各部屋の位置に加算して使います。
 
     float warriorY = -2.34f;
-    float wizardY = -2.37f;
+    float wizardY = -2.34f;
 
     enum RoomNum
     {
