@@ -51,7 +51,7 @@ public class RoomsManager : MonoBehaviour
 
     void Start()
     {
-        CloseAllDoors();
+        //OpenAllDoors();       // すべてのドアを開けるメソッド。デバッグに使います。
 
         TreasureBoxOrBonfire();
         ShopOrBonfire();
@@ -135,11 +135,9 @@ public class RoomsManager : MonoBehaviour
             // 宝箱 + 遮蔽
             treasureBox = Instantiate(treasureBoxPrefab, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
 
-            rooms[(int)RoomNum.Room7].transform.GetChild(2).GetComponent<BoxCollider>().enabled = false;                                            // gateRightのコライダーを無効化
-            rooms[(int)RoomNum.Room7].transform.GetChild(2).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
-
-            rooms[(int)RoomNum.Room8].transform.GetChild(1).GetComponent<BoxCollider>().enabled = false;                                            // gateLeftのコライダーを無効化
-            rooms[(int)RoomNum.Room8].transform.GetChild(1).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
+            // ゲートを非表示
+            rooms[(int)RoomNum.Room7].transform.GetChild(2).gameObject.SetActive(false);
+            rooms[(int)RoomNum.Room8].transform.GetChild(1).gameObject.SetActive(false);
 
             // 焚火
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
@@ -153,11 +151,9 @@ public class RoomsManager : MonoBehaviour
             // 宝箱 + 遮蔽
             treasureBox = Instantiate(treasureBoxPrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));      // 宝箱生成
 
-            rooms[(int)RoomNum.Room5].transform.GetChild(2).GetComponent<BoxCollider>().enabled = false;                                            // gateRightのコライダーを無効化
-            rooms[(int)RoomNum.Room5].transform.GetChild(2).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示
-
-            rooms[(int)RoomNum.Room6].transform.GetChild(1).GetComponent<BoxCollider>().enabled = false;                                            // gateLeftのコライダーを無効化
-            rooms[(int)RoomNum.Room6].transform.GetChild(1).GetChild(1).gameObject.SetActive(true);                                                 // ドアを表示  
+            // ゲートを非表示
+            rooms[(int)RoomNum.Room5].transform.GetChild(2).gameObject.SetActive(false);
+            rooms[(int)RoomNum.Room6].transform.GetChild(1).gameObject.SetActive(false);  
 
 
             // 焚火
@@ -187,10 +183,8 @@ public class RoomsManager : MonoBehaviour
             // ショップ + 遮蔽
             shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));    // ショップ生成
 
-            rooms[(int)RoomNum.BossRoom2].transform.GetChild(4).GetComponent<BoxCollider>().enabled = false;                                    // gateBackのコライダーを無効化
-
-            rooms[(int)RoomNum.Room12].transform.GetChild(3).GetComponent<BoxCollider>().enabled = false;                                       // gateForwardのコライダーを無効化
-            rooms[(int)RoomNum.Room12].transform.GetChild(3).GetChild(1).gameObject.SetActive(true);                                            // ドアを表示
+            // ゲートを非表示
+            rooms[(int)RoomNum.Room12].transform.GetChild(3).gameObject.SetActive(false);
 
             // 焚火
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                               // 焚火生成
@@ -205,10 +199,8 @@ public class RoomsManager : MonoBehaviour
             // ショップ + 遮蔽
             shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));     // ショップ生成
 
-            rooms[(int)RoomNum.BossRoom1].transform.GetChild(4).GetComponent<BoxCollider>().enabled = false;                                    // gateBackのコライダーを無効化
-
-            rooms[(int)RoomNum.Room9].transform.GetChild(3).GetComponent<BoxCollider>().enabled = false;                                        // gateForwardのコライダーを無効化
-            rooms[(int)RoomNum.Room9].transform.GetChild(3).GetChild(1).gameObject.SetActive(true);                                             // ドアを表示
+            // ゲートを非表示
+            rooms[(int)RoomNum.Room9].transform.GetChild(3).gameObject.SetActive(false);
 
             // 焚火
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                              // 焚火生成
@@ -291,20 +283,20 @@ public class RoomsManager : MonoBehaviour
 
 
     /// <summary>
-    /// すべてのドアを閉めます。
+    /// すべてのドアを開けます。
     /// デバッグに使います。
     /// </summary>
-    public void CloseAllDoors()
+    public void OpenAllDoors()
     {
         for (int roomNum = 1; roomNum <= rooms.Length - 1; roomNum++)
         {
             for (int i = 1; i <= 3; i++)
             {
-                // ドアを閉める
-                rooms[roomNum].transform.GetChild(i).GetChild(1).gameObject.SetActive(true);
+                // ドアを開ける
+                rooms[roomNum].transform.GetChild(i).GetChild(1).gameObject.SetActive(false);
 
-                // ドアのコライダーをfalseに
-                rooms[roomNum].transform.GetChild(i).GetComponent<BoxCollider>().enabled = false;
+                // ドアのコライダーをtrueに
+                rooms[roomNum].transform.GetChild(i).GetComponent<BoxCollider>().enabled = true;
             }
         }
     }

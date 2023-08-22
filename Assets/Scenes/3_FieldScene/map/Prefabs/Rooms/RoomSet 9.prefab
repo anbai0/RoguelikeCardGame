@@ -177,12 +177,17 @@ PrefabInstance:
     - target: {fileID: 116891349824966845, guid: 575a3f138c8c49f44b31796a944c0413,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 116891350208102957, guid: 575a3f138c8c49f44b31796a944c0413,
         type: 3}
       propertyPath: m_Name
       value: gateForward
+      objectReference: {fileID: 0}
+    - target: {fileID: 116891350208102957, guid: 575a3f138c8c49f44b31796a944c0413,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 116891350208102957, guid: 575a3f138c8c49f44b31796a944c0413,
         type: 3}
@@ -267,7 +272,7 @@ BoxCollider:
   m_GameObject: {fileID: 4166659142469774498}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.022, y: 0.023, z: 0.025}
   m_Center: {x: 0.0035, y: -0.003, z: -0.04}
@@ -349,12 +354,17 @@ PrefabInstance:
     - target: {fileID: 7888661871217208131, guid: 83f03fe136116e345a50f9ef7da46538,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7888661872957438419, guid: 83f03fe136116e345a50f9ef7da46538,
         type: 3}
       propertyPath: m_Name
       value: gateRight
+      objectReference: {fileID: 0}
+    - target: {fileID: 7888661872957438419, guid: 83f03fe136116e345a50f9ef7da46538,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7888661872957438419, guid: 83f03fe136116e345a50f9ef7da46538,
         type: 3}
@@ -384,7 +394,7 @@ BoxCollider:
   m_GameObject: {fileID: 4135521744609005412}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.022, y: 0.023, z: 0.025}
   m_Center: {x: 0.0035, y: -0.003, z: -0.04}
