@@ -1,7 +1,4 @@
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 /// <summary>
 /// BattleSceneのUIManagerです。
@@ -80,7 +77,19 @@ public class UIManagerBattle : MonoBehaviour
     {
         if (!Input.GetMouseButton(0) && !isDragging)
         {
-            UIObject.GetComponent<CardMovement>().CardEnter(UIObject);
+            if (UIObject.CompareTag("Condition"))
+            {
+                UIObject.transform.GetChild(1).gameObject.SetActive(true); //PlayerConditionEffectBGを表示する
+            }
+            else if (UIObject.CompareTag("EnemyCondition"))
+            {
+                UIObject.transform.GetChild(2).gameObject.SetActive(true); //EnemyConditionEffectBGを表示する
+            }
+            else
+            {
+                UIObject.GetComponent<CardMovement>().CardEnter(UIObject);
+            }
+            
         }
     }
 
@@ -94,7 +103,18 @@ public class UIManagerBattle : MonoBehaviour
 
         if (!Input.GetMouseButton(0) && !isDragging)
         {
-            UIObject.GetComponent<CardMovement>().CardExit(UIObject);
+            if (UIObject.CompareTag("Condition"))
+            {
+                UIObject.transform.GetChild(1).gameObject.SetActive(false); //PlayerConditionEffectBGを非表示にする
+            }
+            else if(UIObject.CompareTag("EnemyCondition"))
+            {
+                UIObject.transform.GetChild(2).gameObject.SetActive(false); //EnemyConditionEffectBGを非表示にする
+            }
+            else
+            {
+                UIObject.GetComponent<CardMovement>().CardExit(UIObject);
+            }
         }
     }
 
@@ -104,7 +124,7 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     void UIBeginDrag(GameObject UIObject)
     {
-        if (UIObject.tag == "Cards")
+        if (UIObject.CompareTag("Cards"))
         {
             UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
         }
@@ -124,7 +144,7 @@ public class UIManagerBattle : MonoBehaviour
     /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
     void UIDrop(GameObject UIObject)
     {
-        if (UIObject.tag == "Cards")
+        if (UIObject.CompareTag("Cards"))
         {
             UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
         }

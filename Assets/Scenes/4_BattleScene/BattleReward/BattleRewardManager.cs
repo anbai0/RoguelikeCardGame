@@ -89,11 +89,11 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (type == "StrongEnemy")
         {
-            rewardRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 1, 1 });
+            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
         }
         else if (type == "Boss")
         {
-            rewardRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 2 });
+            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 2 });
             rewardRelicID.Insert(0, RelicID1);
         }
         else

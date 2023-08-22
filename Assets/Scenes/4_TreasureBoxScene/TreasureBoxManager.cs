@@ -50,7 +50,7 @@ public class TreasureBoxManager : MonoBehaviour
     void TreasureLottery()
     {
         treasureCardID = lottery.SelectCardByRarity(new List<int> { 2, 2, 1 });
-        treasureRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 1, 1 });
+        treasureRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
     }
 
     /// <summary>

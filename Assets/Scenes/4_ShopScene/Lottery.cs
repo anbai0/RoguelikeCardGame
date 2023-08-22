@@ -23,7 +23,7 @@ public class Lottery : MonoBehaviour
     [SerializeField] List<int> relicRarity1List;
     [SerializeField] List<int> relicRarity2List;
     [SerializeField] List<int> shopCards = new List<int>();       // ショップに追加されたカード
-    //[SerializeField] List<int> shopRelics = new List<int>();      // ショップに追加されたレリック
+    [SerializeField] List<int> shopRelics = new List<int>();      // ショップに追加されたレリック
 
     void Start()
     {
@@ -209,49 +209,49 @@ public class Lottery : MonoBehaviour
     /// </summary>
     /// <param name="rarity">抽選したいレアリティ</param>
     /// <returns>指定したレアリティのListの要素</returns>
-    //int RelicLottery(int rarity)
-    //{
-    //    List<int> SelectedRarityList;
+    int NotDuplicateRelicLottery(int rarity)
+    {
+        List<int> SelectedRarityList;
 
-    //    // 引数で指定されたレアリティのListをSelectedRarityListへ代入
-    //    switch (rarity)
-    //    {
-    //        case 1:
-    //            SelectedRarityList = relicRarity1List;
-    //            break;
-    //        case 2:
-    //            SelectedRarityList = relicRarity2List;
-    //            break;
-    //        default:
-    //            Debug.Log("指定されたレアリティのレリックがありません。");
-    //            return -1;
-    //    }
+        // 引数で指定されたレアリティのListをSelectedRarityListへ代入
+        switch (rarity)
+        {
+            case 1:
+                SelectedRarityList = relicRarity1List;
+                break;
+            case 2:
+                SelectedRarityList = relicRarity2List;
+                break;
+            default:
+                Debug.Log("指定されたレアリティのレリックがありません。");
+                return -1;
+        }
 
-    //    // 所持レリックとショップに出ているカードをmyRelicAndShopRelicsへ追加
-    //    List<int> myRelicAndShopRelics = new List<int>(playerData._relicList);
-    //    myRelicAndShopRelics.AddRange(shopRelics);
+        // 所持レリックとショップに出ているカードをmyRelicAndShopRelicsへ追加
+        List<int> myRelicAndShopRelics = new List<int>(gm.playerData._relicList);
+        myRelicAndShopRelics.AddRange(shopRelics);
 
-    //    int relicLottery = -1;
+        int relicLottery = -1;
 
-    //    // 抽選処理
-    //    int maxAttempts = 100;  // 最大試行回数を設定
-    //    int attempts = 0;
+        // 抽選処理
+        int maxAttempts = 100;  // 最大試行回数を設定
+        int attempts = 0;
 
-    //    while (relicLottery == -1 || (myRelicAndShopRelics.Contains(SelectedRarityList[relicLottery])) && attempts < maxAttempts)
-    //    {
-    //        relicLottery = Random.Range(0, SelectedRarityList.Count);
-    //        attempts++;
-    //    }
+        while (relicLottery == -1 || (myRelicAndShopRelics.Contains(SelectedRarityList[relicLottery])) && attempts < maxAttempts)
+        {
+            relicLottery = Random.Range(0, SelectedRarityList.Count);
+            attempts++;
+        }
 
-    //    if (attempts >= maxAttempts)
-    //    {
-    //        relicLottery = -1;
-    //        Debug.Log("レリックを抽選できませんでした。");
-    //    }
+        if (attempts >= maxAttempts)
+        {
+            relicLottery = -1;
+            Debug.Log("レリックを抽選できませんでした。");
+        }
 
-    //    myRelicAndShopRelics = null;
-    //    return relicLottery;
-    //}
+        myRelicAndShopRelics = null;
+        return relicLottery;
+    }
 
 
 
@@ -262,61 +262,61 @@ public class Lottery : MonoBehaviour
     /// </summary>
     /// <param name="selectRarity">抽選したいレアリティ1~2をListで指定</param>
     /// <returns>抽選したレリックID</returns>
-    //public List<int> SelectRelicByRarity(List<int> selectRarity)
-    //{
-    //    List<int> lotteryResult = new List<int>();
+    public List<int> NotDuplicateSelectRelicByRarity(List<int> selectRarity)
+    {
+        List<int> lotteryResult = new List<int>();
 
-    //    for (int i = 0; i < selectRarity.Count; i++)
-    //    {
-    //        // レリックの抽選
-    //        int selectedRelic = RelicLottery(selectRarity[i]);
+        for (int i = 0; i < selectRarity.Count; i++)
+        {
+            // レリックの抽選
+            int selectedRelic = NotDuplicateRelicLottery(selectRarity[i]);
 
-    //        // 指定したレアリティにレリックがなかった時の再抽選
-    //        if (selectedRelic == -1)
-    //        {
-    //            switch (selectRarity[i])
-    //            {
-    //                case 1:
-    //                    selectedRelic = RelicLottery(2);
-    //                    selectedRelic = relicRarity2List[selectedRelic];   // 抽選した各レアリティのListの要素をRelicIDに変換
-    //                    break;
-    //                case 2:
-    //                    selectedRelic = RelicLottery(1);
-    //                    selectedRelic = relicRarity1List[selectedRelic];
-    //                    break;
-    //                default:
-    //                    break;
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // 抽選した各レアリティのListの要素をRelicIDに変換
-    //            switch (selectRarity[i])
-    //            {
-    //                case 1:
-    //                    selectedRelic = relicRarity1List[selectedRelic];
-    //                    break;
-    //                case 2:
-    //                    selectedRelic = relicRarity2List[selectedRelic];
-    //                    break;
-    //                default:
-    //                    break;
-    //            }
-    //        }
+            // 指定したレアリティにレリックがなかった時の再抽選
+            if (selectedRelic == -1)
+            {
+                switch (selectRarity[i])
+                {
+                    case 1:
+                        selectedRelic = NotDuplicateRelicLottery(2);
+                        selectedRelic = relicRarity2List[selectedRelic];   // 抽選した各レアリティのListの要素をRelicIDに変換
+                        break;
+                    case 2:
+                        selectedRelic = NotDuplicateRelicLottery(1);
+                        selectedRelic = relicRarity1List[selectedRelic];
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                // 抽選した各レアリティのListの要素をRelicIDに変換
+                switch (selectRarity[i])
+                {
+                    case 1:
+                        selectedRelic = relicRarity1List[selectedRelic];
+                        break;
+                    case 2:
+                        selectedRelic = relicRarity2List[selectedRelic];
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-    //        lotteryResult.Add(selectedRelic);
+            lotteryResult.Add(selectedRelic);
 
-    //        // ShopControllerから呼ばれたら
-    //        if (fromShopController)
-    //        {
-    //            shopRelics.Add(selectedRelic);
-    //        }
-    //    }
+            // ShopControllerから呼ばれたら
+            if (fromShopController)
+            {
+                shopRelics.Add(selectedRelic);
+            }
+        }
 
-    //    fromShopController = false;
+        fromShopController = false;
 
-    //    return lotteryResult;
-    //}
+        return lotteryResult;
+    }
 
     #endregion
 
