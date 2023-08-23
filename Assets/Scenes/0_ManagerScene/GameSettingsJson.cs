@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;  //AssetDatabaseを使うために追加
 using System.IO;  //StreamWriterなどを使うために追加
@@ -19,20 +17,32 @@ public class GameSettingsJson : MonoBehaviour
     //保存先
     string datapath => Application.dataPath + "/GameSettingsJson.json";
 
+
     private void Awake()
     {
         //GameSettingsデータを取得
         GameSettings gameSettings = new GameSettings();
 
         //JSONファイルがあればロード, なければ初期化関数へ
-        if (FindJsonfile())
+        if (File.Exists(datapath))
         {
+            Debug.Log("Jsonファイルが見つかりました");
             gameSettings = loadGameSettingsData();
         }
         else
         {
+            Debug.Log("Jsonファイルが見つかりませんでした");
             Initialize(gameSettings);
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log(File.Exists(datapath));
+        }
+
     }
 
     //セーブするための関数
@@ -73,23 +83,5 @@ public class GameSettingsJson : MonoBehaviour
         gameSettings.bgmVolume = 0.5f;
 
         saveGameSettingsData(gameSettings);
-    }
-
-    //JSONファイルの有無を判定するための関数
-    public bool FindJsonfile()
-    {
-        string[] assets = AssetDatabase.FindAssets(datapath);
-        Debug.Log(assets.Length);
-        if (assets.Length != 0)
-        {
-            string[] paths = assets.Select(guid => AssetDatabase.GUIDToAssetPath(guid)).ToArray();
-            Debug.Log($"検索結果:\n{string.Join("\n", paths)}");
-            return true;
-        }
-        else
-        {
-            Debug.Log("Jsonファイルがなかった");
-            return false;
-        }
     }
 }

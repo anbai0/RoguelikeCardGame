@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
-        if (!isAlreadyRead) ReadPlayer("Warrior");
+        //if (!isAlreadyRead) ReadPlayer("Warrior");
     }
 
     
