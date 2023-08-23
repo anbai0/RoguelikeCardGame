@@ -29,6 +29,7 @@ public class UIManagerShop : MonoBehaviour
     [SerializeField] private GameObject restUI;
 
     [Header("クリック後に参照するUI")]
+    [SerializeField] private GameObject closeShop;
     [SerializeField] private GameObject buyButton;
     [SerializeField] private GameObject closeShopping;
     [SerializeField] private GameObject restButton;
@@ -42,6 +43,14 @@ public class UIManagerShop : MonoBehaviour
         UIEventsReload();
     }
 
+    private void Update()
+    {
+        // ショップシーンがアクティブになってるとき
+        if (shopUI.activeSelf)
+        {
+            restController.CheckRest("ShopScene");      // 休憩のテキスト更新
+        }
+    }
 
     #region UIイベントリスナー関係の処理
     /// <summary>
@@ -90,7 +99,7 @@ public class UIManagerShop : MonoBehaviour
             shopManager.HasHealPotion();
         }
         // "店を出る"を押したら
-        if (UIObject.CompareTag("ExitButton") && !isClick)
+        if (UIObject == closeShop && !isClick)
         {
             isClick = true;
             AudioManager.Instance.PlaySE("選択音1");

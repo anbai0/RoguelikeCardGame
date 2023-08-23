@@ -3675,6 +3675,7 @@ MonoBehaviour:
   restController: {fileID: 387374077}
   shopUI: {fileID: 1182467483}
   restUI: {fileID: 2049788800}
+  closeShop: {fileID: 1857995150}
   buyButton: {fileID: 1349941458}
   closeShopping: {fileID: 1598600394}
   restButton: {fileID: 1564350630}
