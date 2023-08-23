@@ -18,7 +18,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioSource bgmAudioSource;     // BGM用のAudioSource
     private AudioSetting audioSetting;
 
-
     [Header("SE関係")]
     [SerializeField] private AudioClip[] seAudioClips;
     [SerializeField] private float[] seAudioVolumes;
@@ -26,6 +25,8 @@ public class AudioManager : MonoBehaviour
     [Header("BGM関係")]
     [SerializeField] private AudioClip[] bgmAudioClips;
     [SerializeField] private float[] bgmAudioVolumes;
+
+    private int currentBGMIndex;        // 設定で音量を変えるときに使います
 
 
     public static AudioManager Instance;     // シングルトン
@@ -120,6 +121,7 @@ public class AudioManager : MonoBehaviour
     public void PlayBGM(string bgmName)
     {
         int bgmIndex = GetBGMIndex(bgmName);
+        currentBGMIndex = bgmIndex;             // 設定で音量を変えるときに使います
         if (bgmIndex >= 0)
         {
             bgmAudioSource.Stop();
@@ -159,5 +161,13 @@ public class AudioManager : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    /// <summary>
+    /// Option画面で設定を適応ボタンを押したときに、今再生しているBGMの音量を変更します。
+    /// </summary>
+    public void UpdateBGMVolume()
+    {
+        bgmAudioSource.volume = bgmAudioVolumes[currentBGMIndex] * audioSetting.overallVolume * audioSetting.bgmVolume;     
     }
 }

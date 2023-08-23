@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject overlayOptionButton;
     [SerializeField] GameObject titleOptionButton;
     [SerializeField] GameObject closeOptionButton;
+    [SerializeField] GameObject ApplySettingsButton;
     [SerializeField] GameObject titleBackButton;
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
@@ -115,9 +116,9 @@ public class UIManager : MonoBehaviour
 
         // オプション画面非表示
         if (UIObject == closeOptionButton)
-        {
-            AudioManager.Instance.PlaySE("選択音1");
+        {          
             audioSetting.SaveAudioSetting();    // 音量設定のデータをセーブ
+            AudioManager.Instance.PlaySE("選択音1");
             optionScreen.SetActive(false);
         }
 
@@ -135,6 +136,7 @@ public class UIManager : MonoBehaviour
             confirmationPanel.SetActive(false);
         }
 
+        // タイトルへ戻るボタンを押したら
         if (UIObject == confirmTitleBackButton)
         {
             AudioManager.Instance.PlaySE("選択音2");
@@ -142,6 +144,14 @@ public class UIManager : MonoBehaviour
             gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
             optionScreen.SetActive(false);
+        }
+
+        // 設定を適用ボタンを押したら
+        if (UIObject == ApplySettingsButton)
+        {         
+            audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
+            AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
+            AudioManager.Instance.PlaySE("選択音1");
         }
 
         #endregion
