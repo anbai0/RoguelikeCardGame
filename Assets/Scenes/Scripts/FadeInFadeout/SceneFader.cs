@@ -32,10 +32,10 @@ public class SceneFader : MonoBehaviour
         Invoke("findFadeObject", fadeDelay * fadeDuration / 10f);      // 起動時用にCanvasの生成をちょっと待つ
     }
 
-    void findFadeObject()
+    async void findFadeObject()
     {
         fade = GameObject.FindGameObjectWithTag("Fade");            // Canvasをみつける
-        fade.GetComponent<FadeController>().fadeIn();         // フェードインフラグを立てる
+        await fade.GetComponent<FadeController>().fadeIn();         // フェードインフラグを立てる
     }
 
 

@@ -1,21 +1,26 @@
+using DG.Tweening;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// SE,BGMを管理します。
-/// 音を流すときは、
-/// AudioManager.Instance.PlaySE("SEの名前");
-/// AudioManager.Instance.PlayBGM("BGMの名前");
-/// 音を消すときは、
-/// AudioManager.Instance.seAudioSource.Stop();
-/// AudioManager.Instance.bgmAudioSource.Stop();
-/// 一時停止、停止解除は、
-/// bgmAudioSource.Pause
-/// bgmAudioSource.UnPause
+/// <para>音を流すときは、</para>
+/// <code>AudioManager.Instance.PlaySE("SEの名前");</code>
+/// <code>AudioManager.Instance.PlayBGM("BGMの名前");</code>
+/// <para>音を消すときは、</para>
+/// <code>AudioManager.Instance.seAudioSource.Stop();</code>
+/// <code>AudioManager.Instance.bgmAudioSource.Stop();</code>
+/// <para>一時停止、停止解除は、</para>
+/// <code>AudioManager.Instance.bgmAudioSource.Pause();</code>
+/// <code>AudioManager.Instance.bgmAudioSource.UnPause();</code>
+/// <para>フェードありの一時停止、停止解除は、</para>
+/// <code>AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeInBGMVolume());</code>
+/// <code>AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());</code>
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioSource seAudioSource;      // SE用のAudioSource
-    [SerializeField] private AudioSource bgmAudioSource;     // BGM用のAudioSource
+    [SerializeField] public AudioSource bgmAudioSource;      // BGM用のAudioSource
     private AudioSetting audioSetting;
 
     [Header("SE関係")]
@@ -27,7 +32,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private float[] bgmAudioVolumes;
 
     private int currentBGMIndex;        // 設定で音量を変えるときに使います
-
+    private float currentBGMVolume;     // 音をフェードする時に使います
+    private float fadeVolumeSpeed = 1.5f;
 
     public static AudioManager Instance;     // シングルトン
     private void Awake()
@@ -42,58 +48,58 @@ public class AudioManager : MonoBehaviour
     }
 
 
-    //private void Update()
-    //{
-    //    // SEチェック
-    //    if (Input.GetKeyDown(KeyCode.Alpha1))
-    //        PlaySE("タイトル画面");
-    //    if (Input.GetKeyDown(KeyCode.Alpha2))
-    //        PlaySE("選択音");
-    //    if (Input.GetKeyDown(KeyCode.Alpha3))
-    //        PlaySE("買い物");
-    //    if (Input.GetKeyDown(KeyCode.Alpha4))
-    //        PlaySE("マップ切り替え");
-    //    if (Input.GetKeyDown(KeyCode.Alpha5))
-    //        PlaySE("攻撃1");
-    //    if (Input.GetKeyDown(KeyCode.Alpha6))
-    //        PlaySE("回復");
-    //    if (Input.GetKeyDown(KeyCode.Alpha7))
-    //        PlaySE("バフ");
-    //    if (Input.GetKeyDown(KeyCode.Alpha8))
-    //        PlaySE("デバフ");
-    //    if (Input.GetKeyDown(KeyCode.Alpha9))
-    //        PlaySE("");
-    //    if (Input.GetKeyDown(KeyCode.Alpha0))
-    //        PlaySE("");
+    private void Update()
+    {
+        //// SEチェック
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //    PlaySE("タイトル画面");
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //    PlaySE("選択音");
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //    PlaySE("買い物");
+        //if (Input.GetKeyDown(KeyCode.Alpha4))
+        //    PlaySE("マップ切り替え");
+        //if (Input.GetKeyDown(KeyCode.Alpha5))
+        //    PlaySE("攻撃1");
+        //if (Input.GetKeyDown(KeyCode.Alpha6))
+        //    PlaySE("回復");
+        //if (Input.GetKeyDown(KeyCode.Alpha7))
+        //    PlaySE("バフ");
+        //if (Input.GetKeyDown(KeyCode.Alpha8))
+        //    PlaySE("デバフ");
+        //if (Input.GetKeyDown(KeyCode.Alpha9))
+        //    PlaySE("");
+        //if (Input.GetKeyDown(KeyCode.Alpha0))
+        //    PlaySE("");
 
-    //    // BGMチェック
-    //    if (Input.GetKeyDown(KeyCode.Q))
-    //        PlayBGM("Field1");
-    //    if (Input.GetKeyDown(KeyCode.W))
-    //        PlayBGM("Field2");
-    //    if (Input.GetKeyDown(KeyCode.E))
-    //        PlayBGM("Result");
-    //    if (Input.GetKeyDown(KeyCode.R))
-    //        PlayBGM("it's my turn");
-    //    if (Input.GetKeyDown(KeyCode.T))
-    //        PlayBGM("Social Documentary02");
-    //    if (Input.GetKeyDown(KeyCode.Y))
-    //        PlayBGM("ファニーエイリアン");
-    //    if (Input.GetKeyDown(KeyCode.U))
-    //        PlayBGM("深淵を覗く者");
-    //    if (Input.GetKeyDown(KeyCode.I))
-    //        PlayBGM("");
-    //    if (Input.GetKeyDown(KeyCode.O))
-    //        PlayBGM("");
-    //    if (Input.GetKeyDown(KeyCode.P))
-    //        PlayBGM("");
+        //// BGMチェック
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //    PlayBGM("Field1");
+        //if (Input.GetKeyDown(KeyCode.W))
+        //    PlayBGM("Field2");
+        //if (Input.GetKeyDown(KeyCode.E))
+        //    PlayBGM("Result");
+        //if (Input.GetKeyDown(KeyCode.R))
+        //    PlayBGM("it's my turn");
+        //if (Input.GetKeyDown(KeyCode.T))
+        //    PlayBGM("Social Documentary02");
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //    PlayBGM("ファニーエイリアン");
+        //if (Input.GetKeyDown(KeyCode.U))
+        //    PlayBGM("深淵を覗く者");
+        //if (Input.GetKeyDown(KeyCode.I))
+        //    PlayBGM("");
+        //if (Input.GetKeyDown(KeyCode.O))
+        //    PlayBGM("");
+        //if (Input.GetKeyDown(KeyCode.P))
+        //    PlayBGM("");
 
-    //    if (Input.GetKeyDown(KeyCode.S))
-    //    {
-    //        seAudioSource.Stop();
-    //        bgmAudioSource.Stop();
-    //    }         
-    //}
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    seAudioSource.Stop();
+        //    bgmAudioSource.Stop();
+        //}
+    }
 
     /// <summary>
     /// 指定されたSEを流します。
@@ -127,9 +133,8 @@ public class AudioManager : MonoBehaviour
             bgmAudioSource.Stop();
             bgmAudioSource.clip = bgmAudioClips[bgmIndex];      // 使用する音声ファイルを設定
             bgmAudioSource.volume = bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume;    // 音量を変更
+            currentBGMVolume = bgmAudioSource.volume;       // 現在の音量を格納。フェードに使います。
             bgmAudioSource.Play();      // BGM再生開始
-
-            //bgmAudioSource.PlayOneShot(bgmAudioClips[bgmIndex], bgmAudioVolumes[bgmIndex] * audioSetting.overallVolume * audioSetting.bgmVolume);
         }
         else
         {
@@ -168,6 +173,43 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void UpdateBGMVolume()
     {
-        bgmAudioSource.volume = bgmAudioVolumes[currentBGMIndex] * audioSetting.overallVolume * audioSetting.bgmVolume;     
+        bgmAudioSource.volume = bgmAudioVolumes[currentBGMIndex] * audioSetting.overallVolume * audioSetting.bgmVolume;
+        currentBGMVolume = bgmAudioSource.volume;       // 現在の音量を格納。フェードに使います。
+    }
+
+    /// <summary>
+    /// フェードインしながらBGM音量を変えます。
+    /// </summary>
+    public IEnumerator IEFadeInBGMVolume()
+    {
+        bgmAudioSource.UnPause();
+
+        // 数値の変更
+        DOTween.To(
+            () => bgmAudioSource.volume,                // 何を対象にするのか
+            volume => bgmAudioSource.volume = volume,   // 値の更新
+            currentBGMVolume,                           // 最終的な値
+            fadeVolumeSpeed                             // アニメーション時間
+        );
+
+        while (bgmAudioSource.volume != currentBGMVolume) yield return null;
+    }
+
+    /// <summary>
+    /// フェードアウトしながらBGM音量を変えます。
+    /// </summary>
+    public IEnumerator IEFadeOutBGMVolume()
+    {
+        // 数値の変更
+        DOTween.To(
+            () => bgmAudioSource.volume,                // 何を対象にするのか
+            volume => bgmAudioSource.volume = volume,   // 値の更新
+            0f,                                         // 最終的な値
+            fadeVolumeSpeed                             // アニメーション時間
+        );
+
+        while (bgmAudioSource.volume != 0) yield return null;
+
+        bgmAudioSource.Pause();
     }
 }

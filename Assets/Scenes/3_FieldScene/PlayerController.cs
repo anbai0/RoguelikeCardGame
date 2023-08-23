@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
         // isPlayerActiveがtrueかつフェードインが終わっているとき
         if (isPlayerActive && !FadeController.fadeInDone)
         {
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeInBGMVolume());       // BGMを再生
             PlayerMove();
         }
 
@@ -78,6 +79,8 @@ public class PlayerController : MonoBehaviour
         #region シーン遷移
         if (collision.gameObject.CompareTag("Bonfire"))
         {
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
+
             // playerを動けなくする処理
             isPlayerActive = false;
             animator.SetBool("IsWalking", false);
@@ -88,6 +91,8 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("TreasureBox"))
         {
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
+
             // playerを動けなくする処理
             isPlayerActive = false;
             animator.SetBool("IsWalking", false);
@@ -98,6 +103,8 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Shop"))
         {
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
+
             // playerを動けなくする処理
             isPlayerActive = false;
             animator.SetBool("IsWalking", false);
@@ -119,6 +126,9 @@ public class PlayerController : MonoBehaviour
 
         if (collision.gameObject.CompareTag("SmallEnemy") || collision.gameObject.CompareTag("StrongEnemy"))
         {
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
+
+            // playerを動けなくする処理
             isPlayerActive = false;
             animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
 
