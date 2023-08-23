@@ -130,6 +130,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(upStrengthIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort(); //名前順にソート
             }
+            AudioManager.Instance.PlaySE("バフ");
             upStrengthIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             upStrengthIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = upStrengthIcon.transform.Find("ConditionCountText").GetComponent<Text>(); 
@@ -161,6 +162,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(autoHealingIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("バフ");
             autoHealingIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             autoHealingIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = autoHealingIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -192,6 +194,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(invalidBadStatusIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("バフ");
             invalidBadStatusIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             invalidBadStatusIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = invalidBadStatusIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -223,6 +226,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(curseIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             curseIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             curseIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = curseIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -254,6 +258,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(impatienceIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             impatienceIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             impatienceIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = impatienceIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -285,6 +290,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(weaknessIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             weaknessIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             weaknessIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = weaknessIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -316,6 +322,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(burnIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             burnIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             burnIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = burnIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -347,6 +354,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 ViewConditionEffect(poisonIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             poisonIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             poisonIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = poisonIcon.transform.Find("ConditionCountText").GetComponent<Text>();

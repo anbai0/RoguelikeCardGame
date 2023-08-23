@@ -181,6 +181,7 @@ public class EnemyBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
+            AudioManager.Instance.PlaySE("UŒ‚1");
             StartCoroutine(DamageFlash(deductedDamage));
         }
     }
@@ -214,6 +215,7 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetCurrentHP += healingHPPower;
         if (healingHPPower > 0)
         {
+            AudioManager.Instance.PlaySE("‰ñ•œ");
             ViewHealing(healingHPPower);
         }
     }

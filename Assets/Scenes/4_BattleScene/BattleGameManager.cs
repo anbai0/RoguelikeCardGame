@@ -82,6 +82,7 @@ public class BattleGameManager : MonoBehaviour
         floor = gm.floor;
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
+        StartBGM(enemyType);
         playerScript = GetComponent<PlayerBattleAction>();
         enemyScript = GetComponent<EnemyBattleAction>();
         selectEnemyName = GetComponent<SelectEnemyName>();
@@ -432,5 +433,33 @@ public class BattleGameManager : MonoBehaviour
             gm.playerData._playerCurrentHP = playerScript.GetSetCurrentHP; //戦闘終了時の体力を返す
         }
         playerData._playerMoney += enemyScript.GetSetDropMoney; //コインを獲得
+    }
+
+    /// <summary>
+    /// エネミーの種類に応じてBGMを流す
+    /// </summary>
+    /// <param name="_enemyType">エネミーの種類</param>
+    void StartBGM(string _enemyType)
+    {
+        if (_enemyType == "SmallEnemy")
+        {
+            // BGMを流します
+            if (Random.Range(0, 2) == 0)
+            {
+                AudioManager.Instance.PlayBGM("it's my turn");
+            }
+            else
+            {
+                AudioManager.Instance.PlayBGM("ファニーエイリアン");
+            }
+        }
+        else if (_enemyType == "StrongEnemy")
+        {
+            AudioManager.Instance.PlayBGM("Social Documentary02");
+        }
+        else if (_enemyType == "Boss")
+        {
+            AudioManager.Instance.PlayBGM("深淵を覗く者");
+        }
     }
 }

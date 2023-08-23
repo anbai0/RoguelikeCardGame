@@ -115,6 +115,7 @@ public class PlayerBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
+            AudioManager.Instance.PlaySE("UŒ‚1");
             ViewDamage(deductedDamage);
             shakeBattleField.Shake(0.25f, 10f);
         }
@@ -139,6 +140,7 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetCurrentHP += healingHPPower;
         if (healingHPPower > 0)
         {
+            AudioManager.Instance.PlaySE("‰ñ•œ");
             ViewHealing(healingHPPower);
         }
     }

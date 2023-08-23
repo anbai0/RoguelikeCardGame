@@ -152,6 +152,7 @@ public class UIManagerBattleReward : MonoBehaviour
         if (UIObject == applyGetItem && isSelected && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("選択音1");
 
             // 最後にクリックしたアイテムの選択状態を解除する
             if (lastSelectedItem.CompareTag("Cards"))
@@ -213,6 +214,8 @@ public class UIManagerBattleReward : MonoBehaviour
         // "入手しない"を押したら
         if (UIObject == closeGetItem)
         {
+            AudioManager.Instance.PlaySE("選択音1");
+
             //レリックの報酬も必要なら
             if (isDisplayRelics)
             {

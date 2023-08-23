@@ -162,6 +162,17 @@ public class BattleRewardManager : MonoBehaviour
         {
             // バトルシーンをアンロード
             sceneFader.SceneChange(unLoadSceneName: "BattleScene");
+
+            // フィールドシーンのBGMを流します
+            if (Random.Range(0, 2) == 0)
+            {
+                AudioManager.Instance.PlayBGM("Field1");
+            }
+            else
+            {
+                AudioManager.Instance.PlayBGM("Field2");
+            }
+
             PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
             PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
             playerController.enemy.SetActive(false);      // エネミーを消す
