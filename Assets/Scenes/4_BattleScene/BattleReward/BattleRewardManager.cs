@@ -144,7 +144,7 @@ public class BattleRewardManager : MonoBehaviour
 
     public void UnLoadBattleScene()
     {
-        if (bg.enemyType == "StrongEnemy")
+        if (bg.enemyType == "Boss")
         {
             if (gm.floor < 3) //ŠK‘w‚ª3ŠK‚Ü‚Å“ž’B‚µ‚Ä‚¢‚È‚¢ê‡
             {

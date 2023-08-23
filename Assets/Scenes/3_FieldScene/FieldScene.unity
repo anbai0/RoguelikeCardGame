@@ -1631,6 +1631,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1870224441}
     m_Modifications:
+    - target: {fileID: 3813588118130940382, guid: 400c5703123a5124592eadc7717d32bd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4166659142469774498, guid: 400c5703123a5124592eadc7717d32bd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Boss
+      objectReference: {fileID: 0}
     - target: {fileID: 6923348124334265861, guid: 400c5703123a5124592eadc7717d32bd,
         type: 3}
       propertyPath: m_RootOrder
@@ -2234,6 +2244,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1870224441}
     m_Modifications:
+    - target: {fileID: 3954837375620491276, guid: ed989000b2939074aac4ac1a761ac840,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4166659142469774498, guid: ed989000b2939074aac4ac1a761ac840,
+        type: 3}
+      propertyPath: m_TagString
+      value: Boss
+      objectReference: {fileID: 0}
     - target: {fileID: 6923348124334265861, guid: ed989000b2939074aac4ac1a761ac840,
         type: 3}
       propertyPath: m_RootOrder
