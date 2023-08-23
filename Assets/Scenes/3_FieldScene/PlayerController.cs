@@ -37,7 +37,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerActive)
+        // isPlayerActiveがtrueかつフェードインが終わっているとき
+        if (isPlayerActive && !FadeController.fadeInDone)
         {
             PlayerMove();
         }
