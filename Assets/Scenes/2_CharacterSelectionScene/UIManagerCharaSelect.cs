@@ -109,6 +109,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         if (UIObject == warrior)
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("‘I‘ð‰¹1");
             selectWarrior = true;
             selectWizard = false;
             warriorRelicPlace.gameObject.SetActive(true);
@@ -118,6 +119,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         if (UIObject == wizard)
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("‘I‘ð‰¹1");
             selectWarrior = false;
             selectWizard = true;
             warriorRelicPlace.gameObject.SetActive(false);
@@ -129,6 +131,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         if (UIObject == button && isSelected && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("‘I‘ð‰¹2");
 
             if (selectWarrior)
                 gm.ReadPlayer("Warrior");

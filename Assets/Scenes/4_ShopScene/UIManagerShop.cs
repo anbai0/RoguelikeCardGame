@@ -29,6 +29,7 @@ public class UIManagerShop : MonoBehaviour
     [SerializeField] private GameObject restUI;
 
     [Header("クリック後に参照するUI")]
+    [SerializeField] private GameObject closeShop;
     [SerializeField] private GameObject buyButton;
     [SerializeField] private GameObject closeShopping;
     [SerializeField] private GameObject restButton;
@@ -42,6 +43,14 @@ public class UIManagerShop : MonoBehaviour
         UIEventsReload();
     }
 
+    private void Update()
+    {
+        // ショップシーンがアクティブになってるとき
+        if (shopUI.activeSelf)
+        {
+            restController.CheckRest("ShopScene");      // 休憩のテキスト更新
+        }
+    }
 
     #region UIイベントリスナー関係の処理
     /// <summary>
@@ -84,14 +93,16 @@ public class UIManagerShop : MonoBehaviour
         // "購入"を押したら
         if (UIObject == buyButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             shopUI.SetActive(false);
             shopManager.PriceTextCheck();
             shopManager.HasHealPotion();
         }
         // "店を出る"を押したら
-        if (UIObject.CompareTag("ExitButton") && !isClick)
+        if (UIObject == closeShop && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("選択音1");
             shopManager.ExitShop();     // ShopSceneを非表示
 
             // フィールドシーンのプレイヤーを動けるようにする
@@ -107,6 +118,8 @@ public class UIManagerShop : MonoBehaviour
                 restUI.SetActive(true);
 
                 restController.ChengeRestText("ShopScene");
+
+                AudioManager.Instance.PlaySE("選択音1");
             }
         }
         #endregion
@@ -187,6 +200,7 @@ public class UIManagerShop : MonoBehaviour
         // "買い物を終える"を押したら
         if (UIObject == closeShopping)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             shopUI.SetActive(true);
             restController.CheckRest("ShopScene");
         }
@@ -197,6 +211,7 @@ public class UIManagerShop : MonoBehaviour
         // "休憩する"を押したら
         if (UIObject == takeRestButton)
         {
+            AudioManager.Instance.PlaySE("回復");
             restController.Rest("ShopScene");      // 回復する
             restController.CheckRest("ShopScene");
             restUI.SetActive(false);
@@ -204,6 +219,7 @@ public class UIManagerShop : MonoBehaviour
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             restUI.SetActive(false);
         }
 

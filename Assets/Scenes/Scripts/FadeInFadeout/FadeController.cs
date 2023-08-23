@@ -17,8 +17,8 @@ public class FadeController : MonoBehaviour
     private float alpha = 0.0f;     // “§‰ß—¦
     private Image fadeImage;
 
-    public bool fadeInDone = false;
-    public bool fadeOutDone = false;
+    public static bool fadeInDone { get; private set;} = false;
+    public static bool fadeOutDone { get; private set; } = false;
 
     void Start()
     {

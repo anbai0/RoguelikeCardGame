@@ -22,13 +22,16 @@ public class RoomsManager : MonoBehaviour
     [SerializeField] private GameObject shopPrefab;
     [SerializeField] private RoomStatus[] roomStatuses = new RoomStatus[12];
 
-    [SerializeField] private Camera cam;    // Main.cameraだと正しく取得できない時があるため
-    [SerializeField] private GameObject cameraPos2, cameraPos3;
+    [SerializeField] public Camera cam;    // Main.cameraだと正しく取得できない時があるため
     [SerializeField] private GameObject objectParent;
     [SerializeField] private GameObject enemyParent;
 
+    [SerializeField] public GameObject spotLight;          // 部屋を移動したときに一緒に移動させます
+    public Vector3 lightPos = new Vector3(0, -4, 0);       // カメラの位置に加算して使います
+    public Vector3 roomCam = new Vector3(0, 10, -10);      // 各部屋の位置に加算して使います。
+
     float warriorY = -2.34f;
-    float wizardY = -2.37f;
+    float wizardY = -2.34f;
 
     enum RoomNum
     {
@@ -66,8 +69,8 @@ public class RoomsManager : MonoBehaviour
     /// </summary>
     private void PlayerSpawn()
     {
-        Scene targetScene = SceneManager.GetSceneByName("FieldScene");
         GameObject enemy;
+
         if (Random.Range(0,2) == 0)
         {
             // キャラ選択で選択されたキャラのモデルを生成
@@ -86,11 +89,18 @@ public class RoomsManager : MonoBehaviour
                 wizard.transform.SetParent(null);
             }
 
+            // 扉を開ける
+            EnableRoomDoorAccess((int)RoomNum.Room2);
+
             // 隣の部屋に敵生成
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room3].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             enemy.transform.SetParent(enemyParent.transform);
+
             // カメラの位置を変更
-            cam.transform.position = cameraPos2.transform.position;
+            cam.transform.position = rooms[(int)RoomNum.Room2].transform.position + roomCam;
+
+            // ライトの位置変更
+            spotLight.transform.position = cam.transform.position + lightPos;
         }
         else
         {
@@ -110,11 +120,18 @@ public class RoomsManager : MonoBehaviour
                 wizard.transform.SetParent(null);
             }
 
+            // 扉を開ける
+            EnableRoomDoorAccess((int)RoomNum.Room3);
+
             // 隣の部屋に敵生成
             enemy = Instantiate(smallEnemyPrefab, rooms[(int)RoomNum.Room2].transform.position + new Vector3(0, -0.6f, 0), Quaternion.Euler(0f, 90f, 0f));
             enemy.transform.SetParent(enemyParent.transform);
+
             // カメラの位置を変更
-            cam.transform.position = cameraPos3.transform.position;
+            cam.transform.position = rooms[(int)RoomNum.Room3].transform.position + roomCam;
+
+            // ライトの位置変更
+            spotLight.transform.position = cam.transform.position + lightPos;
         }
     }
 

@@ -153,7 +153,8 @@ public class UIManagerTreasureBox : MonoBehaviour
         if (UIObject == applyGetTreasure && isSelected && !isClick)
         {
             isClick = true;
-            
+            AudioManager.Instance.PlaySE("選択音1");
+
             // 最後にクリックしたアイテムの選択状態を解除する
             if (lastSelectedItem.CompareTag("Cards"))
             {
@@ -216,6 +217,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         // "入手しない"を押したら
         if (UIObject == closeGetTreasure)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             //レリックの報酬も必要なら
             if (isDisplayRelics)
             {

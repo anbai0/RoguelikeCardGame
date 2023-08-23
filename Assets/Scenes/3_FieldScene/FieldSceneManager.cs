@@ -8,6 +8,19 @@ public class FieldSceneManager : MonoBehaviour
     [SerializeField]
     private SceneFader sceneFader;
 
+    private void Start()
+    {
+        // BGMを流します
+        if (Random.Range(0, 2) == 0)
+        {
+            AudioManager.Instance.PlayBGM("Field1");
+        }
+        else
+        {
+            AudioManager.Instance.PlayBGM("Field2");
+        }
+    }
+
     public void LoadBattleScene()
     {
         // バトルシーンをロード

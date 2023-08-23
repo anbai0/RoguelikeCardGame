@@ -84,6 +84,7 @@ public class UIManagerBonfire : MonoBehaviour
         // "強化"を押したら
         if (UIObject == enhanceButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             BonfireUI.SetActive(false);     // 強化画面に行く
         }
 
@@ -91,7 +92,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject.CompareTag("ExitButton") && !isClick)
         {
             isClick = true;
-            
+            AudioManager.Instance.PlaySE("選択音1");
             bonfireManager.UnLoadBonfireScene();          // フィールドに戻る
             PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
         }
@@ -104,7 +105,7 @@ public class UIManagerBonfire : MonoBehaviour
                 restUI.SetActive(true);                             // 休憩UIを表示
 
                 restController.ChengeRestText("BonfireScene");      // 休憩textを更新
-                
+                AudioManager.Instance.PlaySE("選択音1");
             }
         }
         #endregion
@@ -148,6 +149,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject == applyEnhance && isSelected && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("選択音1");
 
             bonfireManager.CardEnhance(lastSelectedCards);   // カード強化
 
@@ -160,6 +162,7 @@ public class UIManagerBonfire : MonoBehaviour
         // "強化しない"を押したら
         if (UIObject == closeEnhance)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             BonfireUI.SetActive(true);          // 焚火画面に戻る
             
         }
@@ -171,6 +174,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject == takeRestButton && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.PlaySE("回復");
 
             restController.Rest("BonfireScene");                // 回復する
             restUI.SetActive(false);
@@ -183,6 +187,7 @@ public class UIManagerBonfire : MonoBehaviour
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             restUI.SetActive(false);        // 焚火画面に戻る
         }
 

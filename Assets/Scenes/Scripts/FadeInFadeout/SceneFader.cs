@@ -70,7 +70,6 @@ public class SceneFader : MonoBehaviour
         // アンロードだけ行う場合ここでフェードインをする
         if (loadSceneName == "None")
         {
-            Debug.Log("fadeIn");
             // フェードインしフェードインが終わるまで待機
             await fadeController.fadeIn();
         }

@@ -73,7 +73,7 @@ public class UIManagerTitle : MonoBehaviour
         if (UIObject.CompareTag("BackGround") && !isClick)
         {
             isClick = true;
-            Debug.Log("a");
+            AudioManager.Instance.PlaySE("‘I‘ð‰¹2");
             sceneManager.LoadCharaSelectScene();
         }
     }

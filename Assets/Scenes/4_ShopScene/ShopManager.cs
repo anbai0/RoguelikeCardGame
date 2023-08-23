@@ -223,6 +223,8 @@ public class ShopManager : MonoBehaviour
                 return true;
             }
         }
+        // 回復カードをハイライトにする
+        shopCards[healCardNum].transform.GetChild(1).GetComponent<Image>().color = Color.white;
         return false;
     }
 
@@ -240,26 +242,26 @@ public class ShopManager : MonoBehaviour
 
             if (gm.playerData._playerMoney >= card.cardDataManager._cardPrice)           // 所持金が足りるなら
             {
-                // デッキ上限チェック
-                if (gm.CheckDeckFull())     // デッキ上限に達している場合
-                {
-                    gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
-
-                    buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納
-
-                    // アイテムの見た目の選択状態を解除
-                    selectedItem.transform.localScale = scaleReset;
-                    selectedItem.transform.GetChild(0).gameObject.SetActive(false);       
-                    // 選択状態リセット
-                    uiManager.lastSelectedItem = null;
-                    uiManager.isSelected = false;
-                    return;
-                }
-
-
-
                 if (selectedCardID != healCardID)   // 選んだカードが回復カードではなかった場合
                 {
+                    // デッキ上限チェック
+                    if (gm.CheckDeckFull())     // デッキ上限に達している場合
+                    {
+                        gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
+
+                        buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納
+
+                        // アイテムの見た目の選択状態を解除
+                        selectedItem.transform.localScale = scaleReset;
+                        selectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                        // 選択状態リセット
+                        uiManager.lastSelectedItem = null;
+                        uiManager.isSelected = false;
+                        return;
+                    }
+
+
+                    AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                     gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
 
@@ -267,14 +269,31 @@ public class ShopManager : MonoBehaviour
                 }
                 else if (!HasHealPotion())          // 選んだカードが回復カードで、回復カードを所持していない場合
                 {
-                    gm.playerData._playerMoney -= card.cardDataManager._cardPrice;
-                    gm.playerData._deckList.Add(selectedCardID);
+                    // デッキ上限チェック
+                    if (gm.CheckDeckFull())     // デッキ上限に達している場合
+                    {
+                        gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
 
-                    // 回復カードをグレーアウトにする
-                    selectedItem.transform.GetChild(1).GetComponent<Image>().color = Color.gray;        // 正直あまりいい書き方ではないので修正したい
-                    selectedItem.transform.localScale = scaleReset;
+                        buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納
+
+                        // アイテムの見た目の選択状態を解除
+                        selectedItem.transform.localScale = scaleReset;
+                        selectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                        // 選択状態リセット
+                        uiManager.lastSelectedItem = null;
+                        uiManager.isSelected = false;
+                        return;
+                    }
+
+
+                    AudioManager.Instance.PlaySE("買い物");
+                    gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
+                    gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
+
+                    selectedItem.transform.localScale = scaleReset;                     // スケールを戻す
                 }
             }
+            HasHealPotion();        // 回復カードの見た目を更新
         }
 
 
@@ -285,6 +304,7 @@ public class ShopManager : MonoBehaviour
 
             if (gm.playerData._playerMoney >= relic.relicDataManager._relicPrice)         // 所持金が足りるなら
             {
+                AudioManager.Instance.PlaySE("買い物");
                 gm.playerData._playerMoney -= relic.relicDataManager._relicPrice;         // 所持金から値段分のお金を引いて
                 gm.hasRelics[selectedRelicID]++;                                          // レリックを取得
 

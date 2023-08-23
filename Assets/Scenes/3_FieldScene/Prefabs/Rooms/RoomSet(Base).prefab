@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6923348124334265861}
-  - component: {fileID: 7294994439223026176}
+  - component: {fileID: 7742020846688397058}
   m_Layer: 0
-  m_Name: RoomSet 14
+  m_Name: RoomSet(Base)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +37,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7294994439223026176
+--- !u!65 &7742020846688397058
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2404322234540494723}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &4205649934819936677
+--- !u!65 &1465301742990102079
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,19 +149,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.007, y: 0.008, z: 0.005}
   m_Center: {x: 0, y: 0.004, z: -0.031}
---- !u!114 &1104529429949821865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4166659143969051422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59a7031de2ce9ef46a91e069303be0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNumber: 12
 --- !u!1001 &4057103873711746703
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -173,11 +160,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: gateForward
-      objectReference: {fileID: 0}
-    - target: {fileID: 116891350208102957, guid: 575a3f138c8c49f44b31796a944c0413,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 116891350208102957, guid: 575a3f138c8c49f44b31796a944c0413,
         type: 3}
@@ -253,7 +235,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4057103873711746703}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &4802404768424851981
+--- !u!65 &42421709857137236
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,19 +248,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.022, y: 0.023, z: 0.025}
   m_Center: {x: 0.0035, y: -0.003, z: -0.04}
---- !u!114 &8364144925114381351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4166659142469774498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59a7031de2ce9ef46a91e069303be0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNumber: 0
 --- !u!1001 &6061417598176294583
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,11 +317,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7888661872957438419, guid: 83f03fe136116e345a50f9ef7da46538,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888661872957438419, guid: 83f03fe136116e345a50f9ef7da46538,
-        type: 3}
       propertyPath: m_TagString
       value: GateRight
       objectReference: {fileID: 0}
@@ -370,7 +334,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6061417598176294583}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &217081508012664208
+--- !u!65 &3756418348578193127
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -383,19 +347,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.022, y: 0.023, z: 0.025}
   m_Center: {x: 0.0035, y: -0.003, z: -0.04}
---- !u!114 &2302183113776982400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4135521744609005412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59a7031de2ce9ef46a91e069303be0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNumber: 0
 --- !u!1001 &6267627316177633832
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -465,11 +416,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4073958119166868225, guid: 5ec19333691e4be4db0bf37246b128de,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073958119166868225, guid: 5ec19333691e4be4db0bf37246b128de,
-        type: 3}
       propertyPath: m_TagString
       value: GateLeft
       objectReference: {fileID: 0}
@@ -487,7 +433,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 6267627316177633832}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1877040224334346151
+--- !u!65 &256061704448679112
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -500,19 +446,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.022, y: 0.023, z: 0.025}
   m_Center: {x: 0.0035, y: -0.003, z: -0.04}
---- !u!114 &3759957759400417196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7958580194196846889}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59a7031de2ce9ef46a91e069303be0c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roomNumber: 0
 --- !u!1001 &8417818828900131453
 PrefabInstance:
   m_ObjectHideFlags: 0
