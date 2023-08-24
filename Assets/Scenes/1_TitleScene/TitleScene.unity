@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 722509697}
+  isClick: 0
   sceneManager: {fileID: 888711034}
   clickToStartText: {fileID: 1043017002}
   duration: 1.2
