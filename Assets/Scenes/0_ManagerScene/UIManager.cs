@@ -365,9 +365,9 @@ public class UIManager : MonoBehaviour
     {
         upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
         deckNumberList = gm.playerData._deckList;
-        int distribute = DistributionOfCards(deckNumberList.Count); 
-        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない
-        if (distribute >= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+        int distribute = DistributionOfCards(deckNumberList.Count);
+        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない     
+        if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
 
         for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
         {
