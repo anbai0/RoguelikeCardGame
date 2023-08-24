@@ -48,6 +48,8 @@ public class UIManager : MonoBehaviour
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 生成するカードのスケール
     private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
+    private Vector3 upperCardPos = new Vector3(0, 176,0);   // upperCardのデフォルトの位置
+
 
     void Start()
     {
@@ -139,7 +141,11 @@ public class UIManager : MonoBehaviour
         // タイトルへ戻るボタンを押したら
         if (UIObject == confirmTitleBackButton)
         {
+            // bgm停止(IEFadeOutBGMVolmeコルーチンでは止まってくれなかったのでStopを使っています。)
+            AudioManager.Instance.bgmAudioSource.Stop();    
             AudioManager.Instance.PlaySE("選択音2");
+            Debug.Log("aaa");
+            
             // タイトルへ戻る処理
             gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
@@ -357,10 +363,12 @@ public class UIManager : MonoBehaviour
     /// </summary>
     private void ShowDeck()
     {
+        upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
         deckNumberList = gm.playerData._deckList;
         int distribute = DistributionOfCards(deckNumberList.Count); 
-        if (distribute <= 0) //デッキの枚数が0枚なら生成しない
-            return;
+        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない
+        if (distribute >= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+
         for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
         {
             if (init <= distribute) //決められた数をupperCardPlaceに生成する

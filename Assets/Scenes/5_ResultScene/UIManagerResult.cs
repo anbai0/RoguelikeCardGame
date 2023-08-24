@@ -87,6 +87,7 @@ public class UIManagerResult : MonoBehaviour
         if (UIObject == titleBackButton && !isClick)
         {
             isClick = true;
+            AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());
             AudioManager.Instance.PlaySE("選択音1");
 
             // タイトルに戻る処理
