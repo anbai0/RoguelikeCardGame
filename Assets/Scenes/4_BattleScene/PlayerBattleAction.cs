@@ -65,7 +65,7 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         playerNameText.text = "現在のキャラ:" + playerData._playerName;
         GetSetHP = playerData._playerHP;
-        GetSetCurrentHP = GetSetHP;
+        GetSetCurrentHP = playerData._playerCurrentHP;
         GetSetAP = playerData._playerAP;
         GetSetConstAP = playerData._playerAP;
         GetSetCurrentAP = GetSetAP;
@@ -76,7 +76,6 @@ public class PlayerBattleAction : CharacterBattleAction
         cardEffectList = GetComponent<CardEffectList>();
         GetSetInflictCondition = GetComponent<InflictCondition>();
         hasPlayerRelics = GameManager.Instance.hasRelics;
-        hasPlayerRelics[4] += 3;
     }
 
     /// <summary>
@@ -116,6 +115,7 @@ public class PlayerBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
+            AudioManager.Instance.PlaySE("攻撃1");
             ViewDamage(deductedDamage);
             shakeBattleField.Shake(0.25f, 10f);
         }
@@ -140,6 +140,7 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetCurrentHP += healingHPPower;
         if (healingHPPower > 0)
         {
+            AudioManager.Instance.PlaySE("回復");
             ViewHealing(healingHPPower);
         }
     }
@@ -239,7 +240,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <returns>戦闘終了後のゴールド獲得時に多く貰える数</returns>
     public int EndGameRelicEffect()
     {
-        int money = 10;
+        int money = 0;
         money = relicEffect.RelicID9(hasPlayerRelics[9], money);
         HealingHP(relicEffect.RelicID10(hasPlayerRelics[10]));
         hasPlayerRelics = null; //GameManagerの参照を外しておく

@@ -6,6 +6,8 @@ public class BonfireManager : MonoBehaviour
 {
     [SerializeField] SceneFader sceneFader;
 
+    [SerializeField] GameObject cardEmptyText;
+
     // カード表示
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform upperCardPlace;
@@ -16,15 +18,20 @@ public class BonfireManager : MonoBehaviour
 
     void Start()
     {
+        cardEmptyText.SetActive(false);
         InitDeck();
     }
 
     private void InitDeck() //デッキ生成
     {
         deckNumberList = GameManager.Instance.playerData._deckList;
+        deckNumberList = ExcludeDeckCards(deckNumberList);
         int distribute = DistributionOfCards(deckNumberList.Count);
         if (distribute <= 0) //デッキの枚数が0枚なら生成しない
+        {
+            cardEmptyText.SetActive(true); //強化できるカードがないことをTextで伝える
             return;
+        }
         for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
         {
             if (init <= distribute) //決められた数をupperCardPlaceに生成する
@@ -42,6 +49,24 @@ public class BonfireManager : MonoBehaviour
                 card.Init(deckNumberList[init - 1]);//デッキデータの表示
             }
         }
+    }
+
+    /// <summary>
+    /// 魔女の霊薬や強化済みのカードはリストから除外する
+    /// </summary>
+    /// <param name="deckList">プレイヤーの所持しているデッキリスト</param>
+    /// <returns>強化できないものを除いたデッキリスト</returns>
+    List<int> ExcludeDeckCards(List<int> deckList)
+    {
+        List<int> selectableList = new List<int>();
+        for (int deckNum = 0; deckNum < deckList.Count; deckNum++)
+        {
+            if (deckList[deckNum] != 3 && deckList[deckNum] <= 20) //ID3の魔女の霊薬ではなく、IDが20以下の未強化カードの場合
+            {
+                selectableList.Add(deckList[deckNum]);
+            }
+        }
+        return selectableList;
     }
 
     /// <summary>
@@ -87,12 +112,8 @@ public class BonfireManager : MonoBehaviour
         {
             if (deckNumberList[count] == id) //デッキからIDのカードを探す 
             {
-                if(deckNumberList[count] <= 20 && id != 3) //IDのカードが未強化で魔女の霊薬でなければ
-                {
-                    deckNumberList[count] += 100; //そのカードの強化版のIDに変更する
-                }
+                deckNumberList[count] += 100; //そのカードの強化版のIDに変更する
             }
-            Debug.Log("現在のPlayerのデッキリストは：" + deckNumberList[count]);
         }
     }
 

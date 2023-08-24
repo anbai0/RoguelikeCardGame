@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //オリジナルのシェーダーを使用
 //マテリアルの張り替えが必要なのでプレイヤーと分けていまず
@@ -31,8 +32,31 @@ public class EnemyConditionDisplay : MonoBehaviour
     public int DebugNum = 0;
     [SerializeField]
     SortName sortIcon;
-    private Dictionary<string, int> saveCondition;
+    private Dictionary<string, int> saveCondition = new Dictionary<string, int>();
     WaitForSeconds waitFor1milliSec = new WaitForSeconds(0.1f);
+
+    [SerializeField]
+    UIManagerBattle uiManagerBattle;
+
+    private void Awake()
+    {
+        InitializedSaveCondition();
+    }
+
+    /// <summary>
+    /// saveConditionに格納する状態異常の名前と所持数を初期化しておく処理
+    /// </summary>
+    void InitializedSaveCondition()
+    {
+        saveCondition.Add("UpStrength", 0);
+        saveCondition.Add("AutoHealing", 0);
+        saveCondition.Add("InvalidBadStatus", 0);
+        saveCondition.Add("Curse", 0);
+        saveCondition.Add("Impatience", 0);
+        saveCondition.Add("Weakness", 0);
+        saveCondition.Add("Burn", 0);
+        saveCondition.Add("Poison", 0);
+    }
 
     /// <summary>
     /// 状態異常の有無に合わせてアイコンの表示・非表示を行う処理
@@ -102,8 +126,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 upStrengthIcon.name = "Icon1"; //ソートしやすいように名前を変更
                 var image = upStrengthIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon1"); //オリジナルのマテリアルを設定
+                ConditionDataManager conditiondata = new ConditionDataManager("UpStrength"); //筋力増強のデータを作成
+                ViewConditionEffect(upStrengthIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort(); //名前順にソート
             }
+            AudioManager.Instance.PlaySE("バフ");
             upStrengthIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             upStrengthIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = upStrengthIcon.transform.Find("ConditionCountText").GetComponent<Text>(); 
@@ -131,8 +158,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 autoHealingIcon.name = "Icon2";
                 var image = autoHealingIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon2");
+                ConditionDataManager conditiondata = new ConditionDataManager("AutoHealing"); //自動回復のデータを作成
+                ViewConditionEffect(autoHealingIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("バフ");
             autoHealingIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             autoHealingIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = autoHealingIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -160,8 +190,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 invalidBadStatusIcon.name = "Icon3";
                 var image = invalidBadStatusIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon3");
+                ConditionDataManager conditiondata = new ConditionDataManager("InvalidBadStatus"); //状態異常無効のデータを作成
+                ViewConditionEffect(invalidBadStatusIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("バフ");
             invalidBadStatusIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             invalidBadStatusIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = invalidBadStatusIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -189,8 +222,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 curseIcon.name = "Icon4";
                 var image = curseIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon4");
+                ConditionDataManager conditiondata = new ConditionDataManager("Curse"); //呪縛のデータを作成
+                ViewConditionEffect(curseIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             curseIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             curseIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = curseIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -218,8 +254,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 impatienceIcon.name = "Icon5";
                 var image = impatienceIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon5");
+                ConditionDataManager conditiondata = new ConditionDataManager("Impatience"); //焦燥のデータを作成
+                ViewConditionEffect(impatienceIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             impatienceIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             impatienceIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = impatienceIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -247,8 +286,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 weaknessIcon.name = "Icon6";
                 var image = weaknessIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon6");
+                ConditionDataManager conditiondata = new ConditionDataManager("Weakness"); //衰弱のデータを作成
+                ViewConditionEffect(weaknessIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             weaknessIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             weaknessIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = weaknessIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -276,8 +318,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 burnIcon.name = "Icon7";
                 var image = burnIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon7");
+                ConditionDataManager conditiondata = new ConditionDataManager("Burn"); //火傷のデータを作成
+                ViewConditionEffect(burnIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             burnIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             burnIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = burnIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -305,8 +350,11 @@ public class EnemyConditionDisplay : MonoBehaviour
                 poisonIcon.name = "Icon8";
                 var image = poisonIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon8");
+                ConditionDataManager conditiondata = new ConditionDataManager("Poison"); //邪毒のデータを作成
+                ViewConditionEffect(poisonIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
+            AudioManager.Instance.PlaySE("デバフ");
             poisonIcon.GetComponent<FlashImage>().StartFlash(Color.white, 0.1f);
             poisonIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = poisonIcon.transform.Find("ConditionCountText").GetComponent<Text>();
@@ -318,5 +366,23 @@ public class EnemyConditionDisplay : MonoBehaviour
             isDisplayPoison = false;
             Destroy(poisonIcon);
         }
+    }
+
+    /// <summary>
+    /// 状態異常の名前と効果をアイコンのConditionEffectBGの内のテキストに挿入
+    /// </summary>
+    /// <param name="conditionIcon">テキストを入れるアイコン</param>
+    /// <param name="conditionName">状態異常の名前</param>
+    /// <param name="conditionEffect">状態異常の効果</param>
+    void ViewConditionEffect(GameObject conditionIcon, string conditionName, string conditionEffect)
+    {
+        Transform conditionEffectBG = conditionIcon.transform.GetChild(2); //EnemyConditionEffectBGを取得
+        TextMeshProUGUI conditonNameText = conditionEffectBG.GetChild(0).GetComponent<TextMeshProUGUI>(); //ConditionNameのTMProUGUIを取得
+        conditonNameText.text = conditionName;
+        TextMeshProUGUI conditonEffectText = conditionEffectBG.GetChild(1).GetComponent<TextMeshProUGUI>(); //ConditionEffectのTMProUGUIを取得
+        conditonEffectText.text = conditionEffect;
+        conditionIcon.gameObject.tag = "EnemyCondition"; //エネミーの状態異常アイコンはタグをEnemyConditionに付け替える
+        conditionEffectBG.gameObject.SetActive(false); //最初は表示をしないようにする
+        uiManagerBattle.UIEventsReload();
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TreasureBoxManager : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class TreasureBoxManager : MonoBehaviour
     void TreasureLottery()
     {
         treasureCardID = lottery.SelectCardByRarity(new List<int> { 2, 2, 1 });
-        treasureRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 1, 1 });
+        treasureRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
     }
 
     /// <summary>
@@ -77,6 +78,11 @@ public class TreasureBoxManager : MonoBehaviour
             relicObj.transform.SetParent(relicPlace);
             relicController = relicObj.GetComponent<RelicController>();
             relicController.Init(treasureRelicID[relicCount]);
+            Transform relicBG = relicObj.transform.GetChild(8); //表示するBackGroundを取得
+            TextMeshProUGUI relicName = relicBG.GetChild(0).GetComponent<TextMeshProUGUI>(); //レリックの名前
+            relicName.text = relicController.relicDataManager._relicName;
+            TextMeshProUGUI relicEffect = relicBG.GetChild(1).GetComponent<TextMeshProUGUI>(); //レリックの効果
+            relicEffect.text = relicController.relicDataManager._relicEffect;
         }
     }
 

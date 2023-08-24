@@ -93,14 +93,19 @@ public class EnemyBattleAction : CharacterBattleAction
     IEnumerator MoveFlash()
     {
         bg.isEnemyMoving = true;
+        var selectMove = enemyAI.SelectMove(GetSetCurrentAP);
+        string moveName = selectMove.moveName;
+        debugMoveName = moveName;
+        if (moveName == "RoundEnd") //EnemyAIで選択された行動が行動終了の場合
+        {
+            TurnEnd();
+            yield break;
+        }
         yield return new WaitForSeconds(0.5f);
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.2f);
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.1f);
-        var selectMove = enemyAI.SelectMove(GetSetCurrentAP);
-        string moveName = selectMove.moveName;
-        debugMoveName = moveName;
         int moveCost = selectMove.moveCost;
         GetSetCurrentAP -= moveCost;
         enemyAI.ActionMove(moveName);
@@ -181,6 +186,7 @@ public class EnemyBattleAction : CharacterBattleAction
 
         if (deductedDamage > 0)
         {
+            AudioManager.Instance.PlaySE("攻撃1");
             StartCoroutine(DamageFlash(deductedDamage));
         }
     }
@@ -214,6 +220,7 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetCurrentHP += healingHPPower;
         if (healingHPPower > 0)
         {
+            AudioManager.Instance.PlaySE("回復");
             ViewHealing(healingHPPower);
         }
     }

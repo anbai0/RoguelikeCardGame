@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using SelfMadeNamespace;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
@@ -88,11 +89,11 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (type == "StrongEnemy")
         {
-            rewardRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 1, 1 });
+            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
         }
         else if (type == "Boss")
         {
-            rewardRelicID = lottery.SelectRelicByRarity(new List<int> { 2, 2 });
+            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 2 });
             rewardRelicID.Insert(0, RelicID1);
         }
         else
@@ -130,6 +131,11 @@ public class BattleRewardManager : MonoBehaviour
                 relicObj.transform.SetParent(relicPlace);
                 relicController = relicObj.GetComponent<RelicController>();
                 relicController.Init(rewardRelicID[relicCount]);
+                Transform relicBG = relicObj.transform.GetChild(8); //表示するBackGroundを取得
+                TextMeshProUGUI relicName = relicBG.GetChild(0).GetComponent<TextMeshProUGUI>(); //レリックの名前
+                relicName.text = relicController.relicDataManager._relicName;
+                TextMeshProUGUI relicEffect = relicBG.GetChild(1).GetComponent<TextMeshProUGUI>(); //レリックの効果
+                relicEffect.text = relicController.relicDataManager._relicEffect;
             }
         }
     }
@@ -138,7 +144,7 @@ public class BattleRewardManager : MonoBehaviour
 
     public void UnLoadBattleScene()
     {
-        if (bg.enemyType == "StrongEnemy")
+        if (bg.enemyType == "Boss")
         {
             if (gm.floor < 3) //階層が3階まで到達していない場合
             {
@@ -156,6 +162,17 @@ public class BattleRewardManager : MonoBehaviour
         {
             // バトルシーンをアンロード
             sceneFader.SceneChange(unLoadSceneName: "BattleScene");
+
+            // フィールドシーンのBGMを流します
+            if (Random.Range(0, 2) == 0)
+            {
+                AudioManager.Instance.PlayBGM("Field1");
+            }
+            else
+            {
+                AudioManager.Instance.PlayBGM("Field2");
+            }
+
             PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
             PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
             playerController.enemy.SetActive(false);      // エネミーを消す
@@ -199,6 +216,38 @@ public class BattleRewardManager : MonoBehaviour
 
         // フィールドシーンかリザルトシーンをロード
         asyncOperation = SceneManager.LoadSceneAsync(unloadSceneName, LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
+    }
+
+    public void TransitionLoseBattle()
+    {
+        sceneFader.FadeOutInWrapper(TransitionLoseBattleScenes);
+    }
+
+    public async Task TransitionLoseBattleScenes()
+    {
+        AsyncOperation asyncOperation;
+
+        //バトルシーンをアンロード
+        Scene battleScene = SceneManager.GetSceneByName("BattleScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(battleScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        //ショップシーンがロードされていればアンロードする
+        Scene shopScene = SceneManager.GetSceneByName("ShopScene");
+        if (shopScene.isLoaded)
+        {
+            asyncOperation = SceneManager.UnloadSceneAsync(shopScene);
+            while (!asyncOperation.isDone) await Task.Yield();
+        }
+
+        // 参照解除の関係でフィールドシーンを最後にアンロード
+        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
+        asyncOperation = SceneManager.UnloadSceneAsync(fieldScene);
+        while (!asyncOperation.isDone) await Task.Yield();
+
+        // リザルトシーンをロード
+        asyncOperation = SceneManager.LoadSceneAsync("ResultScene", LoadSceneMode.Additive);
         while (!asyncOperation.isDone) await Task.Yield();
     }
 }

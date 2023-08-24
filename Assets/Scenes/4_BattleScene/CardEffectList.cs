@@ -298,11 +298,20 @@ public class CardEffectList : MonoBehaviour
         string text = cardText.text;
         for (int i = 0; i < text.Length; i++)
         {
-            if (char.IsDigit(text[i]))
+            if(char.IsDigit(text[i]) && char.IsDigit(text[i + 1])) //攻撃力が2桁の場合
             {
-                // 最初の半角数字のみを+1した数字に変更
-                text = text.Remove(i, 1).Insert(i, card.cardDataManager._cardAttackPower.ToString());
+                // 最初の2桁の半角数字のみを+1した数字に変更
+                text = text.Remove(i, 2).Insert(i, card.cardDataManager._cardAttackPower.ToString());
                 break;
+            }
+            else
+            {
+                if (char.IsDigit(text[i])) //攻撃力が1桁の場合
+                {
+                    // 最初の1桁の半角数字のみを+1した数字に変更
+                    text = text.Remove(i, 1).Insert(i, card.cardDataManager._cardAttackPower.ToString());
+                    break;
+                }
             }
         }
         cardText.text = text; //カードのTextに反映
@@ -491,7 +500,7 @@ public class CardEffectList : MonoBehaviour
         if (enemy.enemyCondition["Burn"] > 0)//エネミーが火傷状態だった場合
         {
             //火傷の3倍のダメージでエネミーを攻撃
-            PlayerAttacking(enemy.enemyCondition["Burn"] * 3);
+            PlayerAttacking(cardAttackPower * 3);
         }
         else
         {

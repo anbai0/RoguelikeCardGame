@@ -101,7 +101,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                 {
                     lastSelectedItem.transform.localScale = relicScaleReset;
                     lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                    lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+                    lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
                 }
 
                 // 2回目に選択したアイテムがカードだった場合、カードを選択状態にする
@@ -115,7 +115,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                 if (UIObject.CompareTag("Relics"))
                 {
                     UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);
-                    UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
+                    UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(true);
                 }
 
             }
@@ -138,7 +138,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
                 lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+                lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
             }
             lastSelectedItem = null;
             isSelected = false;
@@ -166,50 +166,52 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
                 lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+                lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
             }
-            lastSelectedItem = null;
-            isSelected = false;
 
-            if (gm.CheckDeckFull()) //デッキの上限に達している場合
+            if (lastSelectedItem.CompareTag("Cards"))
             {
-                //破棄画面を呼び出し
-                gm.OnCardDiscard += ReGetTreasure;
-                // 入手ボタン切り替え
-                applyGetTreasure.SetActive(false);
-                closeGetTreasure.SetActive(true);
-                isClick = false; //applyGetItemをもう一度クリック出来るようにする
-            }
-            else
-            {
-                //if (UIObject.CompareTag("Cards"))
-                //{
-                //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-                //    GameManager.Instance.playerData._deckList.Add(cardID);
-                //}
-                //if (UIObject.CompareTag("Relics"))
-                //{
-                //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
-                //    GameManager.Instance.hasRelics[relicID] += 1;
-                //}
-
-                //レリックの報酬も必要なら
-                if (isDisplayRelics)
+                if (gm.CheckDeckFull()) //デッキの上限に達している場合
                 {
+                    //破棄画面を呼び出し
+                    gm.OnCardDiscard += ReGetTreasure;
+                    // 入手ボタン切り替え
+                    applyGetTreasure.SetActive(false);
+                    closeGetTreasure.SetActive(true);
                     isClick = false; //applyGetItemをもう一度クリック出来るようにする
-                    StartCoroutine(ShowRelicTreasure());
-                    isDisplayRelics = false;
+                    return;
                 }
                 else
                 {
-                    //treasureChestUI.SetActive(false);
-                    Debug.Log("フィールドシーンへ移行");
-                    TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                    PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
-                    ExitTreasureBox();
+                    var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+                    gm.playerData._deckList.Add(cardID);
                 }
             }
-            
+            if (lastSelectedItem.CompareTag("Relics"))
+            {
+                var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+                gm.hasRelics[relicID]++;
+                gm.ShowRelics();
+            }
+
+            lastSelectedItem = null;
+            isSelected = false;
+
+            //レリックの報酬も必要なら
+            if (isDisplayRelics)
+            {
+                isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                StartCoroutine(ShowRelicTreasure());
+                isDisplayRelics = false;
+            }
+            else
+            {
+                Debug.Log("フィールドシーンへ移行");
+                TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
+                PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
+                ExitTreasureBox();
+            }
+
         }
 
         // "入手しない"を押したら
@@ -253,16 +255,21 @@ public class UIManagerTreasureBox : MonoBehaviour
     /// </summary>
     void ReGetTreasure()
     {
-        //if (UIObject.CompareTag("Cards"))
-        //{
-        //    var cardID = UIObject.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-        //    GameManager.Instance.playerData._deckList.Add(cardID);
-        //}
-        //if (UIObject.CompareTag("Relics"))
-        //{
-        //    var relicID = UIObject.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
-        //    GameManager.Instance.hasRelics[relicID] += 1;
-        //}
+        if (lastSelectedItem.CompareTag("Cards"))
+        {
+            var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
+            gm.playerData._deckList.Add(cardID);
+        }
+
+        if (lastSelectedItem.CompareTag("Relics"))
+        {
+            var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
+            gm.hasRelics[relicID]++;
+            gm.ShowRelics();
+        }
+
+        lastSelectedItem = null;
+        isSelected = false;
 
         //レリックの報酬も必要なら
         if (isDisplayRelics)
@@ -273,7 +280,6 @@ public class UIManagerTreasureBox : MonoBehaviour
         }
         else
         {
-            //treasureChestUI.SetActive(false);
             Debug.Log("フィールドシーンへ移行");
             TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
             PlayerController.isPlayerActive = true; // プレイヤーを動けるようにする
@@ -295,7 +301,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
-                UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);                     // レリックの説明を表示
+                UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(true);                     // レリックの説明を表示
             }
         }
     }
@@ -315,7 +321,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 UIObject.transform.localScale = relicScaleReset;
                 UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
-                UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);                    // レリックの説明を非表示
+                UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);                    // レリックの説明を非表示
             }
         }
     }

@@ -26,7 +26,7 @@ public class ResultSceneManager : MonoBehaviour
     {
         // GameManageræ“¾(•Ï”–¼È—ª)
         gm = GameManager.Instance;
-
+        AudioManager.Instance.PlayBGM("Result");
         InitDeck();
         ShowRelics();
         uiManager.UIEventsReload();
