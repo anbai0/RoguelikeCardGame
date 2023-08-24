@@ -135,6 +135,7 @@ public class PlayerController : MonoBehaviour
             enemy = collision.gameObject;
             enemyTag = collision.gameObject.tag;
             fieldManager.LoadBattleScene();   //戦闘シーンをロード
+            Invoke("AccessDoorAfterWin", 2.0f); //ロードする時間を考慮して2秒待ってから処理を呼び出す
         }
         #endregion
     }
