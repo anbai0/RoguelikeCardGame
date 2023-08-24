@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// カードデータの表示を行うスクリプト
+/// </summary>
 public class CardViewManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI cardNameText,cardEffectText,cardCostText, cardPriceText;

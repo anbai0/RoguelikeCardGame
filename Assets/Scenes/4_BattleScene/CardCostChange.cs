@@ -1,11 +1,15 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// アクセラレートの効果によってカードのコストを変更するスクリプト
+/// </summary>
 public class CardCostChange : MonoBehaviour
 {
     [Header("デッキのある場所")]
     [SerializeField]
     Transform cardPlace;
+
     /// <summary>
     /// CardEffectListのアクセラレートの効果でカードのコストを減少させる
     /// </summary>

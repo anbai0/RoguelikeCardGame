@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// オブジェクトの名前を昇順でソートするスクリプト
+/// </summary>
 public class SortName : MonoBehaviour
 {
     /// <summary>

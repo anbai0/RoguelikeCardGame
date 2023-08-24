@@ -6,10 +6,12 @@ using TMPro;
 
 //オリジナルのシェーダーを使用
 //マテリアルの張り替えが必要なのでプレイヤーと分けていまず
+/// <summary>
+/// エネミーの状態異常アイコンを表示するスクリプト
+/// </summary>
 public class EnemyConditionDisplay : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject coditionIcon;
+    [SerializeField] GameObject coditionIcon;
     //保存しておく状態異常のアイコン
     GameObject upStrengthIcon = null;
     GameObject autoHealingIcon = null;
@@ -29,14 +31,11 @@ public class EnemyConditionDisplay : MonoBehaviour
     bool isDisplayBurn = false;
     bool isDisplayPoison = false;
 
-    public int DebugNum = 0;
-    [SerializeField]
-    SortName sortIcon;
-    private Dictionary<string, int> saveCondition = new Dictionary<string, int>();
+    [SerializeField] SortName sortIcon;
+    Dictionary<string, int> saveCondition = new Dictionary<string, int>();
     WaitForSeconds waitFor1milliSec = new WaitForSeconds(0.1f);
 
-    [SerializeField]
-    UIManagerBattle uiManagerBattle;
+    [SerializeField] UIManagerBattle uiManagerBattle;
 
     private void Awake()
     {

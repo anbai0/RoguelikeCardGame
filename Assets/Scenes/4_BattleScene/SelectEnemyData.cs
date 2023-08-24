@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// エネミーのデータを作成するスクリプト
+/// </summary>
 public class SelectEnemyData : MonoBehaviour
 {
     /// <summary>

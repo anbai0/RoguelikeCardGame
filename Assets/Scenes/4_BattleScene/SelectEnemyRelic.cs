@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 3層目の敵に持たせるレリックを選択するスクリプト
+/// </summary>
 public class SelectEnemyRelic : MonoBehaviour
 {
     /// <summary>

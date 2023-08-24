@@ -1,14 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+/// <summary>
+/// 使用不可のカードを暗くするスクリプト
+/// </summary>
 public class CardState : MonoBehaviour
 {
     CardDataManager cardDataManager;
     GameObject blindPanel;
     public bool isActive = true;
-    // Start is called before the first frame update
+
     void Start()
     {
         isActive = true;
@@ -17,7 +17,6 @@ public class CardState : MonoBehaviour
         blindPanel.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isActive == true && cardDataManager._cardState != 0)//カードが表示されていてステートが0以外の場合

@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// カードデータの生成と表示を行うスクリプト
+/// </summary>
 public class CardController : MonoBehaviour
 {
     public CardViewManager cardViewManager;// カードの見た目の処理

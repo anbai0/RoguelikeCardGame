@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// ダメージと回復の表示をする際の演出を行うスクリプト
+/// </summary>
 public class DamageOrHealingText : MonoBehaviour
 {
-    [SerializeField]
-    private float DeleteTime = 1.5f;
-    [SerializeField]
-    private float MoveRange = 50.0f;
-    [SerializeField]
-    private float EndAlpha = 0.2f;
+    [SerializeField] float DeleteTime = 1.5f;
+    [SerializeField] float MoveRange = 50.0f;
+    [SerializeField] float EndAlpha = 0.2f;
 
     private float TimeCnt;
     private TextMeshProUGUI NowText;

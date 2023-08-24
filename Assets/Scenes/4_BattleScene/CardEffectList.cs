@@ -1,22 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
-using System;
 using UnityEngine;
 using TMPro;
 
-//このスクリプトはカードの効果をまとめた物です。
-//フィールド上にドロップされたカードの情報を引数で受け取り効果の処理をします。
+/// <summary>
+/// カードの効果をまとめたスクリプト
+/// (ドロップされたカードの情報を引数で受け取り効果の処理を実行)
+/// </summary>
 public class CardEffectList : MonoBehaviour
 {
     BattleGameManager bg;
-    PlayerBattleAction player;
-    EnemyBattleAction enemy;
-    FlashImage flash;
+    [SerializeField] PlayerBattleAction player;
+    [SerializeField] EnemyBattleAction enemy;
+    [SerializeField] FlashImage flash;
     Color deepGreen = new Color(0.2f, 0.6f, 0.2f);
     int cardID;
     int cardAttackPower;
     int cardHealingPower;
     int cardGuardPoint;
+
+    void Start()
+    {
+        bg = BattleGameManager.Instance;
+    }
 
     /// <summary>
     /// カードのIDに応じて処理を呼び出す処理
@@ -24,15 +29,10 @@ public class CardEffectList : MonoBehaviour
     /// <param name="card">PlayerBattleActionから受け取るカード</param>
     public void ActiveCardEffect(CardController card)
     {
-        bg = BattleGameManager.Instance;
-        player = GetComponent<PlayerBattleAction>();
-        enemy = GetComponent<EnemyBattleAction>();
-        flash = GetComponent<FlashImage>();
         cardID = card.cardDataManager._cardID;
         cardAttackPower = card.cardDataManager._cardAttackPower;
         cardHealingPower = card.cardDataManager._cardHealingPower;
         cardGuardPoint = card.cardDataManager._cardGuardPoint;
-        Debug.Log("Cardのナンバーは" + cardID);
         switch (cardID)
         {
             case 1:
@@ -518,8 +518,8 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(cardAttackPower);
         //エネミーを行動不能にする
         enemy.TurnEnd();
-        //この戦闘中カードを使用不可にする(デバッグ中、元に戻す予定)
-        //card.cardDataManager._cardState = 2;
+        //この戦闘中カードを使用不可にする
+        card.cardDataManager._cardState = 2;
     }
     /// <summary>
     /// 技名：エクスカリバー,強化エクスカリバー
@@ -585,7 +585,6 @@ public class CardEffectList : MonoBehaviour
     private void PlayerAttacking(int attackMethod)
     {
         attackMethod = ChangeAttackPower(attackMethod);
-        Debug.Log("計算後の攻撃力は" + attackMethod);
         enemy.TakeDamage(attackMethod);
     }
     /// <summary>

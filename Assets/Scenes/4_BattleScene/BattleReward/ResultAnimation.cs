@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// 勝敗のテキストを表示するスクリプト
+/// </summary>
 public class ResultAnimation : MonoBehaviour
 {
-    [Header("勝敗演出用オブジェクト")]
-    [SerializeField]
-    GameObject resultPrefab;
-    [Header("勝敗演出の表示場所")]
-    [SerializeField]
-    Transform resultPlace;
+    [SerializeField, Header("勝敗演出用オブジェクト")] GameObject resultPrefab;
+    [SerializeField, Header("勝敗演出の表示場所")] Transform resultPlace;
 
     GameObject resultObj = null;
     TextMeshProUGUI resultText; //勝敗の表示を行うテキスト

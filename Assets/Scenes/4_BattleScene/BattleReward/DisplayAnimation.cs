@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 戦闘報酬画面の拡大表示・縮小表示を行うスクリプト
+/// </summary>
 public class DisplayAnimation : MonoBehaviour
 {
-    [Header("表示用オブジェクト")]
-    [SerializeField]
-    GameObject displayObject;
-    [Header("表示の倍率")]
-    [SerializeField]
-    float enlargeScale = 1.5f;
-    [Header("切り替わるまでの時間")]
-    [SerializeField]
-    float animationDuration = 1.0f;
+    [SerializeField, Header("表示用オブジェクト")] GameObject displayObject;
+    [SerializeField, Header("表示の倍率")] float enlargeScale = 1.5f;
+    [SerializeField, Header("切り替わるまでの時間")] float animationDuration = 1.0f;
 
     private bool isPopUP = true; //true:拡大表示　false:縮小表示
     private Vector3 originalScale;

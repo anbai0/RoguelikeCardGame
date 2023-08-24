@@ -4,35 +4,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// エネミーの行動をまとめたスクリプト
+/// </summary>
 public class EnemyBattleAction : CharacterBattleAction
 {
-    [Header("エネミー名テキスト")]
-    [SerializeField] Text enemyNameText;
-    [Header("エネミー画像")]
-    [SerializeField] Image enemyImage;
-    [Header("エネミーHPテキスト")]
-    [SerializeField] Text enemyHPText;
-    [Header("エネミーHPスライダー")]
-    [SerializeField] Slider enemyHPSlider;
-    [Header("エネミーAPテキスト")]
-    [SerializeField] Text enemyAPText;
-    [Header("エネミーGPテキスト")]
-    [SerializeField] Text enemyGPText;
-    [Header("技の名前")]
-    [SerializeField] Text moveText;
-    [Header("ダメージ表示オブジェクト")]
-    [SerializeField]
-    GameObject damageUI;
-    [Header("回復表示オブジェクト")]
-    [SerializeField]
-    GameObject healingUI;
-    [Header("ダメージと回復表示の出現場所")]
-    [SerializeField]
-    GameObject damageOrHealingPos;
-    [Header("状態異常のアイコン表示スクリプト")]
-    [SerializeField]
-    EnemyConditionDisplay enemyConditionDisplay;
-    
+    [SerializeField, Header("エネミー名テキスト")] Text enemyNameText;
+    [SerializeField, Header("エネミー画像")] Image enemyImage;
+    [SerializeField, Header("エネミーHPテキスト")] Text enemyHPText;
+    [SerializeField, Header("エネミーHPスライダー")] Slider enemyHPSlider;
+    [SerializeField, Header("エネミーAPテキスト")] Text enemyAPText;
+    [SerializeField, Header("エネミーGPテキスト")] Text enemyGPText;
+    [SerializeField, Header("技の名前")] Text moveText;
+    [SerializeField, Header("ダメージ表示オブジェクト")] GameObject damageUI;
+    [SerializeField, Header("回復表示オブジェクト")] GameObject healingUI;
+    [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
+    [SerializeField, Header("状態異常のアイコン表示スクリプト")] EnemyConditionDisplay enemyConditionDisplay;
+
+    [SerializeField] EnemyAI enemyAI;
+    [SerializeField] FlashImage flash;
 
     public Dictionary<int, int> hasEnemyRelics = new Dictionary< int, int>(); //エネミーの所持しているレリック
     const int maxRelics = 12;
@@ -43,16 +33,12 @@ public class EnemyBattleAction : CharacterBattleAction
     int dropMoney = 0;
     public int GetSetDropMoney { get => dropMoney; set => dropMoney = value; } //エネミーが落とすコインの枚数
 
-    EnemyAI enemyAI; //敵の行動スクリプト
-
-    FlashImage flash; //敵行動時の演出
-
-    BattleGameManager bg;
-
     bool roundEnabled; //ラウンド中に一度だけ判定を設ける
     public bool GetSetRoundEnabled { get => roundEnabled; set => roundEnabled = value; }
     
     string debugMoveName = "無し";
+    
+    BattleGameManager bg;
 
     void Awake()
     {
@@ -109,7 +95,6 @@ public class EnemyBattleAction : CharacterBattleAction
         int moveCost = selectMove.moveCost;
         GetSetCurrentAP -= moveCost;
         enemyAI.ActionMove(moveName);
-        Debug.Log("エネミーの現在のAP:" + GetSetCurrentAP);
         yield return StartCoroutine(MoveAfterCondition());
         bg.isEnemyMoving = false;
         yield break;
@@ -140,13 +125,10 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetCurrentAP = GetSetAP;
         GetSetGP = enemyData._enemyGP;
         dropMoney = enemyData._dropMoney;
-        //enemyCondition = GetCondition;
         InitializedCondition();
         GetSetCondition = enemyCondition;
         GetSetInflictCondition = GetComponent<InflictCondition>();
-        enemyAI = GetComponent<EnemyAI>();
         enemyAI.SetEnemyState(floor, enemyData._enemyName);
-        flash = GetComponent<FlashImage>();
     }
 
     /// <summary>
@@ -289,7 +271,6 @@ public class EnemyBattleAction : CharacterBattleAction
         GetSetConstAP = relicEffect.RelicID3(hasEnemyRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
         ps.playerCondition["Burn"] = relicEffect.RelicID6(hasEnemyRelics[6], ps.playerCondition["Burn"]);
         GetSetGP = relicEffect.RelicID8(hasEnemyRelics[8], GetSetGP);
-        Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
         return ps;
     }
 

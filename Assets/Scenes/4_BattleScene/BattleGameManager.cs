@@ -4,24 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using SelfMadeNamespace;
 
+/// <summary>
+/// バトルの進行を進めるスクリプト
+/// </summary>
 public class BattleGameManager : MonoBehaviour
 {
-    PlayerBattleAction playerScript;
-    EnemyBattleAction enemyScript;
+    [SerializeField] PlayerBattleAction playerScript;
+    [SerializeField] EnemyBattleAction enemyScript;
 
     //プレイヤー
-    GameObject player;
     PlayerDataManager playerData;
-    [SerializeField] 
-    Image playerTurnDisplay;
+    [SerializeField] Image playerTurnDisplay;
 
     //エネミー
     EnemyDataManager enemyData;
-    [SerializeField] 
-    Image enemyTurnDisplay;
-    SelectEnemyName selectEnemyName;
-    SelectEnemyData selectEnemyData;
-    SelectEnemyRelic selectEnemyRelic;
+    [SerializeField] Image enemyTurnDisplay;
+    [SerializeField] SelectEnemyName selectEnemyName;
+    [SerializeField] SelectEnemyData selectEnemyData;
+    [SerializeField] SelectEnemyRelic selectEnemyRelic;
     public string enemyType = "SmallEnemy";
     string enemyName;
     
@@ -33,19 +33,14 @@ public class BattleGameManager : MonoBehaviour
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
 
     //リザルト
-    [SerializeField]
-    BattleRewardManager battleRewardManager;
-    ResultAnimation resultAnimation;
-    [SerializeField]
-    GameObject uiManagerBR;
-    [SerializeField]
-    GameObject uiManagerBattle;
+    [SerializeField] BattleRewardManager battleRewardManager;
+    [SerializeField] ResultAnimation resultAnimation;
+    [SerializeField] GameObject uiManagerBR;
+    [SerializeField] GameObject uiManagerBattle;
 
     //ラウンド
-    [SerializeField]
-    RoundTextAnimation roundTextAnimation;
-    [SerializeField]
-    GameObject turnEndBlackPanel;
+    [SerializeField] RoundTextAnimation roundTextAnimation;
+    [SerializeField] GameObject turnEndBlackPanel;
 
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
@@ -83,12 +78,6 @@ public class BattleGameManager : MonoBehaviour
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);
-        playerScript = GetComponent<PlayerBattleAction>();
-        enemyScript = GetComponent<EnemyBattleAction>();
-        selectEnemyName = GetComponent<SelectEnemyName>();
-        selectEnemyData = GetComponent<SelectEnemyData>();
-        selectEnemyRelic = GetComponent<SelectEnemyRelic>();
-        resultAnimation = GetComponent<ResultAnimation>();
         //初期化
         isPlayerTurn = false;
         isTurnEnd = false;
@@ -104,12 +93,10 @@ public class BattleGameManager : MonoBehaviour
         accelerateValue = 0;
         roundCount = 0;
         turnEndBlackPanel.SetActive(false);
-        player = GameObject.Find("TestPlayer");
         enemyName = selectEnemyName.DecideEnemyName(floor, enemyType);
-        //ReadPlayer(player);
-        playerData = gm.playerData;
-        ReadEnemy(enemyName);
-        SetStatus(playerData, enemyData);
+        playerData = gm.playerData; //GameManagerからプレイヤーのデータを受け取る
+        ReadEnemy(enemyName); //エネミーの名前から新しくデータを作成
+        SetStatus(playerData, enemyData); //それぞれのデータをBattleActionの変数に代入する
         StartRelicEffect();
         InitDeck();
         StartRound();
@@ -255,7 +242,6 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     private void EndRound() 
     {
-        Debug.Log("EndRoundが呼び出された");
         playerScript.Poison(playerMoveCount);
         enemyScript.Poison(enemyMoveCount);
         playerScript.ChargeAP();
@@ -320,22 +306,6 @@ public class BattleGameManager : MonoBehaviour
     //ここまでがゲームループ
 
     /// <summary>
-    /// プレイヤーのデータを読み取る処理
-    /// </summary>
-    /// <param name="player">プレイヤーのオブジェクト</param>
-    private void ReadPlayer(GameObject player) 
-    {
-        if (player.CompareTag("Warrior"))
-        {
-            playerData = new PlayerDataManager("Warrior");
-        }
-        else if (player.CompareTag("Wizard"))
-        {
-            playerData = new PlayerDataManager("Wizard");
-        }
-    }
-
-    /// <summary>
     /// エネミーのデータを読み取る
     /// </summary>
     /// <param name="enemyName">エネミーの名前</param>
@@ -347,7 +317,6 @@ public class BattleGameManager : MonoBehaviour
     {
         //プレイヤーのステータスを割り振る
         playerScript.SetStatus(player);
-        deckNumberList = player._deckList;
         //エネミーのステータスを割り振る
         enemyScript.SetStatus(floor, enemy);
         enemyScript.hasEnemyRelics = selectEnemyRelic.SetEnemyRelics(enemyScript.hasEnemyRelics, floor, enemyName);
@@ -416,6 +385,7 @@ public class BattleGameManager : MonoBehaviour
     {
         if (!isTurnEnd && !isPlayerMove) //まだボタンが押されていなかったら押すことが出来る
         {
+            AudioManager.Instance.PlaySE("選択音1");
             isTurnEnd = true;
             playerScript.TurnEnd();
             turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする

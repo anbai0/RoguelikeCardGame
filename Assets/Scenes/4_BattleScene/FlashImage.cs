@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Imageをオリジナルのシェーダーマテリアルでフラッシュさせるスクリプト
+/// </summary>
 public class FlashImage : MonoBehaviour
 {
     public Image flashImage; //フラッシュさせるオブジェクト

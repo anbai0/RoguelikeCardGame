@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// エネミーの名前を選択するスクリプト
+/// </summary>
 public class SelectEnemyName : MonoBehaviour
 {
     string[] enemyNameList = { "Slime", "SkeletonSwordsman", "Naga"}; //通常の敵のリスト

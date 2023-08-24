@@ -1,7 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ダメージを受けた際に画面を揺らすスクリプト
+/// </summary>
 public class ShakeBattleField : MonoBehaviour
 {
     /// <summary>

@@ -1,6 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// BattleReward画面のUIManagerです。
+/// UIの管理を行うスクリプトです。
+/// UIController側で起きた判定に対して処理を行います。
+/// </summary>
 public class UIManagerBattleReward : MonoBehaviour
 {
     // UIManagerに最初から定義してある変数

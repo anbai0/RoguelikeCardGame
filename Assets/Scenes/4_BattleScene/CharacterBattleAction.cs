@@ -1,10 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//これは戦闘時にキャラクターが起こす行動の基本となるスクリプトです。
-//今後PlayerとEnemyのBattleActionではこのスクリプトを継承します。
+/// <summary>
+/// 戦闘時にキャラクターが起こす行動の基本となるスクリプト
+/// (PlayerとEnemyのBattleActionではこのスクリプトを継承)
+/// </summary>
 public class CharacterBattleAction : MonoBehaviour
 {
     //ステータス
@@ -42,7 +43,6 @@ public class CharacterBattleAction : MonoBehaviour
     /// </summary>
     public void SetUpAP() 
     {
-        Debug.Log("現在のconstAPは" + constAP + "で、chargeAPは" + chargeAP);
         var curse = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]);
         AP = curse.nextRoundAP;
         currentAP = AP;

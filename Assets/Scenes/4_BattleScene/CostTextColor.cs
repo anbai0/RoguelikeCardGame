@@ -1,12 +1,13 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// コスト上限を超えたカードのコスト表示を赤くするスクリプト
+/// </summary>
 public class CostTextColor : MonoBehaviour
 {
-    [SerializeField]
-    CardController cardController;
-    [SerializeField]
-    TextMeshProUGUI costText;
+    [SerializeField] CardController cardController;
+    [SerializeField] TextMeshProUGUI costText;
 
     PlayerBattleAction player;
     void Start()

@@ -1,44 +1,30 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// プレイヤーの行動をまとめたスクリプト
+/// </summary>
 public class PlayerBattleAction : CharacterBattleAction
 {
-    [Header("プレイヤー名テキスト")]
-    [SerializeField] Text playerNameText;
-    [Header("プレイヤーHPテキスト")]
-    [SerializeField] Text playerHPText;
-    [Header("プレイヤーAPテキスト")]
-    [SerializeField] Text playerAPText;
-    [Header("プレイヤーGPテキスト")]
-    [SerializeField] Text playerGPText;
-    [Header("ダメージ表示オブジェクト")]
-    [SerializeField]
-    GameObject damageUI;
-    [Header("回復表示オブジェクト")]
-    [SerializeField]
-    GameObject healingUI;
-    [Header("ダメージと回復表示の出現場所")]
-    [SerializeField]
-    GameObject damageOrHealingPos;
-    [Header("状態異常のアイコン表示スクリプト")]
-    [SerializeField]
-    PlayerConditionDisplay playerConditionDisplay;
-    [Header("画面揺れのスクリプト")]
-    [SerializeField]
-    ShakeBattleField shakeBattleField;
-
+    [SerializeField, Header("プレイヤー名テキスト")] Text playerNameText;
+    [SerializeField, Header("プレイヤーHPテキスト")] Text playerHPText;
+    [SerializeField, Header("プレイヤーAPテキスト")] Text playerAPText;
+    [SerializeField, Header("プレイヤーGPテキスト")] Text playerGPText;
+    [SerializeField, Header("ダメージ表示オブジェクト")] GameObject damageUI;
+    [SerializeField, Header("回復表示オブジェクト")] GameObject healingUI;
+    [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
+    [SerializeField, Header("状態異常のアイコン表示スクリプト")] PlayerConditionDisplay playerConditionDisplay;
+    [SerializeField, Header("画面揺れのスクリプト")] ShakeBattleField shakeBattleField;
+    
+    [SerializeField] RelicEffectList relicEffect;
+    [SerializeField] CardEffectList cardEffectList;
+    
     public Dictionary<int, int> hasPlayerRelics = new Dictionary<int, int>(); //プレイヤーの所持しているレリック
-    int maxRelics = 12;
-    RelicEffectList relicEffect; //レリックの効果
-
     public Dictionary<string, int> playerCondition = new Dictionary<string, int>(); //プレイヤーに付与されている状態異常
     
-    CardEffectList cardEffectList;//カードの効果スクリプト
-
-    int playerMoney;//プレイヤーの所持金
+    int playerMoney; //プレイヤーの所持金
     public int GetSetPlayerMoney { get => playerMoney; set => playerMoney = value; }
 
     private void Update()
@@ -53,7 +39,6 @@ public class PlayerBattleAction : CharacterBattleAction
     public void Move(CardController card)
     {
         GetSetCurrentAP -= card.cardDataManager._cardCost;
-        Debug.Log("現在のPlayerCurrentAPは" + GetSetCurrentAP);
         cardEffectList.ActiveCardEffect(card);
     }
 
@@ -73,7 +58,6 @@ public class PlayerBattleAction : CharacterBattleAction
         playerMoney = playerData._playerMoney;
         InitializedCondition();
         GetSetCondition = playerCondition;
-        cardEffectList = GetComponent<CardEffectList>();
         GetSetInflictCondition = GetComponent<InflictCondition>();
         hasPlayerRelics = GameManager.Instance.hasRelics;
     }
@@ -201,7 +185,6 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <returns>変更を加えたエネミーのステータス</returns>
     public EnemyBattleAction StartRelicEffect(EnemyBattleAction enemyBattleAction, string enemyType)
     {
-        relicEffect = GetComponent<RelicEffectList>();
         var es = enemyBattleAction;
         var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2], playerCondition["UpStrength"], es.enemyCondition["UpStrength"]);
         playerCondition["UpStrength"] = relicEffectID2.playerUpStrength;
@@ -213,7 +196,6 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetHP = relicEffect.RelicID7(hasPlayerRelics[7], GetSetHP);
         GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
         playerCondition["UpStrength"] = relicEffect.RelicID12(hasPlayerRelics[12], enemyType, playerCondition["UpStrength"]);
-        Debug.Log("スタート時のレリックが呼び出されました: " + GetSetConstAP + " to " + GetSetChargeAP);
         return es;
     }
 

@@ -1,14 +1,13 @@
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// ラウンド数を表示する際に演出を行うスクリプト
+/// </summary>
 public class RoundTextAnimation : MonoBehaviour
 {
-    [Header("ラウンド数表示用オブジェクト")]
-    [SerializeField]
-    GameObject roundPrefab;
-    [Header("ラウンド数の表示場所")]
-    [SerializeField]
-    Transform roundPlace;
+    [SerializeField, Header("ラウンド数表示用オブジェクト")] GameObject roundPrefab;
+    [SerializeField, Header("ラウンド数の表示場所")] Transform roundPlace;
 
     GameObject roundObj = null;
     TextMeshProUGUI roundText; //ラウンド数をテキスト

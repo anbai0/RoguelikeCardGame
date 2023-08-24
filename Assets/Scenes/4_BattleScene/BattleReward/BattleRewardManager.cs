@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -6,30 +5,20 @@ using SelfMadeNamespace;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
+/// <summary>
+/// 戦闘報酬画面のマネージャースクリプト
+/// </summary>
 public class BattleRewardManager : MonoBehaviour
 {
-    [Header("報酬画面用UI")]
-    [SerializeField]
-    GameObject battleRewardUI;
+    [SerializeField, Header("報酬画面用UI")] GameObject battleRewardUI;
 
-    [Header("参照するコンポーネント")]
-    [SerializeField]
-    Lottery lottery;
-    [SerializeField] 
-    SceneFader sceneFader;
-    
-    [Header("生成するカードオブジェクト")]
-    [SerializeField]
-    GameObject cardPrefab;
-    [Header("生成するレリックオブジェクト")]
-    [SerializeField]
-    GameObject relicPrefab;
-    [Header("カードの生成場所")]
-    [SerializeField]
-    Transform cardPlace;
-    [Header("レリックの生成場所")]
-    [SerializeField]
-    Transform relicPlace;
+    [SerializeField, Header("参照するコンポーネント")] Lottery lottery;
+    [SerializeField] SceneFader sceneFader;
+
+    [SerializeField, Header("生成するカードオブジェクト")] GameObject cardPrefab;
+    [SerializeField, Header("生成するレリックオブジェクト")] GameObject relicPrefab;
+    [SerializeField, Header("カードの生成場所")] Transform cardPlace;
+    [SerializeField, Header("レリックの生成場所")] Transform relicPlace;
     
     CardController cardController;
     RelicController relicController;

@@ -15,15 +15,20 @@ public class EnemyMove //エネミーの行動クラス
         moveCost = cost;
     }
 }
+
+/// <summary>
+/// エネミーの行動をまとめたスクリプト
+/// </summary>
 public class EnemyAI : MonoBehaviour
 {
     BattleGameManager bg;
-    PlayerBattleAction player;
-    EnemyBattleAction enemy;
+    [SerializeField] PlayerBattleAction player;
+    [SerializeField] EnemyBattleAction enemy;
 
     //使用制限のある技の変数
     bool isUsedOnlyMove; //戦闘開始時のみ使用可能
     bool isUsableGodCrusher; //神砕きを使用出来るか判定
+
     private enum EnemyState //エネミーの種別
     {
         SLIME1,                    //スライム(1階層)
@@ -46,15 +51,19 @@ public class EnemyAI : MonoBehaviour
         MINOTAUR,                  //ミノタウロス(3階層)
     }
     EnemyState enemyState;
-    // Start is called before the first frame update
+
     void Start()
     {
-        bg = GetComponent<BattleGameManager>();
-        player = GetComponent<PlayerBattleAction>();
-        enemy = GetComponent<EnemyBattleAction>();
+        bg = BattleGameManager.Instance;
         isUsedOnlyMove = false;
         isUsableGodCrusher = false;
     }
+
+    /// <summary>
+    /// 使用する技を選択する
+    /// </summary>
+    /// <param name="currentAP">現在のAP</param>
+    /// <returns>技の名前とコスト</returns>
     public (string moveName, int moveCost) SelectMove(int currentAP)
     {
         string moveName = null; //選択された技の名前
@@ -69,7 +78,13 @@ public class EnemyAI : MonoBehaviour
         moveCost = selectMove.cost; //選択された技のコストを代入
         return (moveName, moveCost);
     }
-    public void SetEnemyState(int floor, string enemyName) //エネミーの名前と階層数に応じてEnemyAIのステートを変更する
+
+    /// <summary>
+    /// エネミーの名前と階層数に応じてEnemyAIのステートを変更する
+    /// </summary>
+    /// <param name="floor">現在の階層</param>
+    /// <param name="enemyName">エネミーの名前</param>
+    public void SetEnemyState(int floor, string enemyName) 
     {
         if (enemyName == "スライム" && floor == 1)
         {
@@ -144,7 +159,12 @@ public class EnemyAI : MonoBehaviour
             enemyState = EnemyState.MINOTAUR;
         }
     }
-    List<EnemyMove> SetMoveList() //エネミーの技をリストとしてセットする
+
+    /// <summary>
+    /// エネミーの使用できる技をリストとしてセットする
+    /// </summary>
+    /// <returns>使うことができる技のリスト</returns>
+    List<EnemyMove> SetMoveList() 
     {
         List<EnemyMove> enemyMove = new List<EnemyMove>();
         if (enemyState == EnemyState.SLIME1)
@@ -277,7 +297,14 @@ public class EnemyAI : MonoBehaviour
         }
         return enemyMove;
     }
-    List<EnemyMove> CheckAP(List<EnemyMove> enemyMove, int currentAP) //エネミーの技がAP以下かチェックする
+
+    /// <summary>
+    /// エネミーの技がAP以下かチェックする
+    /// </summary>
+    /// <param name="enemyMove">全てが使用不可になっている技のリスト</param>
+    /// <param name="currentAP">現在のAP</param>
+    /// <returns>使用可能な技をtrueにしたリスト</returns>
+    List<EnemyMove> CheckAP(List<EnemyMove> enemyMove, int currentAP) 
     {
         foreach (var move in enemyMove) //エネミーの技を全探索 
         {
@@ -288,7 +315,13 @@ public class EnemyAI : MonoBehaviour
         }
         return enemyMove;
     }
-    List<EnemyMove> CheckEnemyMove(List<EnemyMove> enemyMove) //エネミーの技が使用出来るかチェックする
+
+    /// <summary>
+    /// エネミーの技が使用出来るかチェックする
+    /// </summary>
+    /// <param name="enemyMove">使うことの出来る技のリスト</param>
+    /// <returns>使用できる条件が揃っていない技をfalseにしたリスト</returns>
+    List<EnemyMove> CheckEnemyMove(List<EnemyMove> enemyMove) 
     {
         if (enemyState == EnemyState.SLIME1)
         {
@@ -525,7 +558,13 @@ public class EnemyAI : MonoBehaviour
         }
         return enemyMove;
     }
-    (string name, int cost) SelectMove(List<EnemyMove> enemyMove) //使用する技を選ぶ
+
+    /// <summary>
+    /// 使用する技を選ぶ
+    /// </summary>
+    /// <param name="enemyMove">使用できる技をtrueに使用できない技をfalseにしたリスト</param>
+    /// <returns>使用する技の名前とコスト</returns>
+    (string name, int cost) SelectMove(List<EnemyMove> enemyMove) 
     {
         List<(string, int)> moveUsabledList = new List<(string, int)>(); //技の名前とコストを格納できるリスト
         foreach (var move in enemyMove) //使用可能な技をmoveUsabledListに追加する
@@ -548,6 +587,7 @@ public class EnemyAI : MonoBehaviour
         }
         return moveUsabledList[rand];
     }
+
     /// <summary>
     /// 技の効果処理
     /// </summary>
@@ -1115,7 +1155,6 @@ public class EnemyAI : MonoBehaviour
     private void EnemyAttacking(int damage)//エネミーへの攻撃処理 
     {
         damage = ChangeAttackPower(damage);
-        Debug.Log("計算後の攻撃力は" + damage);
         player.TakeDamage(damage);
     }
     private int ChangeAttackPower(int damage) //状態異常による攻撃力の増減

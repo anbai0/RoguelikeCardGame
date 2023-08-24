@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// レリックの効果をまとめたスクリプト
+/// </summary>
 public class RelicEffectList : MonoBehaviour
 {
     /// <summary>
@@ -11,6 +13,7 @@ public class RelicEffectList : MonoBehaviour
     /// <param name="ID1Quantity"></param>
     public void RelicID1(int ID1Quantity)
     {
+        //このスクリプトで処理する効果はなし
     }
 
     /// <summary>
@@ -170,7 +173,6 @@ public class RelicEffectList : MonoBehaviour
     {
         //バッドステータスをリストに追加
         List<int> badStatus = new List<int> { condition["Curse"], condition["Impatience"], condition["Weakness"], condition["Burn"], condition["Poison"] };
-        Debug.Log("Relicの処理によるBurnの数：変更前：" + badStatus[3]);
         //解除できる数がバッドステータスの数より多い場合はバッドステータスの数だけ解除
         int totalBadStatus = condition["Curse"] + condition["Impatience"] + condition["Weakness"] + condition["Burn"] + condition["Poison"];
         if (totalBadStatus < ID11Quantity)
@@ -188,7 +190,6 @@ public class RelicEffectList : MonoBehaviour
             }
             badStatus[chooseNumber] -= 1;
         }
-        Debug.Log("Relicの処理によるBurnの数：変更後：" + badStatus[3]);
         //減少後の数値を代入する
         condition["Curse"] = badStatus[0];
         condition["Impatience"] = badStatus[1];

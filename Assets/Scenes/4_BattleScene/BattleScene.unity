@@ -1327,7 +1327,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &562602476
 MonoBehaviour:
@@ -1570,7 +1570,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &870591702
 MonoBehaviour:
@@ -2386,37 +2386,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1171092127}
   m_CullTransparentMesh: 1
---- !u!1 &1173196061
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1173196062}
-  m_Layer: 0
-  m_Name: TestPlayer
-  m_TagString: Wizard
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1173196062
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1173196061}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 931.1625, y: 686.50336, z: -90.601974}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1189496655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2682,7 +2651,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coditionIcon: {fileID: 8872422394153287131, guid: 3a43282b58debff43827f2adb1fbfa84,
     type: 3}
-  DebugNum: 0
   sortIcon: {fileID: 1227849108}
   uiManagerBattle: {fileID: 1237742750}
 --- !u!1 &1237742747
@@ -3673,6 +3641,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66cb6e403398cc0408e8328ceb28bb28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1522913952}
+  enemy: {fileID: 1522913951}
+  flash: {fileID: 1522913957}
 --- !u!114 &1522913947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3685,8 +3656,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef740ddc00171e44a638997d8eea547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerScript: {fileID: 1522913952}
+  enemyScript: {fileID: 1522913951}
   playerTurnDisplay: {fileID: 1463396512}
   enemyTurnDisplay: {fileID: 916258405}
+  selectEnemyName: {fileID: 1522913958}
+  selectEnemyData: {fileID: 1522913956}
+  selectEnemyRelic: {fileID: 1522913955}
   enemyType: StrongEnemy
   cardPrefab: {fileID: 7009455883766435928, guid: 6d97bce2c74bb1a44ac0e09c10c805a7,
     type: 3}
@@ -3694,6 +3670,7 @@ MonoBehaviour:
   PickCardPlace: {fileID: 1051905017}
   cardCostChange: {fileID: 1522913960}
   battleRewardManager: {fileID: 562602478}
+  resultAnimation: {fileID: 1522913959}
   uiManagerBR: {fileID: 870591700}
   uiManagerBattle: {fileID: 1237742747}
   roundTextAnimation: {fileID: 1522913961}
@@ -3720,6 +3697,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0857ae1ef6795c49860f09825622996, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1522913952}
+  enemy: {fileID: 1522913951}
 --- !u!114 &1522913950
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3757,6 +3736,8 @@ MonoBehaviour:
     type: 3}
   damageOrHealingPos: {fileID: 982558071}
   enemyConditionDisplay: {fileID: 1227849113}
+  enemyAI: {fileID: 1522913948}
+  flash: {fileID: 1522913957}
 --- !u!114 &1522913952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3780,6 +3761,8 @@ MonoBehaviour:
   damageOrHealingPos: {fileID: 1171092127}
   playerConditionDisplay: {fileID: 1839181339}
   shakeBattleField: {fileID: 1491581598}
+  relicEffect: {fileID: 1522913953}
+  cardEffectList: {fileID: 1522913946}
 --- !u!114 &1522913953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4386,7 +4369,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coditionIcon: {fileID: 8872422394153287131, guid: 3a43282b58debff43827f2adb1fbfa84,
     type: 3}
-  DebugNum: 0
   sortIcon: {fileID: 1839181334}
   uiManagerBattle: {fileID: 1237742750}
 --- !u!1 &1885989512

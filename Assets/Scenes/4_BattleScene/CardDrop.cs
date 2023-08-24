@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// カードをDropPlaceにドロップした時にプレイヤーの行動を呼び出すスクリプト
+/// </summary>
 public class CardDrop : MonoBehaviour, IDropHandler
 {
     public void OnDrop(PointerEventData eventData)//カードがこのオブジェクトの範囲に落ちてきたときに行う処理

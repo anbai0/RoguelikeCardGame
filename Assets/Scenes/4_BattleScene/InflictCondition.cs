@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 状態異常の効果をまとめたスクリプト
+/// </summary>
 public class InflictCondition : MonoBehaviour
 {
     /// <summary>

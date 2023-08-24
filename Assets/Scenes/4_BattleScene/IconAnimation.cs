@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// アイコンを表示する際に拡大する演出を行うスクリプト
+/// </summary>
 public class IconAnimation : MonoBehaviour
 {
     Image iconImage;
