@@ -34,6 +34,8 @@ public class AudioManager : MonoBehaviour
     private int currentBGMIndex;        // 設定で音量を変えるときに使います
     private float currentBGMVolume;     // 音をフェードする時に使います
     private float fadeVolumeSpeed = 1.5f;
+    private Tween fadeInTween = null;
+    private Tween fadeOutTween = null;
 
     public static AudioManager Instance;     // シングルトン
     private void Awake()
@@ -45,6 +47,8 @@ public class AudioManager : MonoBehaviour
         }
         // コンポーネント取得
         audioSetting = GetComponent<AudioSetting>();
+
+        DOTween.SetTweensCapacity(1000, 50);    // Tween用のメモリ確保
     }
 
 
@@ -184,8 +188,10 @@ public class AudioManager : MonoBehaviour
     {
         bgmAudioSource.UnPause();
 
+        DOTween.Kill(fadeInTween);
+
         // 数値の変更
-        DOTween.To(
+        fadeInTween = DOTween.To(
             () => bgmAudioSource.volume,                // 何を対象にするのか
             volume => bgmAudioSource.volume = volume,   // 値の更新
             currentBGMVolume,                           // 最終的な値
@@ -200,8 +206,10 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public IEnumerator IEFadeOutBGMVolume()
     {
+        DOTween.Kill(fadeOutTween);
+
         // 数値の変更
-        DOTween.To(
+        fadeOutTween = DOTween.To(
             () => bgmAudioSource.volume,                // 何を対象にするのか
             volume => bgmAudioSource.volume = volume,   // 値の更新
             0f,                                         // 最終的な値

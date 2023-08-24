@@ -139,7 +139,11 @@ public class UIManager : MonoBehaviour
         // タイトルへ戻るボタンを押したら
         if (UIObject == confirmTitleBackButton)
         {
+            // bgm停止(IEFadeOutBGMVolmeコルーチンでは止まってくれなかったのでStopを使っています。)
+            AudioManager.Instance.bgmAudioSource.Stop();    
             AudioManager.Instance.PlaySE("選択音2");
+            Debug.Log("aaa");
+            
             // タイトルへ戻る処理
             gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
