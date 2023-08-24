@@ -12,4 +12,6 @@ public class ConditionData : ScriptableObject
     /// ó‘ÔˆÙí‚ÌŒø‰Ê
     /// </summary>
     public string conditionEffect;
+
+    public Sprite conditionImage;
 }

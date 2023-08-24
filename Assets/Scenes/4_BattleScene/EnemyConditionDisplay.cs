@@ -127,6 +127,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = upStrengthIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon1"); //オリジナルのマテリアルを設定
                 ConditionDataManager conditiondata = new ConditionDataManager("UpStrength"); //筋力増強のデータを作成
+                image.sprite = conditiondata._conditionImage; //状態異常に応じたスプライトを設定
                 ViewConditionEffect(upStrengthIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort(); //名前順にソート
             }
@@ -159,6 +160,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = autoHealingIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon2");
                 ConditionDataManager conditiondata = new ConditionDataManager("AutoHealing"); //自動回復のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(autoHealingIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -191,6 +193,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = invalidBadStatusIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon3");
                 ConditionDataManager conditiondata = new ConditionDataManager("InvalidBadStatus"); //状態異常無効のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(invalidBadStatusIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -223,6 +226,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = curseIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon4");
                 ConditionDataManager conditiondata = new ConditionDataManager("Curse"); //呪縛のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(curseIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -255,6 +259,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = impatienceIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon5");
                 ConditionDataManager conditiondata = new ConditionDataManager("Impatience"); //焦燥のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(impatienceIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -287,6 +292,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = weaknessIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon6");
                 ConditionDataManager conditiondata = new ConditionDataManager("Weakness"); //衰弱のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(weaknessIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -319,6 +325,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = burnIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon7");
                 ConditionDataManager conditiondata = new ConditionDataManager("Burn"); //火傷のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(burnIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }
@@ -351,6 +358,7 @@ public class EnemyConditionDisplay : MonoBehaviour
                 var image = poisonIcon.GetComponent<Image>();
                 image.material = Resources.Load<Material>("IconMaterials/EnemyIcon8");
                 ConditionDataManager conditiondata = new ConditionDataManager("Poison"); //邪毒のデータを作成
+                image.sprite = conditiondata._conditionImage;
                 ViewConditionEffect(poisonIcon, conditiondata._conditionName, conditiondata._conditionEffect);
                 sortIcon.Sort();
             }

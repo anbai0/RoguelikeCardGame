@@ -25,14 +25,14 @@ public class BonfireManager : MonoBehaviour
     private void InitDeck() //デッキ生成
     {
         deckNumberList = GameManager.Instance.playerData._deckList;
-        deckNumberList = ExcludeDeckCards(deckNumberList);
-        int distribute = DistributionOfCards(deckNumberList.Count);
+        var selectableList = ExcludeDeckCards(deckNumberList);
+        int distribute = DistributionOfCards(selectableList.Count);
         if (distribute <= 0) //デッキの枚数が0枚なら生成しない
         {
             cardEmptyText.SetActive(true); //強化できるカードがないことをTextで伝える
             return;
         }
-        for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
+        for (int init = 1; init <= selectableList.Count; init++)// 選択出来るデッキの枚数分
         {
             if (init <= distribute) //決められた数をupperCardPlaceに生成する
             {
