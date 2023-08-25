@@ -158,6 +158,7 @@ public class RoomsManager : MonoBehaviour
 
             // •°‰Î
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // •°‰Î¶¬
+            bonfire.transform.SetParent(rooms[(int)RoomNum.Room5].transform);
 
         }
         else
@@ -175,11 +176,11 @@ public class RoomsManager : MonoBehaviour
 
             // •°‰Î
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // •°‰Î¶¬
+            bonfire.transform.SetParent(rooms[(int)RoomNum.Room8].transform);
 
         }
 
         treasureBox.transform.SetParent(objectParent.transform);
-        bonfire.transform.SetParent(objectParent.transform);
     }
 
     /// <summary>
@@ -205,6 +206,7 @@ public class RoomsManager : MonoBehaviour
 
             // •°‰Î
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                               // •°‰Î¶¬
+            bonfire.transform.SetParent(rooms[(int)RoomNum.Room9].transform);
             enemy = Instantiate(bossEnemyPrefab, rooms[(int)RoomNum.BossRoom1].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // •°‰Î‚ª¶¬‚³‚ê‚Ä‚¢‚éŸ‚Ì•”‰®‚ÉBoss‚ğ¶¬
 
         }
@@ -221,13 +223,12 @@ public class RoomsManager : MonoBehaviour
 
             // •°‰Î
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                              // •°‰Î¶¬
+            bonfire.transform.SetParent(rooms[(int)RoomNum.Room12].transform);
             enemy = Instantiate(bossEnemyPrefab, rooms[(int)RoomNum.BossRoom2].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // •°‰Î‚ª¶¬‚³‚ê‚Ä‚¢‚éŸ‚Ì•”‰®‚ÉBoss‚ğ¶¬
 
         }
-        Debug.Log(rooms[(int)RoomNum.Room12].transform.GetChild(5).gameObject);
         
         shop.transform.SetParent(objectParent.transform);
-        bonfire.transform.SetParent(objectParent.transform);
         enemy.transform.SetParent(enemyParent.transform);
     }
 

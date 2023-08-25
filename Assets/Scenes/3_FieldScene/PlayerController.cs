@@ -160,7 +160,6 @@ public class PlayerController : MonoBehaviour
         }
         #endregion
 
-        
         #region ïîâÆà⁄ìÆèàóù
         if (other.gameObject.CompareTag("GateForward"))
         {
@@ -169,6 +168,18 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;                    // ÉJÉÅÉâÇéüÇÃïîâÆÇ…à⁄ìÆ
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ÉâÉCÉgÇéüÇÃïîâÆÇ…à⁄ìÆ
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, -3.6f);      // PlayerÇéüÇÃïîâÆÇ…à⁄ìÆ
+
+            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                particle.Play();
+            }
+
+            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in stopParticles)
+            {
+                particle.Stop();
+            }
         }
 
         if (other.gameObject.CompareTag("GateRight"))
@@ -178,6 +189,18 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, pPos.y, 0);
+
+            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                particle.Play();
+            }
+
+            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in stopParticles)
+            {
+                particle.Stop();
+            }
         }
 
         if (other.gameObject.CompareTag("GateLeft"))
@@ -187,6 +210,18 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, pPos.y, 0);
+
+            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                particle.Play();
+            }
+
+            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in stopParticles)
+            {
+                particle.Stop();
+            }
         }
 
         if (other.gameObject.CompareTag("GateBack"))
@@ -196,6 +231,18 @@ public class PlayerController : MonoBehaviour
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, 3.6f);
+
+            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in particles)
+            {
+                particle.Play();
+            }
+
+            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem particle in stopParticles)
+            {
+                particle.Stop();
+            }
         }
         #endregion
     }

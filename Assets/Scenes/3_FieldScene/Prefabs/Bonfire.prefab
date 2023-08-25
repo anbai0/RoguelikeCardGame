@@ -952,6 +952,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: BonfireParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 1146448664037038045, guid: c9cb1c57dea5e4348b5945ead95fd321,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146448664037038047, guid: c9cb1c57dea5e4348b5945ead95fd321,
+        type: 3}
+      propertyPath: prewarm
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1146448664037038047, guid: c9cb1c57dea5e4348b5945ead95fd321,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1146448664037038048, guid: c9cb1c57dea5e4348b5945ead95fd321,
         type: 3}
       propertyPath: m_RootOrder
