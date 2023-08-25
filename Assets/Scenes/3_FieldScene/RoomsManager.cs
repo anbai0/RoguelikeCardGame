@@ -201,7 +201,7 @@ public class RoomsManager : MonoBehaviour
             shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));    // ショップ生成
 
             // ゲートを非表示
-            rooms[(int)RoomNum.Room12].transform.GetChild(3).gameObject.SetActive(false);
+            rooms[(int)RoomNum.Room12].transform.GetChild(5).gameObject.SetActive(false);
 
             // 焚火
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                               // 焚火生成
@@ -217,13 +217,14 @@ public class RoomsManager : MonoBehaviour
             shop = Instantiate(shopPrefab, rooms[(int)RoomNum.Room9].transform.position + new Vector3(-0.3f, -2.4f, 0), Quaternion.Euler(0f, 180f, 0f));     // ショップ生成
 
             // ゲートを非表示
-            rooms[(int)RoomNum.Room9].transform.GetChild(3).gameObject.SetActive(false);
+            rooms[(int)RoomNum.Room9].transform.GetChild(5).gameObject.SetActive(false);
 
             // 焚火
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room12].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                              // 焚火生成
             enemy = Instantiate(bossEnemyPrefab, rooms[(int)RoomNum.BossRoom2].transform.position + new Vector3(0, -3.5f, 0), Quaternion.Euler(0f, 90f, 0f));               // 焚火が生成されている次の部屋にBossを生成
 
         }
+        Debug.Log(rooms[(int)RoomNum.Room12].transform.GetChild(5).gameObject);
         
         shop.transform.SetParent(objectParent.transform);
         bonfire.transform.SetParent(objectParent.transform);
