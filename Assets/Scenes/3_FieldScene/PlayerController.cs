@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -164,16 +163,16 @@ public class PlayerController : MonoBehaviour
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ライトを次の部屋に移動
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, -3.6f);      // Playerを次の部屋に移動
 
-            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in particles)
+            // 焚火のエフェクトの切り替え
+            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
+            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
             {
-                particle.Play();
+                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
             }
-
-            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in stopParticles)
+            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
+            if (lastRoomBonfire != null)
             {
-                particle.Stop();
+                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
 
@@ -185,16 +184,16 @@ public class PlayerController : MonoBehaviour
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, pPos.y, 0);
 
-            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in particles)
+            // 焚火のエフェクトの切り替え
+            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
+            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
             {
-                particle.Play();
+                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
             }
-
-            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in stopParticles)
+            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
+            if (lastRoomBonfire != null)
             {
-                particle.Stop();
+                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
 
@@ -206,16 +205,16 @@ public class PlayerController : MonoBehaviour
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, pPos.y, 0);
 
-            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in particles)
+            // 焚火のエフェクトの切り替え
+            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
+            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
             {
-                particle.Play();
+                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
             }
-
-            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in stopParticles)
+            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
+            if (lastRoomBonfire != null)
             {
-                particle.Stop();
+                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
 
@@ -227,16 +226,16 @@ public class PlayerController : MonoBehaviour
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, 3.6f);
 
-            ParticleSystem[] particles = nextRoom.transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in particles)
+            // 焚火のエフェクトの切り替え
+            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
+            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
             {
-                particle.Play();
+                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
             }
-
-            ParticleSystem[] stopParticles = roomsM.rooms[lastRoomNum].transform.GetComponentsInChildren<ParticleSystem>();
-            foreach (ParticleSystem particle in stopParticles)
+            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
+            if (lastRoomBonfire != null)
             {
-                particle.Stop();
+                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
             }
         }
         #endregion

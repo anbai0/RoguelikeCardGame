@@ -158,6 +158,9 @@ public class RoomsManager : MonoBehaviour
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room5].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
             bonfire.transform.SetParent(rooms[(int)RoomNum.Room5].transform);
 
+            // 扉を開ける
+            EnableRoomDoorAccess((int)RoomNum.Room5);
+
         }
         else
         {
@@ -176,14 +179,18 @@ public class RoomsManager : MonoBehaviour
             bonfire = Instantiate(bonfirePrefab, rooms[(int)RoomNum.Room8].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity);                     // 焚火生成
             bonfire.transform.SetParent(rooms[(int)RoomNum.Room8].transform);
 
+            // 扉を開ける
+            EnableRoomDoorAccess((int)RoomNum.Room8);
+
         }
 
         treasureBox.transform.SetParent(objectParent.transform);
     }
 
     /// <summary>
-    /// room9またはroom12でショップを生成し次の部屋につながる扉を閉めます。
+    /// room9またはroom12でショップを生成し、
     /// ショップが生成されなかった部屋には焚火を生成します。
+    /// 焚火が生成された部屋にはボスの扉を表示します。
     /// </summary>
     void ShopOrBonfire()
     {
