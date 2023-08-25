@@ -94,28 +94,28 @@ public class UIManagerTreasureBox : MonoBehaviour
                 if (lastSelectedItem.CompareTag("Cards"))
                 {
                     lastSelectedItem.transform.localScale = cardScaleReset;
-                    lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 }
 
                 if (lastSelectedItem.CompareTag("Relics"))
                 {
                     lastSelectedItem.transform.localScale = relicScaleReset;
-                    lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                    lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
+                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                    lastSelectedItem.transform.GetChild(8).gameObject.SetActive(false);       // RelicEffectBG(BattleReward)を非表示
                 }
 
                 // 2回目に選択したアイテムがカードだった場合、カードを選択状態にする
                 if (UIObject.CompareTag("Cards"))
                 {
                     UIObject.transform.localScale += scaleBoost;
-                    UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);
+                    UIObject.transform.GetChild(0).gameObject.SetActive(true);
                 }
 
                 // 2回目に選択したアイテムがレリックだった場合、レリックを選択状態にして説明を表示
                 if (UIObject.CompareTag("Relics"))
                 {
-                    UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);
-                    UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(true);
+                    UIObject.transform.GetChild(0).gameObject.SetActive(true);
+                    UIObject.transform.GetChild(8).gameObject.SetActive(true);
                 }
 
             }
@@ -131,14 +131,14 @@ public class UIManagerTreasureBox : MonoBehaviour
             if (lastSelectedItem.CompareTag("Cards"))
             {
                 lastSelectedItem.transform.localScale = cardScaleReset;
-                lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
             if (lastSelectedItem.CompareTag("Relics"))
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
-                lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                lastSelectedItem.transform.GetChild(8).gameObject.SetActive(false);                    // RelicEffectBG(BattleReward)を非表示
             }
             lastSelectedItem = null;
             isSelected = false;
@@ -159,14 +159,14 @@ public class UIManagerTreasureBox : MonoBehaviour
             if (lastSelectedItem.CompareTag("Cards"))
             {
                 lastSelectedItem.transform.localScale = cardScaleReset;
-                lastSelectedItem.transform.Find("CardSelectImage").gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             }
 
             if (lastSelectedItem.CompareTag("Relics"))
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
-                lastSelectedItem.transform.Find("RelicSelectImage").gameObject.SetActive(false);
-                lastSelectedItem.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);       // レリックの説明を非表示
+                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                lastSelectedItem.transform.GetChild(8).gameObject.SetActive(false);                    // RelicEffectBG(BattleReward)を非表示
             }
 
             if (lastSelectedItem.CompareTag("Cards"))
@@ -294,14 +294,14 @@ public class UIManagerTreasureBox : MonoBehaviour
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
-                UIObject.transform.Find("CardSelectImage").gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
 
             if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale += scaleBoost;
-                UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
-                UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(true);                     // レリックの説明を表示
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
+                UIObject.transform.GetChild(8).gameObject.SetActive(true);                    // RelicEffectBG(BattleReward)を表示
             }
         }
     }
@@ -313,15 +313,15 @@ public class UIManagerTreasureBox : MonoBehaviour
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale = cardScaleReset;
-                UIObject.transform.Find("CardSelectImage").gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
 
             }
 
             if (UIObject.CompareTag("Relics"))
             {
                 UIObject.transform.localScale = relicScaleReset;
-                UIObject.transform.Find("RelicSelectImage").gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
-                UIObject.transform.Find("RelicEffectBG(BattleReward)").gameObject.SetActive(false);                    // レリックの説明を非表示
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
+                UIObject.transform.GetChild(8).gameObject.SetActive(false);                    // RelicEffectBG(BattleReward)を非表示
             }
         }
     }

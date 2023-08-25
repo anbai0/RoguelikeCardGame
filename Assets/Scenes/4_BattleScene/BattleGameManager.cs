@@ -276,7 +276,6 @@ public class BattleGameManager : MonoBehaviour
 
     IEnumerator WinAnimation()
     {
-        Debug.Log("Playerの勝利");
         enemyScript.EnemyDefeated(); //エネミーのやられた演出
         yield return new WaitForSeconds(4.0f);
         EndGameRelicEffect();
@@ -297,7 +296,6 @@ public class BattleGameManager : MonoBehaviour
 
     IEnumerator LoseAnimation()
     {
-        Debug.Log("Enemyの勝利");
         yield return new WaitForSeconds(1.0f);
         resultAnimation.StartAnimation("Defeated");
         yield return new WaitForSeconds(2.0f);
