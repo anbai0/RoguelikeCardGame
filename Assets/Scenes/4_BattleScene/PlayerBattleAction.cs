@@ -8,7 +8,6 @@ using TMPro;
 /// </summary>
 public class PlayerBattleAction : CharacterBattleAction
 {
-    [SerializeField, Header("プレイヤー名テキスト")] Text playerNameText;
     [SerializeField, Header("プレイヤーHPテキスト")] Text playerHPText;
     [SerializeField, Header("プレイヤーAPテキスト")] Text playerAPText;
     [SerializeField, Header("プレイヤーGPテキスト")] Text playerGPText;
@@ -48,7 +47,6 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <param name="playerData">職種に応じたプレイヤーデータ</param>
     public void SetStatus(PlayerDataManager playerData)
     {
-        playerNameText.text = "現在のキャラ:" + playerData._playerName;
         GetSetHP = playerData._playerHP;
         GetSetCurrentHP = playerData._playerCurrentHP;
         GetSetAP = playerData._playerAP;
