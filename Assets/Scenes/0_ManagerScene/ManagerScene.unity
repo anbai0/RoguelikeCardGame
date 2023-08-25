@@ -4952,6 +4952,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1717233874}
   - component: {fileID: 1717233873}
+  - component: {fileID: 1717233879}
   - component: {fileID: 1717233878}
   m_Layer: 0
   m_Name: GameManager
@@ -5009,6 +5010,26 @@ MonoBehaviour:
     type: 3}
   fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
     type: 3}
+--- !u!114 &1717233879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717233872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardRarity1List: 
+  cardRarity2List: 
+  cardRarity3List: 
+  relicRarity1List: 
+  relicRarity2List: 
+  shopCards: 
+  currentCardsLotteryID: 
+  currentRelicsLotteryID: 
 --- !u!1 &1729058822
 GameObject:
   m_ObjectHideFlags: 0

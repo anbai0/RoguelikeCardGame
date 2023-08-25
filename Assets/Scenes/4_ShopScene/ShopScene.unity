@@ -459,7 +459,6 @@ GameObject:
   - component: {fileID: 387374074}
   - component: {fileID: 387374075}
   - component: {fileID: 387374077}
-  - component: {fileID: 387374076}
   - component: {fileID: 387374078}
   m_Layer: 0
   m_Name: ShopManager
@@ -495,7 +494,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c29c687a351ef3b43918b572fc06a11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lottery: {fileID: 387374076}
   uiManager: {fileID: 2100310164}
   sceneFader: {fileID: 1213055526}
   shoppingUI: {fileID: 1016566035}
@@ -517,27 +515,6 @@ MonoBehaviour:
   shopCards: []
   shopRelics: []
   tmpID: 0
---- !u!114 &387374076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 387374073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gm: {fileID: 0}
-  fromShopController: 0
-  cardRarity1List: 
-  cardRarity2List: 
-  cardRarity3List: 
-  relicRarity1List: 
-  relicRarity2List: 
-  shopCards: 
-  shopRelics: 
 --- !u!114 &387374077
 MonoBehaviour:
   m_ObjectHideFlags: 0

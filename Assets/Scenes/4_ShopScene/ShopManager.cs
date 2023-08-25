@@ -13,7 +13,6 @@ public class ShopManager : MonoBehaviour
 {
     private GameManager gm;
 
-    [SerializeField] private Lottery lottery;
     [SerializeField] private UIManagerShop uiManager;
     [SerializeField] private SceneFader sceneFader;
 
@@ -62,24 +61,21 @@ public class ShopManager : MonoBehaviour
     {
         // GameManager取得(変数名省略)
         gm = GameManager.Instance;
+
+        ShopLottery();
+        shopCardsID.Add(healCardID);                        // 回復カードを追加
+        shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
+        //Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
+
+        // ショップに並ぶアイテムを表示
+        ShowItem();
+
+        uiManager.UIEventsReload();          // UIEvent更新
     }
 
     void Update()
     {
 
-        if (Lottery.isInitialize)
-        {
-            ShopLottery();
-            shopCardsID.Add(healCardID);                        // 回復カードを追加
-            shopRelicsID.Insert(0, deckLimitIncRelicID);        // デッキの上限を1枚増やすレリックを追加
-            //Debug.Log("レリック1:   " + shopRelicsID[0] + "\nレリック2:   " + shopRelicsID[1] + "\nレリック3:  " + shopRelicsID[2]);
-
-            // ショップに並ぶアイテムを表示
-            ShowItem();
-            
-            uiManager.UIEventsReload();          // UIEvent更新      
-            Lottery.isInitialize = false;
-        }
 
         //// デバッグ用
         //if (Input.GetKeyDown(KeyCode.Space))
@@ -131,10 +127,8 @@ public class ShopManager : MonoBehaviour
     void ShopLottery()
     {
         //(Card1, Card2, Card3) = lottery.SelectCardByRarity(new int[] { 2, 1, 1 });     // メモ: タプルと言って複数の戻り値を受け取れる
-        lottery.fromShopController = true;
-        shopCardsID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
-        lottery.fromShopController = true;
-        shopRelicsID = lottery.SelectRelicByRarity(new List<int> { 2, 1 });
+        shopCardsID = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 1, 1 },true);
+        shopRelicsID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 1 });
 
     }
 

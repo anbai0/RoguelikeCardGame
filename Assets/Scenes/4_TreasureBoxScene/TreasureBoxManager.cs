@@ -8,7 +8,6 @@ public class TreasureBoxManager : MonoBehaviour
     [SerializeField] GameObject treasureBoxUI;
 
     [Header("参照するコンポーネント")]
-    [SerializeField] Lottery lottery;
     [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerTreasureBox uiManagerTB;
 
@@ -24,12 +23,23 @@ public class TreasureBoxManager : MonoBehaviour
     CardController cardController;
     RelicController relicController;
 
-    List<int> treasureCardID = null; //宝箱から出てくるカードのID
+    [SerializeField] List<int> treasureCardID = null; //宝箱から出てくるカードのID
     List<int> treasureRelicID = null; //宝箱から出てくるレリックのID
 
     void Start()
     {
         Invoke("ShowTreasure", 0.05f); //読み込みが遅れているので呼び出しを遅らせる
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+
+            treasureCardID = null;
+            treasureCardID = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 2, 1 });
+            Debug.Log(treasureCardID);
+        }
     }
 
     /// <summary>
@@ -49,8 +59,8 @@ public class TreasureBoxManager : MonoBehaviour
     /// </summary>
     void TreasureLottery()
     {
-        treasureCardID = lottery.SelectCardByRarity(new List<int> { 2, 2, 1 });
-        treasureRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
+        treasureCardID = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 2, 1 });
+        treasureRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 1, 1 });
     }
 
     /// <summary>

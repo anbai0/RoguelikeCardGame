@@ -13,8 +13,6 @@ public class BattleRewardManager : MonoBehaviour
     GameObject battleRewardUI;
 
     [Header("参照するコンポーネント")]
-    [SerializeField]
-    Lottery lottery;
     [SerializeField] 
     SceneFader sceneFader;
     
@@ -68,15 +66,15 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (type == "SmallEnemy")
         {
-            rewardCardID = lottery.SelectCardByRarity(new List<int> { 2, 1, 1 });
+            rewardCardID = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 1, 1 });
         }
         else if (type == "StrongEnemy")
         {
-            rewardCardID = lottery.SelectCardByRarity(new List<int> { 2, 2, 1 });
+            rewardCardID = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 2, 1 });
         }
         else if (type == "Boss")
         {
-            rewardCardID = lottery.SelectCardByRarity(new List<int> { 3, 2, 2 });
+            rewardCardID = Lottery.Instance.SelectCardByRarity(new List<int> { 3, 2, 2 });
         }
         ShowCards();
     }
@@ -89,11 +87,11 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (type == "StrongEnemy")
         {
-            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 1, 1 });
+            rewardRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 1, 1 });
         }
         else if (type == "Boss")
         {
-            rewardRelicID = lottery.NotDuplicateSelectRelicByRarity(new List<int> { 2, 2 });
+            rewardRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 2 });
             rewardRelicID.Insert(0, RelicID1);
         }
         else

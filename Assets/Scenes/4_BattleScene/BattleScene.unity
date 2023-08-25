@@ -1305,7 +1305,6 @@ GameObject:
   m_Component:
   - component: {fileID: 562602475}
   - component: {fileID: 562602478}
-  - component: {fileID: 562602477}
   - component: {fileID: 562602476}
   m_Layer: 0
   m_Name: BattleRewardManager
@@ -1341,27 +1340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d76d0e417d4105c4a80873e8a08d7807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &562602477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 562602474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 990788f5bed207643ae8fddc2e359081, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gm: {fileID: 0}
-  fromShopController: 0
-  cardRarity1List: 
-  cardRarity2List: 
-  cardRarity3List: 
-  relicRarity1List: 
-  relicRarity2List: 
-  shopCards: 
-  shopRelics: 
 --- !u!114 &562602478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1375,7 +1353,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleRewardUI: {fileID: 160689628}
-  lottery: {fileID: 562602477}
   sceneFader: {fileID: 1021673078}
   cardPrefab: {fileID: 7009455883766435924, guid: a4142022ac005bc4ca6b58bc9c35ccf9,
     type: 3}

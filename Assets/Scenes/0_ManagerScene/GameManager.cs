@@ -177,6 +177,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void ResetGameData()
     {
+        Lottery.Instance.shopCards.Clear();
         PlayerController.isPlayerActive = true;
         playerData = null;
 
