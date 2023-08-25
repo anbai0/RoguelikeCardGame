@@ -43,11 +43,6 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeInBGMVolume());       // BGMÇçƒê∂
             PlayerMove();
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            AccessDoorAfterWin();
-        }
     }
 
     private void PlayerMove()

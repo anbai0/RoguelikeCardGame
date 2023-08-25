@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -74,10 +75,15 @@ public class UIManagerTitle : MonoBehaviour
         {
             isClick = true;
             AudioManager.Instance.PlaySE("選択音2");
-            sceneManager.LoadCharaSelectScene();
+            StartCoroutine(GameStart());
         }
     }
 
+    IEnumerator GameStart()
+    {
+        yield return new WaitForSeconds(0.5f);       
+        sceneManager.LoadCharaSelectScene();
+    }
 
     void Update()
     {

@@ -28,12 +28,13 @@ public class UIManagerBonfire : MonoBehaviour
     [SerializeField] private GameObject restUI;
 
     [Header("クリック後に参照するUI")]
+    [SerializeField] private GameObject closeBonfire;
     [SerializeField] private GameObject enhanceButton;
     [SerializeField] private GameObject applyEnhance;
     [SerializeField] private GameObject closeEnhance;
     [SerializeField] private GameObject restButton;
     [SerializeField] private GameObject takeRestButton;
-    [SerializeField] private GameObject noRestButton;
+    [SerializeField] private GameObject noRestButton;   
 
 
     void Start()
@@ -89,7 +90,7 @@ public class UIManagerBonfire : MonoBehaviour
         }
 
         // "休憩しない"を押したら
-        if (UIObject.CompareTag("ExitButton") && !isClick)
+        if (UIObject == closeBonfire && !isClick)
         {
             isClick = true;
             AudioManager.Instance.PlaySE("選択音1");

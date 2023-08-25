@@ -783,7 +783,7 @@ GameObject:
   - component: {fileID: 554603104}
   m_Layer: 5
   m_Name: CloseBonfire
-  m_TagString: ExitButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3793,6 +3793,7 @@ MonoBehaviour:
   bonfireManager: {fileID: 387374078}
   BonfireUI: {fileID: 1182467483}
   restUI: {fileID: 392671230}
+  closeBonfire: {fileID: 554603102}
   enhanceButton: {fileID: 1249950017}
   applyEnhance: {fileID: 1106024066}
   closeEnhance: {fileID: 238210836}
