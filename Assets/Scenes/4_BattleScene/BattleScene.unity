@@ -3458,6 +3458,7 @@ MonoBehaviour:
   player: {fileID: 1522913952}
   enemy: {fileID: 1522913951}
   flash: {fileID: 1522913957}
+  pickCardPlace: {fileID: 1051905017}
 --- !u!114 &1522913947
 MonoBehaviour:
   m_ObjectHideFlags: 0
