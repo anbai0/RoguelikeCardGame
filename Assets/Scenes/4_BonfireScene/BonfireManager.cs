@@ -34,13 +34,10 @@ public class BonfireManager : MonoBehaviour
             cardEmptyText.SetActive(true); //強化できるカードがないことをTextで伝える
             return;
         }
-<<<<<<< HEAD
-        for (int init = 1; init <= selectableList.Count; init++)// 選択出来るデッキの枚数分
-=======
+
         if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
 
-        for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
->>>>>>> origin/ambai
+        for (int init = 1; init <= selectableList.Count; init++)// 選択出来るデッキの枚数分
         {
             if (init <= distribute) //決められた数をupperCardPlaceに生成する
             {
