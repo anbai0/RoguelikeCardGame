@@ -12,6 +12,7 @@ public class CardEffectList : MonoBehaviour
     [SerializeField] PlayerBattleAction player;
     [SerializeField] EnemyBattleAction enemy;
     [SerializeField] FlashImage flash;
+    [SerializeField] Transform pickCardPlace;
     Color deepGreen = new Color(0.2f, 0.6f, 0.2f);
     int cardID;
     int cardAttackPower;
@@ -184,6 +185,18 @@ public class CardEffectList : MonoBehaviour
         //HPを回復
         PlayerHealing(cardHealingPower);
         Destroy(card.gameObject);
+        DestroyPickCardID3();
+    }
+    void DestroyPickCardID3()
+    {
+        foreach(Transform child in pickCardPlace) //ピックカードの中を検索
+        {
+            int pickCardID = child.GetComponent<CardController>().cardDataManager._cardID;
+            if(pickCardID == 3) //魔女の霊薬のピックカードの場合
+            {
+                Destroy(child.gameObject);
+            }
+        }
     }
     /// <summary>
     /// 技名：ガード,強化ガード

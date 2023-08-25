@@ -9,13 +9,11 @@ using TMPro;
 /// </summary>
 public class EnemyBattleAction : CharacterBattleAction
 {
-    [SerializeField, Header("エネミー名テキスト")] Text enemyNameText;
     [SerializeField, Header("エネミー画像")] Image enemyImage;
     [SerializeField, Header("エネミーHPテキスト")] Text enemyHPText;
     [SerializeField, Header("エネミーHPスライダー")] Slider enemyHPSlider;
     [SerializeField, Header("エネミーAPテキスト")] Text enemyAPText;
     [SerializeField, Header("エネミーGPテキスト")] Text enemyGPText;
-    [SerializeField, Header("技の名前")] Text moveText;
     [SerializeField, Header("ダメージ表示オブジェクト")] GameObject damageUI;
     [SerializeField, Header("回復表示オブジェクト")] GameObject healingUI;
     [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
@@ -35,8 +33,6 @@ public class EnemyBattleAction : CharacterBattleAction
 
     bool roundEnabled; //ラウンド中に一度だけ判定を設ける
     public bool GetSetRoundEnabled { get => roundEnabled; set => roundEnabled = value; }
-    
-    string debugMoveName = "無し";
     
     BattleGameManager bg;
 
@@ -65,7 +61,6 @@ public class EnemyBattleAction : CharacterBattleAction
     void Update()
     {
         UpdateText(enemyHPText, enemyAPText, enemyGPText, enemyHPSlider);
-        moveText.text = "現在の技:" + debugMoveName;
     }
 
     /// <summary>
@@ -81,7 +76,6 @@ public class EnemyBattleAction : CharacterBattleAction
         bg.isEnemyMoving = true;
         var selectMove = enemyAI.SelectMove(GetSetCurrentAP);
         string moveName = selectMove.moveName;
-        debugMoveName = moveName;
         if (moveName == "RoundEnd") //EnemyAIで選択された行動が行動終了の場合
         {
             TurnEnd();
@@ -115,7 +109,6 @@ public class EnemyBattleAction : CharacterBattleAction
     /// <param name="enemyData">選択されたエネミーデータ</param>
     public void SetStatus(int floor, EnemyDataManager enemyData)
     {
-        enemyNameText.text = enemyData._enemyName;
         enemyImage.sprite = enemyData._enemyImage;
         enemyHPSlider.value = 1;
         GetSetHP = enemyData._enemyHP;
