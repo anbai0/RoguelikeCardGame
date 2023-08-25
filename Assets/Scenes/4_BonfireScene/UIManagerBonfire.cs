@@ -125,7 +125,9 @@ public class UIManagerBonfire : MonoBehaviour
             if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
             {
                 lastSelectedCards.transform.localScale = scaleReset;
+                lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);
             }
 
             lastSelectedCards = UIObject;
@@ -136,6 +138,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (isSelected && UIObject.CompareTag("BackGround"))
         {
             lastSelectedCards.transform.localScale = scaleReset;
+            lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             lastSelectedCards = null;
             isSelected = false;
 
@@ -201,6 +204,7 @@ public class UIManagerBonfire : MonoBehaviour
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
         }
     }
@@ -212,6 +216,7 @@ public class UIManagerBonfire : MonoBehaviour
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale = scaleReset;
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
             }
         }
     }

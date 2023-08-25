@@ -15,6 +15,7 @@ public class BonfireManager : MonoBehaviour
     private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
     private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
+    private Vector3 upperCardPos = new Vector3(0, 176, 0);   // upperCardのデフォルトの位置
 
     void Start()
     {
@@ -24,6 +25,7 @@ public class BonfireManager : MonoBehaviour
 
     private void InitDeck() //デッキ生成
     {
+        upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
         deckNumberList = GameManager.Instance.playerData._deckList;
         var selectableList = ExcludeDeckCards(deckNumberList);
         int distribute = DistributionOfCards(selectableList.Count);
@@ -32,7 +34,13 @@ public class BonfireManager : MonoBehaviour
             cardEmptyText.SetActive(true); //強化できるカードがないことをTextで伝える
             return;
         }
+<<<<<<< HEAD
         for (int init = 1; init <= selectableList.Count; init++)// 選択出来るデッキの枚数分
+=======
+        if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+
+        for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
+>>>>>>> origin/ambai
         {
             if (init <= distribute) //決められた数をupperCardPlaceに生成する
             {

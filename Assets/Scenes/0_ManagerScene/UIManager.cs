@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject optionScreen;
     [SerializeField] GameObject confirmationPanel;
     [SerializeField] GameObject cardDiscardScreen;
+    [SerializeField] GameObject DeckConfirmation;
     [Header("クリック後に参照するUI")]
     [SerializeField] GameObject overlayOptionButton;
     [SerializeField] GameObject titleOptionButton;
@@ -30,13 +31,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject titleBackButton;
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
-    [SerializeField] GameObject returnButton;
+    [SerializeField] GameObject discardReturnButton;
     [SerializeField] GameObject discardButton;
+    [SerializeField] GameObject DeckConfirmationButton;
+    [SerializeField] GameObject DeckReturnButton;
     [Space(10)]
     [SerializeField] TextMeshProUGUI myMoneyText;   //所持金を表示するテキスト
 
 
     private bool isShowingCardDiscard = false;  // カード破棄画面を表示しているときだけtrue
+    private bool isShowingDeckConfirmation = false; // デッキ確認画面を表示しているときだけtrue
 
     private bool isSelected = false;
     private GameObject lastSelectedCards;
@@ -113,6 +117,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
+            PlayerController.isPlayerActive = false;
             optionScreen.SetActive(true);
         }
 
@@ -121,6 +126,7 @@ public class UIManager : MonoBehaviour
         {          
             audioSetting.SaveAudioSetting();    // 音量設定のデータをセーブ
             AudioManager.Instance.PlaySE("選択音1");
+            PlayerController.isPlayerActive = true;
             optionScreen.SetActive(false);
         }
 
@@ -144,7 +150,6 @@ public class UIManager : MonoBehaviour
             // bgm停止(IEFadeOutBGMVolmeコルーチンでは止まってくれなかったのでStopを使っています。)
             AudioManager.Instance.bgmAudioSource.Stop();    
             AudioManager.Instance.PlaySE("選択音2");
-            Debug.Log("aaa");
             
             // タイトルへ戻る処理
             gm.UnloadAllScene();
@@ -162,6 +167,42 @@ public class UIManager : MonoBehaviour
 
         #endregion
 
+        #region カード確認画面の処理
+        // デッキ確認画面を表示
+        if (UIObject == DeckConfirmationButton && !isShowingDeckConfirmation)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            PlayerController.isPlayerActive = false;
+            isShowingDeckConfirmation = true;
+
+            upperCardPlace.gameObject.SetActive(true);
+            lowerCardPlace.gameObject.SetActive(true);
+
+            // 前回表示したカードをDestroy
+            foreach (Transform child in upperCardPlace.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (Transform child in lowerCardPlace.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            DeckConfirmation.SetActive(true);
+            ShowDeck();
+            UIEventsReload();
+        }
+        // 戻るボタンの処理
+        if (UIObject == DeckReturnButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            PlayerController.isPlayerActive = true;
+            isShowingDeckConfirmation = false;
+            upperCardPlace.gameObject.SetActive(false);
+            lowerCardPlace.gameObject.SetActive(false);
+            DeckConfirmation.SetActive(false);
+        }
+        #endregion
 
         #region カード破棄画面の処理
 
@@ -174,14 +215,17 @@ public class UIManager : MonoBehaviour
                 isSelected = true;
 
                 // ボタン切り替え
-                returnButton.SetActive(false);
+                discardReturnButton.SetActive(false);
                 discardButton.SetActive(true);
 
                 // カード選択状態の切り替え
                 if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
                 {
                     lastSelectedCards.transform.localScale = scaleReset;
+                    lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                     UIObject.transform.localScale += scaleBoost;
+                    UIObject.transform.GetChild(0).gameObject.SetActive(true);
+
                 }
 
                 lastSelectedCards = UIObject;
@@ -192,16 +236,17 @@ public class UIManager : MonoBehaviour
             if (isSelected && UIObject.CompareTag("BackGround"))
             {
                 lastSelectedCards.transform.localScale = scaleReset;
+                lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 lastSelectedCards = null;
                 isSelected = false;
 
                 // 強化ボタン切り替え
-                returnButton.SetActive(true);
+                discardReturnButton.SetActive(true);
                 discardButton.SetActive(false);
             }
 
             // カード破棄画面を非表示に
-            if (!isSelected && UIObject == returnButton)
+            if (!isSelected && UIObject == discardReturnButton)
             {
                 AudioManager.Instance.PlaySE("選択音1");
                 ToggleDiscardScreen(false);
@@ -249,11 +294,12 @@ public class UIManager : MonoBehaviour
 
 
         // カード破棄画面が表示されているとき
-        if (isShowingCardDiscard && !isSelected)
+        if ((isShowingCardDiscard || isShowingDeckConfirmation) && !isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
         }
     }
@@ -272,11 +318,12 @@ public class UIManager : MonoBehaviour
 
 
         // カード破棄画面が表示されているとき
-        if (isShowingCardDiscard && !isSelected)
+        if ((isShowingCardDiscard || isShowingDeckConfirmation) && !isSelected)
         {
             if (UIObject.CompareTag("Cards"))
             {
                 UIObject.transform.localScale = scaleReset;
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
             }
         }
     }
@@ -333,8 +380,12 @@ public class UIManager : MonoBehaviour
         if (show)
         {
             // ボタンの状態リセット
-            returnButton.SetActive(true);
+            discardReturnButton.SetActive(true);
             discardButton.SetActive(false);
+
+            // カード表示するUI表示
+            upperCardPlace.gameObject.SetActive(true);
+            lowerCardPlace.gameObject.SetActive(true);
 
             // 前回表示したカードをDestroy
             foreach (Transform child in upperCardPlace.transform)
@@ -352,7 +403,8 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-
+            upperCardPlace.gameObject.SetActive(false);
+            lowerCardPlace.gameObject.SetActive(false);
             isShowingCardDiscard = false;
             cardDiscardScreen.SetActive(false);
         }
@@ -365,9 +417,9 @@ public class UIManager : MonoBehaviour
     {
         upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
         deckNumberList = gm.playerData._deckList;
-        int distribute = DistributionOfCards(deckNumberList.Count); 
-        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない
-        if (distribute >= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+        int distribute = DistributionOfCards(deckNumberList.Count);
+        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない     
+        if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
 
         for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
         {
