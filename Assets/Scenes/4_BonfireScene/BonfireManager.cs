@@ -44,7 +44,7 @@ public class BonfireManager : MonoBehaviour
                 CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
                 card.transform.localScale = CardScale;
                 card.name = "Deck" + (init-1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
+                card.Init(selectableList[init - 1]);//デッキデータの表示
             }
             else //残りはlowerCardPlaceに生成する
             {

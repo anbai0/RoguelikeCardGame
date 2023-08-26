@@ -38,6 +38,8 @@ public class PickCard : MonoBehaviour
         pickCard.transform.Find("CardInfo/CardEffect").GetComponent<TextMeshProUGUI>().text = deckEffect;
         //ピックされたカードは参照するデッキのカードのcardStateを反映
         pickCard.GetComponent<CardController>().cardDataManager._cardState = deckData._cardState;
+        //ピックされたカードは参照するデッキのカードのcardCostを反映
+        pickCard.GetComponent<CardController>().cardDataManager._cardCost = deckData._cardCost;
         //カード情報を表示する
         pickCard.transform.Find("CardInfo").gameObject.SetActive(true);
         pickCard.GetComponent<CardState>().isActive = true;

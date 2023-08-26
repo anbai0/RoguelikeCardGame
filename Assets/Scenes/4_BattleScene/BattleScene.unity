@@ -3678,6 +3678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPlace: {fileID: 203011022}
+  pickCardPlace: {fileID: 203011022}
 --- !u!114 &1522913961
 MonoBehaviour:
   m_ObjectHideFlags: 0

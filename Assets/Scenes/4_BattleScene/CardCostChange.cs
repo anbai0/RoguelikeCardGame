@@ -6,9 +6,10 @@ using TMPro;
 /// </summary>
 public class CardCostChange : MonoBehaviour
 {
-    [Header("デッキのある場所")]
-    [SerializeField]
+    [SerializeField, Header("デッキのある場所")]
     Transform cardPlace;
+    [SerializeField, Header("表示カードのある場所")]
+    Transform pickCardPlace;
 
     /// <summary>
     /// CardEffectListのアクセラレートの効果でカードのコストを減少させる
@@ -18,7 +19,7 @@ public class CardCostChange : MonoBehaviour
         foreach (Transform child in cardPlace) //cardPlaceにある全てのデッキを探索
         {
             CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardType == "Attack") //カードのタイプがAttackなら
+            if (deckCard.cardDataManager._cardType == "Attack" && deckCard.cardDataManager._cardID != 13) //カードのタイプがAttackでフルバーストじゃない場合
             {
                 //カードのコストを下げる
                 deckCard.cardDataManager._cardCost -= accelerateValue;
