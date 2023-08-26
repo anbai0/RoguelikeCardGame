@@ -37,6 +37,7 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] ResultAnimation resultAnimation;
     [SerializeField] GameObject uiManagerBR;
     [SerializeField] GameObject uiManagerBattle;
+    private UIManagerBattle uiManager;
 
     //ラウンド
     [SerializeField] RoundTextAnimation roundTextAnimation;
@@ -79,6 +80,7 @@ public class BattleGameManager : MonoBehaviour
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);
         //初期化
+        uiManager = uiManagerBattle.GetComponent<UIManagerBattle>();
         isPlayerTurn = false;
         isTurnEnd = false;
         isAccelerate = false;
@@ -133,6 +135,16 @@ public class BattleGameManager : MonoBehaviour
             isCoroutineEnabled = false; //動いているコルーチンは無し
             //一回だけTurnCalc()を呼ぶ
             TurnCalc();
+        }
+        
+        // バトル終了時、カードに触れなくする
+        if ((playerScript.CheckHP() || enemyScript.CheckHP()))
+        {
+            CanvasGroup[] cards = CardPlace.GetComponentsInChildren<CanvasGroup>();
+            foreach (CanvasGroup card in cards)
+            {
+                card.blocksRaycasts = false;
+            }
         }
     }
 

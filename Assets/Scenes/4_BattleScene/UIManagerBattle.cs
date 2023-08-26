@@ -12,7 +12,7 @@ public class UIManagerBattle : MonoBehaviour
     private UIController[] UIs;
     private bool isEventsReset = true;
 
-    private bool isDragging;    // ドラッグ状態かを判定します
+    private bool isDragging = false;    // ドラッグ状態かを判定します
 
     void Start()
     {
@@ -32,7 +32,6 @@ public class UIManagerBattle : MonoBehaviour
         UIs = canvas.GetComponentsInChildren<UIController>(true);       //指定した親の子オブジェクトのUIControllerコンポーネントをすべて取得
         foreach (UIController UI in UIs)                            //UIs配列内の各要素がUIController型の変数UIに順番に代入され処理される
         {
-            UI.onLeftClick.AddListener(() => UILeftClick(UI.gameObject));         //UIがクリックされたら、クリックされたUIを関数に渡す
             UI.onEnter.AddListener(() => UIEnter(UI.gameObject));
             UI.onExit.AddListener(() => UIExit(UI.gameObject));
             UI.onBeginDrag.AddListener(() => UIBeginDrag(UI.gameObject));
@@ -48,7 +47,6 @@ public class UIManagerBattle : MonoBehaviour
     {
         foreach (UIController UI in UIs)
         {
-            UI.onLeftClick.RemoveAllListeners();
             UI.onEnter.RemoveAllListeners();
             UI.onExit.RemoveAllListeners();
             UI.onBeginDrag.RemoveAllListeners();
@@ -58,23 +56,13 @@ public class UIManagerBattle : MonoBehaviour
     }
     #endregion
 
-
-
-    /// <summary>
-    /// 左クリックされたときに処理するメソッドです。
-    /// </summary>
-    /// <param name="UIObject">クリックされたObject</param>
-    void UILeftClick(GameObject UIObject)
-    {
-        
-    }
-
     /// <summary>
     /// カーソルが触れたときに処理するメソッドです。
     /// </summary>
     /// <param name="UIObject">カーソルが触れたObject</param>
     void UIEnter(GameObject UIObject)
     {
+
         if (!Input.GetMouseButton(0) && !isDragging)
         {
             if (UIObject.CompareTag("Condition"))
@@ -124,6 +112,7 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     void UIBeginDrag(GameObject UIObject)
     {
+        Debug.Log("Begin");
         if (UIObject.CompareTag("Cards"))
         {
             UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
@@ -135,7 +124,7 @@ public class UIManagerBattle : MonoBehaviour
     /// </summary>
     void UIDrag(GameObject UIObject)
     {
-
+        Debug.Log("Drag");
     }
 
     /// <summary>
@@ -144,9 +133,19 @@ public class UIManagerBattle : MonoBehaviour
     /// <param name="UIObject">ドラッグアンドドロップしたObject</param>
     void UIDrop(GameObject UIObject)
     {
+        Debug.Log("Drop");
         if (UIObject.CompareTag("Cards"))
         {
             UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
+            CardController card = UIObject.GetComponent<CardController>(); // ドラッグしてきた情報からCardControllerを取得
+            if (card != null && BattleGameManager.Instance.isPlayerTurn) // もしカードがあり、プレイヤーのターンの場合
+            {
+                if (card.cardDataManager._cardState == 0)//カードが使用可能であれば
+                {
+                    //カードの効果を発動
+                    BattleGameManager.Instance.PlayerMove(card);
+                }
+            }
         }
 
     }

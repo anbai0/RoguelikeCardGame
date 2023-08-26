@@ -70,8 +70,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!isDraggable) return;
-
-        //canvasGroup.alpha = 0.3f;                       // ドラッグ中半透明にする
+        if (eventData.button == PointerEventData.InputButton.Right) return;
 
         // ドラッグ中のオブジェクトが他のオブジェクトに対してユーザーの入力を透過するためにfalseに
         canvasGroup.blocksRaycasts = false;
@@ -82,6 +81,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public void OnDrag(PointerEventData eventData)
     {
         if (!isDraggable) return;
+        if (eventData.button == PointerEventData.InputButton.Right) return;
 
         onDrag?.Invoke();
 
@@ -91,8 +91,7 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!isDraggable) return;
-
-        //canvasGroup.alpha = 1f;                         // 透明度を戻す
+        if (eventData.button == PointerEventData.InputButton.Right) return;
 
         // ドラッグ操作の終了時に、ドロップされたオブジェクトが再びユーザーの入力を受け付けるようにするためtrueに
         canvasGroup.blocksRaycasts = true;

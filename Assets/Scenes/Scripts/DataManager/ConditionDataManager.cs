@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ConditionDataManager : MonoBehaviour
+public class ConditionDataManager
 {
     public string _conditionName;
     public string _conditionEffect;

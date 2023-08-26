@@ -141,10 +141,10 @@ public class RelicEffectList : MonoBehaviour
     /// 効果:戦闘終了後に獲得するゴールドを10増やす
     /// </summary>
     /// <param name="ID9Quantity">レリック番号09の個数</param>
-    /// <param name="money">エネミーの持つゴールド</param>
     /// <returns>増加したゴールド</returns>
-    public int RelicID9(int ID9Quantity, int money)
+    public int RelicID9(int ID9Quantity)
     {
+        int money = 0;
         money += 10 * ID9Quantity;
         return money;
     }
