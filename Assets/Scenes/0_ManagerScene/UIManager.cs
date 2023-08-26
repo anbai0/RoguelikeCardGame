@@ -27,7 +27,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject overlayOptionButton;
     [SerializeField] GameObject titleOptionButton;
     [SerializeField] GameObject closeOptionButton;
-    [SerializeField] GameObject ApplySettingsButton;
     [SerializeField] GameObject titleBackButton;
     [SerializeField] GameObject closeConfirmButton;
     [SerializeField] GameObject confirmTitleBackButton;
@@ -37,7 +36,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject DeckReturnButton;
     [Space(10)]
     [SerializeField] TextMeshProUGUI myMoneyText;   //所持金を表示するテキスト
-
+    [Space(10)]
+    [SerializeField] GameObject confimDeskBackPanel;
+    [SerializeField] GameObject desktopBackButton;
+    [SerializeField] GameObject closeDesktopBackButton;
+    [SerializeField] GameObject confimDeskbackButton;
 
     private bool isShowingCardDiscard = false;  // カード破棄画面を表示しているときだけtrue
     private bool isShowingDeckConfirmation = false; // デッキ確認画面を表示しているときだけtrue
@@ -123,8 +126,9 @@ public class UIManager : MonoBehaviour
 
         // オプション画面非表示
         if (UIObject == closeOptionButton)
-        {          
-            audioSetting.SaveAudioSetting();    // 音量設定のデータをセーブ
+        {
+            audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
+            AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
             AudioManager.Instance.PlaySE("選択音1");
             PlayerController.isPlayerActive = true;
             optionScreen.SetActive(false);
@@ -157,12 +161,28 @@ public class UIManager : MonoBehaviour
             optionScreen.SetActive(false);
         }
 
-        // 設定を適用ボタンを押したら
-        if (UIObject == ApplySettingsButton)
-        {         
+        // デスクトップへ戻るボタンを押したら
+        if (UIObject == desktopBackButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            confimDeskBackPanel.SetActive(true);
+        }
+
+        // デスクトップへ戻る画面でバツボタンを押したら
+        if (UIObject == closeDesktopBackButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            confimDeskBackPanel.SetActive(false);
+        }
+
+        // 確認画面でデスクトップへ戻るボタンを押したら
+        if (UIObject == confimDeskbackButton)
+        {
             audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
             AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
             AudioManager.Instance.PlaySE("選択音1");
+            
+            Application.Quit();     // ゲームを終了させる
         }
 
         #endregion
