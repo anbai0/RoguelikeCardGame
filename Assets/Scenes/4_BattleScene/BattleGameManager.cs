@@ -262,7 +262,28 @@ public class BattleGameManager : MonoBehaviour
         EndRoundRelicEffect();
         isTurnEnd = false;//行動終了ボタンの復活
         turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
+        StateReset();
         StartRound();
+    }
+
+    void StateReset()
+    {
+        foreach(Transform child in CardPlace)
+        {
+            if (child.GetComponent<CardController>().cardDataManager._cardState == 1)
+            {
+                child.GetComponent<CardController>().cardDataManager._cardState = 0;
+            }
+            
+        }
+        foreach (Transform child in PickCardPlace)
+        {
+            if (child.GetComponent<CardController>().cardDataManager._cardState == 1)
+            {
+                child.GetComponent<CardController>().cardDataManager._cardState = 0;
+            }
+
+        }
     }
 
     /// <summary>

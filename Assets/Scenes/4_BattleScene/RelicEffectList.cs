@@ -6,6 +6,11 @@ using UnityEngine;
 /// </summary>
 public class RelicEffectList : MonoBehaviour
 {
+    int id5Count = 0;
+    private void Start()
+    {
+        id5Count = 0;
+    }
     /// <summary>
     /// 名前:アリアドネの糸
     /// 効果:デッキの上限を1枚増やす。
@@ -80,13 +85,17 @@ public class RelicEffectList : MonoBehaviour
     /// <returns>減少したAPの初期値,増加したAPの上昇値</returns>
     public (int constAP, int chargeAP) RelicID5(int ID5Quantity, int constAP, int chargeAP)
     {
-        if (ID5Quantity > 5)
+        if(id5Count <= 5)
         {
-            constAP = 5;
-            chargeAP = 5;
+            return (constAP, chargeAP);
         }
         constAP -= ID5Quantity;
+        if(constAP < 0)
+        {
+            constAP = 0;
+        }
         chargeAP += ID5Quantity;
+        id5Count++;
         return (constAP, chargeAP);
     }
 
