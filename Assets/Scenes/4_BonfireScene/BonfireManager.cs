@@ -12,13 +12,16 @@ public class BonfireManager : MonoBehaviour
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform cardPlace;
     [SerializeField] Transform enhancedCardHolder;
+    [SerializeField] CardController enhancedCard;
     private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
     private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
     void Start()
     {
-        CardController card = Instantiate(cardPrefab, enhancedCardHolder);   // 強化後のカードを表示するPrefabを生成
+        enhancedCard = Instantiate(cardPrefab, enhancedCardHolder);   // 強化後のカードを表示するPrefabを生成
+        enhancedCard.gameObject.GetComponent<UIController>().enabled = false;
+        enhancedCard.transform.SetParent(enhancedCardHolder);
         InitDeck();
     }
 
@@ -83,7 +86,8 @@ public class BonfireManager : MonoBehaviour
     public void DisplayEnhancedCard(GameObject selectCard)
     {
         int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
-
+        enhancedCard.Init(id+100);                            //デッキデータの表示
+        
     }
 
     public void UnLoadBonfireScene()

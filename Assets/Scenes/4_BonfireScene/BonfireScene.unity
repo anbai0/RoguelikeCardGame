@@ -703,7 +703,8 @@ MonoBehaviour:
   cardPrefab: {fileID: 7009455883766435928, guid: a4142022ac005bc4ca6b58bc9c35ccf9,
     type: 3}
   cardPlace: {fileID: 57149656}
-  enhancedCardHolder: {fileID: 0}
+  enhancedCardHolder: {fileID: 1118693829}
+  enhancedCard: {fileID: 0}
 --- !u!114 &387374079
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1310,7 +1311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1118693829
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1328,7 +1329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 650, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1118693830
@@ -1491,7 +1492,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1182467484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3966,6 +3967,7 @@ MonoBehaviour:
   bonfireManager: {fileID: 387374078}
   BonfireUI: {fileID: 1182467483}
   restUI: {fileID: 392671230}
+  enhancedCardHolder: {fileID: 1118693829}
   closeBonfire: {fileID: 554603102}
   enhanceButton: {fileID: 1249950017}
   applyEnhance: {fileID: 1106024066}
