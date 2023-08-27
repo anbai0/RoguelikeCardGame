@@ -184,17 +184,25 @@ public class PlayerBattleAction : CharacterBattleAction
     public EnemyBattleAction StartRelicEffect(EnemyBattleAction enemyBattleAction, string enemyType)
     {
         var es = enemyBattleAction;
-        var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2], playerCondition["UpStrength"], es.enemyCondition["UpStrength"]);
-        playerCondition["UpStrength"] = relicEffectID2.playerUpStrength;
-        es.enemyCondition["UpStrength"] = relicEffectID2.enemyUpStrength;
+        var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2]);
+        AddConditionStatus("UpStrength", relicEffectID2.playerUpStrength);
+        es.AddConditionStatus("UpStrength", relicEffectID2.enemyUpStrength);
         GetSetConstAP = relicEffect.RelicID3(hasPlayerRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
         GetSetConstAP = relicEffect.RelicID4(hasPlayerRelics[4], GetSetConstAP);
         GetSetConstAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetConstAP, GetSetChargeAP).constAP;
-        es.enemyCondition["Burn"] = relicEffect.RelicID6(hasPlayerRelics[6], es.enemyCondition["Burn"]);
+        es.AddConditionStatus("Burn", relicEffect.RelicID6(hasPlayerRelics[6]));
         GetSetHP = relicEffect.RelicID7(hasPlayerRelics[7], GetSetHP);
         GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
-        playerCondition["UpStrength"] = relicEffect.RelicID12(hasPlayerRelics[12], enemyType, playerCondition["UpStrength"]);
+        AddConditionStatus("UpStrength", relicEffect.RelicID12(hasPlayerRelics[12], enemyType));
         return es;
+    }
+
+    /// <summary>
+    /// ラウンド毎に発動するレリック効果
+    /// </summary>
+    public void OnRoundRelicEffect()
+    {
+        
     }
 
     /// <summary>
@@ -203,7 +211,6 @@ public class PlayerBattleAction : CharacterBattleAction
     public void OnceEndRoundRelicEffect()
     {
         GetSetChargeAP = relicEffect.RelicID3(hasPlayerRelics[3], GetSetConstAP, GetSetChargeAP).chargeAP;
-        GetSetChargeAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetAP, GetSetChargeAP).chargeAP;
     }
 
     /// <summary>
@@ -211,6 +218,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void EndRoundRelicEffect()
     {
+        GetSetChargeAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetAP, GetSetChargeAP).chargeAP;
         playerCondition = relicEffect.RelicID11(hasPlayerRelics[11], playerCondition);
     }
 

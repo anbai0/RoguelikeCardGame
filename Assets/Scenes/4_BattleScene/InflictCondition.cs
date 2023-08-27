@@ -41,16 +41,19 @@ public class InflictCondition : MonoBehaviour
         {
             return (badStatus, invalidBadStatus);
         }
+
         int currentBadStatus = badStatus - invalidBadStatus;
         if (currentBadStatus < 0)
         {
             currentBadStatus = 0;
         }
+
         invalidBadStatus -= badStatus;
         if (invalidBadStatus < 0)
         {
             invalidBadStatus = 0;
         }
+
         return (currentBadStatus, invalidBadStatus);
     }
     /// <summary>

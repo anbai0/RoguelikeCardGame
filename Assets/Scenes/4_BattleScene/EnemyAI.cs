@@ -29,6 +29,8 @@ public class EnemyAI : MonoBehaviour
     bool isUsedOnlyMove; //戦闘開始時のみ使用可能
     bool isUsableGodCrusher; //神砕きを使用出来るか判定
 
+    WaitForSeconds attackInterval = new WaitForSeconds(0.5f); //エネミーの連撃速度
+
     private enum EnemyState //エネミーの種別
     {
         SLIME1,                    //スライム(1階層)
@@ -877,7 +879,7 @@ public class EnemyAI : MonoBehaviour
         int attackCount = Random.Range(startCount, endCount);
         for (int count = 0; count < attackCount; count++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return attackInterval;
             EnemyAttacking(2);
         }
         bg.isCoroutine = false;
@@ -1010,7 +1012,7 @@ public class EnemyAI : MonoBehaviour
         int attackCount = Random.Range(1, 3);
         for (int count = 0; count < attackCount; count++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return attackInterval;
             EnemyAttacking(5);
         }
         bg.isCoroutine = false;
@@ -1079,7 +1081,7 @@ public class EnemyAI : MonoBehaviour
         int attackCount = 6;
         for (int count = 0; count < attackCount; count++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return attackInterval;
             EnemyAttacking(3);
         }
         bg.isCoroutine = false;
@@ -1136,7 +1138,7 @@ public class EnemyAI : MonoBehaviour
         int attackCount = 5;
         for (int count = 0; count < attackCount; count++)
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return attackInterval;
             EnemyAttacking(3);
         }
         bg.isCoroutine = false;

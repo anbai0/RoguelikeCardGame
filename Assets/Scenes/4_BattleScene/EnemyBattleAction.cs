@@ -258,11 +258,11 @@ public class EnemyBattleAction : CharacterBattleAction
     {
         relicEffect = GetComponent<RelicEffectList>();
         var ps = playerBattleAction;
-        var relicEffectID2 = relicEffect.RelicID2(hasEnemyRelics[2], ps.playerCondition["UpStrength"], enemyCondition["UpStrength"]);
-        enemyCondition["UpStrength"] = relicEffectID2.enemyUpStrength;
-        ps.playerCondition["UpStrength"] = relicEffectID2.playerUpStrength;
+        var relicEffectID2 = relicEffect.RelicID2(hasEnemyRelics[2]);
+        AddConditionStatus("UpStrength", relicEffectID2.enemyUpStrength);
+        ps.AddConditionStatus("UpStrength", relicEffectID2.playerUpStrength);
         GetSetConstAP = relicEffect.RelicID3(hasEnemyRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
-        ps.playerCondition["Burn"] = relicEffect.RelicID6(hasEnemyRelics[6], ps.playerCondition["Burn"]);
+        ps.AddConditionStatus("Burn", relicEffect.RelicID6(hasEnemyRelics[6]));
         GetSetGP = relicEffect.RelicID8(hasEnemyRelics[8], GetSetGP);
         return ps;
     }

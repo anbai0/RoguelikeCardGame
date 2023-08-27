@@ -7,7 +7,7 @@ using UnityEngine;
 public class RelicEffectList : MonoBehaviour
 {
     int id5Count = 0;
-    private void Start()
+    void Start()
     {
         id5Count = 0;
     }
@@ -26,21 +26,22 @@ public class RelicEffectList : MonoBehaviour
     ///  効果:与えるダメージと受けるダメージを1増やす。
     /// </summary>
     /// <param name="ID2Quantity">レリック番号02の個数</param>
-    /// <param name="playerUpStrength">プレイヤーの筋力増強</param>
-    /// <param name="enemyUpStrength">エネミーの筋力増強</param>
-    /// <returns>増加したプレイヤーの筋力増強,増強したエネミーの筋力増強</returns>
-    public (int playerUpStrength, int enemyUpStrength) RelicID2(int ID2Quantity, int playerUpStrength, int enemyUpStrength)
+    /// <returns>加算するプレイヤーの筋力増強の値,加算するエネミーの筋力増強の値</returns>
+    public (int playerUpStrength, int enemyUpStrength) RelicID2(int ID2Quantity)
     {
+        int addPlayerUpStrength = 0;
+        int addEnemyUpStrength = 0;
+
         if (ID2Quantity <= 0)
         {
-            return (playerUpStrength, enemyUpStrength);
+            return (addPlayerUpStrength, addEnemyUpStrength);
         }
         else
         {
-            playerUpStrength += 1 * ID2Quantity;
-            enemyUpStrength += 1 * ID2Quantity;
+            addPlayerUpStrength += 1 * ID2Quantity;
+            addEnemyUpStrength += 1 * ID2Quantity;
         }
-        return (playerUpStrength, enemyUpStrength);
+        return (addPlayerUpStrength, addEnemyUpStrength);
     }
 
     /// <summary>
@@ -77,7 +78,7 @@ public class RelicEffectList : MonoBehaviour
 
     /// <summary>
     /// 名前:千里眼鏡
-    /// 効果:最大APを1減らすが、ラウンド終了時、APの上昇値をさらに1増やす。レリック1つにつき最大5まで。
+    /// 効果:最大APを1減らすが、ラウンド終了時、APの上昇値をさらに1増やす。レリック1つにつき最大5回まで。
     /// </summary>
     /// <param name="ID5Quantity">レリック番号05の個数</param>
     /// <param name="constAP">APの初期値</param>
@@ -85,7 +86,7 @@ public class RelicEffectList : MonoBehaviour
     /// <returns>減少したAPの初期値,増加したAPの上昇値</returns>
     public (int constAP, int chargeAP) RelicID5(int ID5Quantity, int constAP, int chargeAP)
     {
-        if(id5Count <= 5)
+        if(id5Count >= 5)
         {
             return (constAP, chargeAP);
         }
@@ -104,19 +105,20 @@ public class RelicEffectList : MonoBehaviour
     /// 効果:戦闘開始時、相手に火傷を1つ付与する。
     /// </summary>
     /// <param name="ID6Quantity">レリック番号06の個数</param>
-    /// <param name="burn">火傷</param>
-    /// <returns>増加した火傷</returns>
-    public int RelicID6(int ID6Quantity, int burn)
+    /// <returns>加算する火傷の値</returns>
+    public int RelicID6(int ID6Quantity)
     {
+        int addBurn = 0;
+
         if (ID6Quantity <= 0)
         {
-            return burn;
+            return addBurn;
         }
         else
         {
-            burn += ID6Quantity;
+            addBurn += ID6Quantity;
         }
-        return burn;
+        return addBurn;
     }
 
     /// <summary>
@@ -213,17 +215,21 @@ public class RelicEffectList : MonoBehaviour
     /// 効果:ボスとの戦闘時、与えるダメージが1増加する。
     /// </summary>
     /// <param name="ID12Quantity">レリック番号12の個数</param>
-    /// <param name="tag">エネミーの種類</param>
-    public int RelicID12(int ID12Quantity, string type, int playerUpStrength)
+    /// <param name="type">エネミーの種類</param>
+    /// <returns>加算する筋力増強の値</returns>
+    public int RelicID12(int ID12Quantity, string type)
     {
-        if (ID12Quantity <= 0 || !(type == "Boss"))
+        int addPlayerUpStrength = 0;
+
+        if (ID12Quantity > 0 && type == "Boss")
         {
-            return playerUpStrength;
+            addPlayerUpStrength += 1 * ID12Quantity;
         }
         else
         {
-            playerUpStrength += 1 * ID12Quantity;
+            return addPlayerUpStrength;
         }
-        return playerUpStrength;
+
+        return addPlayerUpStrength;
     }
 }

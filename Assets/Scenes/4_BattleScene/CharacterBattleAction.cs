@@ -266,34 +266,53 @@ public class CharacterBattleAction : MonoBehaviour
         if (status == "UpStrength")
         {
             condition["UpStrength"] += count;
+            condition["UpStrength"] = CheckConditionLimit(condition["UpStrength"]);
         }
         else if (status == "AutoHealing")
         {
             condition["AutoHealing"] += count;
+            condition["AutoHealing"] = CheckConditionLimit(condition["AutoHealing"]);
         }
         else if (status == "InvalidBadStatus")
         {
             condition["InvalidBadStatus"] += count;
+            condition["InvalidBadStatus"] = CheckConditionLimit(condition["InvalidBadStatus"]);
         }
         else if (status == "Curse")
         {
             condition["Curse"] += count;
+            condition["Curse"] = CheckConditionLimit(condition["Curse"]);
         }
         else if (status == "Impatience")
         {
             condition["Impatience"] += count;
+            condition["Impatience"] = CheckConditionLimit(condition["Impatience"]);
         }
         else if (status == "Weakness")
         {
             condition["Weakness"] += count;
+            condition["Weakness"] = CheckConditionLimit(condition["Weakness"]);
         }
         else if (status == "Burn")
         {
             condition["Burn"] += count;
+            condition["Burn"] = CheckConditionLimit(condition["Burn"]);
         }
         else if (status == "Poison")
         {
             condition["Poison"] += count;
+            condition["Poison"] = CheckConditionLimit(condition["Poison"]);
         }
+    }
+
+    /// <summary>
+    /// ‚P‚Â‚Ìó‘ÔˆÙí‚ÌãŒÀ‚ª‚U‚ğ’´‚¦‚È‚¢‚æ‚¤‚É‚·‚éˆ—
+    /// </summary>
+    /// <param name="conditionValue">‚P‚Â‚Ìó‘ÔˆÙí‚ÌŒÂ”</param>
+    /// <returns>6ˆÈ‰º‚Å’²®‚³‚ê‚½ó‘ÔˆÙí‚ÌŒÂ”</returns>
+    int CheckConditionLimit(int conditionValue)
+    {
+        int checkValue = conditionValue >= 6 ? 6 : conditionValue;
+        return checkValue;
     }
 }

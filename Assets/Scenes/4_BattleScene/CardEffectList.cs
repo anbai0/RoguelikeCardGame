@@ -215,8 +215,6 @@ public class CardEffectList : MonoBehaviour
     {
         //時間差でエネミーを攻撃
         StartCoroutine(ID5Attacking(cardAttackPower, 0.8f));
-        //このラウンド中カードを使用不可にする
-        card.cardDataManager._cardState = 1;
     }
     IEnumerator ID5Attacking(int attackMethod, float attackInterval)
     {
@@ -234,9 +232,7 @@ public class CardEffectList : MonoBehaviour
     private void CardID105(CardController card)
     {
         //時間差でエネミーを攻撃
-        StartCoroutine(ID105Attacking(cardAttackPower, 0.8f));
-        //このラウンド中カードを使用不可にする
-        card.cardDataManager._cardState = 1;
+        StartCoroutine(ID105Attacking(cardAttackPower, 0.5f));
     }
     IEnumerator ID105Attacking(int attackMethod, float attackInterval)
     {
@@ -297,7 +293,7 @@ public class CardEffectList : MonoBehaviour
     }
     /// <summary>
     /// 技名：リコシェト,強化リコシェト
-    /// 効果：相手に1(2)ダメージを与える。このゲーム中、このコマンドのダメージが1増える。
+    /// 効果：相手に1ダメージを与える。このゲーム中、このコマンドのダメージが1増える。
     /// </summary>
     private void CardID8(CardController card)
     {
@@ -437,7 +433,7 @@ public class CardEffectList : MonoBehaviour
         //エネミーを攻撃
         PlayerAttacking(damage);
         //このラウンド中カードを使用不可にする
-        card.cardDataManager._cardState = 1;
+        card.cardDataManager._cardState = 2;
     }
     /// <summary>
     /// 技名：強化フルバースト
@@ -452,7 +448,7 @@ public class CardEffectList : MonoBehaviour
         //エネミーを攻撃
         PlayerAttacking(damage);
         //このラウンド中カードを使用不可にする
-        card.cardDataManager._cardState = 1;
+        card.cardDataManager._cardState = 2;
     }
     /// <summary>
     /// 技名：ハイボルケーノ 
@@ -547,7 +543,7 @@ public class CardEffectList : MonoBehaviour
             StartCoroutine(ID18APHealing(1.0f));
         }
         //この戦闘中カードを使用不可にする
-        card.cardDataManager._cardState = 2;
+        card.cardDataManager._cardState = 1;
     }
     IEnumerator ID18APHealing(float attackInterval)
     {

@@ -24,10 +24,12 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] SelectEnemyRelic selectEnemyRelic;
     public string enemyType = "SmallEnemy";
     string enemyName;
+    float enemyMoveTime = 1.0f;
     
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
+    Vector3 originCardPlace;
     [SerializeField] Transform PickCardPlace;
     [SerializeField] CardCostChange cardCostChange;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
@@ -37,7 +39,6 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] ResultAnimation resultAnimation;
     [SerializeField] GameObject uiManagerBR;
     [SerializeField] GameObject uiManagerBattle;
-    private UIManagerBattle uiManager;
 
     //ラウンド
     [SerializeField] RoundTextAnimation roundTextAnimation;
@@ -53,8 +54,8 @@ public class BattleGameManager : MonoBehaviour
     public bool isCoroutine;//コルーチンが動作中か判定//PlayerMove(),EnemyMove()で使用
     public bool isCoroutineEnabled;//動いているコルーチンが存在しているか判定//Update()で使用
     public bool isEnemyMoving;//エネミーのアクションが続いているか判定//PlayerMove(),EnemyMove()で使用
-    public float turnTime = 1.0f;//ターンの切り替え時間
-    public float roundTime = 2.0f;//ラウンドの切り替え時間
+    public float turnTime = 0.5f;//ターンの切り替え時間
+    public float roundTime = 0.2f;//ラウンドの切り替え時間
     private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     public int roundCount;//何ラウンド目かを記録する
@@ -80,7 +81,7 @@ public class BattleGameManager : MonoBehaviour
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);
         //初期化
-        uiManager = uiManagerBattle.GetComponent<UIManagerBattle>();
+        originCardPlace = CardPlace.transform.position;
         isPlayerTurn = false;
         isTurnEnd = false;
         isAccelerate = false;
@@ -138,13 +139,23 @@ public class BattleGameManager : MonoBehaviour
         }
         
         // バトル終了時、カードに触れなくする
-        if ((playerScript.CheckHP() || enemyScript.CheckHP()))
+        if ((playerScript.CheckHP() || enemyScript.CheckHP() || !isPlayerTurn))
         {
             CanvasGroup[] cards = CardPlace.GetComponentsInChildren<CanvasGroup>();
             foreach (CanvasGroup card in cards)
             {
                 card.blocksRaycasts = false;
             }
+            CardPlace.transform.position = originCardPlace + new Vector3(0, -50, 0);
+        }
+        else if(isPlayerTurn)
+        {
+            CanvasGroup[] cards = CardPlace.GetComponentsInChildren<CanvasGroup>();
+            foreach (CanvasGroup card in cards)
+            {
+                card.blocksRaycasts = true;
+            }
+            CardPlace.transform.position = originCardPlace;
         }
     }
 
@@ -204,18 +215,26 @@ public class BattleGameManager : MonoBehaviour
                 isPlayerTurn = false;
                 playerTurnDisplay.enabled = false;
                 enemyTurnDisplay.enabled = true;
-                Invoke("EnemyMove", 1.0f);
+                Invoke("EnemyMove", enemyMoveTime);
             }
         }
         else //どちらも行動できない場合
         {
-            //ラウンドを終了する
+            if(!isTurnEnd)
+            {
+                isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
+            }
+
+            //ターンディスプレイはどちらもオフに
             playerTurnDisplay.enabled = false;
             enemyTurnDisplay.enabled = false;
             if (isOnceEndRound)
             {
                 isOnceEndRound = false;
-                Invoke("EndRound", roundTime);
+                if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
+                {
+                    Invoke("EndRound", roundTime); //ターンを終了する
+                }
             }
         }
     }
@@ -420,7 +439,15 @@ public class BattleGameManager : MonoBehaviour
             isTurnEnd = true;
             playerScript.TurnEnd();
             turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
-            TurnCalc();
+
+            if (enemyScript.GetSetCurrentAP <= 0) //エネミーのAPが0の場合
+            {
+                Invoke("EndRound", roundTime); //ラウンドを終了する
+            }
+            else  
+            {
+                TurnCalc(); //ターン処理に移る
+            }
         }
     }
 
