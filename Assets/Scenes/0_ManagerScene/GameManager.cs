@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
-        //if (!isAlreadyRead) ReadPlayer("Warrior");
+        if (!isAlreadyRead) ReadPlayer("Warrior");
     }
 
     
@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
         playerData._deckList.Add(1); //スイング
         playerData._deckList.Add(2); //ヒール
         playerData._deckList.Add(4); //ガード
+
     }
 
 
