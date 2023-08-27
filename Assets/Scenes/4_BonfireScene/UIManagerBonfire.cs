@@ -118,6 +118,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject.CompareTag("Cards"))
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("‘I‘ğ‰¹1");
 
             // ‹­‰»ƒ{ƒ^ƒ“Ø‚è‘Ö‚¦
             applyEnhance.SetActive(true);

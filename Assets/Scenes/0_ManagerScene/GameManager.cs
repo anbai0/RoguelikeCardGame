@@ -43,10 +43,9 @@ public class GameManager : MonoBehaviour
 
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
-        if (!isAlreadyRead) ReadPlayer("Warrior");
+        if (!isAlreadyRead) ReadPlayer("Debug");
     }
 
-    
     /// <summary>
     /// アイテムデータの初期化を行います。
     /// </summary>
@@ -88,7 +87,26 @@ public class GameManager : MonoBehaviour
             hasRelics[9] += 2;     // 富豪の金貨袋
             ShowRelics();
         }
+        if (playerJob == "Debug")
+        {
+            playerData = new PlayerDataManager("Debug");
+            // 全レリック取得
+            hasRelics[1] += 5;
+            hasRelics[2] += 1;
+            hasRelics[3] += 1;
+            hasRelics[4] += 1;
+            hasRelics[5] += 1;
+            hasRelics[6] += 1;
+            hasRelics[7] += 1;
+            hasRelics[8] += 1;
+            hasRelics[9] += 1;
+            hasRelics[10] += 1;
+            hasRelics[11] += 1;
+            hasRelics[12] += 1;
 
+            ShowRelics();
+            return;
+        }
         playerData._deckList.Clear(); //デッキリストを空にする
         //開始時に配布されるカードを追加する
         playerData._deckList.Add(1); //スイング
