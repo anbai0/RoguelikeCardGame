@@ -134,6 +134,7 @@ public class UIManagerBattle : MonoBehaviour
     void UIDrop(GameObject UIObject)
     {
         Debug.Log("Drop");
+        Debug.Log(UIObject.name);
         if (UIObject.CompareTag("Cards"))
         {
             UIObject.GetComponent<CardMovement>().CardDorp(UIObject);

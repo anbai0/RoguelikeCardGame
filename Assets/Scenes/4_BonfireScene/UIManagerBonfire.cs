@@ -161,6 +161,7 @@ public class UIManagerBonfire : MonoBehaviour
         {
             isClick = true;
             AudioManager.Instance.PlaySE("選択音1");
+            enhancedCardHolder.gameObject.SetActive(false);     // 強化後のカードを非表示に
 
             bonfireManager.CardEnhance(lastSelectedCards);   // カード強化
 

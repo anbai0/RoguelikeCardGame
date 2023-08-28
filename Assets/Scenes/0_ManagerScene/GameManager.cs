@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public Dictionary<int, int> hasRelics { private set; get; } = new Dictionary<int, int>();     // 所持しているレリックを格納    
     public int maxCards { get; private set; } = 20;
     public int maxRelics { get; private set; } = 12;
-    private const int defaultDeckSize = 3;
+    private const int defaultDeckSize = 4;
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
