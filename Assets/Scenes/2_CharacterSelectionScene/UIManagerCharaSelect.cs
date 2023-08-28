@@ -49,6 +49,12 @@ public class UIManagerCharaSelect : MonoBehaviour
     //[Header("表示を切り替えるUI")]
     //[Header("クリック後に参照するUI")]
 
+    [Header("カード抽選")]
+    [SerializeField] GameObject lotteryScreen;
+    [SerializeField] CardController cardPrefab;
+    [SerializeField] Transform cardPlace;
+    [SerializeField] GameObject cardDecisionButton;
+
     void Start()
     {
         // GameManager取得(変数名省略)
