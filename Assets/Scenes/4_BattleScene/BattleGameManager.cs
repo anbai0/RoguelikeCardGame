@@ -124,7 +124,6 @@ public class BattleGameManager : MonoBehaviour
         enemyScript.SetUpAP();
         enemyScript.GetSetRoundEnabled = false;
         enemyScript.SaveRoundAP();
-
         isOnceEndRound = true;
         TurnCalc();
     }
@@ -275,6 +274,8 @@ public class BattleGameManager : MonoBehaviour
     {
         playerScript.Poison(playerMoveCount);
         enemyScript.Poison(enemyMoveCount);
+        playerMoveCount = 0; //プレイヤーの行動回数をリセットする
+        enemyMoveCount = 0; //エネミーの行動回数をリセットする
         playerScript.ChargeAP();
         enemyScript.ChargeAP();
         if (!isFirstCall) { isFirstCall = true; OnceEndRoundRelicEffect(); }

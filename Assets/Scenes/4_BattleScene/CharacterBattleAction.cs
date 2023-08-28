@@ -9,14 +9,14 @@ using UnityEngine.UI;
 public class CharacterBattleAction : MonoBehaviour
 {
     //ステータス
-    int HP; //最大HP
+    [Range(0, 999)] int HP; //最大HP
     int currentHP; //現在のHP
-    int AP; //最大AP
+    [Range(0, 99)] int AP; //最大AP
     int constAP; //戦闘開始時の最大AP
     int currentAP; //現在のAP
     int chargeAP; //ラウンドが進むごとに増加するAPの値
     int roundStartAP; //ラウンド開始時の最大AP(IsCurseの判定に用いる)
-    int GP; //ダメージを防げるガードポイント
+    [Range(0, 999)] int GP; //ダメージを防げるガードポイント
     public int GetSetHP { get => HP; set => HP = value; }
     public int GetSetCurrentHP { get => currentHP; set => currentHP = value; }
     public int GetSetAP { get => AP; set => AP = value; }
