@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     private const int defaultDeckSize = 4;
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
+    private const int id7HPIncreaseAmount = 5;  //心の器のHP増加量
+
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
 
     private bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
@@ -149,6 +151,17 @@ public class GameManager : MonoBehaviour
         uiManager.UIEventsReload();
     }
 
+    /// <summary>
+    /// レリックを入手した際にIDを確認し、ID7(心の器)の時に効果を処理する
+    /// </summary>
+    /// <param name="relicID">入手したレリックの番号</param>
+    public void CheckGetRelicID7(int relicID)
+    {
+        if(relicID == 7) //レリックがID7(心の器)の場合
+        {
+            playerData._playerHP += id7HPIncreaseAmount; //心の器の増加量分HPを上昇させる
+        }
+    }
 
     /// <summary>
     /// 所持カードがデッキ上限に達しているかを判定し、
