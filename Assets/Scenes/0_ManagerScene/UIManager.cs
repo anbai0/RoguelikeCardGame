@@ -50,18 +50,28 @@ public class UIManager : MonoBehaviour
 
     [Header("カード表示関係")]
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform upperCardPlace;
-    [SerializeField] Transform lowerCardPlace;
+    [SerializeField] Transform deckPlace;
+    [SerializeField] GameObject scrollView;     // デッキを表示するUIの親オブジェクト
+    [SerializeField] Transform discardHolder;       //破棄するカードを表示するのに使う親オブジェクト
+    private CardController discardCard;
+    //[SerializeField] Transform upperCardPlace;
+    //[SerializeField] Transform lowerCardPlace;
+    //private Vector3 upperCardPos = new Vector3(0, 176, 0);   // upperCardのデフォルトの位置
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 生成するカードのスケール
     private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
-    private Vector3 upperCardPos = new Vector3(0, 176,0);   // upperCardのデフォルトの位置
+    
 
 
     void Start()
     {
         // GameManager取得(変数名省略)
         gm = GameManager.Instance;
+
+        // 破棄するカードを表示するPrefabを生成
+        discardCard = Instantiate(cardPrefab, discardHolder);
+        discardCard.gameObject.GetComponent<UIController>().enabled = false;        // UIEventを拾ってほしくないためfalseに
+        discardCard.transform.SetParent(discardHolder);
 
         UIEventsReload();
     }
@@ -195,21 +205,17 @@ public class UIManager : MonoBehaviour
             PlayerController.isPlayerActive = false;
             isShowingDeckConfirmation = true;
 
-            upperCardPlace.gameObject.SetActive(true);
-            lowerCardPlace.gameObject.SetActive(true);
+            scrollView.SetActive(true);
+
 
             // 前回表示したカードをDestroy
-            foreach (Transform child in upperCardPlace.transform)
+            foreach (Transform child in deckPlace.transform)
             {
                 Destroy(child.gameObject);
             }
-            foreach (Transform child in lowerCardPlace.transform)
-            {
-                Destroy(child.gameObject);
-            }
-
+            
             DeckConfirmation.SetActive(true);
-            ShowDeck();
+            InitDeck();
             UIEventsReload();
         }
         // 戻るボタンの処理
@@ -218,8 +224,7 @@ public class UIManager : MonoBehaviour
             AudioManager.Instance.PlaySE("選択音1");
             PlayerController.isPlayerActive = true;
             isShowingDeckConfirmation = false;
-            upperCardPlace.gameObject.SetActive(false);
-            lowerCardPlace.gameObject.SetActive(false);
+            scrollView.gameObject.SetActive(false);
             DeckConfirmation.SetActive(false);
         }
         #endregion
@@ -233,10 +238,15 @@ public class UIManager : MonoBehaviour
             if (UIObject.CompareTag("Cards"))
             {
                 isSelected = true;
+                AudioManager.Instance.PlaySE("選択音1");
 
                 // ボタン切り替え
                 discardReturnButton.SetActive(false);
                 discardButton.SetActive(true);
+
+                // 破棄するカードを表示
+                discardHolder.gameObject.SetActive(true);
+                DisplayDiscardCard(UIObject);
 
                 // カード選択状態の切り替え
                 if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
@@ -259,6 +269,7 @@ public class UIManager : MonoBehaviour
                 lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 lastSelectedCards = null;
                 isSelected = false;
+                discardHolder.gameObject.SetActive(false);     // 破棄するカードを非表示に
 
                 // 強化ボタン切り替え
                 discardReturnButton.SetActive(true);
@@ -269,6 +280,7 @@ public class UIManager : MonoBehaviour
             if (!isSelected && UIObject == discardReturnButton)
             {
                 AudioManager.Instance.PlaySE("選択音1");
+                discardHolder.gameObject.SetActive(false);     // 破棄するカードを非表示に
                 ToggleDiscardScreen(false);
                 gm.TriggerDiscardAction(false);
             }
@@ -277,6 +289,7 @@ public class UIManager : MonoBehaviour
             if (lastSelectedCards != null && UIObject == discardButton)
             {
                 AudioManager.Instance.PlaySE("選択音1");
+                discardHolder.gameObject.SetActive(false);     // 破棄するカードを非表示に
                 int selectedCardID = lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID; // 選択されたカードのIDを取得
 
                 for (int cardIndex = 0; cardIndex < gm.playerData._deckList.Count; cardIndex++) {
@@ -390,6 +403,7 @@ public class UIManager : MonoBehaviour
             myMoneyText.text = gm.playerData._playerMoney.ToString();
     }
 
+
     /// <summary>
     /// カード破棄画面を表示または非表示にするメソッド
     /// </summary>
@@ -403,92 +417,153 @@ public class UIManager : MonoBehaviour
             discardReturnButton.SetActive(true);
             discardButton.SetActive(false);
 
-            // カード表示するUI表示
-            upperCardPlace.gameObject.SetActive(true);
-            lowerCardPlace.gameObject.SetActive(true);
-
             // 前回表示したカードをDestroy
-            foreach (Transform child in upperCardPlace.transform)
-            {
-                Destroy(child.gameObject);
-            }
-            foreach (Transform child in lowerCardPlace.transform)
+            foreach (Transform child in deckPlace.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            cardDiscardScreen.SetActive(true);      // カード破棄画面を表示
-            ShowDeck();
+            // カード表示するUI表示
+            scrollView.gameObject.SetActive(true);
+            // カード破棄画面を表示
+            cardDiscardScreen.SetActive(true);
+
+            InitDeck();
             UIEventsReload();
         }
         else
         {
-            upperCardPlace.gameObject.SetActive(false);
-            lowerCardPlace.gameObject.SetActive(false);
+            scrollView.gameObject.SetActive(false);
             isShowingCardDiscard = false;
             cardDiscardScreen.SetActive(false);
         }
     }
-
-    /// <summary>
-    /// 持っているカードをすべて表示
-    /// </summary>
-    private void ShowDeck()
+    private void InitDeck() //デッキ生成
     {
-        upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
-        deckNumberList = gm.playerData._deckList;
-        int distribute = DistributionOfCards(deckNumberList.Count);
-        if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない     
-        if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+        deckNumberList = GameManager.Instance.playerData._deckList;
 
-        for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
+        for (int init = 0; init < deckNumberList.Count; init++)         // 選択出来るデッキの枚数分
         {
-            if (init <= distribute) //決められた数をupperCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
-                card.transform.localScale = scaleReset;
-                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
-            }
-            else //残りはlowerCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
-                card.transform.localScale = scaleReset;
-                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
-            }
+            CardController card = Instantiate(cardPrefab, deckPlace);   //カードを生成する
+            card.transform.localScale = scaleReset;
+            card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
+            card.Init(deckNumberList[init]);                            //デッキデータの表示
         }
     }
 
     /// <summary>
-    /// デッキのカード枚数によって上下のCardPlaceに振り分ける数を決める
+    /// 破棄するカードを表示するメソッドです
     /// </summary>
-    /// <param name="deckCount">デッキの枚数</param>
-    /// <returns>上のCardPlaceに生成するカードの枚数</returns>
-    int DistributionOfCards(int deckCount)
+    /// <param name="selectCard">選択されたCard</param>
+    public void DisplayDiscardCard(GameObject selectCard)
     {
-        int distribute = 0;
-        if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
-        {
-            distribute = deckCount;//デッキの枚数分生成
-        }
-        else if (deckCount > 5)//デッキの数が6枚以上だったら
-        {
-            if (deckCount % 2 == 0)//デッキの枚数が偶数だったら
-            {
-                int value = deckCount / 2;
-                distribute = value;//デッキの半分の枚数を生成
-            }
-            else //デッキの枚数が奇数だったら
-            {
-                int value = (deckCount - 1) / 2;
-                distribute = value + 1;//デッキの半分+1の枚数を生成
-            }
-        }
-        else //デッキの数が0枚未満だったら
-        {
-            distribute = 0;//生成しない
-        }
-        return distribute;
+        int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
+        discardCard.Init(id);                            //デッキデータの表示
     }
+
+    #region upperとlowerのCardPlaceを使ったやり方
+    ///// <summary>
+    ///// カード破棄画面を表示または非表示にするメソッド
+    ///// </summary>
+    ///// <param name="show">表示する場合はtrue、非表示にする場合はfalse</param>
+    //public void ToggleDiscardScreen(bool show)
+    //{
+    //    isShowingCardDiscard = true;
+    //    if (show)
+    //    {
+    //        // ボタンの状態リセット
+    //        discardReturnButton.SetActive(true);
+    //        discardButton.SetActive(false);
+
+    //        // カード表示するUI表示
+    //        upperCardPlace.gameObject.SetActive(true);
+    //        lowerCardPlace.gameObject.SetActive(true);
+
+    //        // 前回表示したカードをDestroy
+    //        foreach (Transform child in upperCardPlace.transform)
+    //        {
+    //            Destroy(child.gameObject);
+    //        }
+    //        foreach (Transform child in lowerCardPlace.transform)
+    //        {
+    //            Destroy(child.gameObject);
+    //        }
+
+    //        cardDiscardScreen.SetActive(true);      // カード破棄画面を表示
+    //        ShowDeck();
+    //        UIEventsReload();
+    //    }
+    //    else
+    //    {
+    //        upperCardPlace.gameObject.SetActive(false);
+    //        lowerCardPlace.gameObject.SetActive(false);
+    //        isShowingCardDiscard = false;
+    //        cardDiscardScreen.SetActive(false);
+    //    }
+    //}
+
+
+    ///// <summary>
+    ///// 持っているカードをすべて表示
+    ///// </summary>
+    //private void ShowDeck()
+    //{
+    //    upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
+    //    deckNumberList = gm.playerData._deckList;
+    //    int distribute = DistributionOfCards(deckNumberList.Count);
+    //    if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない     
+    //    if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
+
+    //    for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
+    //    {
+    //        if (init <= distribute) //決められた数をupperCardPlaceに生成する
+    //        {
+    //            CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
+    //            card.transform.localScale = scaleReset;
+    //            card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
+    //            card.Init(deckNumberList[init - 1]);//デッキデータの表示
+    //        }
+    //        else //残りはlowerCardPlaceに生成する
+    //        {
+    //            CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
+    //            card.transform.localScale = scaleReset;
+    //            card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
+    //            card.Init(deckNumberList[init - 1]);//デッキデータの表示
+    //        }
+    //    }
+    //}
+
+    ///// <summary>
+    ///// デッキのカード枚数によって上下のCardPlaceに振り分ける数を決める
+    ///// </summary>
+    ///// <param name="deckCount">デッキの枚数</param>
+    ///// <returns>上のCardPlaceに生成するカードの枚数</returns>
+    //int DistributionOfCards(int deckCount)
+    //{
+    //    int distribute = 0;
+    //    if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
+    //    {
+    //        distribute = deckCount;//デッキの枚数分生成
+    //    }
+    //    else if (deckCount > 5)//デッキの数が6枚以上だったら
+    //    {
+    //        if (deckCount % 2 == 0)//デッキの枚数が偶数だったら
+    //        {
+    //            int value = deckCount / 2;
+    //            distribute = value;//デッキの半分の枚数を生成
+    //        }
+    //        else //デッキの枚数が奇数だったら
+    //        {
+    //            int value = (deckCount - 1) / 2;
+    //            distribute = value + 1;//デッキの半分+1の枚数を生成
+    //        }
+    //    }
+    //    else //デッキの数が0枚未満だったら
+    //    {
+    //        distribute = 0;//生成しない
+    //    }
+    //    return distribute;
+    //}
+    #endregion
+
 }

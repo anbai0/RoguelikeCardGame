@@ -28,8 +28,6 @@ public class UIManagerResult : MonoBehaviour
     [SerializeField] GameObject titleBackButton;
     //[Header("クリック後に参照するUI")]
 
-
-
     void Start()
     {
         // GameManager取得(変数名省略)

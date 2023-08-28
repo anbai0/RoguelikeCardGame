@@ -8,18 +8,18 @@ public class ResultSceneManager : MonoBehaviour
     private GameManager gm;
     [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerResult uiManager;
-    
-    // カード
+
+    [Header("カード表示関係")]
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform upperCardPlace;
-    [SerializeField] Transform lowerCardPlace;
+    [SerializeField] Transform deckPlace;
+    [SerializeField] GameObject scrollView;     // デッキを表示するUIの親オブジェクト
     private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
     // レリック
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
 
-    private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
+    private Vector3 cardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
 
     void Start()
@@ -32,61 +32,17 @@ public class ResultSceneManager : MonoBehaviour
         uiManager.UIEventsReload();
     }
 
-    public void InitDeck() //デッキ生成
+    private void InitDeck() //デッキ生成
     {
-        deckNumberList = gm.playerData._deckList;
-        int distribute = DistributionOfCards(deckNumberList.Count);
-        if (distribute <= 0) //デッキの枚数が0枚なら生成しない
-            return;
-        for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
-        {
-            if (init <= distribute) //決められた数をupperCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
-                card.transform.localScale = CardScale;
-                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
-            }
-            else //残りはlowerCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
-                card.transform.localScale = CardScale;
-                card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
-            }
-        }
-    }
+        deckNumberList = GameManager.Instance.playerData._deckList;
 
-    /// <summary>
-    /// デッキのカード枚数によって上下のCardPlaceに振り分ける数を決める
-    /// </summary>
-    /// <param name="deckCount">デッキの枚数</param>
-    /// <returns>上のCardPlaceに生成するカードの枚数</returns>
-    int DistributionOfCards(int deckCount)
-    {
-        int distribute = 0;
-        if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
+        for (int init = 0; init < deckNumberList.Count; init++)         // 選択出来るデッキの枚数分
         {
-            distribute = deckCount;//デッキの枚数分生成
+            CardController card = Instantiate(cardPrefab, deckPlace);   //カードを生成する
+            card.transform.localScale = cardScale;
+            card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
+            card.Init(deckNumberList[init]);                            //デッキデータの表示
         }
-        else if (deckCount > 5)//デッキの数が6枚以上だったら
-        {
-            if (deckCount % 2 == 0)//デッキの枚数が偶数だったら
-            {
-                int value = deckCount / 2;
-                distribute = value;//デッキの半分の枚数を生成
-            }
-            else //デッキの枚数が奇数だったら
-            {
-                int value = (deckCount - 1) / 2;
-                distribute = value + 1;//デッキの半分+1の枚数を生成
-            }
-        }
-        else //デッキの数が0枚未満だったら
-        {
-            distribute = 0;//生成しない
-        }
-        return distribute;
     }
 
 

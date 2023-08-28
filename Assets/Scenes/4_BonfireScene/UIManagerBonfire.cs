@@ -26,6 +26,7 @@ public class UIManagerBonfire : MonoBehaviour
     [Header("表示を切り替えるUI")]
     [SerializeField] private GameObject BonfireUI;
     [SerializeField] private GameObject restUI;
+    [SerializeField] private Transform enhancedCardHolder;
 
     [Header("クリック後に参照するUI")]
     [SerializeField] private GameObject closeBonfire;
@@ -117,10 +118,15 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject.CompareTag("Cards"))
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("選択音1");
 
             // 強化ボタン切り替え
             applyEnhance.SetActive(true);
             closeEnhance.SetActive(false);
+
+            // 強化後のカードを表示
+            enhancedCardHolder.gameObject.SetActive(true);
+            bonfireManager.DisplayEnhancedCard(UIObject);
 
             // カード選択状態の切り替え
             if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
@@ -142,6 +148,7 @@ public class UIManagerBonfire : MonoBehaviour
             lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
             lastSelectedCards = null;
             isSelected = false;
+            enhancedCardHolder.gameObject.SetActive(false);     // 強化後のカードを非表示に
 
             // 強化ボタン切り替え
             applyEnhance.SetActive(false);
@@ -154,6 +161,7 @@ public class UIManagerBonfire : MonoBehaviour
         {
             isClick = true;
             AudioManager.Instance.PlaySE("選択音1");
+            enhancedCardHolder.gameObject.SetActive(false);     // 強化後のカードを非表示に
 
             bonfireManager.CardEnhance(lastSelectedCards);   // カード強化
 
@@ -167,6 +175,7 @@ public class UIManagerBonfire : MonoBehaviour
         if (UIObject == closeEnhance)
         {
             AudioManager.Instance.PlaySE("選択音1");
+            enhancedCardHolder.gameObject.SetActive(false);     // 強化後のカードを非表示に
             BonfireUI.SetActive(true);          // 焚火画面に戻る
             
         }

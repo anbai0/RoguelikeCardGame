@@ -10,49 +10,37 @@ public class BonfireManager : MonoBehaviour
 
     // カード表示
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform upperCardPlace;
-    [SerializeField] Transform lowerCardPlace;
+    [SerializeField] Transform cardPlace;
+    [SerializeField] Transform enhancedCardHolder;
+    [SerializeField] CardController enhancedCard;
     private List<int> deckNumberList;                    //プレイヤーのもつデッキナンバーのリスト
 
     private Vector3 CardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
-    private Vector3 upperCardPos = new Vector3(0, 176, 0);   // upperCardのデフォルトの位置
 
     void Start()
     {
-        cardEmptyText.SetActive(false);
+        enhancedCard = Instantiate(cardPrefab, enhancedCardHolder);   // 強化後のカードを表示するPrefabを生成
+        enhancedCard.gameObject.GetComponent<UIController>().enabled = false;
+        enhancedCard.transform.SetParent(enhancedCardHolder);
         InitDeck();
     }
 
     private void InitDeck() //デッキ生成
     {
-        upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
         deckNumberList = GameManager.Instance.playerData._deckList;
         var selectableList = ExcludeDeckCards(deckNumberList);
-        int distribute = DistributionOfCards(selectableList.Count);
-        if (distribute <= 0) //デッキの枚数が0枚なら生成しない
+        if (selectableList.Count <= 0) //デッキの枚数が0枚なら生成しない
         {
             cardEmptyText.SetActive(true); //強化できるカードがないことをTextで伝える
             return;
         }
 
-        if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
-
-        for (int init = 1; init <= selectableList.Count; init++)// 選択出来るデッキの枚数分
+        for (int init = 0; init < selectableList.Count; init++)// 選択出来るデッキの枚数分
         {
-            if (init <= distribute) //決められた数をupperCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
-                card.transform.localScale = CardScale;
-                card.name = "Deck" + (init-1).ToString();//生成したカードに名前を付ける
-                card.Init(selectableList[init - 1]);//デッキデータの表示
-            }
-            else //残りはlowerCardPlaceに生成する
-            {
-                CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
-                card.transform.localScale = CardScale;
-                card.name = "Deck" + (init-1).ToString();//生成したカードに名前を付ける
-                card.Init(deckNumberList[init - 1]);//デッキデータの表示
-            }
+            CardController card = Instantiate(cardPrefab, cardPlace);   //カードを生成する
+            card.transform.localScale = CardScale;
+            card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
+            card.Init(selectableList[init]);                            //デッキデータの表示
         }
     }
 
@@ -74,37 +62,6 @@ public class BonfireManager : MonoBehaviour
         return selectableList;
     }
 
-    /// <summary>
-    /// デッキのカード枚数によって上下のCardPlaceに振り分ける数を決める
-    /// </summary>
-    /// <param name="deckCount">デッキの枚数</param>
-    /// <returns>上のCardPlaceに生成するカードの枚数</returns>
-    int DistributionOfCards(int deckCount) 
-    {
-        int distribute = 0;
-        if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
-        {
-            distribute = deckCount;//デッキの枚数分生成
-        }
-        else if (deckCount > 5)//デッキの数が6枚以上だったら
-        {
-            if (deckCount % 2 == 0)//デッキの枚数が偶数だったら
-            {
-                int value = deckCount / 2;
-                distribute = value;//デッキの半分の枚数を生成
-            }
-            else //デッキの枚数が奇数だったら
-            {
-                int value = (deckCount - 1) / 2;
-                distribute = value + 1;//デッキの半分+1の枚数を生成
-            }
-        }
-        else //デッキの数が0枚未満だったら
-        {
-            distribute = 0;//生成しない
-        }
-        return distribute;
-    }
 
     /// <summary>
     /// カードの強化をするメソッドです
@@ -122,6 +79,16 @@ public class BonfireManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 強化後のカードを表示するメソッドです
+    /// </summary>
+    /// <param name="selectCard">選択されたCard</param>
+    public void DisplayEnhancedCard(GameObject selectCard)
+    {
+        int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
+        enhancedCard.Init(id+100);                            //デッキデータの表示
+        
+    }
 
     public void UnLoadBonfireScene()
     {
