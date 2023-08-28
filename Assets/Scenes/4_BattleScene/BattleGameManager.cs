@@ -457,10 +457,11 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     void ReturnPlayerData()
     {
-        if (playerScript.GetSetCurrentHP < gm.playerData._playerHP) //戦闘終了時の体力が元のプレイヤーの体力を上回っていなければ
+        if(playerScript.GetSetCurrentHP > gm.playerData._playerHP) //戦闘終了時の体力が参照元の最大体力を上回っていた場合
         {
-            gm.playerData._playerCurrentHP = playerScript.GetSetCurrentHP; //戦闘終了時の体力を返す
+            playerScript.GetSetCurrentHP = gm.playerData._playerHP; //最大体力を超えないようにする
         }
+        gm.playerData._playerCurrentHP = playerScript.GetSetCurrentHP; //戦闘終了時の体力を返す
         playerData._playerMoney += enemyScript.GetSetDropMoney; //コインを獲得
     }
 

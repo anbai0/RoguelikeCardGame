@@ -609,7 +609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &160689629
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3447,7 +3447,6 @@ MonoBehaviour:
   roundTextAnimation: {fileID: 1522913961}
   turnEndBlackPanel: {fileID: 1304376417}
   isPlayerTurn: 0
-  isTurnEnd: 0
   isAccelerate: 0
   accelerateValue: 0
   isCoroutine: 0
