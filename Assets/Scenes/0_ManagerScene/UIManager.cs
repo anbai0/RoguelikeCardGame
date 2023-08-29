@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// UIの管理を行うスクリプトです。
@@ -50,8 +51,8 @@ public class UIManager : MonoBehaviour
 
     [Header("カード表示関係")]
     [SerializeField] CardController cardPrefab;
-    [SerializeField] Transform deckPlace;
-    [SerializeField] GameObject scrollView;     // デッキを表示するUIの親オブジェクト
+    [SerializeField] Transform deckCardPlace;
+    [SerializeField] Transform discardCardPlace;
     [SerializeField] Transform discardHolder;       //破棄するカードを表示するのに使う親オブジェクト
     private CardController discardCard;
     //[SerializeField] Transform upperCardPlace;
@@ -205,11 +206,8 @@ public class UIManager : MonoBehaviour
             PlayerController.isPlayerActive = false;
             isShowingDeckConfirmation = true;
 
-            scrollView.SetActive(true);
-
-
             // 前回表示したカードをDestroy
-            foreach (Transform child in deckPlace.transform)
+            foreach (Transform child in deckCardPlace.transform)
             {
                 Destroy(child.gameObject);
             }
@@ -224,7 +222,6 @@ public class UIManager : MonoBehaviour
             AudioManager.Instance.PlaySE("選択音1");
             PlayerController.isPlayerActive = true;
             isShowingDeckConfirmation = false;
-            scrollView.gameObject.SetActive(false);
             DeckConfirmation.SetActive(false);
         }
         #endregion
@@ -411,6 +408,7 @@ public class UIManager : MonoBehaviour
     public void ToggleDiscardScreen(bool show)
     {
         isShowingCardDiscard = true;
+        DeckConfirmationButton.SetActive(false);    // デッキ確認アイコン非表示
         if (show)
         {
             // ボタンの状態リセット
@@ -418,36 +416,60 @@ public class UIManager : MonoBehaviour
             discardButton.SetActive(false);
 
             // 前回表示したカードをDestroy
-            foreach (Transform child in deckPlace.transform)
+            foreach (Transform child in discardCardPlace.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            // カード表示するUI表示
-            scrollView.gameObject.SetActive(true);
             // カード破棄画面を表示
             cardDiscardScreen.SetActive(true);
 
-            InitDeck();
+            DiscardCardDeck();
             UIEventsReload();
         }
         else
         {
-            scrollView.gameObject.SetActive(false);
             isShowingCardDiscard = false;
+            DeckConfirmationButton.SetActive(true);       // デッキ確認アイコンを表示
             cardDiscardScreen.SetActive(false);
         }
     }
-    private void InitDeck() //デッキ生成
+
+    /// <summary>
+    /// デッキのカードをすべて表示します。
+    /// </summary>
+    private void InitDeck()
     {
         deckNumberList = GameManager.Instance.playerData._deckList;
 
         for (int init = 0; init < deckNumberList.Count; init++)         // 選択出来るデッキの枚数分
         {
-            CardController card = Instantiate(cardPrefab, deckPlace);   //カードを生成する
+            CardController card = Instantiate(cardPrefab, deckCardPlace);   //カードを生成する
             card.transform.localScale = scaleReset;
             card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
             card.Init(deckNumberList[init]);                            //デッキデータの表示
+        }
+    }
+
+    /// <summary>
+    /// 破棄画面用のInitDeckです。
+    /// 魔女の霊薬を除外してデッキのカードをすべて表示します。
+    /// </summary>
+    private void DiscardCardDeck()
+    {
+        List<int> discardDeck = gm.playerData._deckList.ToList();   // デッキチェック用にデッキをコピー
+
+        // 魔女の霊薬を除外
+        discardDeck.Remove(GameManager.healCardID);
+
+        for (int init = 0; init < discardDeck.Count; init++)         // 選択出来るデッキの枚数分
+        {
+            Debug.Log(discardDeck.Count);
+            Debug.Log(discardDeck[init]);
+            CardController card = Instantiate(cardPrefab, discardCardPlace);   //カードを生成する
+            card.transform.localScale = scaleReset;
+            card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
+            card.Init(discardDeck[init]);                            //デッキデータの表示
         }
     }
 

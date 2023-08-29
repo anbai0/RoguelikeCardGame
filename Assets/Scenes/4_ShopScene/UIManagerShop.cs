@@ -130,6 +130,7 @@ public class UIManagerShop : MonoBehaviour
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("選択音1");
 
             // アイテム選択状態の切り替え
             if (lastSelectedItem != null && lastSelectedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
@@ -191,6 +192,7 @@ public class UIManagerShop : MonoBehaviour
             {
                 lastSelectedItem.transform.localScale = relicScaleReset;
                 lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+                lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
             }
 
             lastSelectedItem = null;         // 選択状態リセット

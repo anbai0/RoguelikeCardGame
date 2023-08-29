@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     public int maxCards { get; private set; } = 20;
     public int maxRelics { get; private set; } = 12;
     private const int defaultDeckSize = 4;
-    private const int healCardID = 3;           // 魔女の霊薬のID
+    public const int healCardID = 3;           // 魔女の霊薬のID
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
     private const int id7HPIncreaseAmount = 5;  //心の器のHP増加量
@@ -176,7 +177,7 @@ public class GameManager : MonoBehaviour
     public bool CheckDeckFull()
     {
         int maxDeckSize = defaultDeckSize + hasRelics[ariadnesThreadID];
-        List<int> checkDeck = playerData._deckList;   // デッキチェック用List
+        List<int> checkDeck = playerData._deckList.ToList();   // デッキチェック用にデッキをコピー
 
         // 魔女の霊薬を除外
         checkDeck.Remove(healCardID);
