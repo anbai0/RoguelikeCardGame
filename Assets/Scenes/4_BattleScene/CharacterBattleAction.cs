@@ -43,10 +43,9 @@ public class CharacterBattleAction : MonoBehaviour
     /// </summary>
     public void SetUpAP() 
     {
-        var curse = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]);
-        AP = curse.nextRoundAP;
+        var checkCurseAP = inflictCondition.Curse(constAP, chargeAP, condition["Curse"]);
+        AP = checkCurseAP;
         currentAP = AP;
-        condition["InvalidBadStatus"] = curse.invalidBadStatus;
     }
 
     /// <summary>
@@ -54,9 +53,8 @@ public class CharacterBattleAction : MonoBehaviour
     /// </summary>
     public void CursedUpdateAP()
     {
-        var curse = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]);
-        AP = curse.nextRoundAP;
-        condition["InvalidBadStatus"] = curse.invalidBadStatus;
+        var checkCurseAP = inflictCondition.Curse(constAP, chargeAP, condition["Curse"]);
+        AP = checkCurseAP;
     }
     
     /// <summary>
@@ -153,7 +151,7 @@ public class CharacterBattleAction : MonoBehaviour
     public bool IsCurse() 
     {
         //É^Å[ÉìèIóπéûÇÃç≈ëÂAP
-        int currentMaxAP = inflictCondition.Curse(constAP, chargeAP, condition["Curse"], condition["InvalidBadStatus"]).nextRoundAP;
+        int currentMaxAP = inflictCondition.Curse(constAP, chargeAP, condition["Curse"]);
         return roundStartAP > currentMaxAP ? true : false;
     }
 
@@ -175,9 +173,7 @@ public class CharacterBattleAction : MonoBehaviour
     /// </summary>
     public void Impatience()
     {
-        var impatience = inflictCondition.Impatience(condition["Impatience"], condition["InvalidBadStatus"]);
-        currentAP -= impatience.impatience;
-        condition["InvalidBadStatus"] = impatience.invalidBadStatus;
+        currentAP -= condition["Impatience"];
     }
     
     /// <summary>
@@ -187,9 +183,7 @@ public class CharacterBattleAction : MonoBehaviour
     /// <returns>å∏è≠ÇµÇΩçUåÇóÕ</returns>
     public int Weakness(int attackPower)
     {
-        var weakness = inflictCondition.Weakness(attackPower, condition["Weakness"], condition["InvalidBadStatus"]);
-        attackPower = weakness.attackPower;
-        condition["InvalidBadStatus"] = weakness.invalidBadStatus;
+        attackPower = inflictCondition.Weakness(attackPower, condition["Weakness"]);
         return attackPower;
     }
 
@@ -280,27 +274,37 @@ public class CharacterBattleAction : MonoBehaviour
         }
         else if (status == "Curse")
         {
-            condition["Curse"] += count;
+            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            condition["Curse"] += invalidBadStatusValue.badStatus;
             condition["Curse"] = CheckConditionLimit(condition["Curse"]);
         }
         else if (status == "Impatience")
         {
-            condition["Impatience"] += count;
+            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            condition["Impatience"] += invalidBadStatusValue.badStatus;
             condition["Impatience"] = CheckConditionLimit(condition["Impatience"]);
         }
         else if (status == "Weakness")
         {
-            condition["Weakness"] += count;
+            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            condition["Weakness"] += invalidBadStatusValue.badStatus;
             condition["Weakness"] = CheckConditionLimit(condition["Weakness"]);
         }
         else if (status == "Burn")
         {
-            condition["Burn"] += count;
+            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            condition["Burn"] += invalidBadStatusValue.badStatus;
             condition["Burn"] = CheckConditionLimit(condition["Burn"]);
         }
         else if (status == "Poison")
         {
-            condition["Poison"] += count;
+            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            condition["Poison"] += invalidBadStatusValue.badStatus;
             condition["Poison"] = CheckConditionLimit(condition["Poison"]);
         }
     }

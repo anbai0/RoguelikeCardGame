@@ -1161,8 +1161,9 @@ public class EnemyAI : MonoBehaviour
     }
     private int ChangeAttackPower(int damage) //ó‘ÔˆÙí‚É‚æ‚éUŒ‚—Í‚Ì‘Œ¸
     {
-        damage = enemy.UpStrength(damage);
-        damage = enemy.Weakness(damage);
+        damage = enemy.UpStrength(damage); //‹Ø—Í‘‹­‚É‚æ‚éUŒ‚—Í‚Ì‘‰Á
+        damage += bg.relicID2Enemy; //ƒŒƒŠƒbƒNID2(S‚ÌŠí)‚ÌŒø‰Ê‚É‚æ‚éUŒ‚—Í‚Ì‘‰Á
+        damage = enemy.Weakness(damage); //Šã‚É‚æ‚éUŒ‚—Í‚ÌŒ¸­
         return damage;
     }
 }

@@ -3440,6 +3440,8 @@ MonoBehaviour:
   CardPlace: {fileID: 203011022}
   PickCardPlace: {fileID: 1051905017}
   cardCostChange: {fileID: 1522913960}
+  relicID2Player: 0
+  relicID2Enemy: 0
   battleRewardManager: {fileID: 562602478}
   resultAnimation: {fileID: 1522913959}
   uiManagerBR: {fileID: 870591700}
@@ -3526,6 +3528,7 @@ MonoBehaviour:
     type: 3}
   healingUI: {fileID: 1513765778294481466, guid: aa3beef6fc20ad54c826687fac079fbf,
     type: 3}
+  gardUI: {fileID: 1513765778294481466, guid: 28d84caaf577eb045a97b34bd50ce9d4, type: 3}
   damageOrHealingPos: {fileID: 1171092127}
   playerConditionDisplay: {fileID: 1839181339}
   shakeBattleField: {fileID: 1491581598}

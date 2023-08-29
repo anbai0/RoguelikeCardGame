@@ -233,9 +233,7 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     public void Burn()
     {
-        var burn = GetSetInflictCondition.Burn(enemyCondition["Burn"], enemyCondition["InvalidBadStatus"]);
-        TakeDamage(burn.damage);
-        enemyCondition["InvalidBadStatus"] = burn.invalidBadStatus;
+        TakeDamage(enemyCondition["Burn"]);
     }
 
     /// <summary>
@@ -244,9 +242,8 @@ public class EnemyBattleAction : CharacterBattleAction
     /// <param name="moveCount">çsìÆâÒêî</param>
     public void Poison(int moveCount)
     {
-        var poison = GetSetInflictCondition.Poison(enemyCondition["Poison"], enemyCondition["InvalidBadStatus"], moveCount);
-        TakeDamage(poison.damage);
-        enemyCondition["InvalidBadStatus"] = poison.invalidBadStatus;
+        var poison = GetSetInflictCondition.Poison(enemyCondition["Poison"], moveCount);
+        TakeDamage(poison);
     }
 
     /// <summary>
@@ -258,9 +255,7 @@ public class EnemyBattleAction : CharacterBattleAction
     {
         relicEffect = GetComponent<RelicEffectList>();
         var ps = playerBattleAction;
-        var relicEffectID2 = relicEffect.RelicID2(hasEnemyRelics[2]);
-        AddConditionStatus("UpStrength", relicEffectID2.enemyUpStrength);
-        ps.AddConditionStatus("UpStrength", relicEffectID2.playerUpStrength);
+        relicEffect.RelicID2(hasEnemyRelics[2]);
         GetSetConstAP = relicEffect.RelicID3(hasEnemyRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
         ps.AddConditionStatus("Burn", relicEffect.RelicID6(hasEnemyRelics[6]));
         GetSetGP = relicEffect.RelicID8(hasEnemyRelics[8], GetSetGP);

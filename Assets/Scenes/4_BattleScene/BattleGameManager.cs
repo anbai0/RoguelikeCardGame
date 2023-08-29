@@ -34,6 +34,10 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] CardCostChange cardCostChange;
     List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
 
+    //レリック
+    public int relicID2Player;
+    public int relicID2Enemy;
+
     //リザルト
     [SerializeField] BattleRewardManager battleRewardManager;
     [SerializeField] ResultAnimation resultAnimation;
@@ -91,6 +95,8 @@ public class BattleGameManager : MonoBehaviour
         isCoroutineEnabled = false;
         isEnemyMoving = false;
         isOnceEndRound = true;
+        relicID2Player = 0;
+        relicID2Enemy = 0;
         playerMoveCount = 0;
         enemyMoveCount = 0;
         accelerateValue = 0;
@@ -145,7 +151,7 @@ public class BattleGameManager : MonoBehaviour
             {
                 card.blocksRaycasts = false;
             }
-            CardPlace.transform.position = originCardPlace + new Vector3(0, -50, 0);
+            CardPlace.transform.position = originCardPlace + new Vector3(0, -150, 0);
         }
         else if(isPlayerTurn)
         {
