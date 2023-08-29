@@ -263,23 +263,6 @@ public class ShopManager : MonoBehaviour
                 }
                 else if (!HasHealPotion())          // 選んだカードが回復カードで、回復カードを所持していない場合
                 {
-                    // デッキ上限チェック
-                    if (gm.CheckDeckFull())     // デッキ上限に達している場合
-                    {
-                        gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
-
-                        buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納
-
-                        // アイテムの見た目の選択状態を解除
-                        selectedItem.transform.localScale = scaleReset;
-                        selectedItem.transform.GetChild(0).gameObject.SetActive(false);
-                        // 選択状態リセット
-                        uiManager.lastSelectedItem = null;
-                        uiManager.isSelected = false;
-                        return;
-                    }
-
-
                     AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
                     gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
