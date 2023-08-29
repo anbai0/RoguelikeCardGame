@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class UIManagerCharaSelect : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     private bool isEventsReset = true;
     private bool isClick = false;
 
-    private bool isSelected = false;
+    private bool isCharaSelected = false;
 
     private bool selectWarrior = false;
     private bool selectWizard = false;
@@ -54,6 +55,12 @@ public class UIManagerCharaSelect : MonoBehaviour
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform cardPlace;
     [SerializeField] GameObject cardDecisionButton;
+    //List<int> lotteryCards = new List<int>(); // 抽選したカードを格納する
+    List<int> lotteryCards = null;
+    private Vector3 scaleReset = Vector3.one * 0.25f;     // 元のスケールに戻すときに使います
+    private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
+    private bool isCardSelected = false;
+    private GameObject lastSelectedCards;
 
     void Start()
     {
@@ -69,7 +76,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         //変更前のScale
         originalScale = warrior.transform.localScale.x;
 
-        RelicShow();
+        RelicShow();       
         UIEventsReload();
     }
 
@@ -114,7 +121,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     {
         if (UIObject == warrior)
         {
-            isSelected = true;
+            isCharaSelected = true;
             AudioManager.Instance.PlaySE("選択音1");
             selectWarrior = true;
             selectWizard = false;
@@ -124,7 +131,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
         if (UIObject == wizard)
         {
-            isSelected = true;
+            isCharaSelected = true;
             AudioManager.Instance.PlaySE("選択音1");
             selectWarrior = false;
             selectWizard = true;
@@ -134,20 +141,63 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
 
 
-        if (UIObject == button && isSelected && !isClick)
+        if (UIObject == button && isCharaSelected && !isClick)
         {
             isClick = true;
-            AudioManager.Instance.PlaySE("選択音2");
+            AudioManager.Instance.PlaySE("選択音1");
 
             if (selectWarrior)
                 gm.ReadPlayer("Warrior");
             if (selectWizard)
                 gm.ReadPlayer("Wizard");
-            
+
+            ShowLottery();
+            UIEventsReload();
+            lotteryScreen.SetActive(true);
+        }
+
+
+        // カードをクリックしたら
+        if (UIObject.CompareTag("Cards"))
+        {
+            isCardSelected = true;
+            AudioManager.Instance.PlaySE("選択音1");
+
+            // カード選択状態の切り替え
+            if (lastSelectedCards != null && lastSelectedCards != UIObject)              // 二回目のクリックかつクリックしたオブジェクトが違う場合   
+            {
+                lastSelectedCards.transform.localScale = scaleReset;
+                lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+                UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);
+            }
+
+            lastSelectedCards = UIObject;
+
+            cardDecisionButton.SetActive(true);    // 決定ボタンを表示
+        }
+
+        // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
+        if (isCardSelected && UIObject.CompareTag("BackGround"))
+        {
+            lastSelectedCards.transform.localScale = scaleReset;
+            lastSelectedCards.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+            lastSelectedCards = null;
+            isCardSelected = false;
+
+            cardDecisionButton.SetActive(false);    // 決定ボタンを非表示
+        }
+
+        // 決定ボタンを押したら
+        if (UIObject == cardDecisionButton)
+        {         
+            AudioManager.Instance.PlaySE("選択音2");
+            // 最後にクリックしたカードを取得
+            GameManager.Instance.playerData._deckList.Add(lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID);
+            // フィールドシーンへ遷移
             sceneManager.LoadFieldScene();
         }
     }
-
 
     void UIEnter(GameObject UIObject)
     {
@@ -162,8 +212,18 @@ public class UIManagerCharaSelect : MonoBehaviour
             UIObject.transform.GetChild(7).gameObject.SetActive(true);
         }
 
+        // カードの選択処理
+        if (!isCardSelected)
+        {
+            if (UIObject.CompareTag("Cards"))
+            {
+                UIObject.transform.localScale += scaleBoost;
+                UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
+            }
+        }
 
-        if (isSelected) return;
+
+        if (isCharaSelected) return;
 
         if (UIObject == warrior)
         {
@@ -188,8 +248,17 @@ public class UIManagerCharaSelect : MonoBehaviour
             UIObject.transform.GetChild(7).gameObject.SetActive(false);
         }
 
+        // カード選択処理
+        if (!isCardSelected)
+        {
+            if (UIObject.CompareTag("Cards"))
+            {
+                UIObject.transform.localScale = scaleReset;
+                UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
+            }
+        }
 
-        if (isSelected) return;
+        if (isCharaSelected) return;
 
         if (UIObject == warrior)
         {
@@ -279,6 +348,19 @@ public class UIManagerCharaSelect : MonoBehaviour
 
             relic.transform.GetChild(7).GetChild(0).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[wizardRelic[relicID]]._relicName.ToString();        // レリックの名前を変更
             relic.transform.GetChild(7).GetChild(1).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[wizardRelic[relicID]]._relicEffect.ToString();      // レリック説明変更
+        }
+    }
+
+    private void ShowLottery()
+    {
+        lotteryCards = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 1, 1 });
+
+        for (int init = 0; init < lotteryCards.Count; init++)
+        {
+            CardController card = Instantiate(cardPrefab, cardPlace);   //カードを生成する
+            card.transform.localScale = scaleReset;
+            card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける
+            card.Init(lotteryCards[init]);                            //デッキデータの表示
         }
     }
 }

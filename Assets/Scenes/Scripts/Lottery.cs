@@ -18,7 +18,7 @@ public class Lottery : MonoBehaviour
     [SerializeField] List<int> cardRarity3List;
     [SerializeField] List<int> relicRarity1List;
     [SerializeField] List<int> relicRarity2List;
-    [SerializeField] public List<int> shopCards = new List<int>();       // ショップに追加されたカード。データをリセットするときにクリアします
+    [SerializeField] public List<int> shopCards { get; private set;} = new List<int>();       // ショップに追加されたカード。データをリセットするときにクリアします
     [SerializeField] List<int> currentCardsLotteryID = new List<int>(); // 現在抽選しているカードのID
     [SerializeField] List<int> currentRelicsLotteryID = new List<int>(); // 現在抽選しているレリックのID
 
@@ -74,7 +74,7 @@ public class Lottery : MonoBehaviour
     /// </summary>
     /// <param name="rarity">抽選したいレアリティ</param>
     /// <returns>指定したレアリティのListの要素</returns>
-    int CardLottery(int rarity)
+    private int CardLottery(int rarity)
     {
         List<int> SelectedRarityList;
 
@@ -136,6 +136,7 @@ public class Lottery : MonoBehaviour
     /// CardLotteryメソッドを使って(selectRarityの要素)回分抽選を行います。
     /// 指定したレアリティがなかった時に代わりのレアリティで再抽選をします。
     /// shopで呼ぶ場合は第二引数にtrueを指定してください。
+    /// <code>Lottery.Instance.SelectCardByRarity(new List<int> { 2,2,1});</int></code>
     /// </summary>
     /// <param name="selectRarity">抽選したいレアリティ1~3をListで指定</param>
     /// <returns>抽選したカードID</returns>
@@ -205,13 +206,12 @@ public class Lottery : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// レリックの抽選メソッド
     /// </summary>
     /// <param name="rarity">抽選したいレアリティ</param>
     /// <returns>指定したレアリティのListの要素</returns>
-    int RelicLottery(int rarity)
+    private int RelicLottery(int rarity)
     {
         List<int> SelectedRarityList;
 
