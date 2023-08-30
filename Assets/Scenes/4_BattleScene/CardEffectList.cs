@@ -597,14 +597,15 @@ public class CardEffectList : MonoBehaviour
         enemy.TakeDamage(attackMethod);
     }
     /// <summary>
-    /// ó‘ÔˆÙí‚É‚æ‚éUŒ‚—Í‚Ì‘Œ¸‚Ìˆ—
+    /// ƒŒƒŠƒbƒN‚Æó‘ÔˆÙí‚É‚æ‚éUŒ‚—Í‚Ì‘Œ¸‚Ìˆ—
     /// </summary>
     /// <param name="attackPower">Œ³‚ÌUŒ‚—Í</param>
     /// <returns>‘‰Á‚Ü‚½‚ÍŒ¸­‚µ‚½UŒ‚—Í</returns>
     private int ChangeAttackPower(int attackPower) 
     {
-        attackPower = player.UpStrength(attackPower);
-        attackPower = player.Weakness(attackPower);
+        attackPower = player.UpStrength(attackPower); //‹Ø—Í‘‹­‚É‚æ‚éUŒ‚—Í‚Ì‘‰Á
+        attackPower += bg.relicID2Player; //ƒŒƒŠƒbƒNID2(S‚ÌŠí)‚ÌŒø‰Ê‚É‚æ‚éUŒ‚—Í‚Ì‘‰Á
+        attackPower = player.Weakness(attackPower); //Šã‚É‚æ‚éUŒ‚—Í‚ÌŒ¸­
         return attackPower;
     }
     /// <summary>

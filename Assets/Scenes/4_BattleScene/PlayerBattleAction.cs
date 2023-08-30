@@ -13,6 +13,7 @@ public class PlayerBattleAction : CharacterBattleAction
     [SerializeField, Header("プレイヤーGPテキスト")] Text playerGPText;
     [SerializeField, Header("ダメージ表示オブジェクト")] GameObject damageUI;
     [SerializeField, Header("回復表示オブジェクト")] GameObject healingUI;
+    [SerializeField, Header("ガード表示オブジェクト")] GameObject gardUI;
     [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
     [SerializeField, Header("状態異常のアイコン表示スクリプト")] PlayerConditionDisplay playerConditionDisplay;
     [SerializeField, Header("画面揺れのスクリプト")] ShakeBattleField shakeBattleField;
@@ -81,6 +82,8 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <param name="damage">受けたダメージ</param>
     public void TakeDamage(int damage)
     {
+        if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
+
         int deductedDamage = 0;
         if (GetSetGP > 0) //ガードポイントがあったら
         {
@@ -88,6 +91,7 @@ public class PlayerBattleAction : CharacterBattleAction
             deductedDamage = damage - GetSetGP;
             deductedDamage = deductedDamage < 0 ? 0 : deductedDamage;
             GetSetGP -= damage;
+            ViewGard();
         }
         else
         {
@@ -111,6 +115,14 @@ public class PlayerBattleAction : CharacterBattleAction
     {
         GameObject damageObj = Instantiate(damageUI, damageOrHealingPos.transform);
         damageObj.GetComponent<TextMeshProUGUI>().text = _damage.ToString();
+    }
+
+    /// <summary>
+    /// ガードしたことを伝えるテキストを表示する処理
+    /// </summary>
+    void ViewGard()
+    {
+        GameObject gardObj = Instantiate(gardUI, damageOrHealingPos.transform);
     }
 
     /// <summary>
@@ -159,9 +171,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void Burn()
     {
-        var burn = GetSetInflictCondition.Burn(playerCondition["Burn"], playerCondition["InvalidBadStatus"]);
-        TakeDamage(burn.damage);
-        playerCondition["InvalidBadStatus"] = burn.invalidBadStatus;
+        TakeDamage(playerCondition["Burn"]);
     }
 
     /// <summary>
@@ -170,9 +180,8 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <param name="moveCount">行動回数</param>
     public void Poison(int moveCount)
     {
-        var poison = GetSetInflictCondition.Poison(playerCondition["Poison"], playerCondition["InvalidBadStatus"], moveCount);
-        TakeDamage(poison.damage);
-        playerCondition["InvalidBadStatus"] = poison.invalidBadStatus;
+        var poison = GetSetInflictCondition.Poison(playerCondition["Poison"], moveCount);
+        TakeDamage(poison);
     }
 
     /// <summary>
@@ -184,9 +193,7 @@ public class PlayerBattleAction : CharacterBattleAction
     public EnemyBattleAction StartRelicEffect(EnemyBattleAction enemyBattleAction, string enemyType)
     {
         var es = enemyBattleAction;
-        var relicEffectID2 = relicEffect.RelicID2(hasPlayerRelics[2]);
-        AddConditionStatus("UpStrength", relicEffectID2.playerUpStrength);
-        es.AddConditionStatus("UpStrength", relicEffectID2.enemyUpStrength);
+        relicEffect.RelicID2(hasPlayerRelics[2]);
         GetSetConstAP = relicEffect.RelicID3(hasPlayerRelics[3], GetSetConstAP, GetSetChargeAP).constAP;
         GetSetConstAP = relicEffect.RelicID4(hasPlayerRelics[4], GetSetConstAP);
         GetSetConstAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetConstAP, GetSetChargeAP).constAP;

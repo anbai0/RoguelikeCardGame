@@ -26,22 +26,22 @@ public class RelicEffectList : MonoBehaviour
     ///  効果:与えるダメージと受けるダメージを1増やす。
     /// </summary>
     /// <param name="ID2Quantity">レリック番号02の個数</param>
-    /// <returns>加算するプレイヤーの筋力増強の値,加算するエネミーの筋力増強の値</returns>
-    public (int playerUpStrength, int enemyUpStrength) RelicID2(int ID2Quantity)
+    public void RelicID2(int ID2Quantity)
     {
-        int addPlayerUpStrength = 0;
-        int addEnemyUpStrength = 0;
-
-        if (ID2Quantity <= 0)
+        var bg = BattleGameManager.Instance;
+        
+        if (ID2Quantity <= 0) //レリックが1個もない場合
         {
-            return (addPlayerUpStrength, addEnemyUpStrength);
+            Debug.Log("player:" + bg.relicID2Player + "enemy" + bg.relicID2Enemy);
+            //リターンで返す
+            return;
         }
         else
         {
-            addPlayerUpStrength += 1 * ID2Quantity;
-            addEnemyUpStrength += 1 * ID2Quantity;
+            bg.relicID2Player += 1 * ID2Quantity; //プレイヤーの攻撃力の増加量はレリックの個数分
+            bg.relicID2Enemy += 1 * ID2Quantity; //エネミーの攻撃力の増加量はレリックの個数分
         }
-        return (addPlayerUpStrength, addEnemyUpStrength);
+        Debug.Log("player:"+ bg.relicID2Player + "enemy"+ bg.relicID2Enemy);
     }
 
     /// <summary>
