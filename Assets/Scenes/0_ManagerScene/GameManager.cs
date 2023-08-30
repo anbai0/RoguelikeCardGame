@@ -220,7 +220,7 @@ public class GameManager : MonoBehaviour
         PlayerController.isPlayerActive = true;
         PlayerController.isEvents = false;
         PlayerController.isSetting = false;
-        PlayerController.isConfimDesk = false;
+        PlayerController.isConfimDeck = false;
 
         playerData = null;
 

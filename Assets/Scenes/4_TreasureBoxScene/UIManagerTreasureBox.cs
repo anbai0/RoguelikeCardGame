@@ -208,7 +208,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController.isEvents = true; // プレイヤーを動けるようにする
+                PlayerController.isEvents = false; // プレイヤーを動けるようにする
                 ExitTreasureBox();
             }
 
@@ -229,7 +229,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController.isEvents = true; // プレイヤーを動けるようにする
+                PlayerController.isEvents = false; // プレイヤーを動けるようにする
                 ExitTreasureBox();
             }
         }
@@ -282,7 +282,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         {
             Debug.Log("フィールドシーンへ移行");
             TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-            PlayerController.isEvents = true; // プレイヤーを動けるようにする
+            PlayerController.isEvents = false; // プレイヤーを動けるようにする
             ExitTreasureBox();
         }
     }

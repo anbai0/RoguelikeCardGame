@@ -1,12 +1,12 @@
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
     public static bool isEvents = false;
     public static bool isSetting = false;
-    public static bool isConfimDesk = false;
+    public static bool isConfimDeck = false;
     public static bool isPlayerActive = true;
 
     public float moveSpeed;                     //プレイヤーの動くスピード
@@ -34,15 +34,17 @@ public class PlayerController : MonoBehaviour
         fieldManager = FindObjectOfType<FieldSceneManager>();
         roomsM = FindObjectOfType<RoomsManager>();
         animator = GetComponent<Animator>();
-        isEvents = true;
     }
 
     void Update()
     {
-        
-        if (!isEvents && !isSetting && !isConfimDesk && !FadeController.isFadeIn && !FadeController.isFadeOut)
+        Debug.Log("isEvents: " + isEvents);
+        Debug.Log("isSetting: " + isSetting);
+        Debug.Log("isConfimDeck: " + isConfimDeck);
+        Debug.Log("isPlayerActive: " + isPlayerActive);
+        if (!isEvents && !isSetting && !isConfimDeck && !FadeController.isFadeIn && !FadeController.isFadeOut)
         {
-            Invoke("PlayerActive", 1f);
+            Invoke("PlayerActive", 0.6f);
         }else
         {
             isPlayerActive = false;
@@ -86,7 +88,6 @@ public class PlayerController : MonoBehaviour
         transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
         #region シーン遷移
@@ -94,12 +95,11 @@ public class PlayerController : MonoBehaviour
         {
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
 
-            // playerを動けなくする処理
-            isEvents = false;
+            isEvents = true;
             animator.SetBool("IsWalking", false);
 
             bonfire = collision.gameObject;
-            fieldManager.LoadBonfireScene();        // 焚火シーンをロード
+            fieldManager.LoadBonfireScene();        // 焚火シーンをロード  
         }
 
         if (collision.gameObject.CompareTag("TreasureBox"))
@@ -107,7 +107,7 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
 
             // playerを動けなくする処理
-            isEvents = false;
+            isEvents = true;
             animator.SetBool("IsWalking", false);
 
             treasureBox = collision.gameObject;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
 
             // playerを動けなくする処理
-            isEvents = false;
+            isEvents = true;
             animator.SetBool("IsWalking", false);
 
             // 指定した名前のシーンを取得
@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeOutBGMVolume());       // BGMを一時停止
 
             // playerを動けなくする処理
-            isEvents = false;
+            isEvents = true;
             animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
 
             enemy = collision.gameObject;

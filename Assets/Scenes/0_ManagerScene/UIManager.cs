@@ -203,7 +203,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == DeckConfirmationButton && !isShowingDeckConfirmation)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isConfimDesk = true;
+            PlayerController.isConfimDeck = true;
             isShowingDeckConfirmation = true;
 
             // 前回表示したカードをDestroy
@@ -220,7 +220,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == DeckReturnButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isConfimDesk = false;
+            PlayerController.isConfimDeck = false;
             isShowingDeckConfirmation = false;
             DeckConfirmation.SetActive(false);
         }
