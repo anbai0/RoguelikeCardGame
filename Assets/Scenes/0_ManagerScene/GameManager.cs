@@ -218,6 +218,10 @@ public class GameManager : MonoBehaviour
     {
         Lottery.Instance.shopCards.Clear();
         PlayerController.isPlayerActive = true;
+        PlayerController.isEvents = false;
+        PlayerController.isSetting = false;
+        PlayerController.isConfimDesk = false;
+
         playerData = null;
 
         // ŠƒŒƒŠƒbƒN‰Šú‰»

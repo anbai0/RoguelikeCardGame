@@ -173,7 +173,7 @@ public class BattleRewardManager : MonoBehaviour
             }
 
             PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-            PlayerController.isPlayerActive = true;       // プレイヤーを動けるようにする
+            PlayerController.isEvents = true;       // プレイヤーを動けるようにする
             playerController.enemy.SetActive(false);      // エネミーを消す
             playerController = null;
         }

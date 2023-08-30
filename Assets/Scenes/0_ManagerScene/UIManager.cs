@@ -131,7 +131,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isPlayerActive = false;
+            PlayerController.isSetting = true;
             optionScreen.SetActive(true);
         }
 
@@ -141,7 +141,7 @@ public class UIManager : MonoBehaviour
             audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
             AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isPlayerActive = true;
+            PlayerController.isSetting = false;
             optionScreen.SetActive(false);
         }
 
@@ -203,7 +203,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == DeckConfirmationButton && !isShowingDeckConfirmation)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isPlayerActive = false;
+            PlayerController.isConfimDesk = true;
             isShowingDeckConfirmation = true;
 
             // 前回表示したカードをDestroy
@@ -220,7 +220,7 @@ public class UIManager : MonoBehaviour
         if (UIObject == DeckReturnButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.isPlayerActive = true;
+            PlayerController.isConfimDesk = false;
             isShowingDeckConfirmation = false;
             DeckConfirmation.SetActive(false);
         }

@@ -106,7 +106,7 @@ public class UIManagerShop : MonoBehaviour
             shopManager.ExitShop();     // ShopSceneを非表示
 
             // フィールドシーンのプレイヤーを動けるようにする
-            PlayerController.isPlayerActive = true;
+            PlayerController.isEvents = true;
 
             isClick = false;
         }

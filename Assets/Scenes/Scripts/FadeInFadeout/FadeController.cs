@@ -11,14 +11,14 @@ public class FadeController : MonoBehaviour
     public float fadeDurationMultiplier = 1.2f;
 
     public static bool isFadeInstance = false;      // シングルトンで生成されたか
-    private bool isFadeIn = false;                  // フェードインするフラグ
-    private bool isFadeOut = false;                 // フェードアウトするフラグ
+    public static bool isFadeIn = false;                  // フェードインするフラグ
+    public static bool isFadeOut = false;                 // フェードアウトするフラグ
 
     private float alpha = 0.0f;     // 透過率
     private Image fadeImage;
 
-    public static bool fadeInDone { get; private set;} = false;
-    public static bool fadeOutDone { get; private set; } = false;
+    private bool fadeInDone = false;
+    private bool fadeOutDone = false;
 
     void Start()
     {
