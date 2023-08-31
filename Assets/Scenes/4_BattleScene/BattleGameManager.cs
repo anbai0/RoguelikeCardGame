@@ -225,21 +225,17 @@ public class BattleGameManager : MonoBehaviour
         }
         else //どちらも行動できない場合
         {
-            if(!isTurnEnd)
-            {
-                isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
-            }
-
             //ターンディスプレイはどちらもオフに
             playerTurnDisplay.enabled = false;
             enemyTurnDisplay.enabled = false;
-            if (isOnceEndRound)
+
+            if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
             {
-                isOnceEndRound = false;
-                if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
-                {
-                    Invoke("EndRound", roundTime); //ターンを終了する
-                }
+                Invoke("EndRound", roundTime); //ターンを終了する
+            }
+            else
+            {
+                isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
             }
         }
     }
@@ -447,14 +443,7 @@ public class BattleGameManager : MonoBehaviour
             playerScript.TurnEnd();
             turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
 
-            if (enemyScript.GetSetCurrentAP <= 0) //エネミーのAPが0の場合
-            {
-                Invoke("EndRound", roundTime); //ラウンドを終了する
-            }
-            else  
-            {
-                TurnCalc(); //ターン処理に移る
-            }
+            TurnCalc(); //ターン処理に移る
         }
     }
 
