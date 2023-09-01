@@ -8,6 +8,9 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    private GameSettingsJson gameSettingsJson;
+    private GameSettings gameSettings;
+
     // プレイヤー
     public PlayerDataManager playerData;
     public List<CardDataManager> cardDataList { private set; get; } = new List<CardDataManager>();
@@ -42,6 +45,9 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        gameSettingsJson = GetComponent<GameSettingsJson>();
+        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
 
         InitializeItemData();
 
