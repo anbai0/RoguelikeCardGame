@@ -33,8 +33,11 @@ public class CardMovement : MonoBehaviour
         cardParent = transform.parent;                          // カードの親を取得
         transform.SetParent(cardParent.parent, false);          // カードの親から抜ける
 
-        pickCard.transform.Find("CardInfo").gameObject.SetActive(false);
-        pickCard.GetComponent<CardState>().isActive = false;
+        if (pickCard.transform.Find("CardInfo").gameObject.activeSelf)
+        {
+            pickCard.transform.Find("CardInfo").gameObject.SetActive(false);
+            pickCard.GetComponent<CardState>().isActive = false;
+        }
     }
 
     public void CardDorp(GameObject Card)
@@ -51,7 +54,10 @@ public class CardMovement : MonoBehaviour
     }
     public void CardExit(GameObject Card)
     {
-        pickCard.transform.Find("CardInfo").gameObject.SetActive(false);
-        pickCard.GetComponent<CardState>().isActive = false;
+        if (pickCard.transform.Find("CardInfo").gameObject.activeSelf)
+        {
+            pickCard.transform.Find("CardInfo").gameObject.SetActive(false);
+            pickCard.GetComponent<CardState>().isActive = false;
+        }
     }
 }

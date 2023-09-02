@@ -61,7 +61,7 @@ public class CardEffectList : MonoBehaviour
                 CardID5(card);
                 break;
             case 105:
-                CardID105(card);
+                CardID5(card);
                 break;
             case 6:
                 CardID6();
@@ -228,8 +228,8 @@ public class CardEffectList : MonoBehaviour
         PlayerAddGP(cardGuardPoint);
     }
     /// <summary>
-    /// 技名：ツバメ返し
-    /// 効果：2ダメージを2回与える。
+    /// 技名：ツバメ返し,強化ツバメ返し
+    /// 効果：2(3)ダメージを2回与える。
     /// </summary>
     private void CardID5(CardController card)
     {
@@ -240,26 +240,6 @@ public class CardEffectList : MonoBehaviour
     {
         bg.isCoroutine = true;
         bg.isCoroutineEnabled = true;
-        PlayerAttacking(attackMethod);
-        yield return new WaitForSeconds(attackInterval);
-        PlayerAttacking(attackMethod);
-        bg.isCoroutine = false;
-    }
-    /// <summary>
-    /// 技名：強化ツバメ返し
-    /// 効果：2ダメージを3回与える。
-    /// </summary>
-    private void CardID105(CardController card)
-    {
-        //時間差でエネミーを攻撃
-        StartCoroutine(ID105Attacking(cardAttackPower, 0.5f));
-    }
-    IEnumerator ID105Attacking(int attackMethod, float attackInterval)
-    {
-        bg.isCoroutine = true;
-        bg.isCoroutineEnabled = true;
-        PlayerAttacking(attackMethod);
-        yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);
         yield return new WaitForSeconds(attackInterval);
         PlayerAttacking(attackMethod);

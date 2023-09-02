@@ -379,7 +379,9 @@ public class BattleGameManager : MonoBehaviour
     private void InitDeck() 
     {
         deckNumberList = playerData._deckList;
-        for (int init = 0; init < deckNumberList.Count; init++)// デッキの枚数分
+        int deckCount = deckNumberList.Count;
+        ChangeSpace(deckCount);
+        for (int init = 0; init < deckCount; init++)// デッキの枚数分
         {
             CardController card = Instantiate(cardPrefab, CardPlace);//カードを生成する
             card.name = "Deck" + init.ToString();//生成したカードに名前を付ける
@@ -392,6 +394,31 @@ public class BattleGameManager : MonoBehaviour
             pickCard.transform.Find("CardInfo").gameObject.SetActive(false); //非表示にしておく
             pickCard.GetComponent<CanvasGroup>().blocksRaycasts = false; //レイで選ばれないようにしておく
         }
+    }
+
+    void ChangeSpace(int deckCount)
+    {
+        if(deckCount>7 && deckCount == 9)
+        {
+            SetDeckSpace(60, 0);
+        }
+        else if(deckCount > 7 && deckCount == 10)
+        {
+            SetDeckSpace(40, 0);
+        }
+        else
+        {
+            SetDeckSpace(80, 0);
+        }
+    }
+
+    void SetDeckSpace(int horizontalSpace,int verticalSpace)
+    {
+        var space = new Vector2(horizontalSpace, verticalSpace);
+        var cardPlaceGrid = CardPlace.GetComponent<GridLayoutGroup>();
+        var pickCardPlaceGrid = PickCardPlace.GetComponent<GridLayoutGroup>();
+        cardPlaceGrid.spacing = space;
+        pickCardPlaceGrid.spacing = space;
     }
 
     /// <summary>
