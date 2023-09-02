@@ -18,25 +18,7 @@ public class GameSettingsJson : MonoBehaviour
 {
     //保存先
     string datapath => Application.dataPath + "/GameSettingsJson.json";
-
-
-    private void Awake()
-    {
-        //GameSettingsデータを取得
-        GameSettings gameSettings = new GameSettings();
-
-        //JSONファイルがあればロード, なければ初期化関数へ
-        if (File.Exists(datapath))
-        {
-            Debug.Log("Jsonファイルが見つかりました");
-            gameSettings = loadGameSettingsData();
-        }
-        else
-        {
-            Debug.Log("Jsonファイルが見つかりませんでした");
-            Initialize(gameSettings);
-        }
-    }
+    public GameSettings gameSettings = new GameSettings();
 
     //セーブするための関数
     public void saveGameSettingsData(GameSettings gameSettings)
@@ -56,6 +38,17 @@ public class GameSettingsJson : MonoBehaviour
     //JSONファイルを読み込み, ロードするための関数
     public GameSettings loadGameSettingsData()
     {
+        //JSONファイルがあればロード, なければ初期化関数へ
+        if (File.Exists(datapath))
+        {
+            Debug.Log("Jsonファイルが見つかりました");
+        }
+        else
+        {
+            Debug.Log("Jsonファイルが見つかりませんでした");
+            Initialize(gameSettings);
+        }
+
         string datastr = "";
         StreamReader reader;
         reader = new StreamReader(datapath);

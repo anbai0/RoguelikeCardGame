@@ -49,14 +49,12 @@ public class GameManager : MonoBehaviour
         }
         gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
         audioSetting.InstantiateAudioSetting();                     // 音量の設定ロード
-        
         InitializeItemData();
         
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
         //if (!isAlreadyRead) ReadPlayer("Debug");
     }
-
 
     /// <summary>
     /// アイテムデータの初期化を行います。
