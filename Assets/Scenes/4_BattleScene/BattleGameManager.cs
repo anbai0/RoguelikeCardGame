@@ -81,6 +81,7 @@ public class BattleGameManager : MonoBehaviour
     {
         gm = GameManager.Instance;
         floor = gm.floor;
+        floor = 2;  // ïœçX
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);
@@ -268,8 +269,10 @@ public class BattleGameManager : MonoBehaviour
     /// </summary>
     private void EnemyMove() 
     {
+        
         enemyScript.Move();
         enemyMoveCount++;
+        playerScript.AddConditionStatus("Poison", 1);  // ïœçX
         Invoke("TurnCalc", turnTime);
     }
 

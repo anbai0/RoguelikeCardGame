@@ -46,9 +46,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
 
-        gameSettingsJson = GetComponent<GameSettingsJson>();
-        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
-
         InitializeItemData();
 
         // 各シーンでデバッグするときにコメントを解除してください
