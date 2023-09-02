@@ -24,7 +24,7 @@ public class BattleGameManager : MonoBehaviour
     [SerializeField] SelectEnemyRelic selectEnemyRelic;
     public string enemyType = "SmallEnemy";
     string enemyName;
-    float enemyMoveTime = 1.0f;
+    float enemyMoveTime = 0.5f;
     
     //ÉJÅ[Éh
     [SerializeField] CardController cardPrefab;
@@ -80,6 +80,7 @@ public class BattleGameManager : MonoBehaviour
     {
         gm = GameManager.Instance;
         floor = gm.floor;
+        floor = 2;
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);

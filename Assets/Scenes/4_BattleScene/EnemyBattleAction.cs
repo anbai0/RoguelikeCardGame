@@ -69,7 +69,6 @@ public class EnemyBattleAction : CharacterBattleAction
     public void Move()//エネミーの効果処理
     {
         StartCoroutine(MoveFlash());
-        
     }
     IEnumerator MoveFlash()
     {
@@ -85,7 +84,7 @@ public class EnemyBattleAction : CharacterBattleAction
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.2f);
         flash.StartFlash(Color.white, 0.1f);
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         int moveCost = selectMove.moveCost;
         GetSetCurrentAP -= moveCost;
         enemyAI.ActionMove(moveName);
@@ -289,9 +288,9 @@ public class EnemyBattleAction : CharacterBattleAction
     {
         yield return new WaitForSeconds(0.5f);
         flash.StartFlash(Color.white, 0.5f);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.2f);
         flash.StartFlash(Color.white, 0.5f);
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.2f);
         flash.StartFlash(Color.white, 1.0f);
         yield return new WaitForSeconds(1.0f);
         Destroy(enemyImage);
