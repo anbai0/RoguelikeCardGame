@@ -38,10 +38,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("isEvents: " + isEvents);
-        Debug.Log("isSetting: " + isSetting);
-        Debug.Log("isConfimDeck: " + isConfimDeck);
-        Debug.Log("isPlayerActive: " + isPlayerActive);
+        //Debug.Log("isEvents: " + isEvents);
+        //Debug.Log("isSetting: " + isSetting);
+        //Debug.Log("isConfimDeck: " + isConfimDeck);
+        //Debug.Log("isPlayerActive: " + isPlayerActive);
         if (!isEvents && !isSetting && !isConfimDeck && !FadeController.isFadeIn && !FadeController.isFadeOut)
         {
             Invoke("PlayerActive", 0.6f);

@@ -41,16 +41,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;     // シングルトン
     protected void Awake()
     {
-        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
-        
 
         // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {
             Instance = this;
         }
-
-        audioSetting.InstantiateAudioSetting();
+        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
+        audioSetting.InstantiateAudioSetting();                     // 音量の設定ロード
+        
         InitializeItemData();
         
         // 各シーンでデバッグするときにコメントを解除してください
@@ -58,10 +57,6 @@ public class GameManager : MonoBehaviour
         //if (!isAlreadyRead) ReadPlayer("Debug");
     }
 
-    private void Update()
-    {
-        Debug.Log("GameManager:   " + gameSettings.overallVolume);
-    }
 
     /// <summary>
     /// アイテムデータの初期化を行います。
@@ -126,12 +121,11 @@ public class GameManager : MonoBehaviour
         }
         playerData._deckList.Clear(); //デッキリストを空にする
         //開始時に配布されるカードを追加する
-        playerData._deckList.Add(1); //スイング
-        playerData._deckList.Add(2); //ヒール
-        playerData._deckList.Add(4); //ガード
+        AddCard(1);     // スイング
+        AddCard(2);     // ヒール
+        AddCard(4);     // ガード
 
     }
-
 
     #region カード関係
     /// <summary>
@@ -141,7 +135,8 @@ public class GameManager : MonoBehaviour
     public void AddCard(int cardID)
     {
         playerData._deckList.Add(cardID);
-        //gameSettings.collectedCardHistory[cardID] = true;
+        gameSettings.collectedCardHistory[cardID] = true;
+        gameSettingsJson.saveGameSettingsData(gameSettings);      // ゲーム設定のセーブ
     }
 
     /// <summary>

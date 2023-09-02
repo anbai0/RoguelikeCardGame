@@ -193,7 +193,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         {         
             AudioManager.Instance.PlaySE("選択音2");
             // 最後にクリックしたカードを取得
-            GameManager.Instance.playerData._deckList.Add(lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID);
+            GameManager.Instance.AddCard(lastSelectedCards.GetComponent<CardController>().cardDataManager._cardID);
             // フィールドシーンへ遷移
             sceneManager.LoadFieldScene();
         }

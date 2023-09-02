@@ -27,10 +27,6 @@ public class AudioSetting : MonoBehaviour
     public float seVolume { get; private set; }
     public float bgmVolume { get; private set; }
 
-    private void Awake()
-    {
-
-    }
 
     public void InstantiateAudioSetting()
     {

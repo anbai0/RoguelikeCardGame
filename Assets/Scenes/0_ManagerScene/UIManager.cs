@@ -62,7 +62,10 @@ public class UIManager : MonoBehaviour
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 生成するカードのスケール
     private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
     
-
+    [Header ("カード図鑑")]
+    [SerializeField] GameObject cardPictureBookButton;
+    [SerializeField] GameObject cardPictureBook;
+    [SerializeField] GameObject cardPictureBookScrollView;
 
     void Start()
     {
@@ -308,6 +311,13 @@ public class UIManager : MonoBehaviour
         }
 
         #endregion
+
+        #region カード図鑑の処理
+        if(UIObject == cardPictureBookButton)
+        {
+
+        }
+        #endregion
     }
 
 
@@ -481,6 +491,11 @@ public class UIManager : MonoBehaviour
     {
         int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
         discardCard.Init(id);                            //デッキデータの表示
+    }
+
+    public void CardPictureBook()
+    {
+        //deckNumberList = GameManager.Instance.
     }
 
     #region upperとlowerのCardPlaceを使ったやり方

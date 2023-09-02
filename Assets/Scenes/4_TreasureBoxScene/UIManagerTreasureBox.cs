@@ -184,7 +184,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                 else
                 {
                     var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-                    gm.playerData._deckList.Add(cardID);
+                    gm.AddCard(cardID);
                 }
             }
             if (lastSelectedItem.CompareTag("Relics"))
@@ -258,7 +258,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         if (lastSelectedItem.CompareTag("Cards"))
         {
             var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-            gm.playerData._deckList.Add(cardID);
+            gm.AddCard(cardID);
         }
 
         if (lastSelectedItem.CompareTag("Relics"))
