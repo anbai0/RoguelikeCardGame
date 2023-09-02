@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;     // シングルトン
     protected void Awake()
     {
-
         // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {

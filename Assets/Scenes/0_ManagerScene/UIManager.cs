@@ -64,8 +64,9 @@ public class UIManager : MonoBehaviour
     
     [Header ("カード図鑑")]
     [SerializeField] GameObject cardPictureBookButton;
+    [SerializeField] GameObject cardPictureBookReturunButton;
     [SerializeField] GameObject cardPictureBook;
-    [SerializeField] GameObject cardPictureBookScrollView;
+    [SerializeField] Transform cardPictureBookPlace;
 
     void Start()
     {
@@ -315,7 +316,19 @@ public class UIManager : MonoBehaviour
         #region カード図鑑の処理
         if(UIObject == cardPictureBookButton)
         {
+            cardPictureBookButton.SetActive(false);
+            cardPictureBook.SetActive(true);
+            ShowCardPictureBook();
+        }
+        if(UIObject == cardPictureBookReturunButton)
+        {
 
+            cardPictureBook.SetActive(false);
+            foreach(Transform card in cardPictureBookPlace.transform)
+            {
+                Destroy(card.gameObject);
+            }
+            cardPictureBookButton.SetActive(true);
         }
         #endregion
     }
@@ -493,9 +506,10 @@ public class UIManager : MonoBehaviour
         discardCard.Init(id);                            //デッキデータの表示
     }
 
-    public void CardPictureBook()
+    public void ShowCardPictureBook()
     {
-        //deckNumberList = GameManager.Instance.
+        //List<int> showCardList = GameManager.Instance.gameSettings.collectedCardHistory;
+        //List<int> showCardList = GameManagercardDataList
     }
 
     #region upperとlowerのCardPlaceを使ったやり方
