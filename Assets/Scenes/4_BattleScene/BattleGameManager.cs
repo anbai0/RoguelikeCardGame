@@ -32,7 +32,7 @@ public class BattleGameManager : MonoBehaviour
     Vector3 originCardPlace;
     [SerializeField] Transform PickCardPlace;
     [SerializeField] CardCostChange cardCostChange;
-    List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
+    public List<int> deckNumberList;//プレイヤーのもつデッキナンバーのリスト
 
     //レリック
     public int relicID2Player;
@@ -63,7 +63,6 @@ public class BattleGameManager : MonoBehaviour
     private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     public int roundCount;//何ラウンド目かを記録する
-    private bool isOnceEndRound; //EndRound()の呼び出しが一回だけか判定
     public int floor = 1; //現在の階層
 
     GameManager gm;
@@ -94,7 +93,6 @@ public class BattleGameManager : MonoBehaviour
         isCoroutine = false;
         isCoroutineEnabled = false;
         isEnemyMoving = false;
-        isOnceEndRound = true;
         relicID2Player = 0;
         relicID2Enemy = 0;
         playerMoveCount = 0;
@@ -130,7 +128,6 @@ public class BattleGameManager : MonoBehaviour
         enemyScript.SetUpAP();
         enemyScript.GetSetRoundEnabled = false;
         enemyScript.SaveRoundAP();
-        isOnceEndRound = true;
         TurnCalc();
     }
 
@@ -280,8 +277,8 @@ public class BattleGameManager : MonoBehaviour
         enemyMoveCount = 0; //エネミーの行動回数をリセットする
         playerScript.ChargeAP();
         enemyScript.ChargeAP();
-        if (!isFirstCall) { isFirstCall = true; OnceEndRoundRelicEffect(); }
         EndRoundRelicEffect();
+        if (!isFirstCall) { isFirstCall = true; OnceEndRoundRelicEffect(); }
         isTurnEnd = false;//行動終了ボタンの復活
         turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
         StateReset();
@@ -457,7 +454,8 @@ public class BattleGameManager : MonoBehaviour
             playerScript.GetSetCurrentHP = gm.playerData._playerHP; //最大体力を超えないようにする
         }
         gm.playerData._playerCurrentHP = playerScript.GetSetCurrentHP; //戦闘終了時の体力を返す
-        playerData._playerMoney += enemyScript.GetSetDropMoney; //コインを獲得
+        gm.playerData._playerMoney += enemyScript.GetSetDropMoney; //コインを獲得
+        gm.playerData._deckList = deckNumberList; //魔女の霊薬を所持していれば使用後に削除して返す
     }
 
     /// <summary>

@@ -192,6 +192,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                 var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
                 gm.hasRelics[relicID]++;
                 gm.ShowRelics();
+                gm.CheckGetRelicID7();
             }
 
             lastSelectedItem = null;
@@ -266,6 +267,7 @@ public class UIManagerTreasureBox : MonoBehaviour
             var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
             gm.hasRelics[relicID]++;
             gm.ShowRelics();
+            gm.CheckGetRelicID7();
         }
 
         lastSelectedItem = null;

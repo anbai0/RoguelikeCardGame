@@ -32,82 +32,94 @@ public class EnemyConditionDisplay : MonoBehaviour
     bool isDisplayPoison = false;
 
     [SerializeField] SortName sortIcon;
-    Dictionary<string, int> saveCondition = new Dictionary<string, int>();
-    WaitForSeconds waitFor1milliSec = new WaitForSeconds(0.1f);
+    Dictionary<string, int> previousCondition = new Dictionary<string, int>();
+    Queue<KeyValuePair<string, int>> iconQueue = new Queue<KeyValuePair<string, int>>();
+    float iconSpawnInterval = 0.1f; // アイコンを生成する間隔（秒）
+    float iconSpawnTimer = 0f;
 
     [SerializeField] UIManagerBattle uiManagerBattle;
 
-    private void Awake()
+    void Update()
     {
-        InitializedSaveCondition();
-    }
+        iconSpawnTimer += Time.deltaTime;
 
-    /// <summary>
-    /// saveConditionに格納する状態異常の名前と所持数を初期化しておく処理
-    /// </summary>
-    void InitializedSaveCondition()
-    {
-        saveCondition.Add("UpStrength", 0);
-        saveCondition.Add("AutoHealing", 0);
-        saveCondition.Add("InvalidBadStatus", 0);
-        saveCondition.Add("Curse", 0);
-        saveCondition.Add("Impatience", 0);
-        saveCondition.Add("Weakness", 0);
-        saveCondition.Add("Burn", 0);
-        saveCondition.Add("Poison", 0);
-    }
-
-    /// <summary>
-    /// 状態異常の有無に合わせてアイコンの表示・非表示を行う処理
-    /// </summary>
-    /// <param name="condition">キャラクターの状態異常のステータス</param>
-    public void ViewIcon(Dictionary<string, int> condition)
-    {
-        StartCoroutine(CheckConditionIcon(condition));
-
-    }
-    /// <summary>
-    /// 実行できる処理があれば左側のアイコンから実行していく処理
-    /// </summary>
-    /// <param name="_condition">現在の状態異常</param>
-    IEnumerator CheckConditionIcon(Dictionary<string, int> _condition)
-    {
-        if (saveCondition != _condition)
+        if (iconQueue.Count > 0 && iconSpawnTimer >= iconSpawnInterval)
         {
-            if (saveCondition != null && saveCondition["UpStrength"] != _condition["UpStrength"])
-                ViewUpStrength(_condition["UpStrength"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["AutoHealing"] != _condition["AutoHealing"])
-                ViewAutoHealing(_condition["AutoHealing"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["InvalidBadStatus"] != _condition["InvalidBadStatus"])
-                ViewInvalidBadStatus(_condition["InvalidBadStatus"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["Curse"] != _condition["Curse"])
-                ViewCurse(_condition["Curse"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["Impatience"] != _condition["Impatience"])
-                ViewImpatience(_condition["Impatience"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["Weakness"] != _condition["Weakness"])
-                ViewWeakness(_condition["Weakness"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["Burn"] != _condition["Burn"])
-                ViewBurn(_condition["Burn"]);
-            yield return waitFor1milliSec;
-            if (saveCondition != null && saveCondition["Poison"] != _condition["Poison"])
-                ViewPoison(_condition["Poison"]);
+            // 追加された状態異常をキューから取り出して生成
+            var conditionPair = iconQueue.Dequeue();
+            ViewConditionIcon(conditionPair.Key, conditionPair.Value);
+            // タイマーをリセット
+            iconSpawnTimer = 0f;
         }
-        saveCondition = new Dictionary<string, int>();
-        saveCondition["UpStrength"] = _condition["UpStrength"];
-        saveCondition["AutoHealing"] = _condition["AutoHealing"];
-        saveCondition["InvalidBadStatus"] = _condition["InvalidBadStatus"];
-        saveCondition["Curse"] = _condition["Curse"];
-        saveCondition["Impatience"] = _condition["Impatience"];
-        saveCondition["Weakness"] = _condition["Weakness"];
-        saveCondition["Burn"] = _condition["Burn"];
-        saveCondition["Poison"] = _condition["Poison"];
-        yield break;
+    }
+
+    /// <summary>
+    /// 状態異常アイコンの更新をする処理
+    /// </summary>
+    /// <param name="condition">現在の状態異常</param>
+    public void UpdateConditionIcon(Dictionary<string, int> condition)
+    {
+        //前回の状態異常と比較する
+        foreach (var pair in condition)
+        {
+            string conditionName = pair.Key;
+            int conditionCount = pair.Value;
+            if (previousCondition.ContainsKey(conditionName))
+            {
+                int previousCount = previousCondition[conditionName];
+                if (previousCount != conditionCount) //前回の状態異常から変化があった場合
+                {
+                    iconQueue.Enqueue(new KeyValuePair<string, int>(conditionName, conditionCount));　// 状態異常をキューに追加
+                }
+            }
+        }
+        // 前回の状態異常を現在の状態異常に更新
+        previousCondition.Clear();
+        foreach (var pair in condition)
+        {
+            previousCondition[pair.Key] = pair.Value;
+        }
+    }
+
+    /// <summary>
+    /// 状態異常アイコンの表示
+    /// </summary>
+    /// <param name="conditionName">状態異常の名前</param>
+    /// <param name="conditionCount">状態異常の個数</param>
+    void ViewConditionIcon(string conditionName, int conditionCount)
+    {
+        if (conditionName == "UpStrength")
+        {
+            ViewUpStrength(conditionCount);
+        }
+        else if (conditionName == "AutoHealing")
+        {
+            ViewAutoHealing(conditionCount);
+        }
+        else if (conditionName == "InvalidBadStatus")
+        {
+            ViewInvalidBadStatus(conditionCount);
+        }
+        else if (conditionName == "Curse")
+        {
+            ViewCurse(conditionCount);
+        }
+        else if (conditionName == "Impatience")
+        {
+            ViewImpatience(conditionCount);
+        }
+        else if (conditionName == "Weakness")
+        {
+            ViewWeakness(conditionCount);
+        }
+        else if (conditionName == "Burn")
+        {
+            ViewBurn(conditionCount);
+        }
+        else if (conditionName == "Poison")
+        {
+            ViewPoison(conditionCount);
+        }
     }
 
     /// <summary>
@@ -135,12 +147,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             upStrengthIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = upStrengthIcon.transform.Find("ConditionCountText").GetComponent<Text>(); 
             if (upStrength >= 2) //2以上であれば
+            {
                 iconText.text = upStrength.ToString(); //個数の表示
+            } 
         }
         else
         {
             isDisplayUpStrength = false;
             Destroy(upStrengthIcon);
+            upStrengthIcon = null;
         }
     }
     /// <summary>
@@ -168,12 +183,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             autoHealingIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = autoHealingIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (autoHealing >= 2)
+            {
                 iconText.text = autoHealing.ToString();
+            }
         }
         else
         {
             isDisplayAutoHealing = false;
             Destroy(autoHealingIcon);
+            autoHealingIcon = null;
         }
     }
     /// <summary>
@@ -201,12 +219,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             invalidBadStatusIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = invalidBadStatusIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (invalidBadStatus >= 2)
+            {
                 iconText.text = invalidBadStatus.ToString();
+            }
         }
         else
         {
             isDisplayInvalidBadStatus = false;
             Destroy(invalidBadStatusIcon);
+            invalidBadStatusIcon = null;
         }
     }
     /// <summary>
@@ -234,12 +255,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             curseIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = curseIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (curse >= 2)
+            {
                 iconText.text = curse.ToString();
+            }
         }
         else
         {
             isDisplayCurse = false;
             Destroy(curseIcon);
+            curseIcon = null;
         }
     }
     /// <summary>
@@ -267,12 +291,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             impatienceIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = impatienceIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (impatience >= 2)
+            {
                 iconText.text = impatience.ToString();
+            }
         }
         else
         {
             isDisplayImpatience = false;
             Destroy(impatienceIcon);
+            impatienceIcon = null;
         }
     }
     /// <summary>
@@ -300,12 +327,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             weaknessIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = weaknessIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (weakness >= 2)
+            {
                 iconText.text = weakness.ToString();
+            }
         }
         else
         {
             isDisplayWeakness = false;
             Destroy(weaknessIcon);
+            weaknessIcon = null;
         }
     }
     /// <summary>
@@ -333,12 +363,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             burnIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = burnIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (burn >= 2)
+            {
                 iconText.text = burn.ToString();
+            }
         }
         else
         {
             isDisplayBurn = false;
             Destroy(burnIcon);
+            burnIcon = null;
         }
     }
     /// <summary>
@@ -366,12 +399,15 @@ public class EnemyConditionDisplay : MonoBehaviour
             poisonIcon.GetComponent<IconAnimation>().StartAnimation();
             Text iconText = poisonIcon.transform.Find("ConditionCountText").GetComponent<Text>();
             if (poison >= 2)
+            {
                 iconText.text = poison.ToString();
+            } 
         }
         else
         {
             isDisplayPoison = false;
             Destroy(poisonIcon);
+            poisonIcon = null;
         }
     }
 

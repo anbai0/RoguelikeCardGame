@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public const int healCardID = 3;           // 魔女の霊薬のID
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
+    private int initialHP = 0;                 //プレイヤーの初期HP
     private const int id7HPIncreaseAmount = 5;  //心の器のHP増加量
 
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
@@ -80,20 +81,25 @@ public class GameManager : MonoBehaviour
         if (playerJob == "Warrior")
         {
             playerData = new PlayerDataManager("Warrior");
+            initialHP = playerData._playerHP;
             hasRelics[10] += 1;      // 黄金の果実
             hasRelics[4] += 2;       // 神秘のピアス
             ShowRelics();
+            CheckGetRelicID7();
         }
         if (playerJob == "Wizard")
         {
             playerData = new PlayerDataManager("Wizard");
+            initialHP = playerData._playerHP;
             hasRelics[5] += 1;     // 千里眼鏡
             hasRelics[9] += 2;     // 富豪の金貨袋
             ShowRelics();
+            CheckGetRelicID7();
         }
         if (playerJob == "Debug")
         {
             playerData = new PlayerDataManager("Debug");
+            initialHP = playerData._playerHP;
             // 全レリック取得
             hasRelics[1] += 5;
             hasRelics[2] += 1;
@@ -109,6 +115,7 @@ public class GameManager : MonoBehaviour
             hasRelics[12] += 1;
 
             ShowRelics();
+            CheckGetRelicID7();
             return;
         }
         playerData._deckList.Clear(); //デッキリストを空にする
@@ -154,15 +161,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// レリックを入手した際にIDを確認し、ID7(心の器)の時に効果を処理する
+    /// レリックを入手した際にID7(心の器)であればHPを上昇させる
+    /// (レリックを入手した際には必ずこの処理を呼ぶ)
     /// </summary>
-    /// <param name="relicID">入手したレリックの番号</param>
-    public void CheckGetRelicID7(int relicID)
+    public void CheckGetRelicID7()
     {
-        if(relicID == 7) //レリックがID7(心の器)の場合
-        {
-            playerData._playerHP += id7HPIncreaseAmount; //心の器の増加量分HPを上昇させる
-        }
+        Debug.Log("初期HPは" + initialHP +"でレリックID7の個数は" +hasRelics[7]);
+        int HPValue = initialHP + id7HPIncreaseAmount * hasRelics[7]; //初期HP＋心の器の増加量×レリックID7の個数
+        Debug.Log("更新されたHPは" + HPValue);
+        playerData._playerHP = HPValue;
     }
 
     /// <summary>

@@ -154,7 +154,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void ViewConditionIcon()
     {
-        playerConditionDisplay.ViewIcon(playerCondition);
+        playerConditionDisplay.UpdateConditionIcon(playerCondition);
     }
 
     //以下、TakeDamageやHealingHPに関係する状態異常の呼び出し
@@ -198,18 +198,9 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetConstAP = relicEffect.RelicID4(hasPlayerRelics[4], GetSetConstAP);
         GetSetConstAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetConstAP, GetSetChargeAP).constAP;
         es.AddConditionStatus("Burn", relicEffect.RelicID6(hasPlayerRelics[6]));
-        GetSetHP = relicEffect.RelicID7(hasPlayerRelics[7], GetSetHP);
         GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
         AddConditionStatus("UpStrength", relicEffect.RelicID12(hasPlayerRelics[12], enemyType));
         return es;
-    }
-
-    /// <summary>
-    /// ラウンド毎に発動するレリック効果
-    /// </summary>
-    public void OnRoundRelicEffect()
-    {
-        
     }
 
     /// <summary>

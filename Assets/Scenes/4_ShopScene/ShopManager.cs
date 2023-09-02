@@ -290,6 +290,7 @@ public class ShopManager : MonoBehaviour
         }
 
         gm.ShowRelics();        // オーバーレイのレリック表示を更新
+        gm.CheckGetRelicID7();
     }
 
 

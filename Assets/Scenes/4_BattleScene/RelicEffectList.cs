@@ -125,13 +125,9 @@ public class RelicEffectList : MonoBehaviour
     /// 名前:心の器
     /// 効果:最大HPを5増やす。現在HPは変化しない。
     /// </summary>
-    /// <param name="ID7Quantity">レリック番号07の個数</param>
-    /// <param name="HP">最大HP</param>
-    /// <returns>増加した最大HP</returns>
-    public int RelicID7(int ID7Quantity, int HP)
+    public void RelicID7()
     {
-        HP += 5 * ID7Quantity;
-        return HP;
+        //このスクリプトで処理する効果はなし
     }
 
     /// <summary>

@@ -184,9 +184,29 @@ public class CardEffectList : MonoBehaviour
     {
         //HPを回復
         PlayerHealing(cardHealingPower);
+        RemoveToDeck();
         Destroy(card.gameObject);
         DestroyPickCardID3();
     }
+    /// <summary>
+    /// GameManagerにあるデッキから魔女の霊薬を削除する
+    /// </summary>
+    /// <param name="card">カード：魔女の霊薬</param>
+    void RemoveToDeck()
+    {
+        var deck = bg.deckNumberList;
+        foreach (var cards in deck) //デッキ内を検索
+        {
+            if (cards == 3) //魔女の霊薬だった場合
+            {
+                deck.Remove(cards); //デッキから削除する
+                return;
+            }
+        }
+    }
+    /// <summary>
+    /// ピック用のカードも削除する
+    /// </summary>
     void DestroyPickCardID3()
     {
         foreach(Transform child in pickCardPlace) //ピックカードの中を検索

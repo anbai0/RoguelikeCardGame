@@ -215,7 +215,7 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     public void ViewConditionIcon()
     {
-        enemyConditionDisplay.ViewIcon(enemyCondition);
+        enemyConditionDisplay.UpdateConditionIcon(enemyCondition);
     }
 
     //ˆÈ‰ºATakeDamage‚âHealingHP‚ÉŠÖŒW‚·‚éó‘ÔˆÙí‚ÌŒÄ‚Ño‚µ
