@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;  //AssetDatabaseを使うために追加
 using System.IO;  //StreamWriterなどを使うために追加
 using System.Linq;  //Selectを使うために追加
+using System.Collections.Generic;
 
 // ゲームの設定のデータです。
 [System.Serializable]
@@ -10,6 +11,7 @@ public class GameSettings
     public float overallVolume;
     public float seVolume;
     public float bgmVolume;
+    public List<bool> collectedCardHistory;     // 一度カードを手に入れたことがあるかを判定します
 }
 
 public class GameSettingsJson : MonoBehaviour
@@ -34,15 +36,6 @@ public class GameSettingsJson : MonoBehaviour
             Debug.Log("Jsonファイルが見つかりませんでした");
             Initialize(gameSettings);
         }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Debug.Log(File.Exists(datapath));
-        }
-
     }
 
     //セーブするための関数
@@ -81,6 +74,12 @@ public class GameSettingsJson : MonoBehaviour
         gameSettings.overallVolume = 1f;
         gameSettings.seVolume = 0.5f;
         gameSettings.bgmVolume = 0.5f;
+
+        gameSettings.collectedCardHistory = new List<bool> { };
+        for (int i = 0; i <= 20; i++)
+        {
+            gameSettings.collectedCardHistory.Add(false);
+        }  
 
         saveGameSettingsData(gameSettings);
     }

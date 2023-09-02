@@ -302,10 +302,10 @@ public class CharacterBattleAction : MonoBehaviour
         }
         else if (status == "Poison")
         {
-            var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
-            condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
-            condition["Poison"] += invalidBadStatusValue.badStatus;
-            condition["Poison"] = CheckConditionLimit(condition["Poison"]);
+            //var invalidBadStatusValue = inflictCondition.InvalidBadStatus(count, condition["InvalidBadStatus"]);
+            //condition["InvalidBadStatus"] = invalidBadStatusValue.invalidBadStatus;
+            //condition["Poison"] += invalidBadStatusValue.badStatus;
+            //condition["Poison"] = CheckConditionLimit(condition["Poison"]);
         }
     }
 

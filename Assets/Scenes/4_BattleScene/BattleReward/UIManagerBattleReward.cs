@@ -188,7 +188,7 @@ public class UIManagerBattleReward : MonoBehaviour
                 else
                 {
                     var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-                    gm.playerData._deckList.Add(cardID);
+                    gm.AddCard(cardID);
                 }
             }
             if (lastSelectedItem.CompareTag("Relics"))
@@ -196,7 +196,6 @@ public class UIManagerBattleReward : MonoBehaviour
                 var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
                 gm.hasRelics[relicID]++;
                 gm.ShowRelics();
-                gm.CheckGetRelicID7();
             }
 
             lastSelectedItem = null;
@@ -259,15 +258,14 @@ public class UIManagerBattleReward : MonoBehaviour
         if (lastSelectedItem.CompareTag("Cards"))
         {
             var cardID = lastSelectedItem.GetComponent<CardController>().cardDataManager._cardID;        //デッキリストにカードを追加する
-            gm.playerData._deckList.Add(cardID);
+            gm.AddCard(cardID);
+            gm.ShowRelics();
         }
 
         if (lastSelectedItem.CompareTag("Relics"))
         {
             var relicID = lastSelectedItem.GetComponent<RelicController>().relicDataManager._relicID;      //レリックリストにレリックを追加する
             gm.hasRelics[relicID]++;
-            gm.ShowRelics();
-            gm.CheckGetRelicID7();
         }
 
         lastSelectedItem = null;

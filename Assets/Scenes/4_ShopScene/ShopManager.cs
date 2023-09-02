@@ -257,7 +257,7 @@ public class ShopManager : MonoBehaviour
 
                     AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                    gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
+                    gm.AddCard(selectedCardID);                         // デッキに加える
 
                     selectedItem.SetActive(false);
                 }
@@ -265,7 +265,7 @@ public class ShopManager : MonoBehaviour
                 {
                     AudioManager.Instance.PlaySE("買い物");
                     gm.playerData._playerMoney -= card.cardDataManager._cardPrice;       // 所持金から値段分のお金を引いて
-                    gm.playerData._deckList.Add(selectedCardID);                         // デッキに加える
+                    gm.AddCard(selectedCardID);                         // デッキに加える
 
                     selectedItem.transform.localScale = scaleReset;                     // スケールを戻す
                 }

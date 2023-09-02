@@ -8,6 +8,10 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
+    public GameSettingsJson gameSettingsJson;
+    public GameSettings gameSettings;
+    [SerializeField] private AudioSetting audioSetting;
+
     // プレイヤー
     public PlayerDataManager playerData;
     public List<CardDataManager> cardDataList { private set; get; } = new List<CardDataManager>();
@@ -19,7 +23,6 @@ public class GameManager : MonoBehaviour
     public const int healCardID = 3;           // 魔女の霊薬のID
     private const int ariadnesThreadID = 1;     // アリドネの糸のレリックのID(デッキの上限を増やすレリック)
 
-    private int initialHP = 0;                 //プレイヤーの初期HP
     private const int id7HPIncreaseAmount = 5;  //心の器のHP増加量
 
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
@@ -36,20 +39,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] SceneFader sceneFader;
 
     public static GameManager Instance;     // シングルトン
-    private void Awake()
+    protected void Awake()
     {
         // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {
             Instance = this;
         }
-
+        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
+        audioSetting.InstantiateAudioSetting();                     // 音量の設定ロード
+        
         InitializeItemData();
-
+        
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
         //if (!isAlreadyRead) ReadPlayer("Debug");
     }
+
 
     /// <summary>
     /// アイテムデータの初期化を行います。
@@ -65,7 +71,7 @@ public class GameManager : MonoBehaviour
         relicDataList.Add(new RelicDataManager(1));     // ID順に管理したいため最初の要素だけ代入
         for (int relicID = 1; relicID <= maxRelics; relicID++)
         {
-            hasRelics.Add(relicID,0);
+            hasRelics.Add(relicID, 0);
 
             relicDataList.Add(new RelicDataManager(relicID));
         }
@@ -81,25 +87,20 @@ public class GameManager : MonoBehaviour
         if (playerJob == "Warrior")
         {
             playerData = new PlayerDataManager("Warrior");
-            initialHP = playerData._playerHP;
             hasRelics[10] += 1;      // 黄金の果実
             hasRelics[4] += 2;       // 神秘のピアス
             ShowRelics();
-            CheckGetRelicID7();
         }
         if (playerJob == "Wizard")
         {
             playerData = new PlayerDataManager("Wizard");
-            initialHP = playerData._playerHP;
             hasRelics[5] += 1;     // 千里眼鏡
             hasRelics[9] += 2;     // 富豪の金貨袋
             ShowRelics();
-            CheckGetRelicID7();
         }
         if (playerJob == "Debug")
         {
             playerData = new PlayerDataManager("Debug");
-            initialHP = playerData._playerHP;
             // 全レリック取得
             hasRelics[1] += 5;
             hasRelics[2] += 1;
@@ -115,61 +116,26 @@ public class GameManager : MonoBehaviour
             hasRelics[12] += 1;
 
             ShowRelics();
-            CheckGetRelicID7();
             return;
         }
         playerData._deckList.Clear(); //デッキリストを空にする
         //開始時に配布されるカードを追加する
-        playerData._deckList.Add(1); //スイング
-        playerData._deckList.Add(2); //ヒール
-        playerData._deckList.Add(4); //ガード
+        AddCard(1);     // スイング
+        AddCard(2);     // ヒール
+        AddCard(4);     // ガード
 
     }
 
-
+    #region カード関係
     /// <summary>
-    /// Overlayに所持レリックを表示します。
+    /// 渡されたカードIDのカードを取得し、カード図鑑に登録します。
     /// </summary>
-    public void ShowRelics()
+    /// <param name="cardID"></param>
+    public void AddCard(int cardID)
     {
-        // relicPlaceの子オブジェクトをすべてDestroy
-        Transform[] children = relicPlace.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < children.Length; i++)
-        {
-            Destroy(children[i].gameObject);
-        }
-
-        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
-        {
-            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
-            if (hasRelics.ContainsKey(RelicID) && hasRelics[RelicID] >= 1)
-            {
-                RelicController relic = Instantiate(relicPrefab, relicPlace);
-                relic.transform.localScale = Vector3.one * 0.9f;                   // 生成したPrefabの大きさ調整
-                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
-
-                relic.transform.GetChild(4).gameObject.SetActive(true);
-                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
-
-                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
-                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
-
-            }
-        }
-
-        uiManager.UIEventsReload();
-    }
-
-    /// <summary>
-    /// レリックを入手した際にID7(心の器)であればHPを上昇させる
-    /// (レリックを入手した際には必ずこの処理を呼ぶ)
-    /// </summary>
-    public void CheckGetRelicID7()
-    {
-        Debug.Log("初期HPは" + initialHP +"でレリックID7の個数は" +hasRelics[7]);
-        int HPValue = initialHP + id7HPIncreaseAmount * hasRelics[7]; //初期HP＋心の器の増加量×レリックID7の個数
-        Debug.Log("更新されたHPは" + HPValue);
-        playerData._playerHP = HPValue;
+        playerData._deckList.Add(cardID);
+        gameSettings.collectedCardHistory[cardID] = true;
+        gameSettingsJson.saveGameSettingsData(gameSettings);      // ゲーム設定のセーブ
     }
 
     /// <summary>
@@ -216,7 +182,58 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
+    #endregion
 
+
+    #region レリック関係
+    /// <summary>
+    /// Overlayに所持レリックを表示します。
+    /// </summary>
+    public void ShowRelics()
+    {
+        // relicPlaceの子オブジェクトをすべてDestroy
+        Transform[] children = relicPlace.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < children.Length; i++)
+        {
+            Destroy(children[i].gameObject);
+        }
+
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
+            if (hasRelics.ContainsKey(RelicID) && hasRelics[RelicID] >= 1)
+            {
+                RelicController relic = Instantiate(relicPrefab, relicPlace);
+                relic.transform.localScale = Vector3.one * 0.9f;                   // 生成したPrefabの大きさ調整
+                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+
+                relic.transform.GetChild(4).gameObject.SetActive(true);
+                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
+
+                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
+                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
+
+            }
+        }
+
+        uiManager.UIEventsReload();
+    }
+
+    /// <summary>
+    /// レリックを入手した際にIDを確認し、ID7(心の器)の時に効果を処理する
+    /// </summary>
+    /// <param name="relicID">入手したレリックの番号</param>
+    public void CheckGetRelicID7(int relicID)
+    {
+        if (relicID == 7) //レリックがID7(心の器)の場合
+        {
+            playerData._playerHP += id7HPIncreaseAmount; //心の器の増加量分HPを上昇させる
+        }
+    }
+    #endregion
+
+
+    #region 全シーンアンロードの処理とデータの初期化
     /// <summary>
     /// ゲームデータのリセットをします。
     /// <para>現状リザルトシーンからタイトルシーンに戻るときのみにしか使えないため後で書き換えます。</para>
@@ -241,7 +258,6 @@ public class GameManager : MonoBehaviour
 
         floor = 1; //階層を1に戻す
     }
-
 
     /// <summary>
     /// UnloadAllScenesメソッドをFadeOutInWrapperメソッドに渡して実行します。
@@ -286,4 +302,6 @@ public class GameManager : MonoBehaviour
 
         ResetGameData();
     }
+    #endregion
+
 }

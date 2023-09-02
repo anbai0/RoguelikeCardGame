@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +63,11 @@ public class UIManager : MonoBehaviour
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 生成するカードのスケール
     private List<int> deckNumberList;                     // プレイヤーのもつデッキナンバーのリスト
     
-
+    [Header ("カード図鑑")]
+    [SerializeField] GameObject cardPictureBookButton;
+    [SerializeField] GameObject cardPictureBookReturunButton;
+    [SerializeField] GameObject cardPictureBook;
+    [SerializeField] Transform cardPictureBookPlace;
 
     void Start()
     {
@@ -308,6 +313,26 @@ public class UIManager : MonoBehaviour
         }
 
         #endregion
+
+        #region カード図鑑の処理
+        if(UIObject == cardPictureBookButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            cardPictureBookButton.SetActive(false);
+            cardPictureBook.SetActive(true);
+            ShowCardPictureBook();
+        }
+        if(UIObject == cardPictureBookReturunButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            cardPictureBook.SetActive(false);
+            foreach(Transform card in cardPictureBookPlace.transform)
+            {
+                Destroy(card.gameObject);
+            }
+            cardPictureBookButton.SetActive(true);
+        }
+        #endregion
     }
 
 
@@ -481,6 +506,27 @@ public class UIManager : MonoBehaviour
     {
         int id = selectCard.GetComponent<CardController>().cardDataManager._cardID; //選択されたカードのIDを取得
         discardCard.Init(id);                            //デッキデータの表示
+    }
+
+    /// <summary>
+    /// 図鑑のカードを表示させるメソッドです。
+    /// </summary>
+    public void ShowCardPictureBook()
+    {
+        //List<int> showCardList = GameManager.Instance.gameSettings.collectedCardHistory;
+        for(int cardNum = 1;  cardNum <=20; cardNum++)
+        {
+            CardController card = Instantiate(cardPrefab, cardPictureBookPlace);
+            card.transform.localScale = scaleReset;
+            card.name = "Deck" + (cardNum).ToString();                     //生成したカードに名前を付ける
+            card.Init(cardNum);
+            if(!GameManager.Instance.gameSettings.collectedCardHistory[cardNum])
+            {
+                card.transform.GetChild(6).transform.gameObject.SetActive(true);
+            }
+        }
+
+        
     }
 
     #region upperとlowerのCardPlaceを使ったやり方

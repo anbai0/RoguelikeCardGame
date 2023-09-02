@@ -261,7 +261,7 @@ public class BattleGameManager : MonoBehaviour
     /// エネミーの効果処理
     /// </summary>
     private void EnemyMove() 
-    {
+    {      
         enemyScript.Move();
         enemyMoveCount++;
         Invoke("TurnCalc", turnTime);
