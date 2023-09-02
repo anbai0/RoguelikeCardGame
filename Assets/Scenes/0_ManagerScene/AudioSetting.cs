@@ -27,10 +27,15 @@ public class AudioSetting : MonoBehaviour
     public float seVolume { get; private set; }
     public float bgmVolume { get; private set; }
 
-    void Awake()
+    private void Awake()
     {
-        gameSettingsJson = GetComponent<GameSettingsJson>();
-        gameSettings = gameSettingsJson.loadGameSettingsData();     // ƒQ[ƒ€İ’è‚Ìƒ[ƒh
+
+    }
+
+    public void InstantiateAudioSetting()
+    {
+        gameSettingsJson = GameManager.Instance.gameSettingsJson;
+        gameSettings = GameManager.Instance.gameSettings;
 
         // Å‘å‰¹—Êİ’è
         overallVolumeSlider.maxValue = maxOverallVolume;

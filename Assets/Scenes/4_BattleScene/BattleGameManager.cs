@@ -81,7 +81,6 @@ public class BattleGameManager : MonoBehaviour
     {
         gm = GameManager.Instance;
         floor = gm.floor;
-        floor = 2;  // 変更
         PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
         enemyType = playerController.enemyTag;
         StartBGM(enemyType);
@@ -268,11 +267,9 @@ public class BattleGameManager : MonoBehaviour
     /// エネミーの効果処理
     /// </summary>
     private void EnemyMove() 
-    {
-        
+    {      
         enemyScript.Move();
         enemyMoveCount++;
-        playerScript.AddConditionStatus("Poison", 1);  // 変更
         Invoke("TurnCalc", turnTime);
     }
 

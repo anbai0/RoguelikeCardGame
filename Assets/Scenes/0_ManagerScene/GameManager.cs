@@ -8,8 +8,9 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    private GameSettingsJson gameSettingsJson;
-    private GameSettings gameSettings;
+    public GameSettingsJson gameSettingsJson;
+    public GameSettings gameSettings;
+    [SerializeField] private AudioSetting audioSetting;
 
     // プレイヤー
     public PlayerDataManager playerData;
@@ -38,19 +39,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] SceneFader sceneFader;
 
     public static GameManager Instance;     // シングルトン
-    private void Awake()
+    protected void Awake()
     {
+        gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
+        
+
         // シングルトンインスタンスをセットアップ
         if (Instance == null)
         {
             Instance = this;
         }
 
+        audioSetting.InstantiateAudioSetting();
         InitializeItemData();
-
+        
         // 各シーンでデバッグするときにコメントを解除してください
         // 一度も読み込んでいなければ
         //if (!isAlreadyRead) ReadPlayer("Debug");
+    }
+
+    private void Update()
+    {
+        Debug.Log("GameManager:   " + gameSettings.overallVolume);
     }
 
     /// <summary>
@@ -67,7 +77,7 @@ public class GameManager : MonoBehaviour
         relicDataList.Add(new RelicDataManager(1));     // ID順に管理したいため最初の要素だけ代入
         for (int relicID = 1; relicID <= maxRelics; relicID++)
         {
-            hasRelics.Add(relicID,0);
+            hasRelics.Add(relicID, 0);
 
             relicDataList.Add(new RelicDataManager(relicID));
         }
@@ -123,49 +133,15 @@ public class GameManager : MonoBehaviour
     }
 
 
+    #region カード関係
     /// <summary>
-    /// Overlayに所持レリックを表示します。
+    /// 渡されたカードIDのカードを取得し、カード図鑑に登録します。
     /// </summary>
-    public void ShowRelics()
+    /// <param name="cardID"></param>
+    public void AddCard(int cardID)
     {
-        // relicPlaceの子オブジェクトをすべてDestroy
-        Transform[] children = relicPlace.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < children.Length; i++)
-        {
-            Destroy(children[i].gameObject);
-        }
-
-        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
-        {
-            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
-            if (hasRelics.ContainsKey(RelicID) && hasRelics[RelicID] >= 1)
-            {
-                RelicController relic = Instantiate(relicPrefab, relicPlace);
-                relic.transform.localScale = Vector3.one * 0.9f;                   // 生成したPrefabの大きさ調整
-                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
-
-                relic.transform.GetChild(4).gameObject.SetActive(true);
-                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
-
-                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
-                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
-
-            }
-        }
-
-        uiManager.UIEventsReload();
-    }
-
-    /// <summary>
-    /// レリックを入手した際にIDを確認し、ID7(心の器)の時に効果を処理する
-    /// </summary>
-    /// <param name="relicID">入手したレリックの番号</param>
-    public void CheckGetRelicID7(int relicID)
-    {
-        if(relicID == 7) //レリックがID7(心の器)の場合
-        {
-            playerData._playerHP += id7HPIncreaseAmount; //心の器の増加量分HPを上昇させる
-        }
+        playerData._deckList.Add(cardID);
+        //gameSettings.collectedCardHistory[cardID] = true;
     }
 
     /// <summary>
@@ -212,7 +188,58 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
+    #endregion
 
+
+    #region レリック関係
+    /// <summary>
+    /// Overlayに所持レリックを表示します。
+    /// </summary>
+    public void ShowRelics()
+    {
+        // relicPlaceの子オブジェクトをすべてDestroy
+        Transform[] children = relicPlace.GetComponentsInChildren<Transform>();
+        for (int i = 1; i < children.Length; i++)
+        {
+            Destroy(children[i].gameObject);
+        }
+
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
+            if (hasRelics.ContainsKey(RelicID) && hasRelics[RelicID] >= 1)
+            {
+                RelicController relic = Instantiate(relicPrefab, relicPlace);
+                relic.transform.localScale = Vector3.one * 0.9f;                   // 生成したPrefabの大きさ調整
+                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+
+                relic.transform.GetChild(4).gameObject.SetActive(true);
+                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = hasRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
+
+                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
+                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
+
+            }
+        }
+
+        uiManager.UIEventsReload();
+    }
+
+    /// <summary>
+    /// レリックを入手した際にIDを確認し、ID7(心の器)の時に効果を処理する
+    /// </summary>
+    /// <param name="relicID">入手したレリックの番号</param>
+    public void CheckGetRelicID7(int relicID)
+    {
+        if (relicID == 7) //レリックがID7(心の器)の場合
+        {
+            playerData._playerHP += id7HPIncreaseAmount; //心の器の増加量分HPを上昇させる
+        }
+    }
+    #endregion
+
+
+    #region 全シーンアンロードの処理とデータの初期化
     /// <summary>
     /// ゲームデータのリセットをします。
     /// <para>現状リザルトシーンからタイトルシーンに戻るときのみにしか使えないため後で書き換えます。</para>
@@ -237,7 +264,6 @@ public class GameManager : MonoBehaviour
 
         floor = 1; //階層を1に戻す
     }
-
 
     /// <summary>
     /// UnloadAllScenesメソッドをFadeOutInWrapperメソッドに渡して実行します。
@@ -282,4 +308,6 @@ public class GameManager : MonoBehaviour
 
         ResetGameData();
     }
+    #endregion
+
 }

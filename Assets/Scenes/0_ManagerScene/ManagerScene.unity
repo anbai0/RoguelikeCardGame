@@ -821,7 +821,6 @@ MonoBehaviour:
     type: 3}
   deckCardPlace: {fileID: 1432063395}
   discardCardPlace: {fileID: 1886690062}
-  deckScrollView: {fileID: 941186901}
   discardHolder: {fileID: 1063856189}
 --- !u!1 &225074112
 GameObject:
@@ -1365,7 +1364,6 @@ GameObject:
   - component: {fileID: 344966918}
   - component: {fileID: 344966917}
   - component: {fileID: 344966916}
-  - component: {fileID: 344966915}
   - component: {fileID: 344966914}
   - component: {fileID: 344966919}
   - component: {fileID: 344966913}
@@ -1480,18 +1478,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &344966915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 344966912}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4921e8f7f8a74d498ec70baa60519c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &344966916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6621,6 +6607,7 @@ GameObject:
   - component: {fileID: 1717233873}
   - component: {fileID: 1717233879}
   - component: {fileID: 1717233878}
+  - component: {fileID: 1717233880}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -6640,6 +6627,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcc2667500f64d24ea8cbb34c0ae524f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameSettingsJson: {fileID: 1717233880}
+  gameSettings:
+    overallVolume: 0
+    seVolume: 0
+    bgmVolume: 0
+  audioSetting: {fileID: 344966917}
   floor: 1
   uiManager: {fileID: 184355870}
   relicPrefab: {fileID: 8617353695134665228, guid: 8058af89149049d4a90531c9f26d62e2,
@@ -6696,6 +6689,18 @@ MonoBehaviour:
   relicRarity2List: 
   currentCardsLotteryID: 
   currentRelicsLotteryID: 
+--- !u!114 &1717233880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1717233872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4921e8f7f8a74d498ec70baa60519c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1729058822
 GameObject:
   m_ObjectHideFlags: 0
