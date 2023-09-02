@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Linq;
@@ -316,13 +317,14 @@ public class UIManager : MonoBehaviour
         #region カード図鑑の処理
         if(UIObject == cardPictureBookButton)
         {
+            AudioManager.Instance.PlaySE("選択音1");
             cardPictureBookButton.SetActive(false);
             cardPictureBook.SetActive(true);
             ShowCardPictureBook();
         }
         if(UIObject == cardPictureBookReturunButton)
         {
-
+            AudioManager.Instance.PlaySE("選択音1");
             cardPictureBook.SetActive(false);
             foreach(Transform card in cardPictureBookPlace.transform)
             {
@@ -506,10 +508,25 @@ public class UIManager : MonoBehaviour
         discardCard.Init(id);                            //デッキデータの表示
     }
 
+    /// <summary>
+    /// 図鑑のカードを表示させるメソッドです。
+    /// </summary>
     public void ShowCardPictureBook()
     {
         //List<int> showCardList = GameManager.Instance.gameSettings.collectedCardHistory;
-        //List<int> showCardList = GameManagercardDataList
+        for(int cardNum = 1;  cardNum <=20; cardNum++)
+        {
+            CardController card = Instantiate(cardPrefab, cardPictureBookPlace);
+            card.transform.localScale = scaleReset;
+            card.name = "Deck" + (cardNum).ToString();                     //生成したカードに名前を付ける
+            card.Init(cardNum);
+            if(!GameManager.Instance.gameSettings.collectedCardHistory[cardNum])
+            {
+                card.transform.GetChild(6).transform.gameObject.SetActive(true);
+            }
+        }
+
+        
     }
 
     #region upperとlowerのCardPlaceを使ったやり方

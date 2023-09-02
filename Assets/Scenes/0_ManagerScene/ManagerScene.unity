@@ -936,7 +936,7 @@ MonoBehaviour:
   discardCardPlace: {fileID: 1886690062}
   discardHolder: {fileID: 1063856189}
   cardPictureBookButton: {fileID: 1753224045}
-  cardPictureBookReturunButton: {fileID: 0}
+  cardPictureBookReturunButton: {fileID: 965500375}
   cardPictureBook: {fileID: 701514959}
   cardPictureBookPlace: {fileID: 12317588}
 --- !u!1 &225074112
