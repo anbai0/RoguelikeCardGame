@@ -39,6 +39,26 @@ public class PlayerConditionDisplay : MonoBehaviour
 
     [SerializeField] UIManagerBattle uiManagerBattle;
 
+    private void Awake()
+    {
+        InitializedCondition();
+    }
+
+    /// <summary>
+    /// ó‘ÔˆÙí‚Ì–¼‘O‚ÆŠ”‚ğ‰Šú‰»‚µ‚Ä‚¨‚­ˆ—
+    /// </summary>
+    void InitializedCondition()
+    {
+        previousCondition.Add("UpStrength", 0);
+        previousCondition.Add("AutoHealing", 0);
+        previousCondition.Add("InvalidBadStatus", 0);
+        previousCondition.Add("Curse", 0);
+        previousCondition.Add("Impatience", 0);
+        previousCondition.Add("Weakness", 0);
+        previousCondition.Add("Burn", 0);
+        previousCondition.Add("Poison", 0);
+    }
+
     void Update()
     {
         iconSpawnTimer += Time.deltaTime;

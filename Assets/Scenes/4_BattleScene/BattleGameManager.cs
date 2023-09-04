@@ -201,6 +201,7 @@ public class BattleGameManager : MonoBehaviour
                 }
                 //プレイヤーの行動
                 isPlayerTurn = true;
+                turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
                 isPlayerMove = false;
                 playerTurnDisplay.enabled = true;
                 enemyTurnDisplay.enabled = false;
@@ -216,6 +217,7 @@ public class BattleGameManager : MonoBehaviour
                 }
                 //エネミーの行動
                 isPlayerTurn = false;
+                turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
                 playerTurnDisplay.enabled = false;
                 enemyTurnDisplay.enabled = true;
                 Invoke("EnemyMove", enemyMoveTime);
@@ -226,6 +228,7 @@ public class BattleGameManager : MonoBehaviour
             //ターンディスプレイはどちらもオフに
             playerTurnDisplay.enabled = false;
             enemyTurnDisplay.enabled = false;
+            turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
 
             if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
             {
@@ -233,6 +236,7 @@ public class BattleGameManager : MonoBehaviour
             }
             else
             {
+                turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
                 isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
             }
         }
@@ -265,6 +269,22 @@ public class BattleGameManager : MonoBehaviour
         enemyScript.Move();
         enemyMoveCount++;
         Invoke("TurnCalc", turnTime);
+    }
+
+    /// <summary>
+    /// 行動終了ボタンを押した処理 
+    /// </summary>
+    public void TurnEnd()
+    {
+        if (!isTurnEnd && !isPlayerMove) //まだボタンが押されていなかったら押すことが出来る
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            isTurnEnd = true;
+            playerScript.TurnEnd();
+            turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
+
+            TurnCalc(); //ターン処理に移る
+        }
     }
 
     /// <summary>
@@ -454,22 +474,6 @@ public class BattleGameManager : MonoBehaviour
     public void EndGameRelicEffect() 
     {
         enemyScript.GetSetDropMoney += playerScript.EndGameRelicEffect();
-    }
-
-    /// <summary>
-    /// 行動終了ボタンを押した処理 
-    /// </summary>
-    public void TurnEnd() 
-    {
-        if (!isTurnEnd && !isPlayerMove) //まだボタンが押されていなかったら押すことが出来る
-        {
-            AudioManager.Instance.PlaySE("選択音1");
-            isTurnEnd = true;
-            playerScript.TurnEnd();
-            turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
-
-            TurnCalc(); //ターン処理に移る
-        }
     }
 
     /// <summary>

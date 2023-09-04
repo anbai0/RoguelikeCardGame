@@ -16,6 +16,7 @@ public class EnemyBattleAction : CharacterBattleAction
     [SerializeField, Header("エネミーGPテキスト")] Text enemyGPText;
     [SerializeField, Header("ダメージ表示オブジェクト")] GameObject damageUI;
     [SerializeField, Header("回復表示オブジェクト")] GameObject healingUI;
+    [SerializeField, Header("ガード表示オブジェクト")] GameObject gardUI;
     [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
     [SerializeField, Header("状態異常のアイコン表示スクリプト")] EnemyConditionDisplay enemyConditionDisplay;
 
@@ -144,6 +145,8 @@ public class EnemyBattleAction : CharacterBattleAction
     /// <param name="damage">受けたダメージ</param>
     public void TakeDamage(int damage)
     {
+        if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
+
         int deductedDamage = 0;
         if (GetSetGP > 0) //ガードポイントがあったら
         {
@@ -151,6 +154,7 @@ public class EnemyBattleAction : CharacterBattleAction
             deductedDamage = damage - GetSetGP;
             deductedDamage = deductedDamage < 0 ? 0 : deductedDamage;
             GetSetGP -= damage;
+            ViewGard();
         }
         else
         {
@@ -183,6 +187,14 @@ public class EnemyBattleAction : CharacterBattleAction
         //float rndY = Random.Range(-50, 50);
         //damageObj.transform.position += new Vector3(rndX, rndY, 0);
         damageObj.GetComponent<TextMeshProUGUI>().text = damage.ToString();
+    }
+
+    /// <summary>
+    /// ガードしたことを伝えるテキストを表示する処理
+    /// </summary>
+    void ViewGard()
+    {
+        GameObject gardObj = Instantiate(gardUI, damageOrHealingPos.transform);
     }
 
     /// <summary>
