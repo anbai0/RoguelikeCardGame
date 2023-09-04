@@ -55,7 +55,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] List<GameObject> shopRelics = null;
 
 
-    [SerializeField] int tmpID = 0;      // デバッグ用
+    //[SerializeField] int tmpID = 0;      // デバッグ用
 
     private void Start()
     {
