@@ -179,7 +179,15 @@ public class RelicEffectList : MonoBehaviour
     public Dictionary<string, int> RelicID11(int ID11Quantity, Dictionary<string, int> condition)
     {
         //バッドステータスをリストに追加
-        List<int> badStatus = new List<int> { condition["Curse"], condition["Impatience"], condition["Weakness"], condition["Burn"], condition["Poison"] };
+        List<string> badStatus = new List<string>();
+        foreach (var bad in condition)
+        {
+            for (int badCount = 0; badCount < bad.Value; badCount++) //付与されている個数分だけリストに状態異常の名前を追加
+            {
+                badStatus.Add(bad.Key);
+            }
+        }
+
         //解除できる数がバッドステータスの数より多い場合はバッドステータスの数だけ解除
         int totalBadStatus = condition["Curse"] + condition["Impatience"] + condition["Weakness"] + condition["Burn"] + condition["Poison"];
         if (totalBadStatus < ID11Quantity)
@@ -187,22 +195,21 @@ public class RelicEffectList : MonoBehaviour
             ID11Quantity = totalBadStatus;
         }
 
-        //ID11の個数分ランダムな数字を選んでその数のList番目に入っている数が0以上なら-1する
-        for (int i = 0; i < ID11Quantity; i++)
+        //ID11の個数分ランダムな数字を選んでその数のList番目に入っている状態異常を-1する
+        if (badStatus.Count > 0)
         {
-            int chooseNumber = Random.Range(0, badStatus.Count - 1);
-            while (badStatus[chooseNumber] == 0)
+            for (int i = 0; i < ID11Quantity; i++)
             {
-                chooseNumber = Random.Range(0, badStatus.Count - 1);
+                int chooseNumber = Random.Range(0, badStatus.Count - 1);
+                condition[badStatus[chooseNumber]] -= 1;
+                badStatus.RemoveAt(chooseNumber);
             }
-            badStatus[chooseNumber] -= 1;
         }
-        //減少後の数値を代入する
-        condition["Curse"] = badStatus[0];
-        condition["Impatience"] = badStatus[1];
-        condition["Weakness"] = badStatus[2];
-        condition["Burn"] = badStatus[3];
-        condition["Poison"] = badStatus[4];
+        else
+        {
+            return condition;
+        }
+
         return condition;
     }
 
