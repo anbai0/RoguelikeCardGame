@@ -215,8 +215,7 @@ public class BattleRewardManager : MonoBehaviour
         while (!asyncOperation.isDone) await Task.Yield();
 
         // フィールドシーンかリザルトシーンをロード
-        asyncOperation = SceneManager.LoadSceneAsync(unloadSceneName, LoadSceneMode.Additive);
-        while (!asyncOperation.isDone) await Task.Yield();
+        sceneFader.SceneChange(unloadSceneName);
     }
 
     public void TransitionLoseBattle()
