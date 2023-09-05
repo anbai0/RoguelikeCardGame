@@ -148,6 +148,7 @@ public class BattleRewardManager : MonoBehaviour
             {
                 gm.floor++; //階層を1つ上げる
                 unloadSceneName = "FieldScene"; //ロードするシーンをフィールドシーンに設定
+                PlayerController.isEvents = false;       // プレイヤーを動けるようにする
                 Lottery.Instance.shopCards.Clear(); //ショップのカードをリセットする
                 TransitionAfterBattle();
             }

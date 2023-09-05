@@ -20,6 +20,7 @@ public class FadeController : MonoBehaviour
     private bool fadeInDone = false;
     private bool fadeOutDone = false;
 
+
     void Start()
     {
         // 生成時にシングルトンを使って複製されないようにする
@@ -65,6 +66,7 @@ public class FadeController : MonoBehaviour
 
     public async Task fadeIn()
     {
+        Debug.Log("フェードインはじめ");
         isFadeIn = true;
         isFadeOut = false;
         while (!fadeInDone) await Task.Yield(); // 同期メソッドの実行を一時的に中断
