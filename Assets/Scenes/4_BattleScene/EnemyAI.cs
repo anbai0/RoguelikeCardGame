@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnemyMove //エネミーの行動クラス
@@ -29,6 +30,9 @@ public class EnemyAI : MonoBehaviour
     bool isUsedOnlyMove; //戦闘開始時のみ使用可能
     bool isUsableGodCrusher; //神砕きを使用出来るか判定
 
+    // 技のテキストを表示するのに必要なUI
+    [SerializeField] GameObject skillText;
+    
     WaitForSeconds attackInterval = new WaitForSeconds(0.5f); //エネミーの連撃速度
 
     private enum EnemyState //エネミーの種別
@@ -711,6 +715,8 @@ public class EnemyAI : MonoBehaviour
                 break;
         }
     }
+
+
     /// <summary>
     ///行動せずにラウンドを終了する。
     /// </summary>
@@ -919,6 +925,7 @@ public class EnemyAI : MonoBehaviour
     private void Shedding()
     {
         enemy.ReleaseBadStatus();
+        StartCoroutine(DisplaySkillText("敵の弱体化状態がかき消された!"));
     }
     /// <summary>
     /// 技名：振り下ろす
@@ -975,6 +982,7 @@ public class EnemyAI : MonoBehaviour
     {
         EnemyAttacking(7);
         player.ReleaseBuffStatus();
+        StartCoroutine(DisplaySkillText("強化状態がかき消された!"));
     }
     /// <summary>
     /// 技名：振りかぶる
@@ -984,6 +992,7 @@ public class EnemyAI : MonoBehaviour
     private void SwingOver()
     {
         enemy.AddGP(10);
+        StartCoroutine(DisplaySkillText("構えている"));
     }
     /// <summary>
     /// 技名：神砕き
@@ -995,6 +1004,7 @@ public class EnemyAI : MonoBehaviour
         int damage = enemy.GetSetGP * 3;
         EnemyAttacking(damage);
         enemy.GetSetGP = 0;
+        StartCoroutine(DisplaySkillText("構えを解いた"));
     }
     /// <summary>
     /// 技名：乱れ打ち
@@ -1037,6 +1047,7 @@ public class EnemyAI : MonoBehaviour
         player.ReleaseBadStatus();
         enemy.ReleaseBuffStatus();
         enemy.ReleaseBadStatus();
+        StartCoroutine(DisplaySkillText("お互いの状態変化がかき消された！"));
     }
     /// <summary>
     /// 技名：蝕毒
@@ -1152,6 +1163,7 @@ public class EnemyAI : MonoBehaviour
     {
         player.GetSetGP = 0;
         EnemyAttacking(4);
+        StartCoroutine(DisplaySkillText("ガードが崩された!"));
     }
 
     private void EnemyAttacking(int damage)//エネミーへの攻撃処理 
@@ -1165,5 +1177,20 @@ public class EnemyAI : MonoBehaviour
         damage += bg.relicID2Enemy; //レリックID2(心の器)の効果による攻撃力の増加
         damage = enemy.Weakness(damage); //衰弱による攻撃力の減少
         return damage;
+    }
+
+
+    /// <summary>
+    /// 引数に受け取った技のテキストを表示します。
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    IEnumerator DisplaySkillText(string text)
+    {
+        skillText.SetActive(true);
+        // 技のテキストを変更
+        skillText.GetComponentInChildren<TextMeshProUGUI>().text = text;
+        yield return new WaitForSeconds(1.5f);
+        skillText.SetActive(false);
     }
 }

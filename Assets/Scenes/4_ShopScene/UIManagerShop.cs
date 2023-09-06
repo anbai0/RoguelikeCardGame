@@ -181,28 +181,14 @@ public class UIManagerShop : MonoBehaviour
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
         if (isSelected && UIObject.CompareTag("BackGround"))
         {
-            // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastSelectedItem.CompareTag("Cards"))
-            {
-                lastSelectedItem.transform.localScale = cardScaleReset;
-                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
-            }
-
-            if (lastSelectedItem.CompareTag("Relics"))
-            {
-                lastSelectedItem.transform.localScale = relicScaleReset;
-                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
-                lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
-            }
-
-            lastSelectedItem = null;         // 選択状態リセット
-            isSelected = false;
+            ResetItemSelection();
         }
 
         // "買い物を終える"を押したら
         if (UIObject == closeShopping)
         {
             AudioManager.Instance.PlaySE("選択音1");
+            ResetItemSelection();
             shopUI.SetActive(true);
             restController.CheckRest("ShopScene");
         }
@@ -264,5 +250,28 @@ public class UIManagerShop : MonoBehaviour
                 UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
             }
         }
+    }
+
+    /// <summary>
+    /// アイテムの選択状態をすべて解除するメソッドです。
+    /// </summary>
+    void ResetItemSelection()
+    {
+        // 最後にクリックしたアイテムの選択状態を解除する
+        if (lastSelectedItem.CompareTag("Cards"))
+        {
+            lastSelectedItem.transform.localScale = cardScaleReset;
+            lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
+        }
+
+        if (lastSelectedItem.CompareTag("Relics"))
+        {
+            lastSelectedItem.transform.localScale = relicScaleReset;
+            lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
+            lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
+        }
+
+        lastSelectedItem = null;         // 選択状態リセット
+        isSelected = false;
     }
 }

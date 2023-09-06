@@ -164,24 +164,24 @@ public class UIManager : MonoBehaviour
             confirmationPanel.SetActive(false);
         }
 
-        // タイトルへ戻るボタンを押したら
+        // 確認画面でタイトルへ戻るボタンを押したら
         if (UIObject == confirmTitleBackButton)
         {
             // bgm停止(IEFadeOutBGMVolmeコルーチンでは止まってくれなかったのでStopを使っています。)
             AudioManager.Instance.bgmAudioSource.Stop();    
             AudioManager.Instance.PlaySE("選択音2");
-            
+
+            // カード図鑑画面非表示
+            cardPictureBook.SetActive(false);
+            cardPictureBookButton.SetActive(true);
+            // デッキ確認画面非表示
+            isShowingDeckConfirmation = false;
+            DeckConfirmation.SetActive(false);
+
             // タイトルへ戻る処理
             gm.UnloadAllScene();
             confirmationPanel.SetActive(false);
             optionScreen.SetActive(false);
-        }
-
-        // デスクトップへ戻るボタンを押したら
-        if (UIObject == desktopBackButton)
-        {
-            AudioManager.Instance.PlaySE("選択音1");
-            confimDeskBackPanel.SetActive(true);
         }
 
         // デスクトップへ戻る画面でバツボタンを押したら
@@ -191,13 +191,26 @@ public class UIManager : MonoBehaviour
             confimDeskBackPanel.SetActive(false);
         }
 
+        // デスクトップへ戻るボタンを押したら
+        if (UIObject == desktopBackButton)
+        {
+            AudioManager.Instance.PlaySE("選択音1");
+            confimDeskBackPanel.SetActive(true);
+        }
+
         // 確認画面でデスクトップへ戻るボタンを押したら
         if (UIObject == confimDeskbackButton)
         {
             audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
             AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
             AudioManager.Instance.PlaySE("選択音1");
-            
+            // カード図鑑画面非表示
+            cardPictureBook.SetActive(false);
+            cardPictureBookButton.SetActive(true);
+            // デッキ確認画面非表示
+            isShowingDeckConfirmation = false;
+            DeckConfirmation.SetActive(false);
+
             Application.Quit();     // ゲームを終了させる
         }
 
@@ -318,6 +331,11 @@ public class UIManager : MonoBehaviour
         if(UIObject == cardPictureBookButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
+            // 前に表示したカードをDestroy
+            foreach (Transform card in cardPictureBookPlace.transform)
+            {
+                Destroy(card.gameObject);
+            }
             cardPictureBookButton.SetActive(false);
             cardPictureBook.SetActive(true);
             ShowCardPictureBook();
@@ -326,10 +344,6 @@ public class UIManager : MonoBehaviour
         {
             AudioManager.Instance.PlaySE("選択音1");
             cardPictureBook.SetActive(false);
-            foreach(Transform card in cardPictureBookPlace.transform)
-            {
-                Destroy(card.gameObject);
-            }
             cardPictureBookButton.SetActive(true);
         }
         #endregion
