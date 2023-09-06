@@ -358,10 +358,7 @@ public class BattleGameManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         Destroy(uiManagerBattle);
         uiManagerBR.SetActive(true);　//UIManagerBattleRewardを使用可能に
-        if (enemyType == "StrongEnemy" || enemyType == "Boss") //エネミーが強敵以上なら
-        {
-            uiManagerBR.GetComponent<UIManagerBattleReward>().isDisplayRelics = true; //報酬としてレリックも選択できるようにする
-        }
+        uiManagerBR.GetComponent<UIManagerBattleReward>().isDisplayRelics = true; //報酬としてレリックを選択できるようにする
         resultAnimation.DisappearResult(); //勝利の文字を消す
         battleRewardManager.ShowReward(enemyType); //報酬を表示
         uiManagerBR.GetComponent<UIManagerBattleReward>().UIEventsReload();

@@ -202,7 +202,7 @@ public class UIManagerBattleReward : MonoBehaviour
             lastSelectedItem = null;
             isSelected = false;
 
-            //レリックの報酬も必要なら
+            //レリック取得画面に移動
             if (isDisplayRelics)
             {
                 battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる
@@ -221,7 +221,7 @@ public class UIManagerBattleReward : MonoBehaviour
         {
             AudioManager.Instance.PlaySE("選択音1");
 
-            //レリックの報酬も必要なら
+            //レリック取得画面に移動
             if (isDisplayRelics)
             {
                 battleRewardUI.GetComponent<DisplayAnimation>().StartDisappearAnimation(); //報酬画面を閉じる

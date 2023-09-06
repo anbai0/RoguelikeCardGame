@@ -85,9 +85,13 @@ public class BattleRewardManager : MonoBehaviour
     /// <param name="type">エネミーの種類</param>
     public void SelectRewardByRelics(string type)
     {
-        if (type == "StrongEnemy")
+        if (type == "SmallEnemy")
         {
-            rewardRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 1, 1 });
+            rewardRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 1, 1, 1 });
+        }
+        else if (type == "StrongEnemy")
+        {
+            rewardRelicID = Lottery.Instance.SelectRelicByRarity(new List<int> { 2, 2, 2 });
         }
         else if (type == "Boss")
         {
