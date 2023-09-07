@@ -90,7 +90,7 @@ public class UIManagerShop : MonoBehaviour
 
         #region ShopUI内での処理
 
-        // "購入"を押したら
+        // "購入"を押したらshopping画面に遷移
         if (UIObject == buyButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
@@ -125,7 +125,6 @@ public class UIManagerShop : MonoBehaviour
         #endregion
 
         #region ShoppingUI内での処理
-
         // アイテムをクリックしたら
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
@@ -141,7 +140,7 @@ public class UIManagerShop : MonoBehaviour
                     lastSelectedItem.transform.localScale = cardScaleReset;
                     lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
                 }
-                    
+
                 if (lastSelectedItem.CompareTag("Relics"))
                 {
                     lastSelectedItem.transform.localScale = relicScaleReset;
@@ -156,7 +155,7 @@ public class UIManagerShop : MonoBehaviour
                 // 2回目に選択したアイテムがレリックだった場合、レリックの説明を表示
                 if (UIObject.CompareTag("Relics"))
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
-                
+
             }
             if (UIObject == lastSelectedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
             {
@@ -192,6 +191,8 @@ public class UIManagerShop : MonoBehaviour
             shopUI.SetActive(true);
             restController.CheckRest("ShopScene");
         }
+
+
         #endregion
 
         #region RestUI内での処理
@@ -257,6 +258,8 @@ public class UIManagerShop : MonoBehaviour
     /// </summary>
     void ResetItemSelection()
     {
+        if (lastSelectedItem == null) return; 
+
         // 最後にクリックしたアイテムの選択状態を解除する
         if (lastSelectedItem.CompareTag("Cards"))
         {
