@@ -106,7 +106,7 @@ public class BattleGameManager : MonoBehaviour
         SetStatus(playerData, enemyData); //‚»‚ê‚¼‚ê‚Ìƒf[ƒ^‚ğBattleAction‚Ì•Ï”‚É‘ã“ü‚·‚é
         StartRelicEffect();
         InitDeck();
-        StartRound();
+        StartRound();        
     }
 
     /// <summary>

@@ -7421,7 +7421,6 @@ MonoBehaviour:
   relicPrefab: {fileID: 8617353695134665228, guid: 8058af89149049d4a90531c9f26d62e2,
     type: 3}
   relicPlace: {fileID: 737367922}
-  sceneFader: {fileID: 1717233878}
 --- !u!4 &1717233874
 Transform:
   m_ObjectHideFlags: 0

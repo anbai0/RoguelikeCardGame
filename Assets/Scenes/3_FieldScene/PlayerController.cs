@@ -7,14 +7,13 @@ public class PlayerController : MonoBehaviour
     public bool isEvents = true;
     public bool isSetting = false;
     public bool isConfimDeck = false;
-    public bool isPlayerActive = true;
 
     public float moveSpeed;                     //プレイヤーの動くスピード
     public float rotationSpeed = 10f;       //向きを変える速度
     private float moveHorizontal;
     private float moveVertical;
 
-    private Animator animator;   
+    private Animator animator;
 
     // 部屋関係
     private FieldSceneManager fieldManager;
@@ -48,28 +47,12 @@ public class PlayerController : MonoBehaviour
         Debug.Log("isEvents: " + isEvents);
         Debug.Log("isSetting: " + isSetting);
         Debug.Log("isConfimDeck: " + isConfimDeck);
-        //Debug.Log("isPlayerActive: " + isPlayerActive);
         if (!isEvents && !isSetting && !isConfimDeck)
-        {
-            Invoke("PlayerActive", 0.6f);
-        }else
-        {
-            isPlayerActive = false;
-        }
-            
-
-        // isPlayerActiveがtrueかつフェードインが終わっているとき
-        if (isPlayerActive)
         {
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeInBGMVolume());       // BGMを再生
             PlayerMove();
         }
 
-    }
-
-    void PlayerActive()
-    {
-        isPlayerActive = true;
     }
 
     private void PlayerMove()

@@ -65,15 +65,15 @@ public class SceneFader : MonoBehaviour
         FadeController fadeController = fade.GetComponent<FadeController>();
 
         // フェードアウトしフェードアウトが終わるまで待機
-        await fadeController.fadeOut();    
+        await fadeController.fadeOut();
+
+        await Task.Delay((int)(fadeTime));       // 一定の長さ暗転させる(ミリ秒単位)
 
         // ロードシーンが指定されていた場合、シーンをロード
         if (loadSceneName != "None") await LoadSceneAsyncTask(loadSceneName);
 
         // アンロードシーンが指定されていた場合、シーンをアンロード
-        if (unLoadSceneName != "None") await UnLoadSceneAsyncTask(unLoadSceneName);
-
-        await Task.Delay((int)(fadeTime));       // 一定の長さ暗転させる(ミリ秒単位)
+        if (unLoadSceneName != "None") await UnLoadSceneAsyncTask(unLoadSceneName);    
 
         // フェードインしフェードインが終わるまで待機
         await fadeController.fadeIn();
@@ -100,9 +100,9 @@ public class SceneFader : MonoBehaviour
         // フェードアウトしフェードアウトが終わるまで待機
         await fadeController.fadeOut();
 
-        toggleSceneName.ToggleSceneDisplay(isSceneActive);      // シーンの表示切替
-
         await Task.Delay(fadeTime);    // 一定の長さ暗転させる(ミリ秒単位)
+
+        toggleSceneName.ToggleSceneDisplay(isSceneActive);      // シーンの表示切替
 
         // フェードインしフェードインが終わるまで待機
         await fadeController.fadeIn();
@@ -125,9 +125,9 @@ public class SceneFader : MonoBehaviour
         // フェードアウトしフェードアウトが終わるまで待機
         await fadeController.fadeOut();
 
-        await method?.Invoke();
-
         await Task.Delay(fadeTime);    // 一定の長さ暗転させる(ミリ秒単位)
+
+        await method?.Invoke();
 
         // フェードインしフェードインが終わるまで待機
         await fadeController.fadeIn();
