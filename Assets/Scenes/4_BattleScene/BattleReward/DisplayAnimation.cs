@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -9,55 +10,15 @@ public class DisplayAnimation : MonoBehaviour
     [SerializeField, Header("表示の倍率")] float enlargeScale = 1.5f;
     [SerializeField, Header("切り替わるまでの時間")] float animationDuration = 1.0f;
 
-    private bool isPopUP = true; //true:拡大表示　false:縮小表示
-    private Vector3 originalScale;
-    private Vector3 zoomScale;
-    private bool isAnimating = false;
-    private float animationStartTime;
+    private Vector3 originalScale; //初期スケール
+    private float elapsedTime = 0f; // 経過時間
 
     private void Start()
     {
+        // UIテキストの初期スケールを保存
         originalScale = displayObject.transform.localScale;
-    }
-
-    private void Update()
-    {
-        if (isAnimating)
-        {
-            float timeSinceStart = Time.time - animationStartTime;
-            float t = Mathf.Clamp01(timeSinceStart / animationDuration);
-
-            // アニメーションが終了
-            if (t >= 1.0f)
-            {
-                if (isPopUP)
-                {
-                    isAnimating = false;
-                }
-                else
-                {
-                    isAnimating = false;
-                    displayObject.SetActive(false);
-                }
-
-            }
-            else
-            {
-                if (isPopUP)
-                {
-                    // 徐々に拡大させる
-                    float currentScale = Mathf.Lerp(1.0f, enlargeScale, t);
-                    displayObject.transform.localScale = originalScale * currentScale;
-                }
-                else
-                {
-                    //徐々に縮小させる
-                    float currentScale = Mathf.Lerp(1.0f, 0.1f, t);
-                    displayObject.transform.localScale = zoomScale * currentScale;
-                }
-
-            }
-        }
+        // UIテキストを非表示にする
+        displayObject.SetActive(false);
     }
 
     /// <summary>
@@ -65,14 +26,11 @@ public class DisplayAnimation : MonoBehaviour
     /// </summary>
     public void StartPopUPAnimation()
     {
-        if (!isAnimating)
-        {
-            displayObject.SetActive(true);
-            displayObject.transform.localScale = originalScale;
-            isPopUP = true;
-            animationStartTime = Time.time;
-            isAnimating = true;
-        }
+        // UIテキストをアクティブにする
+        displayObject.SetActive(true);
+        // アニメーションを開始
+        elapsedTime = 0f;
+        StartCoroutine(ScaleUp());
     }
 
     /// <summary>
@@ -80,12 +38,22 @@ public class DisplayAnimation : MonoBehaviour
     /// </summary>
     public void StartDisappearAnimation()
     {
-        if (!isAnimating)
+        // 非表示にする
+        displayObject.SetActive(false);
+    }
+
+    // 拡大アニメーション
+    private IEnumerator ScaleUp()
+    {
+        while (elapsedTime < animationDuration)
         {
-            zoomScale = displayObject.transform.localScale;
-            isPopUP = false;
-            animationStartTime = Time.time;
-            isAnimating = true;
+            float scale = Mathf.Lerp(originalScale.x, enlargeScale, elapsedTime / animationDuration);
+            displayObject.transform.localScale = new Vector3(scale, scale, 1f);
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+
+        // 目標スケールに達したらアニメーション終了
+        displayObject.transform.localScale = new Vector3(enlargeScale, enlargeScale, 1f);
     }
 }

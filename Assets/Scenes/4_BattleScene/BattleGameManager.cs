@@ -59,7 +59,7 @@ public class BattleGameManager : MonoBehaviour
     public bool isCoroutineEnabled;//動いているコルーチンが存在しているか判定//Update()で使用
     public bool isEnemyMoving;//エネミーのアクションが続いているか判定//PlayerMove(),EnemyMove()で使用
     public float turnTime = 0.5f;//ターンの切り替え時間
-    public float roundTime = 0.2f;//ラウンドの切り替え時間
+    public float roundTime = 1.0f;//ラウンドの切り替え時間
     private int playerMoveCount;//プレイヤーがラウンド中に行動した値//Curseの処理で使用
     private int enemyMoveCount;//エネミーがラウンド中に行動した値//Curseの処理で使用
     public int roundCount;//何ラウンド目かを記録する
@@ -220,7 +220,7 @@ public class BattleGameManager : MonoBehaviour
                 turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
                 playerTurnDisplay.enabled = false;
                 enemyTurnDisplay.enabled = true;
-                Invoke("EnemyMove", enemyMoveTime);
+                EnemyMove();
             }
         }
         else //どちらも行動できない場合
@@ -232,7 +232,7 @@ public class BattleGameManager : MonoBehaviour
 
             if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
             {
-                Invoke("EndRound", roundTime); //ターンを終了する
+                StartCoroutine(WaitEndRound()); //ターンを終了する
             }
             else
             {
@@ -240,6 +240,13 @@ public class BattleGameManager : MonoBehaviour
                 isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
             }
         }
+    }
+
+    IEnumerator WaitEndRound()
+    {
+        yield return new WaitForSeconds(roundTime);
+        EndRound();
+        yield break;
     }
 
     /// <summary>
@@ -268,7 +275,6 @@ public class BattleGameManager : MonoBehaviour
     {      
         enemyScript.Move();
         enemyMoveCount++;
-        Invoke("TurnCalc", turnTime);
     }
 
     /// <summary>

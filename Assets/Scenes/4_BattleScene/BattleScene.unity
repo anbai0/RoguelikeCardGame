@@ -3535,7 +3535,7 @@ MonoBehaviour:
   isCoroutineEnabled: 0
   isEnemyMoving: 0
   turnTime: 1
-  roundTime: 2
+  roundTime: 1
   roundCount: 0
   floor: 1
 --- !u!114 &1522913948

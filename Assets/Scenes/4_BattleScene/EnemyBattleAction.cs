@@ -79,9 +79,10 @@ public class EnemyBattleAction : CharacterBattleAction
         if (moveName == "RoundEnd") //EnemyAIで選択された行動が行動終了の場合
         {
             TurnEnd();
+            bg.TurnCalc();
             yield break;
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.0f);
         flash.StartFlash(Color.white, 0.1f);
         yield return new WaitForSeconds(0.2f);
         flash.StartFlash(Color.white, 0.1f);
@@ -91,6 +92,7 @@ public class EnemyBattleAction : CharacterBattleAction
         enemyAI.ActionMove(moveName);
         yield return StartCoroutine(MoveAfterCondition());
         bg.isEnemyMoving = false;
+        bg.TurnCalc();
         yield break;
     }
 
