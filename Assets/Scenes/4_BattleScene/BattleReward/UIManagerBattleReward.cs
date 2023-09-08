@@ -88,7 +88,6 @@ public class UIManagerBattleReward : MonoBehaviour
             // 入手ボタン切り替え
             applyGetItem.SetActive(true);
             closeGetItem.SetActive(false);
-            //UIEventsReload();
 
             // カード選択状態の切り替え
             // アイテム選択状態の切り替え

@@ -242,7 +242,6 @@ public class GameManager : MonoBehaviour
     private void ResetGameData()
     {
         Lottery.Instance.shopCards.Clear();
-        PlayerController.Instance.isPlayerActive = true;
         PlayerController.Instance.isEvents = false;
         PlayerController.Instance.isSetting = false;
         PlayerController.Instance.isConfimDeck = false;
