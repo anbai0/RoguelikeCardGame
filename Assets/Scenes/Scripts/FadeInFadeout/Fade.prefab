@@ -269,3 +269,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeSpeed: 0.7
   fadeDurationMultiplier: 1.5
+  fadeImage: {fileID: 1301272292875577464}

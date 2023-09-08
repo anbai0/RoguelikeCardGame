@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ShopScene上のアイテムの生成、値段チェック、購入処理を管理します。
@@ -14,7 +12,6 @@ public class ShopManager : MonoBehaviour
     private GameManager gm;
 
     [SerializeField] private UIManagerShop uiManager;
-    [SerializeField] private SceneFader sceneFader;
 
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
@@ -309,6 +306,6 @@ public class ShopManager : MonoBehaviour
     public void ExitShop()
     {
         // フェードインフェードアウトをし、シーンを非表示に
-        sceneFader.ToggleSceneWithFade("ShopScene", false);
+        SceneFader.Instance.ToggleSceneWithFade("ShopScene", false, allowPlayerMove: true);
     }
 }

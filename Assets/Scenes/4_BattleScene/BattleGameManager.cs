@@ -81,8 +81,7 @@ public class BattleGameManager : MonoBehaviour
         gm = GameManager.Instance;
         floor = gm.floor;
         floor = 1;
-        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        enemyType = playerController.enemyTag;
+        enemyType = PlayerController.Instance.enemyTag;
         StartBGM(enemyType);
         //èâä˙âª
         originCardPlace = CardPlace.transform.position;
@@ -500,7 +499,7 @@ public class BattleGameManager : MonoBehaviour
     void StartBGM(string _enemyType)
     {
         if (_enemyType == "SmallEnemy")
-        {
+        {          
             // BGMÇó¨ÇµÇ‹Ç∑
             if (Random.Range(0, 2) == 0)
             {

@@ -12,9 +12,7 @@ public class BattleRewardManager : MonoBehaviour
     [SerializeField]
     GameObject battleRewardUI;
 
-    [Header("参照するコンポーネント")]
-    [SerializeField] 
-    SceneFader sceneFader;
+    //[Header("参照するコンポーネント")]
     
     [Header("生成するカードオブジェクト")]
     [SerializeField]
@@ -142,7 +140,7 @@ public class BattleRewardManager : MonoBehaviour
         }
     }
 
-    private string unloadSceneName = null; //ロードするシーンの名前
+    private string loadSceneName = null; //ロードするシーンの名前
 
     public void UnLoadBattleScene()
     {
@@ -151,21 +149,20 @@ public class BattleRewardManager : MonoBehaviour
             if (gm.floor < 3) //階層が3階まで到達していない場合
             {
                 gm.floor++; //階層を1つ上げる
-                unloadSceneName = "FieldScene"; //ロードするシーンをフィールドシーンに設定
-                PlayerController.isEvents = false;       // プレイヤーを動けるようにする
+                loadSceneName = "FieldScene"; //ロードするシーンをフィールドシーンに設定
                 Lottery.Instance.shopCards.Clear(); //ショップのカードをリセットする
                 TransitionAfterBattle();
             }
             else
             {
-                unloadSceneName = "ResultScene"; //ロードするシーンをリザルトシーンに設定
+                loadSceneName = "ResultScene"; //ロードするシーンをリザルトシーンに設定
                 TransitionAfterBattle();
             }
         }
         else
         {
             // バトルシーンをアンロード
-            sceneFader.SceneChange(unLoadSceneName: "BattleScene");
+            SceneFader.Instance.SceneChange(unLoadSceneName: "BattleScene", allowPlayerMove: true);
 
             // フィールドシーンのBGMを流します
             if (Random.Range(0, 2) == 0)
@@ -177,20 +174,26 @@ public class BattleRewardManager : MonoBehaviour
                 AudioManager.Instance.PlayBGM("Field2");
             }
 
-            PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-            PlayerController.isEvents = false;       // プレイヤーを動けるようにする
-            playerController.enemy.SetActive(false);      // エネミーを消す
-            playerController = null;
+            PlayerController.Instance.enemy.SetActive(false);      // エネミーを消す
         }
     }
 
     /// <summary>
-    /// 戦闘終了後に遷移する際の処理
+    /// ボスとの戦闘終了後に遷移する際の処理
     /// TransitionAfterBattleScenesメソッドをFadeOutInWrapperメソッドに渡して実行
     /// </summary>
     public void TransitionAfterBattle()
     {
-        sceneFader.FadeOutInWrapper(TransitionAfterBattleScenes);
+        // ロードするシーンに応じて処理を分ける
+        if (loadSceneName == "FieldScene")
+        {
+            SceneFader.Instance.FadeOutInWrapper(TransitionAfterBattleScenes,true);
+        }
+        if (loadSceneName == "ResultScene")
+        {
+            SceneFader.Instance.FadeOutInWrapper(TransitionAfterBattleScenes);
+        }
+        
     }
 
     /// <summary>
@@ -201,8 +204,7 @@ public class BattleRewardManager : MonoBehaviour
         AsyncOperation asyncOperation;
 
         //バトルシーンをアンロード
-        Scene battleScene = SceneManager.GetSceneByName("BattleScene");
-        asyncOperation = SceneManager.UnloadSceneAsync(battleScene);
+        asyncOperation = SceneManager.UnloadSceneAsync("BattleScene");
         while (!asyncOperation.isDone) await Task.Yield();
 
         //ショップシーンがロードされていればアンロードする
@@ -214,17 +216,17 @@ public class BattleRewardManager : MonoBehaviour
         }
 
         // 参照解除の関係でフィールドシーンを最後にアンロード
-        Scene fieldScene = SceneManager.GetSceneByName("FieldScene");
-        asyncOperation = SceneManager.UnloadSceneAsync(fieldScene);
+        asyncOperation = SceneManager.UnloadSceneAsync("FieldScene");
         while (!asyncOperation.isDone) await Task.Yield();
 
         // フィールドシーンかリザルトシーンをロード
-        sceneFader.SceneChange(unloadSceneName);
+        asyncOperation = SceneManager.LoadSceneAsync(loadSceneName, LoadSceneMode.Additive);
+        while (!asyncOperation.isDone) await Task.Yield();
     }
 
     public void TransitionLoseBattle()
     {
-        sceneFader.FadeOutInWrapper(TransitionLoseBattleScenes);
+        SceneFader.Instance.FadeOutInWrapper(TransitionLoseBattleScenes);
     }
 
     public async Task TransitionLoseBattleScenes()

@@ -498,6 +498,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce6186606f7290746b6f33c2cc1e77a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isEvents: 1
+  isSetting: 0
+  isConfimDeck: 0
+  isPlayerActive: 1
   moveSpeed: 4
   rotationSpeed: 30
   lastRoomNum: 0

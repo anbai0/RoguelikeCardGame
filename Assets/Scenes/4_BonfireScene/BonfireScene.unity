@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae3cc8a97d7c9524d8570ac62d390575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneFader: {fileID: 1213055526}
+  sceneFader: {fileID: 0}
   cardEmptyText: {fileID: 34374864}
   cardPrefab: {fileID: 7009455883766435928, guid: a4142022ac005bc4ca6b58bc9c35ccf9,
     type: 3}
@@ -1904,7 +1904,6 @@ GameObject:
   - component: {fileID: 1213055523}
   - component: {fileID: 1213055522}
   - component: {fileID: 1213055524}
-  - component: {fileID: 1213055526}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2003,22 +2002,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &1213055526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1213055520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
-  fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
 --- !u!1 &1221388599
 GameObject:
   m_ObjectHideFlags: 0

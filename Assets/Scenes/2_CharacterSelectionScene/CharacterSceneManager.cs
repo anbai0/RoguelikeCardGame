@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class CharacterSceneManager : MonoBehaviour
 {
-    [SerializeField]
-    private SceneFader sceneFader;
 
     void Update()
     {
@@ -11,13 +9,13 @@ public class CharacterSceneManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             // キャラ選択シーンをアンロードし、タイトルシーンをロード
-            sceneFader.SceneChange("TitleScene", "CharacterSelectionScene");
+            SceneFader.Instance.SceneChange("TitleScene", "CharacterSelectionScene");
         }
     }
 
     public void LoadFieldScene()
     {
         // キャラ選択シーンをアンロードし、フィールドシーンをロード
-        sceneFader.SceneChange("FieldScene", "CharacterSelectionScene");
+        SceneFader.Instance.SceneChange("FieldScene", "CharacterSelectionScene",true);
     }
 }

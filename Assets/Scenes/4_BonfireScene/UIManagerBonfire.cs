@@ -96,7 +96,6 @@ public class UIManagerBonfire : MonoBehaviour
             isClick = true;
             AudioManager.Instance.PlaySE("選択音1");
             bonfireManager.UnLoadBonfireScene();          // フィールドに戻る
-            PlayerController.isEvents = false;       // プレイヤーを動けるようにする
         }
 
         // "休憩"を押したら
@@ -167,7 +166,6 @@ public class UIManagerBonfire : MonoBehaviour
             PutOutCampfire();       // 焚火の火を消す
 
             bonfireManager.UnLoadBonfireScene();      // 強化したらフィールドに戻る
-            PlayerController.isEvents = false;       // プレイヤーを動けるようにする
         }
 
         // "強化しない"を押したら
@@ -194,7 +192,6 @@ public class UIManagerBonfire : MonoBehaviour
             PutOutCampfire();       // 焚火の火を消す
 
             bonfireManager.UnLoadBonfireScene();          // 休憩したらフィールドに戻る
-            PlayerController.isEvents = false;       // プレイヤーを動けるようにする
         }
         // "休憩しない"を押したら
         if (UIObject == noRestButton)
@@ -236,14 +233,12 @@ public class UIManagerBonfire : MonoBehaviour
     /// </summary>
     void PutOutCampfire()
     {
-        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-
         // 焚火の火を消す
-        ParticleSystem particle = playerController.bonfire.GetComponentInChildren<ParticleSystem>();
+        ParticleSystem particle = PlayerController.Instance.bonfire.GetComponentInChildren<ParticleSystem>();
         particle.Stop();
 
         // 焚火の当たり判定を消す。
-        BoxCollider boxCol = playerController.bonfire.GetComponent<BoxCollider>();
+        BoxCollider boxCol = PlayerController.Instance.bonfire.GetComponent<BoxCollider>();
         boxCol.enabled = false;
     }
 }

@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
-    [SerializeField] SceneFader sceneFader;
 
     public static GameManager Instance;     // ƒVƒ“ƒOƒ‹ƒgƒ“
     protected void Awake()
@@ -243,10 +242,10 @@ public class GameManager : MonoBehaviour
     private void ResetGameData()
     {
         Lottery.Instance.shopCards.Clear();
-        PlayerController.isPlayerActive = true;
-        PlayerController.isEvents = false;
-        PlayerController.isSetting = false;
-        PlayerController.isConfimDeck = false;
+        PlayerController.Instance.isPlayerActive = true;
+        PlayerController.Instance.isEvents = false;
+        PlayerController.Instance.isSetting = false;
+        PlayerController.Instance.isConfimDeck = false;
 
         playerData = null;
 
@@ -266,7 +265,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void UnloadAllScene()
     {
-        sceneFader.FadeOutInWrapper(UnloadAllScenes);
+        SceneFader.Instance.FadeOutInWrapper(UnloadAllScenes);
     }
 
     /// <summary>

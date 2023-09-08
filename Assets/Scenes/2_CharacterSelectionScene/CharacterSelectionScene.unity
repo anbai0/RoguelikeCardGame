@@ -5355,7 +5355,6 @@ GameObject:
   - component: {fileID: 418362625}
   - component: {fileID: 418362622}
   - component: {fileID: 418362623}
-  - component: {fileID: 418362621}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5363,22 +5362,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &418362621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418362620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
-  fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
 --- !u!20 &418362622
 Camera:
   m_ObjectHideFlags: 0
@@ -5730,7 +5713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f367d4940c365243ba8acd6abfcffc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneFader: {fileID: 418362621}
+  sceneFader: {fileID: 0}
 --- !u!114 &999589709
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ using UnityEngine;
 public class ResultSceneManager : MonoBehaviour
 {
     private GameManager gm;
-    [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerResult uiManager;
 
     [Header("カード表示関係")]

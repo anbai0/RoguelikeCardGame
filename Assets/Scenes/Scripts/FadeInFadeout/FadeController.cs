@@ -7,15 +7,13 @@ public class FadeController : MonoBehaviour
 {
     [Header("フェードに掛かる時間")]
     public float fadeSpeed = 0.7f;
-    [Header("fadeSpeedの何倍分暗転させ続けるか")]
-    public float fadeDurationMultiplier = 1.2f;
 
     public static bool isFadeInstance = false;      // シングルトンで生成されたか
-    public static bool isFadeIn = false;                  // フェードインするフラグ
-    public static bool isFadeOut = false;                 // フェードアウトするフラグ
+    private bool isFadeIn = false;                  // フェードインするフラグ
+    private bool isFadeOut = false;                 // フェードアウトするフラグ
 
     private float alpha = 0.0f;     // 透過率
-    private Image fadeImage;
+    [SerializeField] private Image fadeImage;
 
     private bool fadeInDone = false;
     private bool fadeOutDone = false;
@@ -33,8 +31,6 @@ public class FadeController : MonoBehaviour
         {
             Destroy(this);
         }
-
-        fadeImage = GetComponentInChildren<Image>();
     }
 
     void Update()

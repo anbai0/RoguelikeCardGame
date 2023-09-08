@@ -4,10 +4,10 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public static bool isEvents = false;
-    public static bool isSetting = false;
-    public static bool isConfimDeck = false;
-    public static bool isPlayerActive = true;
+    public bool isEvents = true;
+    public bool isSetting = false;
+    public bool isConfimDeck = false;
+    public bool isPlayerActive = true;
 
     public float moveSpeed;                     //プレイヤーの動くスピード
     public float rotationSpeed = 10f;       //向きを変える速度
@@ -24,12 +24,19 @@ public class PlayerController : MonoBehaviour
     public GameObject enemy { get; private set; }
     public string enemyTag { get; private set; }
     // 部屋の移動
-    private Vector3 pPos;
     public int lastRoomNum;     // プレイヤーが最後にいた部屋の番号
 
+    public static PlayerController Instance { get; private set; }
+    private void Awake()
+    {
+        // シングルトン
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
     void Start()
     {
-        pPos = gameObject.transform.position;
 
         fieldManager = FindObjectOfType<FieldSceneManager>();
         roomsM = FindObjectOfType<RoomsManager>();
@@ -38,13 +45,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("isEvents: " + isEvents);
-        //Debug.Log("isSetting: " + isSetting);
-        //Debug.Log("isConfimDeck: " + isConfimDeck);
+        Debug.Log("isEvents: " + isEvents);
+        Debug.Log("isSetting: " + isSetting);
+        Debug.Log("isConfimDeck: " + isConfimDeck);
         //Debug.Log("isPlayerActive: " + isPlayerActive);
-        //Debug.Log("isFadeIn" + FadeController.isFadeIn);
-        //Debug.Log("isFadeOut" + FadeController.isFadeOut);
-        if (!isEvents && !isSetting && !isConfimDeck && !FadeController.isFadeIn && !FadeController.isFadeOut)
+        if (!isEvents && !isSetting && !isConfimDeck)
         {
             Invoke("PlayerActive", 0.6f);
         }else
@@ -182,7 +187,7 @@ public class PlayerController : MonoBehaviour
             GameObject nextRoom = roomsM.rooms[lastRoomNum + 4];                                              // 次の部屋を取得
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;                    // カメラを次の部屋に移動
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ライトを次の部屋に移動
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, -3.6f);      // Playerを次の部屋に移動
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
             // 焚火のエフェクトの切り替え
             Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
@@ -203,7 +208,7 @@ public class PlayerController : MonoBehaviour
             GameObject nextRoom = roomsM.rooms[lastRoomNum + 1];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, pPos.y, 0);
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
 
             // 焚火のエフェクトの切り替え
             Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
@@ -224,7 +229,7 @@ public class PlayerController : MonoBehaviour
             GameObject nextRoom = roomsM.rooms[lastRoomNum - 1];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, pPos.y, 0);
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
 
             // 焚火のエフェクトの切り替え
             Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
@@ -245,7 +250,7 @@ public class PlayerController : MonoBehaviour
             GameObject nextRoom = roomsM.rooms[lastRoomNum - 4];
             Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
             roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, pPos.y, 3.6f);
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
             // 焚火のエフェクトの切り替え
             Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");

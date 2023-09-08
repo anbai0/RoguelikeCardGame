@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 public class FieldSceneManager : MonoBehaviour
 {
-    [SerializeField]
-    private SceneFader sceneFader;
 
     private void Start()
     {
@@ -24,30 +22,30 @@ public class FieldSceneManager : MonoBehaviour
     public void LoadBattleScene()
     {
         // バトルシーンをロード
-        sceneFader.SceneChange("BattleScene");
+        SceneFader.Instance.SceneChange("BattleScene");
     }
 
     public void LoadBonfireScene()
     {
         // 焚火シーンをロード
-        sceneFader.SceneChange("BonfireScene");
+        SceneFader.Instance.SceneChange("BonfireScene");
     }
 
     public void LoadTreasureBoxScene()
     {
         // 宝箱シーンをロード
-        sceneFader.SceneChange("TreasureBoxScene");
+        SceneFader.Instance.SceneChange("TreasureBoxScene");
     }
 
     public void LoadShopScene()
     {
         // ショップシーンをロード
-        sceneFader.SceneChange("ShopScene");
+        SceneFader.Instance.SceneChange("ShopScene");
     }
 
     public void ActivateShopScene()
     {
         // ショップシーンのオブジェクトを表示
-        sceneFader.ToggleSceneWithFade("ShopScene", true);
+        SceneFader.Instance.ToggleSceneWithFade("ShopScene", true);
     }
 }

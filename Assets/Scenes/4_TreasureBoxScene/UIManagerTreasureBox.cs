@@ -209,7 +209,6 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController.isEvents = false; // プレイヤーを動けるようにする
                 ExitTreasureBox();
             }
 
@@ -230,7 +229,6 @@ public class UIManagerTreasureBox : MonoBehaviour
             {
                 Debug.Log("フィールドシーンへ移行");
                 TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-                PlayerController.isEvents = false; // プレイヤーを動けるようにする
                 ExitTreasureBox();
             }
         }
@@ -284,7 +282,6 @@ public class UIManagerTreasureBox : MonoBehaviour
         {
             Debug.Log("フィールドシーンへ移行");
             TBManager.UnLoadTreasureBoxScene(); // フィールドに戻る
-            PlayerController.isEvents = false; // プレイヤーを動けるようにする
             ExitTreasureBox();
         }
     }
@@ -330,9 +327,6 @@ public class UIManagerTreasureBox : MonoBehaviour
 
     void ExitTreasureBox()
     {
-        PlayerController playerController = "FieldScene".GetComponentInScene<PlayerController>();
-        playerController.treasureBox.SetActive(false); //宝箱を消す
-        playerController = null;
-        gm = null;
+        PlayerController.Instance.treasureBox.SetActive(false); //宝箱を消す
     }
 }

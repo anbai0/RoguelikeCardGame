@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BonfireManager : MonoBehaviour
 {
-    [SerializeField] SceneFader sceneFader;
 
     [SerializeField] GameObject cardEmptyText;
 
@@ -93,6 +92,6 @@ public class BonfireManager : MonoBehaviour
     public void UnLoadBonfireScene()
     {
         // 焚火シーンをアンロード
-        sceneFader.SceneChange(unLoadSceneName: "BonfireScene");
+        SceneFader.Instance.SceneChange(unLoadSceneName: "BonfireScene", allowPlayerMove: true);
     }
 }

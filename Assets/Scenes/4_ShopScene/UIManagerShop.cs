@@ -105,9 +105,6 @@ public class UIManagerShop : MonoBehaviour
             AudioManager.Instance.PlaySE("選択音1");
             shopManager.ExitShop();     // ShopSceneを非表示
 
-            // フィールドシーンのプレイヤーを動けるようにする
-            PlayerController.isEvents = false;
-
             isClick = false;
         }
         // "休憩"を押したら

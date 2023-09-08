@@ -8,7 +8,6 @@ public class TreasureBoxManager : MonoBehaviour
     [SerializeField] GameObject treasureBoxUI;
 
     [Header("参照するコンポーネント")]
-    [SerializeField] SceneFader sceneFader;
     [SerializeField] UIManagerTreasureBox uiManagerTB;
 
     [Header("生成するカードオブジェクト")]
@@ -101,6 +100,6 @@ public class TreasureBoxManager : MonoBehaviour
     /// </summary>
     public void UnLoadTreasureBoxScene()
     {
-        sceneFader.SceneChange(unLoadSceneName: "TreasureBoxScene");
+        SceneFader.Instance.SceneChange(unLoadSceneName: "TreasureBoxScene", allowPlayerMove: true);
     }
 }

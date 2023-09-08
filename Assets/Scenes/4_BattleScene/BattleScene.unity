@@ -1351,7 +1351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleRewardUI: {fileID: 160689628}
-  sceneFader: {fileID: 1021673078}
+  sceneFader: {fileID: 0}
   cardPrefab: {fileID: 7009455883766435924, guid: a4142022ac005bc4ca6b58bc9c35ccf9,
     type: 3}
   relicPrefab: {fileID: 8617353695134665216, guid: 8058af89149049d4a90531c9f26d62e2,
@@ -1811,7 +1811,6 @@ GameObject:
   - component: {fileID: 1021673077}
   - component: {fileID: 1021673076}
   - component: {fileID: 1021673079}
-  - component: {fileID: 1021673078}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1877,22 +1876,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1021673078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1021673074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8a9c4ef4c44bb4687f052037716567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadePrefab: {fileID: 8647389252123039276, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
-  fadeManager: {fileID: 8647389252123039277, guid: 078a6b29c3cdc2a44a172e79c318bdce,
-    type: 3}
 --- !u!114 &1021673079
 MonoBehaviour:
   m_ObjectHideFlags: 0
