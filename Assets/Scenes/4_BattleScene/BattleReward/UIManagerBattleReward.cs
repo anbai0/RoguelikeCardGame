@@ -84,6 +84,7 @@ public class UIManagerBattleReward : MonoBehaviour
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isSelected = true;
+            AudioManager.Instance.PlaySE("‘I‘ğ‰¹1");
 
             // “üèƒ{ƒ^ƒ“Ø‚è‘Ö‚¦
             applyGetItem.SetActive(true);
