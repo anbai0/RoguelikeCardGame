@@ -219,7 +219,15 @@ public class BattleGameManager : MonoBehaviour
                 turnEndBlackPanel.SetActive(true); //TurnEndButton‚ÌF‚ğˆÃ‚­‚·‚é
                 playerTurnDisplay.enabled = false;
                 enemyTurnDisplay.enabled = true;
-                EnemyMove();
+                if(roundCount == 1)
+                {
+                    Invoke("EnemyMove", 0.1f);
+                }
+                else
+                {
+                    EnemyMove();
+                }
+                
             }
         }
         else //‚Ç‚¿‚ç‚às“®‚Å‚«‚È‚¢ê‡
