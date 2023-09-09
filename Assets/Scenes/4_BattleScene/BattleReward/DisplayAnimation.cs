@@ -7,7 +7,7 @@ using UnityEngine;
 public class DisplayAnimation : MonoBehaviour
 {
     [SerializeField, Header("表示用オブジェクト")] GameObject displayObject;
-    [SerializeField, Header("表示の倍率")] float enlargeScale = 1.5f;
+    [SerializeField, Header("表示の倍率")] float enlargeScale = 1f;
     [SerializeField, Header("切り替わるまでの時間")] float animationDuration = 1.0f;
 
     private Vector3 originalScale; //初期スケール

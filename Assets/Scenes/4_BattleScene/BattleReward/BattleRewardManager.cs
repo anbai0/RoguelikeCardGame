@@ -33,6 +33,7 @@ public class BattleRewardManager : MonoBehaviour
     List<int> rewardCardID = null; //報酬として選ばれたカードのID
     List<int> rewardRelicID = null; //報酬として選ばれたレリックのID
     const int RelicID1 = 1; //アリアドネの糸(レアリティ３)
+    Vector3 cardScale =  Vector3.one * 0.25f;       // 生成するカードの大きさ
 
     GameManager gm;
     BattleGameManager bg;
@@ -111,6 +112,7 @@ public class BattleRewardManager : MonoBehaviour
         for (int cardCount = 0; cardCount < rewardCardID.Count; cardCount++)
         {
             GameObject cardObj = Instantiate(cardPrefab, cardPlace);
+            cardObj.transform.localScale = cardScale;
             cardObj.transform.SetParent(cardPlace);
             cardController = cardObj.GetComponent<CardController>();
             cardController.Init(rewardCardID[cardCount]);

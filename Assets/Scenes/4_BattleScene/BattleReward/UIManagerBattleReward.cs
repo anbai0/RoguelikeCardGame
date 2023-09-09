@@ -17,7 +17,7 @@ public class UIManagerBattleReward : MonoBehaviour
     private bool isSelected = false;
     private GameObject lastSelectedItem;
 
-    private Vector3 cardScaleReset = Vector3.one * 0.37f;    // カードを元のスケールに戻すときに使います
+    private Vector3 cardScaleReset = Vector3.one * 0.25f;    // カードを元のスケールに戻すときに使います
     private Vector3 relicScaleReset = Vector3.one * 2.5f;    // レリックを元のスケールに戻すときに使います
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
 
