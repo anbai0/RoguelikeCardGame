@@ -28,10 +28,7 @@ public class GameManager : MonoBehaviour
 
     public Action OnCardDiscard;      // カードの破棄を実行した時に呼び出されるデリゲート
 
-    private bool isAlreadyRead = false; // ReadPlayerで読み込んだかを判定する
-
     //フィールド
-
     public int floor = 1; //階層
 
     [SerializeField] UIManager uiManager;
@@ -49,10 +46,7 @@ public class GameManager : MonoBehaviour
         gameSettings = gameSettingsJson.loadGameSettingsData();     // ゲーム設定のロード
         audioSetting.InstantiateAudioSetting();                     // 音量の設定ロード
         InitializeItemData();
-        
-        // 各シーンでデバッグするときにコメントを解除してください
-        // 一度も読み込んでいなければ
-        //if (!isAlreadyRead) ReadPlayer("Debug");
+
     }
 
     /// <summary>
@@ -81,7 +75,6 @@ public class GameManager : MonoBehaviour
     /// <param name="playerJob"></param>
     public void ReadPlayer(string playerJob)
     {
-        isAlreadyRead = true;
         if (playerJob == "Warrior")
         {
             playerData = new PlayerDataManager("Warrior");
@@ -100,9 +93,9 @@ public class GameManager : MonoBehaviour
             ShowRelics();
             CheckGetRelicID7();
         }
-        if (playerJob == "Debug")
+        if (playerJob == "DebugChan")
         {
-            playerData = new PlayerDataManager("Debug");
+            playerData = new PlayerDataManager("DebugChan");
             initialHP = playerData._playerHP;
             // 全レリック取得
             hasRelics[1] += 5;
@@ -122,6 +115,7 @@ public class GameManager : MonoBehaviour
             CheckGetRelicID7();
             return;
         }
+
         playerData._deckList.Clear(); //デッキリストを空にする
         //開始時に配布されるカードを追加する
         AddCard(1);     // スイング

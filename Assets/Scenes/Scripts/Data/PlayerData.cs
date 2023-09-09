@@ -37,8 +37,4 @@ public class PlayerData : ScriptableObject
     /// キャラクターのデッキ
     /// </summary>
     public List<int> deckList;
-    /// <summary>
-    /// キャラクターのレリック
-    /// </summary>
-    public List<int> relicList;
 }

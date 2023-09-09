@@ -9,7 +9,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     [SerializeField] private GameObject canvas;
     private UIController[] UIs;
     private bool isEventsReset = true;
-    private bool isClick = false;
+    public bool isClick = false;
 
     private bool isCharaSelected = false;
 
@@ -51,7 +51,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     //[Header("クリック後に参照するUI")]
 
     [Header("カード抽選")]
-    [SerializeField] GameObject lotteryScreen;
+    [SerializeField] public GameObject lotteryScreen;
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform cardPlace;
     [SerializeField] GameObject cardDecisionButton;
@@ -351,7 +351,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         }
     }
 
-    private void ShowLottery()
+    public void ShowLottery()
     {
         lotteryCards = Lottery.Instance.SelectCardByRarity(new List<int> { 2, 1, 1 });
 

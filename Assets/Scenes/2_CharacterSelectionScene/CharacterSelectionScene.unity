@@ -5713,7 +5713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f367d4940c365243ba8acd6abfcffc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneFader: {fileID: 0}
+  uiManager: {fileID: 2071841384}
 --- !u!114 &999589709
 MonoBehaviour:
   m_ObjectHideFlags: 0

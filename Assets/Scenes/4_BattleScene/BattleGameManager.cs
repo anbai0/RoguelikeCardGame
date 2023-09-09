@@ -80,7 +80,7 @@ public class BattleGameManager : MonoBehaviour
     {
         gm = GameManager.Instance;
         floor = gm.floor;
-        floor = 1;
+        //floor = 1;
         enemyType = PlayerController.Instance.enemyTag;
         StartBGM(enemyType);
         //‰Šú‰»

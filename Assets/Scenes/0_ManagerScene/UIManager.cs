@@ -136,7 +136,8 @@ public class UIManager : MonoBehaviour
         if (UIObject == overlayOptionButton || UIObject == titleOptionButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.Instance.isSetting = true;
+            if (PlayerController.Instance != null)
+                PlayerController.Instance.isSetting = true;
             optionScreen.SetActive(true);
         }
 
@@ -146,7 +147,8 @@ public class UIManager : MonoBehaviour
             audioSetting.SaveAudioSetting();                // 音量設定のデータをセーブ
             AudioManager.Instance.UpdateBGMVolume();        // 今のBGMの音量を変更 
             AudioManager.Instance.PlaySE("選択音1");
-            PlayerController.Instance.isSetting = false;
+            if (PlayerController.Instance != null)
+                PlayerController.Instance.isSetting = false;
             optionScreen.SetActive(false);
         }
 

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class CharacterSceneManager : MonoBehaviour
 {
+    string playerInput = "";
+    bool isDebug = false;
+    [SerializeField] UIManagerCharaSelect uiManager;
 
     void Update()
     {
@@ -10,6 +13,31 @@ public class CharacterSceneManager : MonoBehaviour
         {
             // キャラ選択シーンをアンロードし、タイトルシーンをロード
             SceneFader.Instance.SceneChange("TitleScene", "CharacterSelectionScene");
+        }
+
+
+        // 隠しコマンド
+        if (Input.inputString.Length > 0 && !uiManager.isClick)
+        {
+            playerInput += Input.inputString;
+
+            if (playerInput.Length > 5) playerInput = "";
+
+            // "001"が入力されたかどうかをチェック
+            if (playerInput.Contains("001") && !isDebug)
+            {
+                isDebug = true;
+                Debug.Log("001が入力されました！");
+
+                GameManager.Instance.ReadPlayer("DebugChan");
+
+                uiManager.ShowLottery();
+                uiManager.UIEventsReload();
+                uiManager.lotteryScreen.SetActive(true);
+
+                // 入力をリセット
+                playerInput = "";
+            }
         }
     }
 
