@@ -18,9 +18,9 @@ public class DungeonGenerator : MonoBehaviour
     private int curWalkY;
     private int curWalkX;
     private int randomWalkMin = 13;
-    private int randomWalkMax = 15;
+    private int randomWalkMax = 14;
     private int movementLimit;
-    private int walkCount;
+    private int walkCount = 0;
     // バックトラッキング
     private Stack<Vector2Int> backTracking = new Stack<Vector2Int>();
 
@@ -28,15 +28,16 @@ public class DungeonGenerator : MonoBehaviour
     {
         // セルの中央(4個所からランダムで)スポーン地点を設定
         spawnY = Random.Range(spawnRandMin, spawnRandMax + 1);
-        spawnX = Random.Range(spawnRandMin, spawnRandMax + 1);   
+        spawnX = Random.Range(spawnRandMin, spawnRandMax + 1);
         rooms[spawnY, spawnX] = Instantiate(room, SetRoomPos(spawnY, spawnX), Quaternion.identity, roomParent);
         // 現在のランダムウォーク地点を更新
         curWalkY = spawnY;
         curWalkX = spawnX;
         // バックトラッキング用にスタックにプッシュ
-        backTracking.Push(new Vector2Int(curWalkY, curWalkX));
+        backTracking.Push(new Vector2Int(curWalkX, curWalkY));
         // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
-        rooms[curWalkY, curWalkX].gameObject.name = $"Room: 0 ({curWalkY}  {curWalkX})";
+        rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
+        walkCount++;
         RandomWalk();
         
     }
@@ -69,7 +70,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 direction = -1;     // switchに入ってほしくないので-1
                 Vector2Int latestCoordinate = backTracking.Pop();
-                Debug.Log(latestCoordinate);
+                Debug.Log($"{latestCoordinate} に戻りました。");
                 curWalkY = latestCoordinate.y;
                 curWalkX = latestCoordinate.x;        
             }
@@ -84,7 +85,7 @@ public class DungeonGenerator : MonoBehaviour
                     rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
 
                     // バックトラッキング用にスタックにプッシュ
-                    backTracking.Push(new Vector2Int(curWalkY, curWalkX));
+                    backTracking.Push(new Vector2Int(curWalkX, curWalkY));
                     walkCount++;                   
                     break;
 
@@ -95,7 +96,7 @@ public class DungeonGenerator : MonoBehaviour
                     rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
 
                     // バックトラッキング用にスタックにプッシュ
-                    backTracking.Push(new Vector2Int(curWalkY, curWalkX));
+                    backTracking.Push(new Vector2Int(curWalkX, curWalkY));
                     walkCount++;                   
                     break;
 
@@ -106,7 +107,7 @@ public class DungeonGenerator : MonoBehaviour
                     rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
 
                     // バックトラッキング用にスタックにプッシュ
-                    backTracking.Push(new Vector2Int(curWalkY, curWalkX));
+                    backTracking.Push(new Vector2Int(curWalkX, curWalkY));
                     walkCount++;          
                     break;
 
@@ -117,7 +118,7 @@ public class DungeonGenerator : MonoBehaviour
                     rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
 
                     // バックトラッキング用にスタックにプッシュ
-                    backTracking.Push(new Vector2Int(curWalkY, curWalkX));
+                    backTracking.Push(new Vector2Int(curWalkX, curWalkY));
                     walkCount++; 
                     break;
 
@@ -126,7 +127,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        
+        CreateDoors();
     }
 
     /// <summary>
@@ -142,13 +143,14 @@ public class DungeonGenerator : MonoBehaviour
             case 0:
                 return curWalkX - 1 >= 0 && rooms[curWalkY, curWalkX - 1] == null;
             case 1:
-                return curWalkX + 1 <= rooms.GetLength(1) - 1 && rooms[curWalkY, curWalkX + 1] == null;            
+                return curWalkX + 1 < rooms.GetLength(1) && rooms[curWalkY, curWalkX + 1] == null;            
             case 2:
                 return curWalkY - 1 >= 0 && rooms[curWalkY - 1, curWalkX] == null;
             case 3:
-                return curWalkY + 1 <= rooms.GetLength(0) - 1 && rooms[curWalkY + 1, curWalkX] == null;
+                return curWalkY + 1 < rooms.GetLength(0) && rooms[curWalkY + 1, curWalkX] == null;
 
             default:
+                Debug.LogError($"switch文に渡す値が間違っています。:  {dir}");
                 return false;
         }
     }
@@ -165,5 +167,91 @@ public class DungeonGenerator : MonoBehaviour
         return new Vector3(vertical * 20f, 0f, -horizontal * 20f);
     }
 
-    
+
+    void CreateDoors()
+    {
+        int aCount = 0;
+        RoomBehaviour roomBehaviour;
+        for (int y = 0; y < rooms.GetLength(0); y++)
+        {
+            //Debug.Log("y  "+ y);
+            for (int x = 0; x < rooms.GetLength(1); x++)
+            {
+                if (rooms[y, x] == null)
+                {
+                    //Debug.Log($"{y},{x}の部屋は、nullです");
+                    continue;
+                }
+               
+
+                bool[] doorStatus = new bool[4];           
+
+                // 上下左右に部屋がある場合doorStatusをtrueにします。
+                for (int i = 0; i < 4; i++)
+                {
+                    // 0 - forward, 1 - back, 2 - Left, 3 - Right
+                    switch (i)
+                    {
+                        case 0:
+                            if (x - 1 < 0)
+                            {
+                                //Debug.Log($"{rooms[y, x]}　の上の部屋は　範囲外です");
+                                break;
+                            }
+
+                            //Debug.Log($"{rooms[y, x]}　の上の部屋は　{rooms[y, x - 1]}");
+                            doorStatus[0] = (rooms[y, x - 1] != null) ? true : false;
+                            break;
+
+                        case 1:
+                            if (x + 1 >= rooms.GetLength(1))
+                            {
+                                //Debug.Log($"{rooms[y, x]}　の下の部屋は　範囲外です");
+                                break;
+                            }
+
+                            //Debug.Log($"{rooms[y, x]}　の下の部屋は　{rooms[y, x + 1]}");
+                            doorStatus[1] = (rooms[y, x + 1] != null) ? true : false;
+                            break;
+
+                        case 2:
+                            if (y - 1 < 0)
+                            {
+                                //Debug.Log($"{rooms[y, x]}　の左の部屋は　範囲外です");
+                                break;
+                            }
+
+                            //Debug.Log($"{rooms[y, x]}　の左の部屋は　{rooms[y - 1, x]}");
+                            doorStatus[2] = (rooms[y - 1, x] != null) ? true : false;
+                            break;
+
+                        case 3:
+                            if (y + 1 >= rooms.GetLength(0))
+                            {
+                                //Debug.Log($"{rooms[y, x]}　の右の部屋は　範囲外です");
+                                break;
+                            }
+
+                            //Debug.Log($"{rooms[y, x]}　の右の部屋は　{rooms[y + 1, x]}");
+                            doorStatus[3] = (rooms[y + 1, x] != null) ? true : false;
+                            break;
+
+                        default:
+                            Debug.LogError($"switch文に渡す値が間違っています。:  {i}");
+                            break;
+                    }
+                    //Debug.Log($"{aCount}回目のi:  {i}");
+                    
+                }
+                aCount++;
+                if (rooms[y, x] != null)
+                {
+                    roomBehaviour = rooms[y, x].GetComponent<RoomBehaviour>();
+                    roomBehaviour.UpdateRoom(doorStatus);
+                }
+                   
+            }
+        }
+
+    }
 }
