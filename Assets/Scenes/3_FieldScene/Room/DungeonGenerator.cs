@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -9,8 +11,8 @@ public class DungeonGenerator : MonoBehaviour
     public Transform roomParent;
 
     // スポーン地点
-    private int spawnY;
-    private int spawnX;
+    public int spawnY;
+    public int spawnX;
     private const int spawnRandMin = 2;
     private const int spawnRandMax = 3;
 
@@ -24,22 +26,62 @@ public class DungeonGenerator : MonoBehaviour
     // バックトラッキング
     private Stack<Vector2Int> backTracking = new Stack<Vector2Int>();
 
+
+    [SerializeField] private GameObject warriorPrefab;
+    [SerializeField] private GameObject wizardPrefab;
+
+    [SerializeField] public Camera cam;    // Main.cameraだと正しく取得できない時があるため
+    [SerializeField] private GameObject objectParent;
+
+    [SerializeField] public GameObject spotLight;          // 部屋を移動したときに一緒に移動させます
+    public Vector3 lightPos = new Vector3(0, -4, 0);       // カメラの位置に加算して使います
+    public Vector3 roomCam = new Vector3(0, 10, -10);      // 各部屋の位置に加算して使います。
+
+    float warriorY = -2.34f;
+    float wizardY = -2.34f;
+
     void Start()
     {
         // セルの中央(4個所からランダムで)スポーン地点を設定
         spawnY = Random.Range(spawnRandMin, spawnRandMax + 1);
         spawnX = Random.Range(spawnRandMin, spawnRandMax + 1);
         rooms[spawnY, spawnX] = Instantiate(room, SetRoomPos(spawnY, spawnX), Quaternion.identity, roomParent);
+        // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
+        rooms[spawnY, spawnX].gameObject.name = $"Room: {walkCount} ({spawnY}  {spawnX})";
         // 現在のランダムウォーク地点を更新
         curWalkY = spawnY;
         curWalkX = spawnX;
         // バックトラッキング用にスタックにプッシュ
         backTracking.Push(new Vector2Int(curWalkX, curWalkY));
-        // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
-        rooms[curWalkY, curWalkX].gameObject.name = $"Room: {walkCount} ({curWalkY}  {curWalkX})";
+
         walkCount++;
         RandomWalk();
-        
+        CreatePalyer();
+    }
+
+    void CreatePalyer()
+    {
+        // キャラ選択で選択されたキャラのモデルを生成
+        if (GameManager.Instance.playerData._playerName == "戦士")
+        {
+            // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+            GameObject warrior = Instantiate(warriorPrefab, rooms[curWalkY, curWalkX].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity);
+            warrior.transform.SetParent(objectParent.transform);
+            warrior.transform.SetParent(null);
+        }
+        if (GameManager.Instance.playerData._playerName == "魔法使い")
+        {
+            // ほかのシーンにPrefabが生成されてしまうため、一度SetParentで親を指定して、親を解除しています。
+            GameObject wizard = Instantiate(wizardPrefab, rooms[curWalkY, curWalkX].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity);
+            wizard.transform.SetParent(objectParent.transform);
+            wizard.transform.SetParent(null);
+        }
+
+        // カメラの位置を変更
+        cam.transform.position = rooms[curWalkY, curWalkX].transform.position + roomCam;
+
+        // ライトの位置変更
+        spotLight.transform.position = cam.transform.position + lightPos;
     }
 
     /// <summary>
