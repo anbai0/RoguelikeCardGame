@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &23044585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1563,8 +1563,15 @@ MonoBehaviour:
     type: 3}
   bossDoor: {fileID: 1349069790602077164, guid: 86949cd22586cda4f9768d7f5e8feb13,
     type: 3}
-  cam: {fileID: 1136374009}
+  strongEnemy: {fileID: 0}
+  smallEnemy: {fileID: 0}
+  bonfirePrefab: {fileID: 0}
+  treasurePrefab: {fileID: 0}
+  shopPrefab: {fileID: 0}
+  playerParent: {fileID: 0}
   objectParent: {fileID: 1016413508}
+  enemyParent: {fileID: 0}
+  cam: {fileID: 1136374009}
   spotLight: {fileID: 944705260}
   lightPos: {x: 0, y: -4, z: 0}
   roomCam: {x: 0, y: 10, z: -10}
@@ -1583,7 +1590,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1870224441
 Transform:
   m_ObjectHideFlags: 0

@@ -181,10 +181,10 @@ public class PlayerController : MonoBehaviour
         //    gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
         //    // 焚火のエフェクトの切り替え
-        //    Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-        //    if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
+        //    Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
+        //    if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         //    {
-        //        bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
+        //        bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
         //    }
         //    Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
         //    if (lastRoomBonfire != null)
@@ -202,10 +202,10 @@ public class PlayerController : MonoBehaviour
         //    gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
 
         //    // 焚火のエフェクトの切り替え
-        //    Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-        //    if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
+        //    Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
+        //    if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         //    {
-        //        bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
+        //        bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
         //    }
         //    Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
         //    if (lastRoomBonfire != null)
@@ -223,10 +223,10 @@ public class PlayerController : MonoBehaviour
         //    gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
 
         //    // 焚火のエフェクトの切り替え
-        //    Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-        //    if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
+        //    Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
+        //    if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         //    {
-        //        bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
+        //        bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
         //    }
         //    Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
         //    if (lastRoomBonfire != null)
@@ -244,10 +244,10 @@ public class PlayerController : MonoBehaviour
         //    gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
         //    // 焚火のエフェクトの切り替え
-        //    Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-        //    if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
+        //    Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
+        //    if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         //    {
-        //        bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
+        //        bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
         //    }
         //    Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
         //    if (lastRoomBonfire != null)
@@ -313,10 +313,10 @@ public class PlayerController : MonoBehaviour
     void BonfireParticleSwitch(GameObject nextRoom)
     {
         //// 焚火のエフェクトの切り替え
-        //Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-        //if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
+        //Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
+        //if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         //{
-        //    bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
+        //    bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
         //}
         //Transform lastRoomBonfire = dungeon.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
         //if (lastRoomBonfire != null)
