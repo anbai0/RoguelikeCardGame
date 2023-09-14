@@ -424,7 +424,7 @@ public class DungeonGenerator : MonoBehaviour
         bossRoomX = farthestRoomX;
 
         // ã≠ìGê∂ê¨
-        GenerateStrongEnemy();
+        //GenerateStrongEnemy();
     }
 
     /// <summary>
@@ -432,30 +432,42 @@ public class DungeonGenerator : MonoBehaviour
     /// </summary>
     void GenerateStrongEnemy()
     {
+        int direction = -1;
         int generateCount = 0;
-        int rand = Random.Range(1, 3 + 1);
+        int loopCount = 0;
+        //int enemya
 
-        switch (rand)
+        direction = Random.Range(1, 3 + 1);
+        loopCount++;
+
+        // 10âÒåJÇËï‘ÇµÇƒã≠ìGÇê∂ê¨Ç≈Ç´Ç»Ç©Ç¡ÇΩèÍçá
+        if (loopCount >= 10)
+        {
+            direction = -1;     // switchÇ…ì¸Ç¡ÇƒÇŸÇµÇ≠Ç»Ç¢ÇÃÇ≈-1
+        }
+
+        switch (direction)
         {
             // â∫
             case 1:
                 if (bossRoomX + 1 < rooms.GetLength(1) && rooms[bossRoomY, bossRoomX + 1])
                 {
-
+                    //Instantiate(strongEnemy, rooms[]);
+                    generateCount++;
                 }
                 break;
             // ç∂
             case 2:
                 if (bossRoomY - 1 >= 0 && rooms[bossRoomY - 1, bossRoomX])
                 {
-
+                    generateCount++;
                 }
                 break;
             // âE
             case 3:
                 if (bossRoomY + 1 < rooms.GetLength(1) && rooms[bossRoomY + 1, bossRoomX])
                 {
-
+                    generateCount++;
                 }
                 break;
             default:
