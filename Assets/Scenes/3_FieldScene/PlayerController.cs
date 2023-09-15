@@ -26,8 +26,7 @@ public class PlayerController : MonoBehaviour
     public int lastRoomNum;     // プレイヤーが最後にいた部屋の番号
 
     [SerializeField] DungeonGenerator dungeon;
-    int playerY;
-    int playerX;
+    Vector2Int playerPos;
 
 
     public static PlayerController Instance { get; private set; }
@@ -46,8 +45,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         dungeon = FindObjectOfType<DungeonGenerator>();
-        playerY = dungeon.spawnY;
-        playerX = dungeon.spawnX;
+        playerPos = dungeon.spawnPos;
     }
 
     void Update()
@@ -262,8 +260,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("GateForward"))
         {
             AudioManager.Instance.PlaySE("マップ切り替え");                                                     // SE再生
-            playerX -= 1;                                                                                       // 次に参照する部屋の位置を移動
-            GameObject nextRoom = dungeon.rooms[playerY,playerX];                                               // 次の部屋を取得
+            playerPos.x -= 1;                                                                                       // 次に参照する部屋の位置を移動
+            GameObject nextRoom = dungeon.rooms[playerPos.y,playerPos.x];                                               // 次の部屋を取得
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;                     // カメラを次の部屋に移動
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;           // ライトを次の部屋に移動
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
@@ -274,8 +272,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("GateBack"))
         {
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerX += 1;
-            GameObject nextRoom = dungeon.rooms[playerY, playerX];
+            playerPos.x += 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
@@ -286,8 +284,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("GateLeft"))
         {
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerY -= 1;
-            GameObject nextRoom = dungeon.rooms[playerY, playerX];
+            playerPos.y -= 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Debug.Log(Camera.main);
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
@@ -299,8 +297,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("GateRight"))
         {
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerY += 1;
-            GameObject nextRoom = dungeon.rooms[playerY, playerX];
+            playerPos.y += 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
