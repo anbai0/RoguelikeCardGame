@@ -151,6 +151,7 @@ public class DungeonGenerator : MonoBehaviour
         {         
             int direction;
             int loopCount = 0;
+            int forwardCount=0, backCount=0, leftCount=0, rightCount=0;
 
             // ランダムウォーク
             do
@@ -174,23 +175,39 @@ public class DungeonGenerator : MonoBehaviour
             switch (direction)
             {
                 case 0:
+                    forwardCount++; backCount = 0; leftCount = 0; rightCount = 0;
                     // 上に移動
                     curWalk.y -= 1; break;
 
                 case 1:
+                    forwardCount = 0; backCount++; leftCount = 0; rightCount = 0;
                     // 下に移動
                     curWalk.y += 1; break;
 
                 case 2:
+                    forwardCount = 0; backCount = 0; leftCount++; rightCount = 0;
                     // 左に移動
                     curWalk.x -= 1; break;
 
                 case 3:
+                    forwardCount = 0; backCount = 0; leftCount = 0; rightCount++;
                     // 右に移動
                     curWalk.x += 1; break;
 
                 default:
                     break;
+            }
+
+            if (forwardCount == 3 || backCount == 3 || leftCount == 3 || rightCount == 3)
+            {
+                if(forwardCount == 3 || backCount == 3)
+                {
+
+                }
+                if(leftCount == 3 || rightCount == 3)
+                {
+
+                }
             }
 
             // 移動した場合そこに部屋を生成
@@ -206,8 +223,8 @@ public class DungeonGenerator : MonoBehaviour
                 backTracking.Push(new Vector2Int(curWalk.x, curWalk.y));
             }
 
-            // 三歩目に焚火を生成
-            if (walkCount == 3)
+            // 二歩目に焚火を生成
+            if (walkCount == 2)
             {
                 // 焚火生成
                 GameObject bonfire = Instantiate(bonfirePrefab, rooms[curWalk.y, curWalk.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, objectParent);
@@ -520,12 +537,10 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         // ショップを二つ生成
-        for (int i = 1; i <= 2; i++)
-        {
-            int lotteryShop = Random.Range(0, emptyRoomList.Count);
-            Instantiate(shopPrefab, emptyRoomList[lotteryShop].transform.position, Quaternion.identity, objectParent);
-            emptyRoomList.RemoveAt(lotteryShop);
-        }
+        int lotteryShop = Random.Range(0, emptyRoomList.Count);
+        Instantiate(shopPrefab, emptyRoomList[lotteryShop].transform.position, Quaternion.identity, objectParent);
+        emptyRoomList.RemoveAt(lotteryShop);
+
 
         // 宝箱を生成
         int lotteryTreasure = Random.Range(0, emptyRoomList.Count);
