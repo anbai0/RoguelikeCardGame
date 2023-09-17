@@ -1593,15 +1593,15 @@ MonoBehaviour:
     type: 3}
   bossDoor: {fileID: 1349069790602077164, guid: 86949cd22586cda4f9768d7f5e8feb13,
     type: 3}
-  strongEnemy: {fileID: 9072370520707341675, guid: e5afcceeb75310b4d8621050bf0f73de,
+  strongEnemy: {fileID: 1023735093794896803, guid: e5afcceeb75310b4d8621050bf0f73de,
     type: 3}
-  smallEnemy: {fileID: 5636416129668958907, guid: 5a72ad82c831e1d41adf9b94eeb1470b,
+  smallEnemy: {fileID: 6764366538732338879, guid: 5a72ad82c831e1d41adf9b94eeb1470b,
     type: 3}
   bonfirePrefab: {fileID: 4242060766204644696, guid: b6f054948bc21f94092ebad76bb6dc48,
     type: 3}
-  treasurePrefab: {fileID: 2750667469111246571, guid: 343135e6b52f4a7479ba779eb3664d59,
+  treasurePrefab: {fileID: 5461818851161326736, guid: 343135e6b52f4a7479ba779eb3664d59,
     type: 3}
-  shopPrefab: {fileID: 6711205647773303621, guid: 2f6fcaa1df9f3a345ac6d7253a4e014e,
+  shopPrefab: {fileID: 7836011145940569440, guid: 2f6fcaa1df9f3a345ac6d7253a4e014e,
     type: 3}
   playerParent: {fileID: 66400214}
   objectParent: {fileID: 1016413509}
@@ -1625,7 +1625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1870224441
 Transform:
   m_ObjectHideFlags: 0

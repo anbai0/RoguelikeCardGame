@@ -74,7 +74,7 @@ public class DungeonGenerator : MonoBehaviour
         backTracking.Push(new Vector2Int(curWalk.x, curWalk.y));
         
         RandomWalk();
-        //CreatePlayer();
+        CreatePlayer();
     }
 
     private void Update()
@@ -264,7 +264,7 @@ public class DungeonGenerator : MonoBehaviour
             if (walkCount == 2)
             {
                 // 焚火生成
-                GameObject bonfire = Instantiate(bonfirePrefab, rooms[curWalk.y, curWalk.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, objectParent);
+                GameObject bonfire = Instantiate(bonfirePrefab, rooms[curWalk.y, curWalk.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, rooms[curWalk.y, curWalk.x].transform);
                 bonfire.gameObject.name = $"bonfire1: {walkCount} ({curWalk.y}  {curWalk.x})";
                 // 焚火を生成した部屋を記録
                 bonfireRoomPos.Set(curWalk.x, curWalk.y);
@@ -441,7 +441,7 @@ public class DungeonGenerator : MonoBehaviour
         Debug.Log($"{rooms[farthestRoomPos.y, farthestRoomPos.x]}　にボスの扉生成。");
 
         // 焚火生成
-        GameObject bonfire = Instantiate(bonfirePrefab, rooms[farthestRoomPos.y, farthestRoomPos.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, objectParent);
+        GameObject bonfire = Instantiate(bonfirePrefab, rooms[farthestRoomPos.y, farthestRoomPos.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, rooms[farthestRoomPos.y, farthestRoomPos.x].transform);
         bonfire.gameObject.name = $"bonfire2: bossRoom ({farthestRoomPos.y}  {farthestRoomPos.x})";
 
         // ボス部屋の位置を記録
@@ -462,17 +462,21 @@ public class DungeonGenerator : MonoBehaviour
         // 下に部屋がある場合Listに追加
         if (bossRoomPos.y + 1 < rooms.GetLength(1) && rooms[bossRoomPos.y + 1, bossRoomPos.x] != null)
         {
-            adjacentRooms.Add(new Vector2Int(bossRoomPos.x, bossRoomPos.y + 1));
+            // 指定した部屋に焚火がない場合Listに追加
+            if (rooms[bossRoomPos.y + 1, bossRoomPos.x] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                adjacentRooms.Add(new Vector2Int(bossRoomPos.x, bossRoomPos.y + 1));
         }
         // 左に部屋がある場合Listに追加
         if (bossRoomPos.x - 1 >= 0 && rooms[bossRoomPos.y, bossRoomPos.x - 1] != null)
         {
-            adjacentRooms.Add(new Vector2Int(bossRoomPos.x - 1, bossRoomPos.y));
+            if (rooms[bossRoomPos.y, bossRoomPos.x - 1] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                adjacentRooms.Add(new Vector2Int(bossRoomPos.x - 1, bossRoomPos.y));
         }
         // 右に部屋がある場合Listに追加
         if (bossRoomPos.x + 1 < rooms.GetLength(0) && rooms[bossRoomPos.y, bossRoomPos.x + 1] != null)
         {
-            adjacentRooms.Add(new Vector2Int(bossRoomPos.x + 1, bossRoomPos.y));
+            if (rooms[bossRoomPos.y, bossRoomPos.x + 1] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                adjacentRooms.Add(new Vector2Int(bossRoomPos.x + 1, bossRoomPos.y));
         }
 
         // ランダムに2つの隣接するを強敵部屋に設定
@@ -494,22 +498,27 @@ public class DungeonGenerator : MonoBehaviour
             // 上に部屋がある場合Listに追加
             if (strongEnemyRooms[0].y -1 >= 0 && rooms[strongEnemyRooms[0].y - 1, strongEnemyRooms[0].x] != null)
             {
-                selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x, strongEnemyRooms[0].y - 1));
+                // 指定した部屋に焚火がない場合Listに追加
+                if (rooms[strongEnemyRooms[0].y - 1, strongEnemyRooms[0].x] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                    selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x, strongEnemyRooms[0].y - 1));
             }
             // 下に部屋がある場合Listに追加
             if (strongEnemyRooms[0].y + 1 < rooms.GetLength(1) && rooms[strongEnemyRooms[0].y + 1, strongEnemyRooms[0].x] != null)
             {
-                selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x, strongEnemyRooms[0].y + 1));
+                if (rooms[strongEnemyRooms[0].y + 1, strongEnemyRooms[0].x] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                    selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x, strongEnemyRooms[0].y + 1));
             }
             // 左に部屋がある場合Listに追加
             if (strongEnemyRooms[0].x - 1 >= 0 && rooms[strongEnemyRooms[0].y, strongEnemyRooms[0].x - 1] != null)
             {
-                selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x - 1, strongEnemyRooms[0].y));
+                if (rooms[strongEnemyRooms[0].y, strongEnemyRooms[0].x - 1] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                    selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x - 1, strongEnemyRooms[0].y));
             }
             // 右に部屋がある場合Listに追加
             if (strongEnemyRooms[0].x + 1 < rooms.GetLength(0) && rooms[strongEnemyRooms[0].y, strongEnemyRooms[0].x + 1] != null)
             {
-                selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x + 1, strongEnemyRooms[0].y));
+                if (rooms[strongEnemyRooms[0].y, strongEnemyRooms[0].x + 1] != rooms[bonfireRoomPos.y, bonfireRoomPos.x])
+                    selectedRooms.Add(new Vector2Int(strongEnemyRooms[0].x + 1, strongEnemyRooms[0].y));
             }
 
             // ボス部屋を除外

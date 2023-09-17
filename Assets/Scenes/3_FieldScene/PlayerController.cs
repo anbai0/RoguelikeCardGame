@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] DungeonGenerator dungeon;
     Vector2Int playerPos;
+    GameObject lastRoom;
 
 
     public static PlayerController Instance { get; private set; }
@@ -155,7 +157,7 @@ public class PlayerController : MonoBehaviour
         //if (roomsM == null) return;
 
         #region 今いる部屋を特定する処理
-        // lastRoomと今いる部屋が違う場合
+        //lastRoomと今いる部屋が違う場合
         //if (roomsM.rooms[lastRoomNum] != other.gameObject)
         //{
         //    for (int roomNum = 1; roomNum <= roomsM.rooms.Length - 1; roomNum++)
@@ -259,8 +261,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateForward"))
         {
+            lastRoom = dungeon.rooms[playerPos.y, playerPos.x];                                                 // 最後にいた部屋更新
             AudioManager.Instance.PlaySE("マップ切り替え");                                                     // SE再生
-            playerPos.x -= 1;                                                                                       // 次に参照する部屋の位置を移動
+            playerPos.y -= 1;                                                                                       // 次に参照する部屋の位置を移動
             GameObject nextRoom = dungeon.rooms[playerPos.y,playerPos.x];                                               // 次の部屋を取得
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;                     // カメラを次の部屋に移動
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;           // ライトを次の部屋に移動
@@ -271,8 +274,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateBack"))
         {
+            lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerPos.x += 1;
+            playerPos.y += 1;
             GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
@@ -283,8 +287,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateLeft"))
         {
+            lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerPos.y -= 1;
+            playerPos.x -= 1;
             GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Debug.Log(Camera.main);
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
@@ -296,8 +301,9 @@ public class PlayerController : MonoBehaviour
 
         if (other.gameObject.CompareTag("GateRight"))
         {
+            lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
             AudioManager.Instance.PlaySE("マップ切り替え");
-            playerPos.y += 1;
+            playerPos.x += 1;
             GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
@@ -310,17 +316,35 @@ public class PlayerController : MonoBehaviour
 
     void BonfireParticleSwitch(GameObject nextRoom)
     {
-        //// 焚火のエフェクトの切り替え
-        //Transform bonfirePrefab = nextRoom.transform.Find("Bonfire(Clone)");
-        //if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
-        //{
-        //    bonfirePrefab.transform.GetComponentInChildren<ParticleSystem>().Play();
-        //}
-        //Transform lastRoomBonfire = dungeon.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
-        //if (lastRoomBonfire != null)
-        //{
-        //    lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
-        //}
+        // 入った部屋に焚火があった場合エフェクトを付ける。
+        Transform bonfirePrefab = null;
+        foreach (Transform child in nextRoom.transform)
+        {
+            if (child.CompareTag("Bonfire"))
+            {
+                bonfirePrefab = child;
+                break; // タグが見つかったらループを終了
+            }
+        }
+        if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
+        {
+            bonfirePrefab.GetComponentInChildren<ParticleSystem>().Play();
+        }
+
+        // 前の部屋に焚火があった場合エフェクトを消す。
+        Transform lastRoomBonfire = null;
+        foreach (Transform child in lastRoom.transform)
+        {
+            if (child.CompareTag("Bonfire"))
+            {
+                lastRoomBonfire = child;
+                break; // タグが見つかったらループを終了
+            }
+        }
+        if (lastRoomBonfire != null && lastRoomBonfire.GetComponent<BoxCollider>().enabled)
+        {
+            lastRoomBonfire.GetComponentInChildren<ParticleSystem>().Stop();
+        }
     }
 
     /// <summary>
