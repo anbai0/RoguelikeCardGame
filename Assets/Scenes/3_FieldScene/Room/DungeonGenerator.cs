@@ -145,13 +145,13 @@ public class DungeonGenerator : MonoBehaviour
     {
         // 部屋を生成する回数を設定
         movementLimit = Random.Range(randomWalkMin, randomWalkMax + 1);
+        int forwardCount = 0, backCount = 0, leftCount = 0, rightCount = 0;
 
         // ランダムウォークと部屋の生成をmovementLimit回分行う
         while (walkCount <= movementLimit)
         {         
             int direction;
-            int loopCount = 0;
-            int forwardCount=0, backCount=0, leftCount=0, rightCount=0;
+            int loopCount = 0;          
 
             // ランダムウォーク
             do
@@ -168,6 +168,55 @@ public class DungeonGenerator : MonoBehaviour
                 Vector2Int latestCoordinate = backTracking.Pop();               
                 curWalk.Set(latestCoordinate.x, latestCoordinate.y);
                 Debug.Log($"{latestCoordinate} に戻りました。");
+            }
+
+            // 同じ方向に三回以上進んだときに別の方向に曲がるようにする
+            if (forwardCount >= 3 || backCount >= 3 || leftCount >= 3 || rightCount >= 3)
+            {
+
+                Debug.LogWarning($"上{forwardCount} 下{backCount} 左{leftCount} 右{rightCount}");
+                List<int> directionLottery = new List<int>();
+                if (forwardCount >= 3 || backCount >= 3)
+                {
+                    // 範囲外になっていない、かつ、進んだ方向に部屋がない               
+                    if (curWalk.x - 1 >= 1 && rooms[curWalk.y, curWalk.x - 1] == null)
+                    {
+                        directionLottery.Add(2);
+                    }
+                    if (curWalk.x + 1 < rooms.GetLength(0) - 1 && rooms[curWalk.y, curWalk.x + 1] == null)
+                    {
+                        directionLottery.Add(3);
+                    }
+
+                    // 進める方向を決定
+                    if (directionLottery.Count != 0)
+                        direction = directionLottery[Random.Range(0, directionLottery.Count)];
+                    
+                    forwardCount = 0; backCount = 0; leftCount = 0; rightCount = 0;
+                    
+                    if (directionLottery.Count != 0 && direction == 2) Debug.Log($"左に進みました");
+                    if (directionLottery.Count != 0 && direction == 3) Debug.Log($"右に進みました");
+                }
+                if (leftCount >= 3 || rightCount >= 3)
+                {
+                    if (curWalk.y - 1 >= 1 && rooms[curWalk.y - 1, curWalk.x] == null)
+                    {
+                        directionLottery.Add(0);
+                    }
+                    if (curWalk.y + 1 < rooms.GetLength(1) - 1 && rooms[curWalk.y + 1, curWalk.x] == null)
+                    {
+                        directionLottery.Add(1);
+                    }
+
+                    // 進める方向を決定
+                    if (directionLottery.Count != 0)
+                        direction = directionLottery[Random.Range(0, directionLottery.Count)];         
+
+                    forwardCount = 0; backCount = 0; leftCount = 0; rightCount = 0;
+
+                    if (directionLottery.Count != 0 && direction == 0) Debug.Log($"上に進みました");
+                    if (directionLottery.Count != 0 && direction == 1) Debug.Log($"下に進みました");
+                }
             }
 
             // 0 - forward, 1 - back, 2 - Left, 3 - Right
@@ -198,18 +247,6 @@ public class DungeonGenerator : MonoBehaviour
                     break;
             }
 
-            if (forwardCount == 3 || backCount == 3 || leftCount == 3 || rightCount == 3)
-            {
-                if(forwardCount == 3 || backCount == 3)
-                {
-
-                }
-                if(leftCount == 3 || rightCount == 3)
-                {
-
-                }
-            }
-
             // 移動した場合そこに部屋を生成
             if (direction >= 0)
             {
@@ -232,8 +269,8 @@ public class DungeonGenerator : MonoBehaviour
                 // 焚火を生成した部屋を記録
                 bonfireRoomPos.Set(curWalk.x, curWalk.y);
             }
-        }
 
+        }
         // ボス部屋生成
         GenerateBossRoom(rooms[spawnPos.y, spawnPos.x]);
     }
@@ -369,7 +406,7 @@ public class DungeonGenerator : MonoBehaviour
                 walkCount++;
                 rooms[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x] = Instantiate(room, SetRoomPos(bossRoomCandidate[rand].y, bossRoomCandidate[rand].x), Quaternion.identity, roomParent);
                 rooms[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x].gameObject.name = $"NewRoom1: {walkCount} ({bossRoomCandidate[rand].y}  {bossRoomCandidate[rand].x})";
-                Debug.LogWarning("新しく部屋を生成"+ bossRoomCandidate[rand].y);
+                //Debug.Log("新しく部屋を生成"+ bossRoomCandidate[rand].y);
                 // 一番遠い部屋から左右どちらに進んだかを取得
                 int direction = bossRoomCandidate[rand].x - farthestRoomPos.x;
                 // 一番遠い部屋を更新
@@ -377,16 +414,16 @@ public class DungeonGenerator : MonoBehaviour
                 if (direction == +1) direction++;
                 farthestRoomPos.y = bossRoomCandidate[rand].y;
                 farthestRoomPos.x += direction;
-                Debug.LogWarning($"一番遠い部屋を更新のやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
+                //Debug.Log($"一番遠い部屋を更新のやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             }
             else
             {
                 // 左右どちらに部屋を生成するか決める
                 int rand = Random.Range(0, bossRoomCandidate.Count);
                 farthestRoomPos.Set(bossRoomCandidate[rand].x, bossRoomCandidate[rand].y);
-                Debug.LogWarning($"左右どちらに部屋を生成するか決めるのやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
+                //Debug.Log($"左右どちらに部屋を生成するか決めるのやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             }
-            Debug.LogWarning($"y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
+            //Debug.Log($"y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             // ボス部屋を生成
             walkCount++;
             rooms[farthestRoomPos.y, farthestRoomPos.x] = Instantiate(room, SetRoomPos(farthestRoomPos.y, farthestRoomPos.x), Quaternion.identity, roomParent);
