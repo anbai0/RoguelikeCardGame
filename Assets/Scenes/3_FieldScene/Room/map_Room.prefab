@@ -285,7 +285,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1957085320519379816
 RectTransform:
   m_ObjectHideFlags: 0
@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 6934954534702087323}
   - component: {fileID: 7448928623945887755}
   - component: {fileID: 322402899945247114}
+  - component: {fileID: -6947976452020006112}
   m_Layer: 5
   m_Name: map_Room
   m_TagString: Untagged
@@ -422,6 +423,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-6947976452020006112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5094958232201297536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2e127dcab8099144a212cb48ae549c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  door:
+  - {fileID: 5486208087422980255}
+  - {fileID: 4807937566811177214}
+  - {fileID: 7178920463765349747}
+  - {fileID: 8647106026714348615}
+  wall:
+  - {fileID: 6229136074206608548}
+  - {fileID: 2859092207341166017}
+  - {fileID: 1974703356247819217}
+  - {fileID: 1057575412885216843}
 --- !u!1 &5486208087422980255
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,7 +462,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6648022346588552792
 RectTransform:
   m_ObjectHideFlags: 0
@@ -591,7 +614,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3649444954165401637
 RectTransform:
   m_ObjectHideFlags: 0
@@ -707,7 +730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3608937910650259426
 RectTransform:
   m_ObjectHideFlags: 0
