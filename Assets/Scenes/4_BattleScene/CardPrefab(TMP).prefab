@@ -471,8 +471,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uIManagerBattle: {fileID: 0}
   cardParent: {fileID: 0}
-  defaultScale: {x: 0.22, y: 0.22, z: 0.22}
-  anchorPosY: -77.5
 --- !u!114 &7009455883766435930
 MonoBehaviour:
   m_ObjectHideFlags: 0
