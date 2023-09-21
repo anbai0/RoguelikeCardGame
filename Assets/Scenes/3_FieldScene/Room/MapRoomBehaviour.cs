@@ -8,7 +8,7 @@ public class MapRoomBehaviour : MonoBehaviour
     [SerializeField] GameObject[] door = new GameObject[4];
     [SerializeField] GameObject[] wall = new GameObject[4];
 
-    void ChooseDoorOrWall(bool[] isDoor)
+    public void UpdateRoomMap(bool[] isDoor)
     {
         for (int i = 0; i < 4; i++)
         {

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.XR;
 
 
 public class DungeonGenerator : MonoBehaviour
@@ -58,6 +60,11 @@ public class DungeonGenerator : MonoBehaviour
     // プレイヤーを生成する位置
     float warriorY = -2.34f;
     float wizardY = -2.34f;
+    
+    // マップ生成
+    [SerializeField] public Transform map;
+    [SerializeField] GameObject mapPrefab;
+    public GameObject[,] maps = new GameObject[8, 8];
 
 
     void Start()
@@ -68,6 +75,14 @@ public class DungeonGenerator : MonoBehaviour
         rooms[spawnPos.y, spawnPos.x] = Instantiate(room, SetRoomPos(spawnPos.y, spawnPos.x), Quaternion.identity, roomParent);
         // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
         rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+        // マップ描画
+        maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+        maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
+        maps[spawnPos.y, spawnPos.x].gameObject.name = $"Map: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+        // スポーン地点の部屋をミニマップの中心にする
+        map.transform.localPosition = new Vector3(-spawnPos.x * 100 - 50, spawnPos.y * 100 + 50, 0);
+        // スポーン地点のマップをアクティブにする
+        maps[spawnPos.y, spawnPos.x].gameObject.SetActive(true);
         // 現在のランダムウォーク地点を更新
         curWalk.Set(spawnPos.x, spawnPos.y);
         // バックトラッキング用にスタックにプッシュ
@@ -106,6 +121,14 @@ public class DungeonGenerator : MonoBehaviour
                 Destroy(childEnemys[i].gameObject);
             }
 
+            Transform[] m = map.GetComponentsInChildren<Transform>();
+
+            // 親自体も含まれているため、インデックス1からループを開始
+            for (int i = 1; i < m.Length; i++)
+            {
+                Destroy(m[i].gameObject);
+            }
+
             walkCount = 0;
             backTracking.Clear();
             // 部屋をすべて削除
@@ -114,6 +137,7 @@ public class DungeonGenerator : MonoBehaviour
                 for (int x = 0; x < rooms.GetLength(1); x++)
                 {
                     rooms[x,y] = null;
+                    maps[x,y] = null;
                 }
             }
 
@@ -125,6 +149,14 @@ public class DungeonGenerator : MonoBehaviour
             rooms[spawnPos.y, spawnPos.x] = Instantiate(room, SetRoomPos(spawnPos.y, spawnPos.x), Quaternion.identity, roomParent);
             // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
             rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+            // マップ描画
+            maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+            maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
+            maps[spawnPos.y, spawnPos.x].gameObject.name = $"Map: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+            // スポーン地点の部屋をミニマップの中心にする
+            map.transform.localPosition = new Vector3(-spawnPos.x * 100 - 50, spawnPos.y * 100 + 50, 0);
+            // スポーン地点のマップをアクティブにする
+            maps[spawnPos.y, spawnPos.x].gameObject.SetActive(true);
             // 現在のランダムウォーク地点を更新
             curWalk = spawnPos;
             // バックトラッキング用にスタックにプッシュ
@@ -255,6 +287,11 @@ public class DungeonGenerator : MonoBehaviour
                 // 部屋を生成
                 rooms[curWalk.y, curWalk.x] = Instantiate(room, SetRoomPos(curWalk.y, curWalk.x), Quaternion.identity, roomParent);
                 rooms[curWalk.y, curWalk.x].gameObject.name = $"Room: {walkCount} ({curWalk.y}  {curWalk.x})";
+
+                // マップ描画
+                maps[curWalk.y, curWalk.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+                maps[curWalk.y, curWalk.x].transform.localPosition = new Vector3(curWalk.x * 100, -curWalk.y * 100, 0);
+                maps[curWalk.y, curWalk.x].gameObject.name = $"Map: {walkCount} ({curWalk.y}  {curWalk.x})";
 
                 // バックトラッキング用にスタックにプッシュ
                 backTracking.Push(new Vector2Int(curWalk.x, curWalk.y));
@@ -406,7 +443,10 @@ public class DungeonGenerator : MonoBehaviour
                 walkCount++;
                 rooms[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x] = Instantiate(room, SetRoomPos(bossRoomCandidate[rand].y, bossRoomCandidate[rand].x), Quaternion.identity, roomParent);
                 rooms[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x].gameObject.name = $"NewRoom1: {walkCount} ({bossRoomCandidate[rand].y}  {bossRoomCandidate[rand].x})";
-                //Debug.Log("新しく部屋を生成"+ bossRoomCandidate[rand].y);
+                // マップ描画
+                maps[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+                maps[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x].transform.localPosition = new Vector3(bossRoomCandidate[rand].x * 100, -bossRoomCandidate[rand].y * 100, 0);
+                maps[bossRoomCandidate[rand].y, bossRoomCandidate[rand].x].gameObject.name = $"NewRoom1Map: {walkCount} ({bossRoomCandidate[rand].y}  {bossRoomCandidate[rand].x})";
                 // 一番遠い部屋から左右どちらに進んだかを取得
                 int direction = bossRoomCandidate[rand].x - farthestRoomPos.x;
                 // 一番遠い部屋を更新
@@ -414,20 +454,21 @@ public class DungeonGenerator : MonoBehaviour
                 if (direction == +1) direction++;
                 farthestRoomPos.y = bossRoomCandidate[rand].y;
                 farthestRoomPos.x += direction;
-                //Debug.Log($"一番遠い部屋を更新のやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             }
             else
             {
                 // 左右どちらに部屋を生成するか決める
                 int rand = Random.Range(0, bossRoomCandidate.Count);
                 farthestRoomPos.Set(bossRoomCandidate[rand].x, bossRoomCandidate[rand].y);
-                //Debug.Log($"左右どちらに部屋を生成するか決めるのやつ y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             }
-            //Debug.Log($"y: {farthestRoomPos.y}, x: {farthestRoomPos.x}");
             // ボス部屋を生成
             walkCount++;
             rooms[farthestRoomPos.y, farthestRoomPos.x] = Instantiate(room, SetRoomPos(farthestRoomPos.y, farthestRoomPos.x), Quaternion.identity, roomParent);
             rooms[farthestRoomPos.y, farthestRoomPos.x].gameObject.name = $"NewRoom2: {walkCount} ({farthestRoomPos.y}  {farthestRoomPos.x}) (bossRoom)";
+            // マップ描画
+            maps[farthestRoomPos.y, farthestRoomPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+            maps[farthestRoomPos.y, farthestRoomPos.x].transform.localPosition = new Vector3(farthestRoomPos.x * 100, -farthestRoomPos.y * 100, 0);
+            maps[farthestRoomPos.y, farthestRoomPos.x].gameObject.name = $"NewRoom2Map: {walkCount} ({farthestRoomPos.y}  {farthestRoomPos.x}) (bossRoom)";
         }
         else// 一番遠い部屋の上に部屋がない場合
         {
@@ -621,7 +662,7 @@ public class DungeonGenerator : MonoBehaviour
 
 
     /// <summary>
-    /// GenerateDoorメソッドを使い、すべての部屋の扉を生成します。
+    /// DoorCheckメソッドを使い、すべての部屋の扉を生成し、マップの扉または、壁を描画します。
     /// </summary>
     void GenerateDoorsInAllRooms()
     {
@@ -632,20 +673,19 @@ public class DungeonGenerator : MonoBehaviour
             {
                 if (rooms[y, x] != null)
                 {
-                    GenerateDoor(y, x);
+                    DoorCheck(y, x);
                 }
             }
         }
     }
 
     /// <summary>
-    /// roomsの要素数を受け取り、その部屋に扉を生成します。
+    /// roomsの要素数を受け取り、その部屋に扉を生成し、マップの扉または、壁を描画します。
     /// </summary>
     /// <param name="roomY"></param>
     /// <param name="roomX"></param>
-    void GenerateDoor(int roomY, int roomX)
+    void DoorCheck(int roomY, int roomX)
     {
-        RoomBehaviour roomBehaviour = rooms[roomY, roomX].GetComponent<RoomBehaviour>();
         bool[] doorStatus = new bool[4];
 
         // 上下左右に部屋がある場合doorStatusをtrueにします。
@@ -689,6 +729,8 @@ public class DungeonGenerator : MonoBehaviour
         }
 
         // ドアを更新
-        roomBehaviour.UpdateRoom(doorStatus);
+        rooms[roomY, roomX].GetComponent<RoomBehaviour>().UpdateRoom(doorStatus);
+        // マップのドアまたは壁を描画
+        maps[roomY, roomX].GetComponent<MapRoomBehaviour>().UpdateRoomMap(doorStatus);
     }
 }
