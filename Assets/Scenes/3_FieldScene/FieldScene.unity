@@ -1809,7 +1809,6 @@ MonoBehaviour:
   shopPrefab: {fileID: 7836011145940569440, guid: 2f6fcaa1df9f3a345ac6d7253a4e014e,
     type: 3}
   playerParent: {fileID: 66400214}
-  objectParent: {fileID: 1016413509}
   enemyParent: {fileID: 1582453766}
   cam: {fileID: 1136374009}
   spotLight: {fileID: 944705260}
@@ -1817,6 +1816,10 @@ MonoBehaviour:
   roomCam: {x: 0, y: 10, z: -10}
   map: {fileID: 1187294026}
   mapPrefab: {fileID: 2354784324003787644, guid: e767cc20176f6c34ea424e2c0751a67e,
+    type: 3}
+  warriorIcon: {fileID: 4947279587093461393, guid: 98405a75dc01cb5469b4b2d7ea8d6587,
+    type: 3}
+  wizardIcon: {fileID: 5330004340903981245, guid: 43e3e75572989fd44b55fadc479d0f51,
     type: 3}
 --- !u!1 &1870224440
 GameObject:

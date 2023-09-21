@@ -48,7 +48,6 @@ public class DungeonGenerator : MonoBehaviour
     
     // 生成したものをまとめるためのTransform
     [SerializeField] private Transform playerParent;
-    [SerializeField] private Transform objectParent;
     [SerializeField] private Transform enemyParent;
 
     // 各部屋に移動したときに一緒に移動させるもの
@@ -65,6 +64,10 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] public Transform map;
     [SerializeField] GameObject mapPrefab;
     public GameObject[,] maps = new GameObject[8, 8];
+
+    // マップアイコン
+    [SerializeField] GameObject warriorIcon;
+    [SerializeField] GameObject wizardIcon;
 
 
     void Start()
@@ -103,14 +106,6 @@ public class DungeonGenerator : MonoBehaviour
             for (int i = 1; i < childRooms.Length; i++)
             {
                 Destroy(childRooms[i].gameObject);
-            }
-
-            Transform[] childObjects = objectParent.GetComponentsInChildren<Transform>();
-
-            // 親自体も含まれているため、インデックス1からループを開始
-            for (int i = 1; i < childObjects.Length; i++)
-            {
-                Destroy(childObjects[i].gameObject);
             }
 
             Transform[] childEnemys = enemyParent.GetComponentsInChildren<Transform>();
@@ -361,10 +356,16 @@ public class DungeonGenerator : MonoBehaviour
         {
             // ほかのシーンにPrefabが生成されてしまうため、親を指定しています。
             Instantiate(warriorPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity, playerParent);
+            // マップのプレイヤーアイコン生成
+            GameObject playerIcon = Instantiate(warriorIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
+            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
         }
         if (GameManager.Instance.playerData._playerName == "魔法使い")
         {
             Instantiate(wizardPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity, playerParent);
+            // マップのプレイヤーアイコン生成
+            GameObject playerIcon = Instantiate(wizardIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
+            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
         }
 
         // カメラの位置を変更
@@ -625,13 +626,13 @@ public class DungeonGenerator : MonoBehaviour
 
         // ショップを二つ生成
         int lotteryShop = Random.Range(0, emptyRoomList.Count);
-        Instantiate(shopPrefab, emptyRoomList[lotteryShop].transform.position, Quaternion.identity, objectParent);
+        Instantiate(shopPrefab, emptyRoomList[lotteryShop].transform.position, Quaternion.identity, emptyRoomList[lotteryShop].transform);
         emptyRoomList.RemoveAt(lotteryShop);
 
 
         // 宝箱を生成
         int lotteryTreasure = Random.Range(0, emptyRoomList.Count);
-        Instantiate(treasurePrefab, emptyRoomList[lotteryTreasure].transform.position, Quaternion.identity, objectParent);
+        Instantiate(treasurePrefab, emptyRoomList[lotteryTreasure].transform.position, Quaternion.identity, emptyRoomList[lotteryTreasure].transform);
         emptyRoomList.RemoveAt(lotteryTreasure);
 
         // 残った部屋に雑魚敵を生成

@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour
     Vector2Int playerPos;
     // マップの描画
     List<Vector2Int> roomVisited = new List<Vector2Int>();  // 一度訪れた部屋の位置を記録します
+    // マップアイコン
+    [SerializeField] GameObject bonfireIcon;
+    [SerializeField] GameObject shopIcon;
+    [SerializeField] GameObject treasureBoxIcon;
+    [SerializeField] GameObject bossIcon;
 
     public static PlayerController Instance { get; private set; }
     private void Awake()
@@ -285,7 +290,36 @@ public class PlayerController : MonoBehaviour
         // 訪れていなかったらマップを描画
         if (!isVisited)
         {
+            // 部屋を描画
             dungeon.maps[playerPos.y, playerPos.x].gameObject.SetActive(true);
+
+            // 部屋に特定のオブジェクトがあった場合アイコンを表示
+            if (dungeon.rooms[playerPos.y, playerPos.x].transform.childCount >= 6)
+            {
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
+                {
+                    GameObject bonfire = Instantiate(bonfireIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    bonfire.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Shop"))
+                {
+                    GameObject shop = Instantiate(shopIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    shop.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("TreasureBox"))
+                {
+                    GameObject box = Instantiate(treasureBoxIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    box.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Boss"))
+                {
+                    GameObject boss = Instantiate(bossIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    boss.transform.localPosition = new Vector3(100, -100, 0);
+                }
+            }
         }  
     }
 }

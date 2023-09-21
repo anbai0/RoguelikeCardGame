@@ -1525,10 +1525,17 @@ MonoBehaviour:
   isEvents: 1
   isSetting: 0
   isConfimDeck: 0
-  isPlayerActive: 1
   moveSpeed: 4
   rotationSpeed: 30
-  lastRoomNum: 0
+  dungeon: {fileID: 0}
+  bonfireIcon: {fileID: 4947279587093461393, guid: 733cc9cce4f6fe8428d11d9867eb6eee,
+    type: 3}
+  shopIcon: {fileID: 4947279587093461393, guid: d24a06c737810fe4299ebbb2f409f2c5,
+    type: 3}
+  treasureBoxIcon: {fileID: 4947279587093461393, guid: 5453e4caa2c4eac4ebd1dfee45b50ad1,
+    type: 3}
+  bossIcon: {fileID: 4947279587093461393, guid: a010fe1ae6dee474cb659b46b48701d5,
+    type: 3}
 --- !u!1 &2462017401555235950
 GameObject:
   m_ObjectHideFlags: 0
