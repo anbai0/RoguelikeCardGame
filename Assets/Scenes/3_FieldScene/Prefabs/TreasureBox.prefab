@@ -207,7 +207,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2819250522606484211}
-  - component: {fileID: 8082156269705504176}
   m_Layer: 0
   m_Name: TreasureBox
   m_TagString: TreasureBox
@@ -235,19 +234,6 @@ Transform:
   m_Father: {fileID: 2283393851712066693}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!65 &8082156269705504176
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2036774164618375187}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.08, z: 0.08}
-  m_Center: {x: 0, y: 0.04, z: 0}
 --- !u!1 &2992288759378471116
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2283393851712066693}
+  - component: {fileID: 5284473027597173521}
   m_Layer: 0
   m_Name: TreasureBox
   m_TagString: TreasureBox
@@ -472,12 +459,25 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2819250522606484211}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5284473027597173521
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5461818851161326736}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 1.6, z: 1.6}
+  m_Center: {x: 0, y: -1.5, z: 0}
 --- !u!1 &6270975064133344007
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2644433864473399185}
-  - component: {fileID: 5529482882582722541}
   m_Layer: 0
   m_Name: Shop
   m_TagString: Shop
@@ -69,19 +68,6 @@ Transform:
   m_Father: {fileID: 5611152931024709382}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!65 &5529482882582722541
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495734821727344768}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.05, y: 0.037, z: 0.06}
-  m_Center: {x: -0.006, y: 0.017, z: 0}
 --- !u!1 &2127826355940155104
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +350,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5611152931024709382}
+  - component: {fileID: 5677025967982274475}
   m_Layer: 0
   m_Name: Shop
   m_TagString: Shop
@@ -381,12 +368,25 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2644433864473399185}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5677025967982274475
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836011145940569440}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 2.22, z: 3.6}
+  m_Center: {x: -0.006, y: -1.25, z: 0}
 --- !u!1 &9153750792270152705
 GameObject:
   m_ObjectHideFlags: 0

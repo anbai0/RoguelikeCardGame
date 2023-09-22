@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2740412896408943948}
   - component: {fileID: 743362775195301867}
   - component: {fileID: 8315177934844068283}
+  - component: {fileID: -8245977076577300526}
   m_Layer: 5
   m_Name: Icon_Worrior
   m_TagString: Untagged
@@ -76,3 +77,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-8245977076577300526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4947279587093461393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d267e6f487e37548ad33f95f2a88da0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerIcon: {fileID: 8315177934844068283}
+  speed: 1

@@ -328,6 +328,9 @@ public class UIManagerTreasureBox : MonoBehaviour
 
     void ExitTreasureBox()
     {
-        PlayerController.Instance.treasureBox.SetActive(false); //宝箱を消す
+        //PlayerController.Instance.treasureBox.SetActive(false); //宝箱を消す
+        Destroy(PlayerController.Instance.treasureBox.transform.parent);
+        Destroy(PlayerController.Instance.treasureBoxIcon); // マップアイコンを削除
+        PlayerController.Instance.playerIcon.SetActive(true); // プレイヤーアイコンを表示
     }
 }

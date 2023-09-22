@@ -68,7 +68,7 @@ public class DungeonGenerator : MonoBehaviour
     // マップアイコン
     [SerializeField] GameObject warriorIcon;
     [SerializeField] GameObject wizardIcon;
-
+    public GameObject playerIcon;
 
     void Start()
     {
@@ -357,14 +357,14 @@ public class DungeonGenerator : MonoBehaviour
             // ほかのシーンにPrefabが生成されてしまうため、親を指定しています。
             Instantiate(warriorPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity, playerParent);
             // マップのプレイヤーアイコン生成
-            GameObject playerIcon = Instantiate(warriorIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
+            playerIcon = Instantiate(warriorIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
             playerIcon.transform.localPosition = new Vector3(100, -100, 0);
         }
         if (GameManager.Instance.playerData._playerName == "魔法使い")
         {
             Instantiate(wizardPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity, playerParent);
             // マップのプレイヤーアイコン生成
-            GameObject playerIcon = Instantiate(wizardIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
+            playerIcon = Instantiate(wizardIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
             playerIcon.transform.localPosition = new Vector3(100, -100, 0);
         }
 
