@@ -13,13 +13,15 @@ public class UIManagerField : MonoBehaviour
     private bool isEventsReset = true;
     //private bool isClick = false;
 
-    [Header("参照するUI")]
+    [Header("ミニマップのUI")]   
+    [SerializeField] GameObject miniMapBG;
     [SerializeField] GameObject miniMap;
-    [SerializeField] GameObject closeButtonPrefab;
-    [SerializeField] GameObject bgPrefab;
-    GameObject enlargedMap;  
-    GameObject closeButton;
-    GameObject bg;
+    [Header("拡大マップのUI")]
+    [SerializeField] GameObject enlargedMap;
+    [SerializeField] Transform mapControl;
+    [SerializeField] GameObject closeButton;
+
+    GameObject map;
 
 
     void Start()
@@ -67,30 +69,33 @@ public class UIManagerField : MonoBehaviour
     void UILeftClick(GameObject UIObject)
     {
         // ミニマップをクリックしたら拡大マップ生成
-        if (UIObject == miniMap)
+        if (UIObject == miniMapBG)
         {
-            // 背景生成
-            bg = Instantiate(bgPrefab,canvas.transform);
+            // 拡大マップを表示
+            enlargedMap.SetActive(true);
 
-            // 拡大マップ生成
-            enlargedMap = Instantiate(miniMap, miniMap.transform.position, Quaternion.identity, canvas.transform);
-            enlargedMap.transform.localPosition = Vector3.zero;
-            enlargedMap.GetComponent<Mask>().enabled = false;
-            enlargedMap.GetComponent<RectTransform>().sizeDelta = new Vector2(1000, 1000);
-            enlargedMap.transform.GetChild(0).transform.localPosition = new Vector3(-400 , 400);
-            // 閉じるボタン生成
-            closeButton = Instantiate(closeButtonPrefab, closeButtonPrefab.transform.position, Quaternion.identity, enlargedMap.transform);
-            closeButton.transform.localPosition = new Vector3(400, 400);
-            UIEventsReload();
+            // 拡大マップにマップ情報を複製
+            map = Instantiate(miniMap, miniMap.transform.position, Quaternion.identity, mapControl.transform);           
+            map.transform.transform.localPosition = new Vector2(-500 , 500);
+            map.GetComponent<RectTransform>().sizeDelta = new Vector2(2000, 2000);
+            map.transform.localScale = Vector3.one * 1.25f;
+
+            // 拡大マップの位置をリセット
+            mapControl.localPosition = Vector3.zero;
+
             // プレイヤーを動けなくする
             PlayerController.Instance.isEvents = true;
+
+            UIEventsReload();
         }
 
         // 拡大マップのcloseButtonを押したら拡大マップをDestroy
         if (UIObject == closeButton)
         {
-            Destroy(bg); bg = null;
-            Destroy(enlargedMap); enlargedMap = null;
+            // 拡大マップを非表示にし、複製したマップを削除
+            enlargedMap.SetActive(false);
+            Destroy(map); map = null;
+
             // プレイヤーを動けるようにする
             PlayerController.Instance.isEvents = false;
         }

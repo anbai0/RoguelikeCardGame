@@ -179,7 +179,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            GenerateMap(nextRoom);
+            UpdateMap(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            GenerateMap(nextRoom);
+            UpdateMap(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            GenerateMap(nextRoom);
+            UpdateMap(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            GenerateMap(nextRoom);
+            UpdateMap(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
     /// 入った部屋が初めて訪れた部屋だった場合、マップに部屋を描画します
     /// </summary>
     /// <param name="nextRoom"></param>
-    private void GenerateMap(GameObject nextRoom)
+    private void UpdateMap(GameObject nextRoom)
     {
         bool isVisited = false;
 
@@ -320,25 +320,25 @@ public class PlayerController : MonoBehaviour
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
                 {
                     bonfireIcon = Instantiate(bonfireIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
-                    bonfireIcon.transform.localPosition = new Vector3(100, -100, 0);
+                    bonfireIcon.transform.localPosition = Vector3.zero;
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Shop"))
                 {
                     shopIcon = Instantiate(shopIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
-                    shopIcon.transform.localPosition = new Vector3(100, -100, 0);
+                    shopIcon.transform.localPosition = Vector3.zero;
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("TreasureBox"))
                 {
                     treasureBoxIcon = Instantiate(treasureBoxIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
-                    treasureBoxIcon.transform.localPosition = new Vector3(100, -100, 0);
+                    treasureBoxIcon.transform.localPosition = Vector3.zero;
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Boss"))
                 {
                     bossIcon = Instantiate(bossIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
-                    bossIcon.transform.localPosition = new Vector3(100, -100, 0);
+                    bossIcon.transform.localPosition = Vector3.zero;
                 }
             }
         }
@@ -346,7 +346,22 @@ public class PlayerController : MonoBehaviour
         // 部屋にオブジェクトがあったときにplayerIconを非表示に
         if (dungeon.rooms[playerPos.y, playerPos.x].transform.childCount >= 6)
         {
-            playerIcon.SetActive(false);
+            // 部屋にあったオブジェクトが焚火だった場合、コライダーがtrueになっているかをチェックしています
+            if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
+            {
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).GetComponent<BoxCollider>().enabled == true)
+                {
+                    playerIcon.SetActive(false);
+                }
+                else
+                {
+                    playerIcon.SetActive(true);
+                }             
+            }
+            else
+            {
+                playerIcon.SetActive(false);
+            }         
         }
         else
         {

@@ -241,7 +241,10 @@ public class UIManagerBonfire : MonoBehaviour
         particle.Stop();
 
         // 焚火の当たり判定を消す。
-        BoxCollider boxCol = PlayerController.Instance.bonfire.GetComponent<BoxCollider>();
-        boxCol.enabled = false;
+        PlayerController.Instance.bonfire.GetComponent<BoxCollider>().enabled = false;
+
+        // マップアイコンの処理
+        Destroy(PlayerController.Instance.bonfireIcon);         // 焚火のアイコンを削除
+        PlayerController.Instance.playerIcon.SetActive(true);   // プレイヤーアイコンを表示
     }
 }
