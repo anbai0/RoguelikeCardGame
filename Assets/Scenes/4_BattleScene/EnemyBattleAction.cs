@@ -147,7 +147,7 @@ public class EnemyBattleAction : CharacterBattleAction
     /// <param name="damage">受けたダメージ</param>
     public void TakeDamage(int damage)
     {
-        if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
+        //if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
 
         int deductedDamage = 0;
         if (GetSetGP > 0) //ガードポイントがあったら
@@ -164,7 +164,7 @@ public class EnemyBattleAction : CharacterBattleAction
         }
         GetSetCurrentHP -= deductedDamage;
 
-        if (deductedDamage > 0)
+        if (deductedDamage >= 0)
         {
             AudioManager.Instance.PlaySE("攻撃1");
             StartCoroutine(DamageFlash(deductedDamage));
@@ -196,7 +196,8 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     void ViewGard()
     {
-        GameObject gardObj = Instantiate(gardUI, damageOrHealingPos.transform);
+        var gardPos = damageOrHealingPos.transform.position + new Vector3(0f, 120f, 0f);
+        GameObject gardObj = Instantiate(gardUI, gardPos, Quaternion.identity, damageOrHealingPos.transform);
     }
 
     /// <summary>
@@ -238,7 +239,10 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     public void AutoHealing()
     {
-        HealingHP(GetSetInflictCondition.AutoHealing(enemyCondition["AutoHealing"]));
+        if (enemyCondition["AutoHealing"] > 0)
+        {
+            HealingHP(GetSetInflictCondition.AutoHealing(enemyCondition["AutoHealing"]));
+        }
     }
 
     /// <summary>
@@ -246,7 +250,10 @@ public class EnemyBattleAction : CharacterBattleAction
     /// </summary>
     public void Burn()
     {
-        TakeDamage(enemyCondition["Burn"]);
+        if (enemyCondition["Burn"] > 0) 
+        {
+            TakeDamage(enemyCondition["Burn"]);
+        }
     }
 
     /// <summary>
@@ -255,8 +262,11 @@ public class EnemyBattleAction : CharacterBattleAction
     /// <param name="moveCount">行動回数</param>
     public void Poison(int moveCount)
     {
-        var poison = GetSetInflictCondition.Poison(enemyCondition["Poison"], moveCount);
-        TakeDamage(poison);
+        if (enemyCondition["Poison"] > 0)
+        {
+            var poison = GetSetInflictCondition.Poison(enemyCondition["Poison"], moveCount);
+            TakeDamage(poison);
+        }
     }
 
     /// <summary>

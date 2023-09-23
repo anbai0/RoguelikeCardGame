@@ -145,7 +145,7 @@ public class CardEffectList : MonoBehaviour
                 CardID19(card);
                 break;
             case 119:
-                CardID19(card);
+                CardID119(card);
                 break;
             case 20:
                 CardID20();
@@ -555,13 +555,27 @@ public class CardEffectList : MonoBehaviour
         bg.isCoroutine = false;
     }
     /// <summary>
-    /// 技名：アヴァロンヴェール,強化アヴァロンヴェール
-    /// 効果：自然治癒を1得る。状態異常無効を2つ得る。
+    /// 技名：アヴァロンヴェール
+    /// 効果：自然治癒を2得る。状態異常無効を2つ得る。
     /// </summary>
     private void CardID19(CardController card)
     {
-        //自動回復を1付与
-        player.AddConditionStatus("AutoHealing", 1);
+        //自動回復を2付与
+        player.AddConditionStatus("AutoHealing", 2);
+        //状態異常無効を2付与
+        player.AddConditionStatus("InvalidBadStatus", 2);
+        //この戦闘中カードを使用不可にする
+        card.cardDataManager._cardState = 2;
+    }
+    /// <summary>
+    /// 技名：強化アヴァロンヴェール
+    /// 効果：自然治癒を3得る。状態異常無効を2つ得る。
+    /// </summary>
+    /// <param name="card"></param>
+    private void CardID119(CardController card)
+    {
+        //自動回復を3付与
+        player.AddConditionStatus("AutoHealing", 3);
         //状態異常無効を2付与
         player.AddConditionStatus("InvalidBadStatus", 2);
         //この戦闘中カードを使用不可にする

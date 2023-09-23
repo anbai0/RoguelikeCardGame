@@ -32,7 +32,7 @@ public class UIManagerCharaSelect : MonoBehaviour
     private float wizardScale;
 
     private int[] warriorRelic = new int[] { 10, 4 };
-    private int[] wizardRelic = new int[] { 5, 9 };
+    private int[] wizardRelic = new int[] { 5, 4 };
 
     [Header("クリック後に参照するUI")]
     [SerializeField] private GameObject warrior;

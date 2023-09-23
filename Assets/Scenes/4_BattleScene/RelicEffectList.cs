@@ -86,7 +86,7 @@ public class RelicEffectList : MonoBehaviour
     /// <returns>減少したAPの初期値,増加したAPの上昇値</returns>
     public (int constAP, int chargeAP) RelicID5(int ID5Quantity, int constAP, int chargeAP)
     {
-        if(id5Count >= 5)
+        if(id5Count >= 3)
         {
             return (constAP, chargeAP);
         }
@@ -139,7 +139,7 @@ public class RelicEffectList : MonoBehaviour
     /// <returns>増加したガードポイント</returns>
     public int RelicID8(int ID8Quantity, int GP)
     {
-        GP += 3 * ID8Quantity;
+        GP += 1 * ID8Quantity;
         return GP;
     }
 

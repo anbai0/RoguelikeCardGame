@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
             playerData = new PlayerDataManager("Wizard");
             initialHP = playerData._playerHP;
             hasRelics[5] += 1;     // 千里眼鏡
-            hasRelics[9] += 2;     // 富豪の金貨袋
+            hasRelics[4] += 1;     // 神秘のピアス
             ShowRelics();
             CheckGetRelicID7();
         }
