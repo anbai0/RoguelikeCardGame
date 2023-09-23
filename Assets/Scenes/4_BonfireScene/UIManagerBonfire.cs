@@ -1,5 +1,6 @@
 using UnityEngine;
 using SelfMadeNamespace;
+using DG.Tweening;
 
 /// <summary>
 /// BonfireSceneのUIManagerです。
@@ -27,6 +28,7 @@ public class UIManagerBonfire : MonoBehaviour
     [SerializeField] private GameObject BonfireUI;
     [SerializeField] private GameObject restUI;
     [SerializeField] private Transform enhancedCardHolder;
+    [SerializeField] private RectTransform triangularArrow;
 
     [Header("クリック後に参照するUI")]
     [SerializeField] private GameObject closeBonfire;
@@ -35,12 +37,14 @@ public class UIManagerBonfire : MonoBehaviour
     [SerializeField] private GameObject closeEnhance;
     [SerializeField] private GameObject restButton;
     [SerializeField] private GameObject takeRestButton;
-    [SerializeField] private GameObject noRestButton;   
+    [SerializeField] private GameObject noRestButton;
 
+    Tween arrowTween;
 
     void Start()
     {
         restController.CheckRest("BonfireScene");
+        arrowTween = triangularArrow.DOAnchorPosX(-10f, 0.35f).SetLoops(-1, LoopType.Yoyo);
         UIEventsReload();
     }
 
@@ -105,7 +109,6 @@ public class UIManagerBonfire : MonoBehaviour
             {
                 restUI.SetActive(true);                             // 休憩UIを表示
 
-                restController.ChengeRestText("BonfireScene");      // 休憩textを更新
                 AudioManager.Instance.PlaySE("選択音1");
             }
         }

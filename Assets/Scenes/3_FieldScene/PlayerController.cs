@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,13 +19,21 @@ public class PlayerController : MonoBehaviour
 
     // 部屋関係
     private FieldSceneManager fieldManager;
-    private RoomsManager roomsM;
     public GameObject bonfire { get; private set; }
     public GameObject treasureBox { get; private set; }
     public GameObject enemy { get; private set; }
     public string enemyTag { get; private set; }
+
     // 部屋の移動
-    public int lastRoomNum;     // プレイヤーが最後にいた部屋の番号
+    [SerializeField] DungeonGenerator dungeon;
+    Vector2Int playerPos;
+    // マップの描画
+    List<Vector2Int> roomVisited = new List<Vector2Int>();  // 一度訪れた部屋の位置を記録します
+    // マップアイコン
+    [SerializeField] GameObject bonfireIcon;
+    [SerializeField] GameObject shopIcon;
+    [SerializeField] GameObject treasureBoxIcon;
+    [SerializeField] GameObject bossIcon;
 
     public static PlayerController Instance { get; private set; }
     private void Awake()
@@ -36,10 +46,11 @@ public class PlayerController : MonoBehaviour
     }
     void Start()
     {
-
         fieldManager = FindObjectOfType<FieldSceneManager>();
-        roomsM = FindObjectOfType<RoomsManager>();
         animator = GetComponent<Animator>();
+
+        dungeon = FindObjectOfType<DungeonGenerator>();
+        playerPos = dungeon.spawnPos;
     }
 
     void Update()
@@ -51,6 +62,10 @@ public class PlayerController : MonoBehaviour
         {
             AudioManager.Instance.StartCoroutine(AudioManager.Instance.IEFadeInBGMVolume());       // BGMを再生
             PlayerMove();
+        }
+        else
+        {
+            animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
         }
 
     }
@@ -146,116 +161,165 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (roomsM == null) return;
-
-        #region 今いる部屋を特定する処理
-        // lastRoomと今いる部屋が違う場合
-        if (roomsM.rooms[lastRoomNum] != other.gameObject)
-        {
-            for (int roomNum = 1; roomNum <= roomsM.rooms.Length - 1; roomNum++)
-            {
-                if (roomsM.rooms[roomNum] == other.gameObject)
-                {
-                    lastRoomNum = roomNum;         // lastRoomを更新
-                    break;
-                }
-            }
-        }
-        #endregion
-
-        #region 部屋移動処理
+        #region 部屋移動の処理
         if (other.gameObject.CompareTag("GateForward"))
         {
-            AudioManager.Instance.PlaySE("マップ切り替え");                                                   // SE再生
-            GameObject nextRoom = roomsM.rooms[lastRoomNum + 4];                                              // 次の部屋を取得
-            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;                    // カメラを次の部屋に移動
-            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;           // ライトを次の部屋に移動
+            GameObject lastRoom = dungeon.rooms[playerPos.y, playerPos.x];                                                 // 最後にいた部屋更新
+            AudioManager.Instance.PlaySE("マップ切り替え");                                                     // SE再生
+            playerPos.y -= 1;                                                                                   // 次に参照する部屋の位置を移動
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];                                      // 次の部屋を取得
+            Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;                     // カメラを次の部屋に移動
+            dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;           // ライトを次の部屋に移動
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
-            // 焚火のエフェクトの切り替え
-            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
-            {
-                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
-            }
-            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
-            if (lastRoomBonfire != null)
-            {
-                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
-            }
-        }
-
-        if (other.gameObject.CompareTag("GateRight"))
-        {
-            AudioManager.Instance.PlaySE("マップ切り替え");
-            GameObject nextRoom = roomsM.rooms[lastRoomNum + 1];
-            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
-            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
-
-            // 焚火のエフェクトの切り替え
-            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
-            {
-                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
-            }
-            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
-            if (lastRoomBonfire != null)
-            {
-                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
-            }
-        }
-
-        if (other.gameObject.CompareTag("GateLeft"))
-        {
-            AudioManager.Instance.PlaySE("マップ切り替え");
-            GameObject nextRoom = roomsM.rooms[lastRoomNum - 1];
-            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
-            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
-            gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
-
-            // 焚火のエフェクトの切り替え
-            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
-            {
-                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
-            }
-            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
-            if (lastRoomBonfire != null)
-            {
-                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
-            }
+            BonfireParticleSwitch(nextRoom, lastRoom);
+            GenerateMap(nextRoom);
+            // 移動した部屋をマップの中心に変更
+            dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
         }
 
         if (other.gameObject.CompareTag("GateBack"))
         {
+            GameObject lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
             AudioManager.Instance.PlaySE("マップ切り替え");
-            GameObject nextRoom = roomsM.rooms[lastRoomNum - 4];
-            Camera.main.transform.position = nextRoom.transform.position + roomsM.roomCam;
-            roomsM.spotLight.transform.position = Camera.main.transform.position + roomsM.lightPos;
+            playerPos.y += 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
+            Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
+            dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
-            // 焚火のエフェクトの切り替え
-            Transform bonfire = nextRoom.transform.Find("Bonfire(Clone)");
-            if (bonfire != null && bonfire.GetComponent<BoxCollider>().enabled)
-            {
-                bonfire.transform.GetComponentInChildren<ParticleSystem>().Play();
-            }
-            Transform lastRoomBonfire = roomsM.rooms[lastRoomNum].transform.Find("Bonfire(Clone)");
-            if (lastRoomBonfire != null)
-            {
-                lastRoomBonfire.transform.GetComponentInChildren<ParticleSystem>().Stop();
-            }
+            BonfireParticleSwitch(nextRoom, lastRoom);
+            GenerateMap(nextRoom);
+            // 移動した部屋をマップの中心に変更
+            dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
         }
-        #endregion
+
+        if (other.gameObject.CompareTag("GateLeft"))
+        {
+            GameObject lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
+            AudioManager.Instance.PlaySE("マップ切り替え");
+            playerPos.x -= 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
+            Debug.Log(Camera.main);
+            Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
+            dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
+
+            BonfireParticleSwitch(nextRoom, lastRoom);
+            GenerateMap(nextRoom);
+            // 移動した部屋をマップの中心に変更
+            dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
+        }
+
+        if (other.gameObject.CompareTag("GateRight"))
+        {
+            GameObject lastRoom = dungeon.rooms[playerPos.y, playerPos.x];
+            AudioManager.Instance.PlaySE("マップ切り替え");
+            playerPos.x += 1;
+            GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
+            Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
+            dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
+            gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
+
+            BonfireParticleSwitch(nextRoom, lastRoom);
+            GenerateMap(nextRoom);
+            // 移動した部屋をマップの中心に変更
+            dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
+        }
+        # endregion
     }
 
 
     /// <summary>
-    /// EnableRoomDoorAccessメソッドを使い、今いる部屋の扉をすべて開けます。
+    /// 部屋を移動したときに焚火のエフェクトの切り替えを行います
     /// </summary>
-    public void AccessDoorAfterWin()
+    /// <param name="nextRoom"></param>
+    /// <param name="lastRoom"></param>
+    void BonfireParticleSwitch(GameObject nextRoom, GameObject lastRoom)
     {
-        roomsM.EnableRoomDoorAccess(lastRoomNum);
+        // 入った部屋に焚火があった場合エフェクトを付ける。
+        Transform bonfirePrefab = null;
+        foreach (Transform child in nextRoom.transform)
+        {
+            if (child.CompareTag("Bonfire"))
+            {
+                bonfirePrefab = child;
+                break; // タグが見つかったらループを終了
+            }
+        }
+        if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
+        {
+            bonfirePrefab.GetComponentInChildren<ParticleSystem>().Play();
+        }
+
+        // 前の部屋に焚火があった場合エフェクトを消す。
+        Transform lastRoomBonfire = null;
+        foreach (Transform child in lastRoom.transform)
+        {
+            if (child.CompareTag("Bonfire"))
+            {
+                lastRoomBonfire = child;
+                break; // タグが見つかったらループを終了
+            }
+        }
+        if (lastRoomBonfire != null && lastRoomBonfire.GetComponent<BoxCollider>().enabled)
+        {
+            lastRoomBonfire.GetComponentInChildren<ParticleSystem>().Stop();
+        }
+    }
+
+    /// <summary>
+    /// 入った部屋が初めて訪れた部屋だった場合、マップに部屋を描画します
+    /// </summary>
+    /// <param name="nextRoom"></param>
+    private void GenerateMap(GameObject nextRoom)
+    {
+        bool isVisited = false;
+
+        // 一度訪れた部屋なのかをチェック
+        foreach (var room in roomVisited)
+        {
+            // 訪れていたら
+            if (room == playerPos)
+            {
+                isVisited = true;
+                break;
+            }
+        }
+
+        // 訪れていなかったらマップを描画
+        if (!isVisited)
+        {
+            // 部屋を描画
+            dungeon.maps[playerPos.y, playerPos.x].gameObject.SetActive(true);
+
+            // 部屋に特定のオブジェクトがあった場合アイコンを表示
+            if (dungeon.rooms[playerPos.y, playerPos.x].transform.childCount >= 6)
+            {
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
+                {
+                    GameObject bonfire = Instantiate(bonfireIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    bonfire.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Shop"))
+                {
+                    GameObject shop = Instantiate(shopIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    shop.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("TreasureBox"))
+                {
+                    GameObject box = Instantiate(treasureBoxIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    box.transform.localPosition = new Vector3(100, -100, 0);
+                }
+
+                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Boss"))
+                {
+                    GameObject boss = Instantiate(bossIcon, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
+                    boss.transform.localPosition = new Vector3(100, -100, 0);
+                }
+            }
+        }  
     }
 }

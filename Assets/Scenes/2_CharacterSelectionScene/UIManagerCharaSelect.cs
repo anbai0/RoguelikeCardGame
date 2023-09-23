@@ -34,28 +34,30 @@ public class UIManagerCharaSelect : MonoBehaviour
     private int[] warriorRelic = new int[] { 10, 4 };
     private int[] wizardRelic = new int[] { 5, 4 };
 
-    // 参照するUI
+    [Header("クリック後に参照するUI")]
     [SerializeField] private GameObject warrior;
     [SerializeField] private GameObject wizard;
-    [SerializeField] private GameObject button;
-    [SerializeField] private Image image;
-    [SerializeField] private Sprite redButton;
+    [SerializeField] private GameObject startMazeButton;
     [SerializeField] private RelicController relicPrefab;
     [SerializeField] private Transform warriorRelicPlace;
     [SerializeField] private Transform wizardRelicPlace;
 
+    [Header("キャラを選択テキスト関係")]
+    [SerializeField] TextMeshProUGUI charaSelectText;
+    [SerializeField]
+    [Range(0.1f, 10.0f)] float fadeDuration = 1.0f;  //テキストを点滅させる間隔
+    private Color32 startColor = new Color32(255, 255, 255, 255);
+    private Color32 endColor = new Color32(255, 255, 255, 20);
+
     [Header("参照するコンポーネント")]
     [SerializeField] private CharacterSceneManager sceneManager;
     private GameManager gm;
-    //[Header("表示を切り替えるUI")]
-    //[Header("クリック後に参照するUI")]
 
     [Header("カード抽選")]
     [SerializeField] public GameObject lotteryScreen;
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform cardPlace;
     [SerializeField] GameObject cardDecisionButton;
-    //List<int> lotteryCards = new List<int>(); // 抽選したカードを格納する
     List<int> lotteryCards = null;
     private Vector3 scaleReset = Vector3.one * 0.25f;     // 元のスケールに戻すときに使います
     private Vector3 scaleBoost = Vector3.one * 0.05f;     // 元のスケールに乗算して使います
@@ -117,6 +119,8 @@ public class UIManagerCharaSelect : MonoBehaviour
     }
     #endregion
 
+
+
     void UILeftClick(GameObject UIObject)
     {
         if (UIObject == warrior)
@@ -127,7 +131,11 @@ public class UIManagerCharaSelect : MonoBehaviour
             selectWizard = false;
             warriorRelicPlace.gameObject.SetActive(true);
             wizardRelicPlace.gameObject.SetActive(false);
-            image.sprite = redButton;
+
+            // キャラを選択してくださいというテキストを消し
+            charaSelectText.gameObject.SetActive(false);
+            // 迷宮に挑むボタンを表示
+            startMazeButton.gameObject.SetActive(true);
         }
         if (UIObject == wizard)
         {
@@ -137,14 +145,20 @@ public class UIManagerCharaSelect : MonoBehaviour
             selectWizard = true;
             warriorRelicPlace.gameObject.SetActive(false);
             wizardRelicPlace.gameObject.SetActive(true);
-            image.sprite = redButton;
+            charaSelectText.gameObject.SetActive(false);
+
+            // キャラを選択してくださいというテキストを消し
+            charaSelectText.gameObject.SetActive(false);
+            // 迷宮に挑むボタンを表示
+            startMazeButton.gameObject.SetActive(true);
         }
 
-
-        if (UIObject == button && isCharaSelected && !isClick)
+        // 迷宮に挑むボタンを押したら
+        if (UIObject == startMazeButton && isCharaSelected && !isClick)
         {
             isClick = true;
-            AudioManager.Instance.PlaySE("選択音1");
+            startMazeButton.gameObject.SetActive(false);
+            AudioManager.Instance.PlaySE("選択音2");
 
             if (selectWarrior)
                 gm.ReadPlayer("Warrior");
@@ -276,6 +290,8 @@ public class UIManagerCharaSelect : MonoBehaviour
         //選ばれたキャラをハイライト
         highLight(warrior.GetComponent<Image>(), wizard.GetComponent<Image>());
 
+        // テキストを点滅させる
+        charaSelectText.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / fadeDuration, 1.0f));
     }
 
     void highLight(Image warriorImage, Image wizardImage)

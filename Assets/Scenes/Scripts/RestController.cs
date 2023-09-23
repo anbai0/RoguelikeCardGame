@@ -12,7 +12,6 @@ public class RestController : MonoBehaviour
     private const int restPrice = 70;          // 休憩の値段
     [Header("参照するUI")]
     [SerializeField] GameObject restButton;
-    [SerializeField] TextMeshProUGUI restText;
     [Header ("ShopSceneの時だけ使う")]
     [SerializeField] TextMeshProUGUI restPriceText;
 
@@ -37,12 +36,20 @@ public class RestController : MonoBehaviour
             {
                 restPriceText.color = Color.red;              // 値段を赤く表示
             }
+            else
+            {
+                restPriceText.color = Color.white;
+            }
 
             // 現在HPがMaxの場合またはお金が足りない場合
             if (gm.playerData._playerHP == gm.playerData._playerCurrentHP || gm.playerData._playerMoney < restPrice)
             {
                 restButton.GetComponent<Image>().color = Color.gray;  // 休憩ボタンをグレーアウト
                 return false;
+            }
+            else
+            {
+                restButton.GetComponent<Image>().color = Color.white;
             }
         }
 
@@ -58,19 +65,6 @@ public class RestController : MonoBehaviour
 
         return true;
 
-    }
-
-    /// <summary>
-    /// 休憩画面でテキストを表示させるメソッドです
-    /// </summary>
-    /// <param name="sceneType">呼び出す側のシーン名</param>
-    public void ChengeRestText(string sceneType)
-    {
-        if (sceneType == "ShopScene")
-            restText.text = $"{restPrice}Gを消費して\n体力を{gm.playerData._playerHP - gm.playerData._playerCurrentHP}回復しますか？";
-
-        if (sceneType == "BonfireScene")
-            restText.text = $"焚火を使用して\n体力を{gm.playerData._playerHP - gm.playerData._playerCurrentHP}回復しますか？";
     }
 
     /// <summary>

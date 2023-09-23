@@ -30,8 +30,9 @@ public class UIManagerShop : MonoBehaviour
 
     [Header("クリック後に参照するUI")]
     [SerializeField] private GameObject closeShop;
-    [SerializeField] private GameObject buyButton;
+    [SerializeField] private GameObject shoppingButton;
     [SerializeField] private GameObject closeShopping;
+    [SerializeField] private GameObject buyButton;
     [SerializeField] private GameObject restButton;
     [SerializeField] private GameObject takeRestButton;
     [SerializeField] private GameObject noRestButton;
@@ -91,7 +92,7 @@ public class UIManagerShop : MonoBehaviour
         #region ShopUI内での処理
 
         // "購入"を押したらshopping画面に遷移
-        if (UIObject == buyButton)
+        if (UIObject == shoppingButton)
         {
             AudioManager.Instance.PlaySE("選択音1");
             shopUI.SetActive(false);
@@ -113,8 +114,6 @@ public class UIManagerShop : MonoBehaviour
             if(restController.CheckRest("ShopScene"))      //休憩できる場合
             {
                 restUI.SetActive(true);
-
-                restController.ChengeRestText("ShopScene");
 
                 AudioManager.Instance.PlaySE("選択音1");
             }
@@ -145,6 +144,7 @@ public class UIManagerShop : MonoBehaviour
                     lastSelectedItem.transform.Find("RelicEffectBG").gameObject.SetActive(false);       // レリックの説明を非表示
                 }
 
+
                 // 2回目に選択したアイテムを選択状態にする
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);
@@ -153,25 +153,57 @@ public class UIManagerShop : MonoBehaviour
                 if (UIObject.CompareTag("Relics"))
                     UIObject.transform.Find("RelicEffectBG").gameObject.SetActive(true);
 
+
+                lastSelectedItem = UIObject;    // 最後にクリックしたアイテムを更新
             }
-            if (UIObject == lastSelectedItem)      // 同じアイテムを2回クリックしたら(アイテム購入)
-            {
-                // 選択したアイテムを買う
-                if (UIObject.CompareTag("Cards"))
-                    shopManager.BuyItem(UIObject, "Card");
 
-                if (UIObject.CompareTag("Relics"))
-                    shopManager.BuyItem(UIObject, "Relic");
 
-                shopManager.PriceTextCheck();            // 値段テキスト更新
-
-                lastSelectedItem = null;                     // 選択状態リセット
-                isSelected = false;
-            }
-            else
+            // 一度も選択されてなかった場合
+            if (lastSelectedItem == null)
             {
                 lastSelectedItem = UIObject;    // 最後にクリックしたアイテムを更新
             }
+
+            // 何かが選択されている場合
+            if (lastSelectedItem != null)
+            {
+                if (lastSelectedItem.CompareTag("Cards"))
+                {
+                    if (shopManager.IsItemBuyable(lastSelectedItem, "Cards"))
+                    {
+                        buyButton.SetActive(true);
+                    }
+                    else
+                    {
+                        buyButton.SetActive(false);
+                    }
+                }
+
+                if (lastSelectedItem.CompareTag("Relics"))
+                {
+                    if (shopManager.IsItemBuyable(lastSelectedItem, "Relics"))
+                    {
+                        buyButton.SetActive(true);
+                    }
+                    else
+                    {
+                        buyButton.SetActive(false);
+                    }
+                } 
+            } 
+        }
+
+        // アイテム購入
+        if (UIObject == buyButton && lastSelectedItem != null)
+        {
+            // 選択したアイテムを買う
+            if (lastSelectedItem.CompareTag("Cards"))
+                shopManager.BuyItem(lastSelectedItem, "Card");
+
+            if (lastSelectedItem.CompareTag("Relics"))
+                shopManager.BuyItem(lastSelectedItem, "Relic");
+
+            ResetItemSelection();
         }
 
         // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
@@ -218,6 +250,7 @@ public class UIManagerShop : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
@@ -273,5 +306,6 @@ public class UIManagerShop : MonoBehaviour
 
         lastSelectedItem = null;         // 選択状態リセット
         isSelected = false;
+        buyButton.SetActive(false);
     }
 }
