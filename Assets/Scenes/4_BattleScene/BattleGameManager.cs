@@ -29,6 +29,7 @@ public class BattleGameManager : MonoBehaviour
     //カード
     [SerializeField] CardController cardPrefab;
     [SerializeField] Transform CardPlace;
+    [SerializeField] GameObject DropPlace;
     Vector3 originCardPlace;
     [SerializeField] Transform PickCardPlace;
     [SerializeField] CardCostChange cardCostChange;
@@ -47,6 +48,9 @@ public class BattleGameManager : MonoBehaviour
     //ラウンド
     [SerializeField] RoundTextAnimation roundTextAnimation;
     [SerializeField] GameObject turnEndBlackPanel;
+
+    //エフェクト
+    [SerializeField] BattleEffect battleEffect;
 
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
@@ -235,6 +239,7 @@ public class BattleGameManager : MonoBehaviour
             //ターンディスプレイはどちらもオフに
             playerTurnDisplay.enabled = false;
             enemyTurnDisplay.enabled = false;
+            isPlayerTurn = false;
             turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
 
             if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
@@ -265,6 +270,12 @@ public class BattleGameManager : MonoBehaviour
         if (playerScript.GetSetCurrentAP < card.cardDataManager._cardCost) //カードのコストがプレイヤーのAPを超えたら何もしない
         {
             return;
+        }
+        //攻撃エフェクトを発動
+        var cardType = card.cardDataManager._cardType;
+        if(cardType == "Attack")
+        {
+            battleEffect.Attack(DropPlace);
         }
         isPlayerMove = true;//プレイヤーは行動中
         playerScript.Move(card);

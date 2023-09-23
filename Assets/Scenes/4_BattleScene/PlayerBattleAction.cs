@@ -17,6 +17,8 @@ public class PlayerBattleAction : CharacterBattleAction
     [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
     [SerializeField, Header("状態異常のアイコン表示スクリプト")] PlayerConditionDisplay playerConditionDisplay;
     [SerializeField, Header("画面揺れのスクリプト")] ShakeBattleField shakeBattleField;
+    [SerializeField, Header("戦闘エフェクト")] BattleEffect battleEffect;
+    [SerializeField, Header("回復エフェクト表示位置")] GameObject healEffectPos;
     
     [SerializeField] RelicEffectList relicEffect;
     [SerializeField] CardEffectList cardEffectList;
@@ -82,7 +84,7 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <param name="damage">受けたダメージ</param>
     public void TakeDamage(int damage)
     {
-        if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
+        //if (damage <= 0) return; //ダメージが0以下だった場合この処理を回さない
 
         int deductedDamage = 0;
         if (GetSetGP > 0) //ガードポイントがあったら
@@ -105,6 +107,11 @@ public class PlayerBattleAction : CharacterBattleAction
             ViewDamage(deductedDamage);
             shakeBattleField.Shake(0.25f, 10f);
         }
+        else if (deductedDamage == 0)
+        {
+            AudioManager.Instance.PlaySE("攻撃1");
+            ViewDamage(deductedDamage);
+        }
     }
 
     /// <summary>
@@ -122,7 +129,8 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     void ViewGard()
     {
-        GameObject gardObj = Instantiate(gardUI, damageOrHealingPos.transform);
+        var gardPos = damageOrHealingPos.transform.position + new Vector3(0f, 120f, 0f);
+        GameObject gardObj = Instantiate(gardUI, gardPos, Quaternion.identity, damageOrHealingPos.transform);
     }
 
     /// <summary>
@@ -136,6 +144,7 @@ public class PlayerBattleAction : CharacterBattleAction
         {
             AudioManager.Instance.PlaySE("回復");
             ViewHealing(healingHPPower);
+            battleEffect.Heal(healEffectPos);
         }
     }
 
@@ -163,7 +172,10 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void AutoHealing()
     {
-        HealingHP(GetSetInflictCondition.AutoHealing(playerCondition["AutoHealing"]));
+        if (playerCondition["AutoHealing"] > 0)
+        {
+            HealingHP(GetSetInflictCondition.AutoHealing(playerCondition["AutoHealing"]));
+        }
     }
 
     /// <summary>
@@ -171,7 +183,10 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     public void Burn()
     {
-        TakeDamage(playerCondition["Burn"]);
+        if(playerCondition["Burn"] > 0)
+        {
+            TakeDamage(playerCondition["Burn"]);
+        }
     }
 
     /// <summary>
@@ -180,8 +195,11 @@ public class PlayerBattleAction : CharacterBattleAction
     /// <param name="moveCount">行動回数</param>
     public void Poison(int moveCount)
     {
-        var poison = GetSetInflictCondition.Poison(playerCondition["Poison"], moveCount);
-        TakeDamage(poison);
+        if (playerCondition["Poison"] > 0) 
+        {
+            var poison = GetSetInflictCondition.Poison(playerCondition["Poison"], moveCount);
+            TakeDamage(poison);
+        }
     }
 
     /// <summary>

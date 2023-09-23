@@ -11,6 +11,11 @@ public class FlashImage : MonoBehaviour
     private Color32 originColor = new Color(0.7f, 0.7f, 0.7f); //フラッシュ終了時の色
     bool isFlashing = false;
 
+    private void Start()
+    {
+        flashImage.material.SetColor("_Color", originColor);
+    }
+
     private void Update()
     {
         if (isFlashing)

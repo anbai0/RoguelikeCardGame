@@ -14,6 +14,8 @@ public class UIManagerBattle : MonoBehaviour
 
     private bool isDragging = false;    // ÉhÉâÉbÉOèÛë‘Ç©ÇîªíËÇµÇ‹Ç∑
 
+    [SerializeField] EmphasisDropPlace emphasisDropPlace;
+    [SerializeField] UIArrowAnimation uiArrowAnimation;
     void Start()
     {
         UIEventsReload();
@@ -115,6 +117,8 @@ public class UIManagerBattle : MonoBehaviour
         Debug.Log("Begin");
         if (UIObject.CompareTag("Cards"))
         {
+            emphasisDropPlace.DisplayGameObject();
+            uiArrowAnimation.StartArrowMovement();
             UIObject.GetComponent<CardMovement>().CardBeginDrag(UIObject);
         }
     }
@@ -137,6 +141,8 @@ public class UIManagerBattle : MonoBehaviour
         Debug.Log(UIObject.name);
         if (UIObject.CompareTag("Cards"))
         {
+            emphasisDropPlace.HiddenGameObject();
+            uiArrowAnimation.StopArrowMovement();
             UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
         }
     }

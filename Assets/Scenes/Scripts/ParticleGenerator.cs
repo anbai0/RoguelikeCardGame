@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ParticleGenerator : MonoBehaviour
 {
-    [SerializeField] GameObject tapEffect;                  // タップエフェクト
+    [SerializeField] GameObject tapEffect; // タップエフェクト
 
     private void Update()
     {
@@ -17,7 +17,7 @@ public class ParticleGenerator : MonoBehaviour
         {
             // クリックしたスクリーン座標
             var screenPoint = Input.mousePosition;
-            Debug.Log(screenPoint);
+            //Debug.Log(screenPoint);
             
             // クリック位置に対応するRectTransformのlocalPositionを計算する
             var rect = GetComponent<RectTransform>();
