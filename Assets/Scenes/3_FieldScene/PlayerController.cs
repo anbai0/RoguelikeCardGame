@@ -74,6 +74,13 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
         }
 
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log(playerPos.y +"   " + playerPos.x);
+            Debug.Log(dungeon.rooms[playerPos.y, playerPos.x]);
+            dungeon.rooms[playerPos.y, playerPos.x].GetComponent<RoomBehaviour>().OpenDoors(playerPos);
+        }
+
     }
 
     private void PlayerMove()

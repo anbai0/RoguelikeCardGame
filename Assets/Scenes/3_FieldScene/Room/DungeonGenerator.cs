@@ -729,8 +729,8 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        // ドアを更新
-        rooms[roomY, roomX].GetComponent<RoomBehaviour>().UpdateRoom(doorStatus);
+        // 部屋のドアを配置
+        rooms[roomY, roomX].GetComponent<RoomBehaviour>().InitRoom(doorStatus);
         // マップのドアまたは壁を描画
         maps[roomY, roomX].GetComponent<MapRoomBehaviour>().UpdateRoomMap(doorStatus);
     }
