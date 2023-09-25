@@ -10,7 +10,7 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject backFloor;
     private bool[] doorsStatus = new bool[4];
 
-    private void Start()
+    private void Awake()
     {
         dungeon = FindObjectOfType<DungeonGenerator>();
     }

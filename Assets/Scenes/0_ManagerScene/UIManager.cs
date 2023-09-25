@@ -360,6 +360,7 @@ public class UIManager : MonoBehaviour
     {
         if (UIObject.CompareTag("Relics"))
         {
+            AudioManager.Instance.PlaySE("OnCursor");
             UIObject.transform.GetChild(5).gameObject.SetActive(true);
         }
 
@@ -369,6 +370,7 @@ public class UIManager : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
@@ -544,110 +546,5 @@ public class UIManager : MonoBehaviour
 
         
     }
-
-    #region upperとlowerのCardPlaceを使ったやり方
-    ///// <summary>
-    ///// カード破棄画面を表示または非表示にするメソッド
-    ///// </summary>
-    ///// <param name="show">表示する場合はtrue、非表示にする場合はfalse</param>
-    //public void ToggleDiscardScreen(bool show)
-    //{
-    //    isShowingCardDiscard = true;
-    //    if (show)
-    //    {
-    //        // ボタンの状態リセット
-    //        discardReturnButton.SetActive(true);
-    //        discardButton.SetActive(false);
-
-    //        // カード表示するUI表示
-    //        upperCardPlace.gameObject.SetActive(true);
-    //        lowerCardPlace.gameObject.SetActive(true);
-
-    //        // 前回表示したカードをDestroy
-    //        foreach (Transform child in upperCardPlace.transform)
-    //        {
-    //            Destroy(child.gameObject);
-    //        }
-    //        foreach (Transform child in lowerCardPlace.transform)
-    //        {
-    //            Destroy(child.gameObject);
-    //        }
-
-    //        cardDiscardScreen.SetActive(true);      // カード破棄画面を表示
-    //        ShowDeck();
-    //        UIEventsReload();
-    //    }
-    //    else
-    //    {
-    //        upperCardPlace.gameObject.SetActive(false);
-    //        lowerCardPlace.gameObject.SetActive(false);
-    //        isShowingCardDiscard = false;
-    //        cardDiscardScreen.SetActive(false);
-    //    }
-    //}
-
-
-    ///// <summary>
-    ///// 持っているカードをすべて表示
-    ///// </summary>
-    //private void ShowDeck()
-    //{
-    //    upperCardPlace.transform.localPosition = upperCardPos;      // upperCardの位置リセット
-    //    deckNumberList = gm.playerData._deckList;
-    //    int distribute = DistributionOfCards(deckNumberList.Count);
-    //    if (distribute <= 0) return;                                                         //デッキの枚数が0枚なら生成しない     
-    //    if (distribute <= 5) upperCardPlace.transform.localPosition = Vector3.zero;          // 5枚以下の場合カードを真ん中に表示
-
-    //    for (int init = 1; init <= deckNumberList.Count; init++)// デッキの枚数分
-    //    {
-    //        if (init <= distribute) //決められた数をupperCardPlaceに生成する
-    //        {
-    //            CardController card = Instantiate(cardPrefab, upperCardPlace);//カードを生成する
-    //            card.transform.localScale = scaleReset;
-    //            card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-    //            card.Init(deckNumberList[init - 1]);//デッキデータの表示
-    //        }
-    //        else //残りはlowerCardPlaceに生成する
-    //        {
-    //            CardController card = Instantiate(cardPrefab, lowerCardPlace);//カードを生成する
-    //            card.transform.localScale = scaleReset;
-    //            card.name = "Deck" + (init - 1).ToString();//生成したカードに名前を付ける
-    //            card.Init(deckNumberList[init - 1]);//デッキデータの表示
-    //        }
-    //    }
-    //}
-
-    ///// <summary>
-    ///// デッキのカード枚数によって上下のCardPlaceに振り分ける数を決める
-    ///// </summary>
-    ///// <param name="deckCount">デッキの枚数</param>
-    ///// <returns>上のCardPlaceに生成するカードの枚数</returns>
-    //int DistributionOfCards(int deckCount)
-    //{
-    //    int distribute = 0;
-    //    if (0 <= deckCount && deckCount <= 5)//デッキの数が0以上5枚以下だったら 
-    //    {
-    //        distribute = deckCount;//デッキの枚数分生成
-    //    }
-    //    else if (deckCount > 5)//デッキの数が6枚以上だったら
-    //    {
-    //        if (deckCount % 2 == 0)//デッキの枚数が偶数だったら
-    //        {
-    //            int value = deckCount / 2;
-    //            distribute = value;//デッキの半分の枚数を生成
-    //        }
-    //        else //デッキの枚数が奇数だったら
-    //        {
-    //            int value = (deckCount - 1) / 2;
-    //            distribute = value + 1;//デッキの半分+1の枚数を生成
-    //        }
-    //    }
-    //    else //デッキの数が0枚未満だったら
-    //    {
-    //        distribute = 0;//生成しない
-    //    }
-    //    return distribute;
-    //}
-    #endregion
 
 }

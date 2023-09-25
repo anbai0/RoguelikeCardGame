@@ -218,11 +218,13 @@ public class UIManagerCharaSelect : MonoBehaviour
         // 戦士選択時に、レリックの説明文切り替え
         if (UIObject.CompareTag("Relics") && selectWarrior)
         {
+            AudioManager.Instance.PlaySE("OnCursor");
             UIObject.transform.GetChild(6).gameObject.SetActive(true);
         }
         // 魔法使い選択時に、レリックの説明文切り替え
         if (UIObject.CompareTag("Relics") && selectWizard)
         {
+            AudioManager.Instance.PlaySE("OnCursor");
             UIObject.transform.GetChild(7).gameObject.SetActive(true);
         }
 
@@ -231,6 +233,7 @@ public class UIManagerCharaSelect : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }

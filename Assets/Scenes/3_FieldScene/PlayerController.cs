@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public string enemyTag { get; private set; }
 
     // 部屋の移動
-    [SerializeField] DungeonGenerator dungeon;
+    private DungeonGenerator dungeon;
     Vector2Int playerPos;
     // マップの描画
     List<Vector2Int> roomVisited = new List<Vector2Int>();  // 一度訪れた部屋の位置を記録します
@@ -74,12 +74,14 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsWalking", false); // 歩くアニメーションを停止
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Debug.Log(playerPos.y +"   " + playerPos.x);
-            Debug.Log(dungeon.rooms[playerPos.y, playerPos.x]);
-            dungeon.rooms[playerPos.y, playerPos.x].GetComponent<RoomBehaviour>().OpenDoors(playerPos);
-        }
+
+        //// 扉を開ける処理（デバッグ用）
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    Debug.Log(playerPos.y +"   " + playerPos.x);
+        //    Debug.Log(dungeon.rooms[playerPos.y, playerPos.x]);
+        //    dungeon.rooms[playerPos.y, playerPos.x].GetComponent<RoomBehaviour>().OpenDoors(new Vector2Int(playerPos.x, playerPos.y));
+        //}
 
     }
 
@@ -186,7 +188,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            UpdateMap(nextRoom);
+            UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -205,7 +207,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            UpdateMap(nextRoom);
+            UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -219,13 +221,12 @@ public class PlayerController : MonoBehaviour
             AudioManager.Instance.PlaySE("マップ切り替え");
             playerPos.x -= 1;
             GameObject nextRoom = dungeon.rooms[playerPos.y, playerPos.x];
-            Debug.Log(Camera.main);
             Camera.main.transform.position = nextRoom.transform.position + dungeon.roomCam;
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            UpdateMap(nextRoom);
+            UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -244,7 +245,7 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
 
             BonfireParticleSwitch(nextRoom, lastRoom);
-            UpdateMap(nextRoom);
+            UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
@@ -294,10 +295,11 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 入った部屋が初めて訪れた部屋だった場合、マップに部屋を描画します
+    /// 入った部屋が初めて訪れた部屋だった場合マップに部屋を描画します。
+    /// <para>イベント系の部屋だった場合、マップにアイコンを描画し、部屋にある扉をすべて開けます。</para>
     /// </summary>
     /// <param name="nextRoom"></param>
-    private void UpdateMap(GameObject nextRoom)
+    private void UpdateMapAndRoom(GameObject nextRoom)
     {
         bool isVisited = false;
 
@@ -328,24 +330,32 @@ public class PlayerController : MonoBehaviour
                 {
                     bonfireIcon = Instantiate(bonfireIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     bonfireIcon.transform.localPosition = Vector3.zero;
+                    // その部屋の扉をすべて開けます
+                    CurRoomOpenDoors();
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Shop"))
                 {
                     shopIcon = Instantiate(shopIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     shopIcon.transform.localPosition = Vector3.zero;
+                    // その部屋の扉をすべて開けます
+                    CurRoomOpenDoors();
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("TreasureBox"))
                 {
                     treasureBoxIcon = Instantiate(treasureBoxIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     treasureBoxIcon.transform.localPosition = Vector3.zero;
+                    // その部屋の扉をすべて開けます
+                    CurRoomOpenDoors();
                 }
 
                 if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Boss"))
                 {
                     bossIcon = Instantiate(bossIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     bossIcon.transform.localPosition = Vector3.zero;
+                    // その部屋の扉をすべて開けます
+                    CurRoomOpenDoors();
                 }
             }
         }
@@ -375,4 +385,27 @@ public class PlayerController : MonoBehaviour
             playerIcon.SetActive(true);
         }
     }
+
+    /// <summary>
+    /// 焚火を消費したときに、アイコンの更新を行います。
+    /// <para>ボス部屋にある焚火を消費したときにアイコンの更新をしたくないため、</para>
+    /// <para>焚火だけがある部屋のアイコンの更新だけします。</para>
+    /// </summary>
+    public void UpdateBonfireIcon()
+    {
+        if (dungeon.maps[playerPos.y, playerPos.x] == dungeon.maps[dungeon.bonfireRoomPos.y, dungeon.bonfireRoomPos.x])
+        {
+            Destroy(bonfireIcon);         // 焚火のアイコンを削除
+            playerIcon.SetActive(true);   // プレイヤーアイコンを表示
+        }
+    }
+
+    /// <summary>
+    /// 現在いる部屋の扉とその扉に対応した隣の部屋の扉を開けます。
+    /// </summary>
+    public void CurRoomOpenDoors()
+    {
+        dungeon.rooms[playerPos.y, playerPos.x].GetComponent<RoomBehaviour>().OpenDoors(new Vector2Int(playerPos.x, playerPos.y));
+    }
+
 }

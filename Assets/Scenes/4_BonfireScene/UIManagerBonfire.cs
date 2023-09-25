@@ -212,6 +212,7 @@ public class UIManagerBonfire : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
             }
@@ -244,7 +245,6 @@ public class UIManagerBonfire : MonoBehaviour
         PlayerController.Instance.bonfire.GetComponent<BoxCollider>().enabled = false;
 
         // マップアイコンの処理
-        Destroy(PlayerController.Instance.bonfireIcon);         // 焚火のアイコンを削除
-        PlayerController.Instance.playerIcon.SetActive(true);   // プレイヤーアイコンを表示
+        PlayerController.Instance.UpdateBonfireIcon();
     }
 }

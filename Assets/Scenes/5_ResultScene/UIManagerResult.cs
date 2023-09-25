@@ -103,12 +103,14 @@ public class UIManagerResult : MonoBehaviour
         // カードを拡大
         if (UIObject.CompareTag("Cards"))
         {
+            AudioManager.Instance.PlaySE("OnCursor");
             UIObject.transform.localScale += scaleBoost;
         }
 
         // レリックの説明を表示
         if (UIObject.CompareTag("Relics"))
         {
+            AudioManager.Instance.PlaySE("OnCursor");
             UIObject.transform.GetChild(5).gameObject.SetActive(true);
         }
     }

@@ -295,6 +295,7 @@ public class UIManagerBattleReward : MonoBehaviour
             {
                 if(UIObject.GetComponent<CardController>().cardDataManager._cardState == -1)             //報酬用のカードだったら
                 {
+                    AudioManager.Instance.PlaySE("OnCursor");
                     UIObject.transform.localScale += scaleBoost;
                     UIObject.transform.GetChild(0).gameObject.SetActive(true);              // アイテムの見た目を選択状態にする
                 }
@@ -302,6 +303,7 @@ public class UIManagerBattleReward : MonoBehaviour
 
             if (UIObject.CompareTag("Relics"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale += scaleBoost;
                 UIObject.transform.GetChild(0).gameObject.SetActive(true);                  // アイテムの見た目を選択状態にする
                 UIObject.transform.GetChild(8).gameObject.SetActive(true);                  // RelicEffectBG(BattleReward)を表示

@@ -312,6 +312,7 @@ public class UIManagerTreasureBox : MonoBehaviour
         {
             if (UIObject.CompareTag("Cards"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale = cardScaleReset;
                 UIObject.transform.GetChild(0).gameObject.SetActive(false);             // アイテムの見た目の選択状態を解除する
 
@@ -319,6 +320,7 @@ public class UIManagerTreasureBox : MonoBehaviour
 
             if (UIObject.CompareTag("Relics"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.localScale = relicScaleReset;
                 UIObject.transform.GetChild(0).gameObject.SetActive(false);                 // アイテムの見た目の選択状態を解除する
                 UIObject.transform.GetChild(8).gameObject.SetActive(false);                    // RelicEffectBG(BattleReward)を非表示

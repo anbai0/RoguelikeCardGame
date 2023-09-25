@@ -177,6 +177,7 @@ public class BattleRewardManager : MonoBehaviour
             }
 
             PlayerController.Instance.enemy.SetActive(false);      // エネミーを消す
+            PlayerController.Instance.CurRoomOpenDoors();          // 扉開放
         }
     }
 

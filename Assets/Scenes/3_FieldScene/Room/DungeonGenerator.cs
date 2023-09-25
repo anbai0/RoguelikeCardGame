@@ -28,7 +28,7 @@ public class DungeonGenerator : MonoBehaviour
     private Stack<Vector2Int> backTracking = new Stack<Vector2Int>();
 
     // 焚火の生成位置
-    private Vector2Int bonfireRoomPos;
+    public Vector2Int bonfireRoomPos;
 
     // ボス部屋の生成位置
     private Vector2Int bossRoomPos;
@@ -678,6 +678,9 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
+
+        // スポーン地点の扉を全開
+        rooms[spawnPos.y, spawnPos.x].GetComponent<RoomBehaviour>().OpenDoors(new Vector2Int(spawnPos.x, spawnPos.y));
     }
 
     /// <summary>
