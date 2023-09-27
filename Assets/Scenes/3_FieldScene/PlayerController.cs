@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);         
+            playerIcon.transform.localPosition = Vector3.zero;
         }
 
         if (other.gameObject.CompareTag("GateBack"))
@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
+            playerIcon.transform.localPosition = Vector3.zero;
         }
 
         if (other.gameObject.CompareTag("GateLeft"))
@@ -231,7 +231,7 @@ public class PlayerController : MonoBehaviour
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
+            playerIcon.transform.localPosition = Vector3.zero;
         }
 
         if (other.gameObject.CompareTag("GateRight"))
@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
             // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
+            playerIcon.transform.localPosition = Vector3.zero;
         }
         # endregion
     }

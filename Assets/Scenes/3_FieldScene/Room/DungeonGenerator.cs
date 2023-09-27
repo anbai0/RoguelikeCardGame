@@ -358,14 +358,14 @@ public class DungeonGenerator : MonoBehaviour
             Instantiate(warriorPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, warriorY, 0), Quaternion.identity, playerParent);
             // マップのプレイヤーアイコン生成
             playerIcon = Instantiate(warriorIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
+            playerIcon.transform.localPosition = Vector3.zero;
         }
         if (GameManager.Instance.playerData._playerName == "魔法使い")
         {
             Instantiate(wizardPrefab, rooms[spawnPos.y, spawnPos.x].transform.position + new Vector3(0, wizardY, 0), Quaternion.identity, playerParent);
             // マップのプレイヤーアイコン生成
             playerIcon = Instantiate(wizardIcon, Vector3.zero, Quaternion.identity.normalized, maps[spawnPos.y, spawnPos.x].transform);
-            playerIcon.transform.localPosition = new Vector3(100, -100, 0);
+            playerIcon.transform.localPosition = Vector3.zero;
         }
 
         // カメラの位置を変更
