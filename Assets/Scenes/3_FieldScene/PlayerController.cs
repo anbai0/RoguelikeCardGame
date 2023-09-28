@@ -187,11 +187,15 @@ public class PlayerController : MonoBehaviour
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;           // ライトを次の部屋に移動
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, -3.6f);      // Playerを次の部屋に移動
 
+            // 松明のエフェクトを切り替える
+            lastRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(false);
+            nextRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
+
             BonfireParticleSwitch(nextRoom, lastRoom);
             UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
-            // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
+            // プレイヤーアイコンをミニマップの真ん中に移動させています
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
             playerIcon.transform.localPosition = Vector3.zero;
         }
@@ -206,11 +210,15 @@ public class PlayerController : MonoBehaviour
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(0, transform.position.y, 3.6f);
 
+            // 松明のエフェクトを切り替える
+            lastRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(false);
+            nextRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
+
             BonfireParticleSwitch(nextRoom, lastRoom);
             UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
-            // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
+            // プレイヤーアイコンをミニマップの真ん中に移動させています
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
             playerIcon.transform.localPosition = Vector3.zero;
         }
@@ -225,11 +233,15 @@ public class PlayerController : MonoBehaviour
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(3.6f, transform.position.y, 0);
 
+            // 松明のエフェクトを切り替える
+            lastRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(false);
+            nextRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
+
             BonfireParticleSwitch(nextRoom, lastRoom);
             UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
-            // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
+            // プレイヤーアイコンをミニマップの真ん中に移動させています
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
             playerIcon.transform.localPosition = Vector3.zero;
         }
@@ -244,11 +256,15 @@ public class PlayerController : MonoBehaviour
             dungeon.spotLight.transform.position = Camera.main.transform.position + dungeon.lightPos;
             gameObject.transform.position = nextRoom.transform.position + new Vector3(-3.6f, transform.position.y, 0);
 
+            // 松明のエフェクトを切り替える
+            lastRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(false);
+            nextRoom.GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
+
             BonfireParticleSwitch(nextRoom, lastRoom);
             UpdateMapAndRoom(nextRoom);
             // 移動した部屋をマップの中心に変更
             dungeon.map.transform.localPosition = new Vector3(-playerPos.x * 100 - 50, playerPos.y * 100 + 50, 0);
-            // プレイヤーアイコンをミニマップの真ん中に移動させています（後でやり方を変えます）
+            // プレイヤーアイコンをミニマップの真ん中に移動させています
             dungeon.playerIcon.transform.SetParent(dungeon.maps[playerPos.y, playerPos.x].transform);
             playerIcon.transform.localPosition = Vector3.zero;
         }

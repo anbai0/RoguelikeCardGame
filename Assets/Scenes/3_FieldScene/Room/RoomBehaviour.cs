@@ -9,6 +9,7 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject[] doors;
     public GameObject backFloor;
     private bool[] doorsStatus = new bool[4];
+    [SerializeField] List<GameObject> torchEff = new List<GameObject>();
 
     private void Awake()
     {
@@ -89,5 +90,26 @@ public class RoomBehaviour : MonoBehaviour
             rightRoom.doors[2].SetActive(false);
             rightRoom.gate[2].GetComponent<BoxCollider>().enabled = true;
         }
+    }
+
+    /// <summary>
+    /// 焚火のエフェクトの切り替えを行います
+    /// </summary>
+    /// <param name="isEffectEnabled"></param>
+    public void ToggleTorchEffect(bool isEffectEnabled)
+    {
+        foreach (var eff in torchEff)
+        {
+            if (isEffectEnabled)
+            {
+                eff.SetActive(true);
+            }
+            else
+            {
+                eff.SetActive(false);
+            }
+            
+        }
+        
     }
 }

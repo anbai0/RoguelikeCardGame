@@ -78,6 +78,8 @@ public class DungeonGenerator : MonoBehaviour
         rooms[spawnPos.y, spawnPos.x] = Instantiate(room, SetRoomPos(spawnPos.y, spawnPos.x), Quaternion.identity, roomParent);
         // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
         rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+        // 松明のエフェクトを表示
+        rooms[spawnPos.y, spawnPos.x].GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
         // マップ描画
         maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
         maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
@@ -97,69 +99,70 @@ public class DungeonGenerator : MonoBehaviour
 
     private void Update()
     {
-        // デバッグ用
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Transform[] childRooms = roomParent.GetComponentsInChildren<Transform>();
 
-            // 親自体も含まれているため、インデックス1からループを開始
-            for (int i = 1; i < childRooms.Length; i++)
-            {
-                Destroy(childRooms[i].gameObject);
-            }
+        #region　デバッグ用
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    Transform[] childRooms = roomParent.GetComponentsInChildren<Transform>();
 
-            Transform[] childEnemys = enemyParent.GetComponentsInChildren<Transform>();
+        //    // 親自体も含まれているため、インデックス1からループを開始
+        //    for (int i = 1; i < childRooms.Length; i++)
+        //    {
+        //        Destroy(childRooms[i].gameObject);
+        //    }
 
-            // 親自体も含まれているため、インデックス1からループを開始
-            for (int i = 1; i < childEnemys.Length; i++)
-            {
-                Destroy(childEnemys[i].gameObject);
-            }
+        //    Transform[] childEnemys = enemyParent.GetComponentsInChildren<Transform>();
 
-            Transform[] m = map.GetComponentsInChildren<Transform>();
+        //    // 親自体も含まれているため、インデックス1からループを開始
+        //    for (int i = 1; i < childEnemys.Length; i++)
+        //    {
+        //        Destroy(childEnemys[i].gameObject);
+        //    }
 
-            // 親自体も含まれているため、インデックス1からループを開始
-            for (int i = 1; i < m.Length; i++)
-            {
-                Destroy(m[i].gameObject);
-            }
+        //    Transform[] m = map.GetComponentsInChildren<Transform>();
 
-            walkCount = 0;
-            backTracking.Clear();
-            // 部屋をすべて削除
-            for (int y = 0; y < rooms.GetLength(0); y++)
-            {
-                for (int x = 0; x < rooms.GetLength(1); x++)
-                {
-                    rooms[x,y] = null;
-                    maps[x,y] = null;
-                }
-            }
+        //    // 親自体も含まれているため、インデックス1からループを開始
+        //    for (int i = 1; i < m.Length; i++)
+        //    {
+        //        Destroy(m[i].gameObject);
+        //    }
 
-            strongEnemyRooms.Clear();
+        //    walkCount = 0;
+        //    backTracking.Clear();
+        //    // 部屋をすべて削除
+        //    for (int y = 0; y < rooms.GetLength(0); y++)
+        //    {
+        //        for (int x = 0; x < rooms.GetLength(1); x++)
+        //        {
+        //            rooms[x, y] = null;
+        //            maps[x, y] = null;
+        //        }
+        //    }
 
-            // セルの中央(4個所からランダムで)スポーン地点を設定
-            spawnPos.y = Random.Range(spawnRandMin, spawnRandMax + 1);
-            spawnPos.x = Random.Range(spawnRandMin, spawnRandMax + 1);
-            rooms[spawnPos.y, spawnPos.x] = Instantiate(room, SetRoomPos(spawnPos.y, spawnPos.x), Quaternion.identity, roomParent);
-            // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
-            rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
-            // マップ描画
-            maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
-            maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
-            maps[spawnPos.y, spawnPos.x].gameObject.name = $"Map: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
-            // スポーン地点の部屋をミニマップの中心にする
-            map.transform.localPosition = new Vector3(-spawnPos.x * 100 - 50, spawnPos.y * 100 + 50, 0);
-            // スポーン地点のマップをアクティブにする
-            maps[spawnPos.y, spawnPos.x].gameObject.SetActive(true);
-            // 現在のランダムウォーク地点を更新
-            curWalk = spawnPos;
-            // バックトラッキング用にスタックにプッシュ
-            backTracking.Push(new Vector2Int(curWalk.x, curWalk.y));
+        //    strongEnemyRooms.Clear();
 
-            RandomWalk();
-        }
+        //    // セルの中央(4個所からランダムで)スポーン地点を設定
+        //    spawnPos.y = Random.Range(spawnRandMin, spawnRandMax + 1);
+        //    spawnPos.x = Random.Range(spawnRandMin, spawnRandMax + 1);
+        //    rooms[spawnPos.y, spawnPos.x] = Instantiate(room, SetRoomPos(spawnPos.y, spawnPos.x), Quaternion.identity, roomParent);
+        //    // わかりやすいように何番目に生成したか?と生成した配列の要素数を名前に入れています。
+        //    rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+        //    // マップ描画
+        //    maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
+        //    maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
+        //    maps[spawnPos.y, spawnPos.x].gameObject.name = $"Map: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
+        //    // スポーン地点の部屋をミニマップの中心にする
+        //    map.transform.localPosition = new Vector3(-spawnPos.x * 100 - 50, spawnPos.y * 100 + 50, 0);
+        //    // スポーン地点のマップをアクティブにする
+        //    maps[spawnPos.y, spawnPos.x].gameObject.SetActive(true);
+        //    // 現在のランダムウォーク地点を更新
+        //    curWalk = spawnPos;
+        //    // バックトラッキング用にスタックにプッシュ
+        //    backTracking.Push(new Vector2Int(curWalk.x, curWalk.y));
 
+        //    RandomWalk();
+        //}
+        #endregion
 
     }
 
