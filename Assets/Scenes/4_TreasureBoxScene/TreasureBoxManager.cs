@@ -70,6 +70,7 @@ public class TreasureBoxManager : MonoBehaviour
         for (int cardCount = 0; cardCount < treasureCardID.Count; cardCount++)
         {
             GameObject cardObj = Instantiate(cardPrefab, cardPlace);
+            cardObj.transform.localScale = Vector3.one * 0.25f;
             cardObj.transform.SetParent(cardPlace);
             cardController = cardObj.GetComponent<CardController>();
             cardController.Init(treasureCardID[cardCount]);
