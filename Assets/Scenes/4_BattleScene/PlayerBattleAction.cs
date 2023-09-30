@@ -129,6 +129,23 @@ public class PlayerBattleAction : CharacterBattleAction
     /// </summary>
     void ViewGard()
     {
+        // SE
+        int rand = Random.Range(0, 3);
+        switch (rand)
+        {
+            case 0:
+                AudioManager.Instance.PlaySE("guard1");
+                break;
+            case 1:
+                AudioManager.Instance.PlaySE("guard2");
+                break;
+            case 2:
+                AudioManager.Instance.PlaySE("guard3");
+                break;
+            default:
+                break;
+        }
+
         var gardPos = damageOrHealingPos.transform.position + new Vector3(0f, 120f, 0f);
         GameObject gardObj = Instantiate(gardUI, gardPos, Quaternion.identity, damageOrHealingPos.transform);
     }

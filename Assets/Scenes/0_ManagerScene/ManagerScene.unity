@@ -1762,6 +1762,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dec8ce1984c993d41906963ce6489038, type: 3}
   - {fileID: 8300000, guid: 49103ba1037ab3a4c9737df2c6cc9eb2, type: 3}
   - {fileID: 8300000, guid: 2f71e11a6d06e224a8285706baa48f0a, type: 3}
+  - {fileID: 8300000, guid: d7ba9308fe8e0b848bec077040b0ff37, type: 3}
+  - {fileID: 8300000, guid: 01d1ff15001986b4a9e988385766f40c, type: 3}
+  - {fileID: 8300000, guid: e9dda40d67983d343b4296aad38ffbaa, type: 3}
   seAudioVolumes:
   - 0.7
   - 1
@@ -1772,6 +1775,9 @@ MonoBehaviour:
   - 0.3
   - 1.2
   - 0.5
+  - 0.9
+  - 1.8
+  - 0.75
   bgmAudioClips:
   - {fileID: 8300000, guid: 671e8e90062948348a9d4cbe2e6c09a5, type: 3}
   - {fileID: 8300000, guid: 0f01199b4ac8a4f4b98997b16539d6fd, type: 3}
