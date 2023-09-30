@@ -7,6 +7,8 @@ public class CardDrop : MonoBehaviour,IDropHandler
 {
     public void OnDrop(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
+        if (eventData.button == PointerEventData.InputButton.Middle) return;
         CardController card = eventData.pointerDrag.GetComponent<CardController>(); // ドラッグしてきた情報からCardControllerを取得
         if (card != null && BattleGameManager.Instance.isPlayerTurn) // もしカードがあり、プレイヤーのターンの場合
         {

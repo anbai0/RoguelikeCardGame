@@ -69,6 +69,8 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
+        if (eventData.button == PointerEventData.InputButton.Middle) return;
         if (!isDraggable) return;
         if (eventData.button == PointerEventData.InputButton.Right) return;
 
@@ -80,6 +82,8 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
+        if (eventData.button == PointerEventData.InputButton.Middle) return;
         if (!isDraggable) return;
         if (eventData.button == PointerEventData.InputButton.Right) return;
 
@@ -90,6 +94,8 @@ public class UIController : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right) return;
+        if (eventData.button == PointerEventData.InputButton.Middle) return;
         if (!isDraggable) return;
         if (eventData.button == PointerEventData.InputButton.Right) return;
 

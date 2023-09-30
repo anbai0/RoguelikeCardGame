@@ -180,6 +180,7 @@ public class BattleGameManager : MonoBehaviour
         if (IsGameEnd()) //戦闘の終了条件を満たしていないか確認する
         {
             //どちらかが先に戦闘不能になった場合、戦闘を止める
+            isPlayerTurn = false;
             return;
         }
         playerScript.ViewConditionIcon(); //プレイヤーの状態異常アイコンの更新
@@ -305,6 +306,7 @@ public class BattleGameManager : MonoBehaviour
         {
             return;
         }
+        isPlayerTurn = false;
         //攻撃エフェクトを発動
         var cardType = card.cardDataManager._cardType;
         if(cardType == "Attack")
