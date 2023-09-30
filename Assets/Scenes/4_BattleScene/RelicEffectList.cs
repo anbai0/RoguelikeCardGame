@@ -184,7 +184,10 @@ public class RelicEffectList : MonoBehaviour
         {
             for (int badCount = 0; badCount < bad.Value; badCount++) //付与されている個数分だけリストに状態異常の名前を追加
             {
-                badStatus.Add(bad.Key);
+                if(bad.Key != "UpStrength" && bad.Key != "AutoHealing" && bad.Key != "InvalidBadStatus") //状態異常のバフステータスを除外
+                {
+                    badStatus.Add(bad.Key);
+                }
             }
         }
 
