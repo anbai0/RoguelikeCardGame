@@ -68,6 +68,7 @@ public class DungeonGenerator : MonoBehaviour
     // マップアイコン
     [SerializeField] GameObject warriorIcon;
     [SerializeField] GameObject wizardIcon;
+    [SerializeField] GameObject spawnIcon;
     public GameObject playerIcon;
 
     void Start()
@@ -80,6 +81,7 @@ public class DungeonGenerator : MonoBehaviour
         rooms[spawnPos.y, spawnPos.x].gameObject.name = $"Room: {walkCount} ({spawnPos.y}  {spawnPos.x}) (spawnRoom)";
         // 松明のエフェクトを表示
         rooms[spawnPos.y, spawnPos.x].GetComponent<RoomBehaviour>().ToggleTorchEffect(true);
+
         // マップ描画
         maps[spawnPos.y, spawnPos.x] = Instantiate(mapPrefab, map.transform.position, Quaternion.identity, map);
         maps[spawnPos.y, spawnPos.x].transform.localPosition = new Vector3(spawnPos.x * 100, -spawnPos.y * 100, 0);
@@ -88,6 +90,9 @@ public class DungeonGenerator : MonoBehaviour
         map.transform.localPosition = new Vector3(-spawnPos.x * 100 - 50, spawnPos.y * 100 + 50, 0);
         // スポーン地点のマップをアクティブにする
         maps[spawnPos.y, spawnPos.x].gameObject.SetActive(true);
+        // スポーン地点アイコンを生成
+        Instantiate(spawnIcon, maps[spawnPos.y, spawnPos.x].transform.position, Quaternion.identity, maps[spawnPos.y, spawnPos.x].transform);
+
         // 現在のランダムウォーク地点を更新
         curWalk.Set(spawnPos.x, spawnPos.y);
         // バックトラッキング用にスタックにプッシュ

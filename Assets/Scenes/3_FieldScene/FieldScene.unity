@@ -1659,11 +1659,13 @@ MonoBehaviour:
   lightPos: {x: 0, y: -4, z: 0}
   roomCam: {x: 0, y: 10, z: -10}
   map: {fileID: 1187294026}
-  mapPrefab: {fileID: 2354784324003787644, guid: e767cc20176f6c34ea424e2c0751a67e,
+  mapPrefab: {fileID: 2354784324003787644, guid: 80f119f610ad67f46b6ca31528937327,
     type: 3}
   warriorIcon: {fileID: 4947279587093461393, guid: 98405a75dc01cb5469b4b2d7ea8d6587,
     type: 3}
   wizardIcon: {fileID: 5330004340903981245, guid: 43e3e75572989fd44b55fadc479d0f51,
+    type: 3}
+  spawnIcon: {fileID: 4947279587093461393, guid: f0152f77946e3d24db75ba6439d459d8,
     type: 3}
   playerIcon: {fileID: 0}
 --- !u!1 &1983297285
@@ -1699,7 +1701,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: bd81fb628237e1942ad4fc296070a958, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 1df8d5c1d2cabe24c9c197ce7eeb9807, type: 2}
 --- !u!4 &1983297287
 Transform:
   m_ObjectHideFlags: 0

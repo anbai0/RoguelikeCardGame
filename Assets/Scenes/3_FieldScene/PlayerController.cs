@@ -340,9 +340,9 @@ public class PlayerController : MonoBehaviour
             dungeon.maps[playerPos.y, playerPos.x].gameObject.SetActive(true);
 
             // 部屋に特定のオブジェクトがあった場合アイコンを表示
-            if (dungeon.rooms[playerPos.y, playerPos.x].transform.childCount >= 6)
+            if (nextRoom.transform.childCount >= 6)
             {
-                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
+                if (nextRoom.transform.GetChild(5).CompareTag("Bonfire"))
                 {
                     bonfireIcon = Instantiate(bonfireIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     bonfireIcon.transform.localPosition = Vector3.zero;
@@ -350,7 +350,7 @@ public class PlayerController : MonoBehaviour
                     CurRoomOpenDoors();
                 }
 
-                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Shop"))
+                if (nextRoom.transform.GetChild(5).CompareTag("Shop"))
                 {
                     shopIcon = Instantiate(shopIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     shopIcon.transform.localPosition = Vector3.zero;
@@ -358,7 +358,7 @@ public class PlayerController : MonoBehaviour
                     CurRoomOpenDoors();
                 }
 
-                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("TreasureBox"))
+                if (nextRoom.transform.GetChild(5).CompareTag("TreasureBox"))
                 {
                     treasureBoxIcon = Instantiate(treasureBoxIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     treasureBoxIcon.transform.localPosition = Vector3.zero;
@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
                     CurRoomOpenDoors();
                 }
 
-                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Boss"))
+                if (nextRoom.transform.GetChild(5).CompareTag("Boss"))
                 {
                     bossIcon = Instantiate(bossIconPrefab, Vector3.zero, Quaternion.identity, dungeon.maps[playerPos.y, playerPos.x].transform);
                     bossIcon.transform.localPosition = Vector3.zero;
@@ -376,13 +376,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
+
+
         // 部屋にオブジェクトがあったときにplayerIconを非表示に
-        if (dungeon.rooms[playerPos.y, playerPos.x].transform.childCount >= 6)
+        if (nextRoom.transform.childCount >= 6)
         {
             // 部屋にあったオブジェクトが焚火だった場合、コライダーがtrueになっているかをチェックしています
-            if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).CompareTag("Bonfire"))
+            if (nextRoom.transform.GetChild(5).CompareTag("Bonfire"))
             {
-                if (dungeon.rooms[playerPos.y, playerPos.x].transform.GetChild(5).GetComponent<BoxCollider>().enabled == true)
+                if (nextRoom.transform.GetChild(5).GetComponent<BoxCollider>().enabled == true)
                 {
                     playerIcon.SetActive(false);
                 }
@@ -398,8 +401,18 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            playerIcon.SetActive(true);
+            // 入った部屋がスポーン地点だった場合playerIconを非表示に
+            if (nextRoom == dungeon.rooms[dungeon.spawnPos.y, dungeon.spawnPos.x])
+            {
+                Debug.Log($"スポーン地点に入りました。{playerIcon}");
+                playerIcon.SetActive(false);
+            }
+            else
+            {
+                playerIcon.SetActive(true);
+            }
         }
+        
     }
 
     /// <summary>
