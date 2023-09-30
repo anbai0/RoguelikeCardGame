@@ -133,7 +133,7 @@ public class CardEffectList : MonoBehaviour
                 CardID17(card);
                 break;
             case 117:
-                CardID17(card);
+                CardID117(card);
                 break;
             case 18:
                 CardID18(card);
@@ -518,10 +518,23 @@ public class CardEffectList : MonoBehaviour
         }
     }
     /// <summary>
-    /// 技名：雷霆の衝撃,強化雷霆の衝撃
-    /// 効果：5(10)ダメージを与え、相手をこのラウンド中行動不能状態にする。
+    /// 技名：雷霆の衝撃
+    /// 効果：相手をこのラウンド中行動不能状態にする。
     /// </summary>
     private void CardID17(CardController card)
+    {
+        //エネミーを行動不能にする
+        enemy.TurnEnd();
+        //この戦闘中カードを使用不可にする
+        card.cardDataManager._cardState = 2;
+    }
+
+    /// <summary>
+    /// 技名：強化雷霆の衝撃
+    /// 効果：10ダメージを与え、相手をこのラウンド中行動不能状態にする。
+    /// </summary>
+    /// <param name="card"></param>
+    private void CardID117(CardController card)
     {
         //エネミーを攻撃
         PlayerAttacking(cardAttackPower);
@@ -530,6 +543,7 @@ public class CardEffectList : MonoBehaviour
         //この戦闘中カードを使用不可にする
         card.cardDataManager._cardState = 2;
     }
+
     /// <summary>
     /// 技名：エクスカリバー,強化エクスカリバー
     /// 効果：10(12)ダメージを与える。これが3ラウンド目以降ならAPを7回復する。
