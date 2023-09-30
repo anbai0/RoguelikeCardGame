@@ -80,80 +80,8 @@ public class UIManagerTreasureBox : MonoBehaviour
         if (UIObject.CompareTag("Cards") || UIObject.CompareTag("Relics"))
         {
             isSelected = true;
-            AudioManager.Instance.PlaySE("選択音1");
-
-            // 入手ボタン切り替え
-            applyGetTreasure.SetActive(true);
-            closeGetTreasure.SetActive(false);
-            //UIEventsReload();
-
-            // カード選択状態の切り替え
-            // アイテム選択状態の切り替え
-            if (lastSelectedItem != null && lastSelectedItem != UIObject)    // 2回目のクリックかつクリックしたオブジェクトが違う場合   
-            {
-                // 最後にクリックしたアイテムの選択状態を解除する
-                if (lastSelectedItem.CompareTag("Cards"))
-                {
-                    lastSelectedItem.transform.localScale = cardScaleReset;
-                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
-                }
-
-                if (lastSelectedItem.CompareTag("Relics"))
-                {
-                    lastSelectedItem.transform.localScale = relicScaleReset;
-                    lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
-                    lastSelectedItem.transform.GetChild(8).gameObject.SetActive(false);       // RelicEffectBG(BattleReward)を非表示
-                }
-
-                // 2回目に選択したアイテムがカードだった場合、カードを選択状態にする
-                if (UIObject.CompareTag("Cards"))
-                {
-                    UIObject.transform.localScale += scaleBoost;
-                    UIObject.transform.GetChild(0).gameObject.SetActive(true);
-                }
-
-                // 2回目に選択したアイテムがレリックだった場合、レリックを選択状態にして説明を表示
-                if (UIObject.CompareTag("Relics"))
-                {
-                    UIObject.transform.GetChild(0).gameObject.SetActive(true);
-                    UIObject.transform.GetChild(8).gameObject.SetActive(true);
-                }
-
-            }
-
-            lastSelectedItem = UIObject;
-
-        }
-
-        // カードをクリックした後、背景をクリックするとカードのクリック状態を解く
-        if (isSelected && UIObject.CompareTag("BackGround"))
-        {
-            // 最後にクリックしたアイテムの選択状態を解除する
-            if (lastSelectedItem.CompareTag("Cards"))
-            {
-                lastSelectedItem.transform.localScale = cardScaleReset;
-                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);       // アイテムの見た目の選択状態を解除する
-            }
-
-            if (lastSelectedItem.CompareTag("Relics"))
-            {
-                lastSelectedItem.transform.localScale = relicScaleReset;
-                lastSelectedItem.transform.GetChild(0).gameObject.SetActive(false);
-                lastSelectedItem.transform.GetChild(8).gameObject.SetActive(false);                    // RelicEffectBG(BattleReward)を非表示
-            }
-            lastSelectedItem = null;
-            isSelected = false;
-
-            // 入手ボタン切り替え
-            applyGetTreasure.SetActive(false);
-            closeGetTreasure.SetActive(true);
-            //UIEventsReload();
-        }
-
-        // "入手する"を押したら
-        if (UIObject == applyGetTreasure && isSelected && !isClick)
-        {
             isClick = true;
+            lastSelectedItem = UIObject;
             AudioManager.Instance.PlaySE("選択音1");
 
             // 最後にクリックしたアイテムの選択状態を解除する
@@ -180,6 +108,7 @@ public class UIManagerTreasureBox : MonoBehaviour
                     applyGetTreasure.SetActive(false);
                     closeGetTreasure.SetActive(true);
                     isClick = false; //applyGetItemをもう一度クリック出来るようにする
+                    isSelected = false; //もし破棄画面から戻るを押された際にもう一度選択出来るようにする
                     return;
                 }
                 else

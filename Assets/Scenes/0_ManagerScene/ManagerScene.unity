@@ -3704,6 +3704,7 @@ GameObject:
   - component: {fileID: 933759231}
   - component: {fileID: 933759230}
   - component: {fileID: 933759229}
+  - component: {fileID: 933759233}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -3798,6 +3799,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &933759233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933759228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 250468d030ebc884aa993f0618f339f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tapEffect: {fileID: 100000, guid: aa3fed151f536ee49b583c6a3ac4a2e1, type: 3}
 --- !u!1 &940051396
 GameObject:
   m_ObjectHideFlags: 0
