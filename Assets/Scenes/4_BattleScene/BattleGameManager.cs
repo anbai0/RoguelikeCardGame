@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using SelfMadeNamespace;
+using DG.Tweening;
 
 /// <summary>
 /// バトルの進行を進めるスクリプト
@@ -51,6 +52,8 @@ public class BattleGameManager : MonoBehaviour
 
     //エフェクト
     [SerializeField] BattleEffect battleEffect;
+    [SerializeField] CanvasGroup turnEndButtonGroup;
+    Tween buttonTween;
 
     public bool isPlayerTurn;//プレイヤーのターンか判定//CardEffect()で使用
     private bool isPlayerMove;//プレイヤーか行動中か判定//TurnEnd()で使用
@@ -208,6 +211,10 @@ public class BattleGameManager : MonoBehaviour
                 isPlayerMove = false;
                 playerTurnDisplay.enabled = true;
                 enemyTurnDisplay.enabled = false;
+                if (!CheckPlayerCanMove())
+                {
+                    WaitTurnEndCompletion();
+                }
             }
             else
             {
@@ -236,21 +243,48 @@ public class BattleGameManager : MonoBehaviour
         }
         else //どちらも行動できない場合
         {
-            //ターンディスプレイはどちらもオフに
-            playerTurnDisplay.enabled = false;
-            enemyTurnDisplay.enabled = false;
-            isPlayerTurn = false;
-            turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
+            WaitTurnEndCompletion();
+        }
+    }
 
-            if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
+    /// <summary>
+    /// プレイヤーにターンが回って来た時に行動できるかチェックする
+    /// </summary>
+    /// <returns>行動できるならtrueを行動できないのであればfalseを返す</returns>
+    bool CheckPlayerCanMove()
+    {
+        CardController[] cards = CardPlace.GetComponentsInChildren<CardController>();
+        foreach(var card in cards)
+        {
+            var cardCost = card.cardDataManager._cardCost;
+            if (cardCost <= playerScript.GetSetCurrentAP)
             {
-                StartCoroutine(WaitEndRound()); //ターンを終了する
+                return true;
             }
-            else
-            {
-                turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
-                isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
-            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// ターンエンドの実行及び実行の待機を行う
+    /// </summary>
+    void WaitTurnEndCompletion()
+    {
+        //ターンディスプレイはどちらもオフに
+        playerTurnDisplay.enabled = false;
+        enemyTurnDisplay.enabled = false;
+        isPlayerTurn = false;
+        turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
+
+        if (isTurnEnd) //プレイヤーが行動終了ボタンを押していたら
+        {
+            StartCoroutine(WaitEndRound()); //ターンを終了する
+        }
+        else
+        {
+            turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
+            buttonTween = turnEndButtonGroup.DOFade(0.0f, 1.0f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
+            isPlayerMove = false; //プレイヤーに行動終了のタイミングを委ねる
         }
     }
 
@@ -305,6 +339,11 @@ public class BattleGameManager : MonoBehaviour
             AudioManager.Instance.PlaySE("選択音1");
             isTurnEnd = true;
             playerScript.TurnEnd();
+            if(buttonTween != null)
+            {
+                buttonTween.Kill();
+                turnEndButtonGroup.alpha = 1;
+            }
             turnEndBlackPanel.SetActive(true); //TurnEndButtonの色を暗くする
 
             TurnCalc(); //ターン処理に移る

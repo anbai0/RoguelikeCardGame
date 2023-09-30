@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 24757801}
   - component: {fileID: 24757800}
   - component: {fileID: 24757799}
+  - component: {fileID: 24757802}
   m_Layer: 5
   m_Name: TurnEndButton
   m_TagString: Untagged
@@ -258,6 +259,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 24757797}
   m_CullTransparentMesh: 1
+--- !u!225 &24757802
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 24757797}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &79873180
 GameObject:
   m_ObjectHideFlags: 0
@@ -3845,6 +3858,7 @@ MonoBehaviour:
   roundTextAnimation: {fileID: 1522913961}
   turnEndBlackPanel: {fileID: 1304376417}
   battleEffect: {fileID: 1448882483}
+  turnEndButtonGroup: {fileID: 24757802}
   isPlayerTurn: 0
   isAccelerate: 0
   accelerateValue: 0
