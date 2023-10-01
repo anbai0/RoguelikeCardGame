@@ -139,9 +139,9 @@ public class UIManagerBattle : MonoBehaviour
     {
         Debug.Log("Drop");
         Debug.Log(UIObject.name);
+        emphasisDropPlace.HiddenGameObject();
         if (UIObject.CompareTag("Cards"))
         {
-            emphasisDropPlace.HiddenGameObject();
             uiArrowAnimation.StopArrowMovement();
             UIObject.GetComponent<CardMovement>().CardDorp(UIObject);
         }

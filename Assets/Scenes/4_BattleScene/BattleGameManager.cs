@@ -488,12 +488,21 @@ public class BattleGameManager : MonoBehaviour
         {
             SetDeckSpace(40, 0);
         }
+        else if (deckCount > 7 && deckCount == 11)
+        {
+            SetDeckSpace(20, 0);
+        }
         else
         {
             SetDeckSpace(80, 0);
         }
     }
 
+    /// <summary>
+    /// デッキの枚数に応じて配置するスペースを設定する
+    /// </summary>
+    /// <param name="horizontalSpace"></param>
+    /// <param name="verticalSpace"></param>
     void SetDeckSpace(int horizontalSpace,int verticalSpace)
     {
         var space = new Vector2(horizontalSpace, verticalSpace);

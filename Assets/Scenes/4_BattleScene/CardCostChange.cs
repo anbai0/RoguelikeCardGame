@@ -19,13 +19,16 @@ public class CardCostChange : MonoBehaviour
         foreach (Transform child in cardPlace) //cardPlaceにある全てのデッキを探索
         {
             CardController deckCard = child.GetComponent<CardController>();
-            if (deckCard.cardDataManager._cardType == "Attack" && deckCard.cardDataManager._cardID != 13) //カードのタイプがAttackでフルバーストじゃない場合
+            if (deckCard.cardDataManager._cardType == "Attack" ) //カードのタイプがAttackの場合
             {
-                //カードのコストを下げる
-                deckCard.cardDataManager._cardCost -= accelerateValue;
-                if (deckCard.cardDataManager._cardCost < 1)
+                if (deckCard.cardDataManager._cardID != 13 || deckCard.cardDataManager._cardID != 113) //フルバーストじゃない場合
                 {
-                    deckCard.cardDataManager._cardCost = 1;
+                    //カードのコストを下げる
+                    deckCard.cardDataManager._cardCost -= accelerateValue;
+                    if (deckCard.cardDataManager._cardCost < 1)
+                    {
+                        deckCard.cardDataManager._cardCost = 1;
+                    }
                 }
             }
             TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
