@@ -1,5 +1,8 @@
+using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -20,16 +23,65 @@ public class ResultSceneManager : MonoBehaviour
 
     private Vector3 cardScale = Vector3.one * 0.25f;     // 生成するカードのスケール
 
+    // リザルトの背景
+    [SerializeField] GameObject clearBG;
+    [SerializeField] GameObject gameOverBG;
+    // クリア、ゲームオーバーのテキスト
+    [SerializeField] TextMeshProUGUI clearText;
+    [SerializeField] TextMeshProUGUI gameOverText;
+    TextMeshProUGUI viewText;
 
     void Start()
     {
         // GameManager取得(変数名省略)
         gm = GameManager.Instance;
         AudioManager.Instance.PlayBGM("Result");
+
+        // リザルトの背景を表示
+        if (gm.isClear == true)
+        {
+            clearBG.SetActive(true);
+            viewText = clearText;
+        }           
+        else
+        {
+            gameOverBG.SetActive(true);
+            viewText = gameOverText;
+        }
+
+        StartCoroutine(TextAnimCoroutine());
+
         InitDeck();
         ShowRelics();
         uiManager.UIEventsReload();
     }
+
+
+    IEnumerator TextAnimCoroutine()
+    {
+
+        DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(viewText);
+
+        for (int i = 0; i < tmproAnimator.textInfo.characterCount; ++i)
+        {
+            tmproAnimator.DOScaleChar(i, 0.7f, 0);
+            Vector3 currCharOffset = tmproAnimator.GetCharOffset(i);
+            DOTween.Sequence()
+                .Append(tmproAnimator.DOOffsetChar(i, currCharOffset + new Vector3(0, 30, 0), 0.4f).SetEase(Ease.OutFlash, 2))
+                .Join(tmproAnimator.DOScaleChar(i, 1, 0.4f).SetEase(Ease.OutBack))
+                .SetDelay(0.07f * i);
+
+            // 最後の文字のアニメーションが完了したら待機
+            if (i == tmproAnimator.textInfo.characterCount - 1)
+            {
+                yield return new WaitForSeconds(0.07f * tmproAnimator.textInfo.characterCount + 1f);
+            }
+        }
+
+        // アニメーションが完了したら再度実行
+        StartCoroutine(TextAnimCoroutine());
+    }
+
 
     private void InitDeck() //デッキ生成
     {

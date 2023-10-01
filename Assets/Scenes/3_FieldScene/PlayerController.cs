@@ -380,7 +380,6 @@ public class PlayerController : MonoBehaviour
 
 
 
-
         // 部屋にオブジェクトがあったときにplayerIconを非表示に
         if (nextRoom.transform.childCount >= 6)
         {

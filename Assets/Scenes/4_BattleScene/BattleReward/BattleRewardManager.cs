@@ -151,13 +151,14 @@ public class BattleRewardManager : MonoBehaviour
             if (gm.floor < 3) //階層が3階まで到達していない場合
             {
                 gm.floor++; //階層を1つ上げる
-                loadSceneName = "FieldScene"; //ロードするシーンをフィールドシーンに設定
+                loadSceneName = "FieldScene";       //ロードするシーンをフィールドシーンに設定
                 Lottery.Instance.shopCards.Clear(); //ショップのカードをリセットする
                 TransitionAfterBattle();
             }
             else
             {
-                loadSceneName = "ResultScene"; //ロードするシーンをリザルトシーンに設定
+                gm.isClear = true;              // リザルトシーンでクリア画面を表示したいためtrueに
+                loadSceneName = "ResultScene";  //ロードするシーンをリザルトシーンに設定
                 TransitionAfterBattle();
             }
         }
@@ -229,6 +230,7 @@ public class BattleRewardManager : MonoBehaviour
 
     public void TransitionLoseBattle()
     {
+        gm.isClear = false;     // リザルトシーンでゲームオーバー画面を表示したいためfalseに
         SceneFader.Instance.FadeOutInWrapper(TransitionLoseBattleScenes);
     }
 

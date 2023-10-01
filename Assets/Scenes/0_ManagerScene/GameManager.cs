@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     //フィールド
     public int floor = 1; //階層
 
+    // 勝利したかの判定
+    public bool isClear = false;
+
     [SerializeField] UIManager uiManager;
     [SerializeField] RelicController relicPrefab;
     [SerializeField] Transform relicPlace;
@@ -241,6 +244,7 @@ public class GameManager : MonoBehaviour
         PlayerController.Instance.isConfimDeck = false;
 
         playerData = null;
+        isClear = false;
 
         // 所持レリック初期化
         for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
