@@ -306,6 +306,7 @@ public class DungeonGenerator : MonoBehaviour
                 // 焚火生成
                 GameObject bonfire = Instantiate(bonfirePrefab, rooms[curWalk.y, curWalk.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, rooms[curWalk.y, curWalk.x].transform);
                 bonfire.gameObject.name = $"bonfire1: {walkCount} ({curWalk.y}  {curWalk.x})";
+                bonfire.GetComponentInChildren<ParticleSystem>().gameObject.SetActive(false);
                 // 焚火を生成した部屋を記録
                 bonfireRoomPos.Set(curWalk.x, curWalk.y);
             }
@@ -493,6 +494,7 @@ public class DungeonGenerator : MonoBehaviour
         // 焚火生成
         GameObject bonfire = Instantiate(bonfirePrefab, rooms[farthestRoomPos.y, farthestRoomPos.x].transform.position + new Vector3(0, -2.4f, 0), Quaternion.identity, rooms[farthestRoomPos.y, farthestRoomPos.x].transform);
         bonfire.gameObject.name = $"bonfire2: bossRoom ({farthestRoomPos.y}  {farthestRoomPos.x})";
+        bonfire.GetComponentInChildren<ParticleSystem>().gameObject.SetActive(false);
 
         // ボス部屋の位置を記録
         bossRoomPos.Set(farthestRoomPos.x, farthestRoomPos.y);

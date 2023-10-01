@@ -9,7 +9,7 @@ public class Lottery : MonoBehaviour
     private GameManager gm;
 
     private const int MaxNumCards = 20;       // 全カードの枚数
-    private const int MaxNumRelics = 12;      // 全レリックの数
+    private const int MaxNumRelics = 11;      // 全レリックの数
 
     [Header("ここから下はデバッグ用に表示させてます")]
     //各レアリティのリスト

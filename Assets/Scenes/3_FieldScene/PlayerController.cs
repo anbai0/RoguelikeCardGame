@@ -291,6 +291,7 @@ public class PlayerController : MonoBehaviour
         }
         if (bonfirePrefab != null && bonfirePrefab.GetComponent<BoxCollider>().enabled)
         {
+            bonfirePrefab.GetComponentInChildren<ParticleSystem>(true).gameObject.SetActive(true);
             bonfirePrefab.GetComponentInChildren<ParticleSystem>().Play();
         }
 
@@ -307,6 +308,7 @@ public class PlayerController : MonoBehaviour
         if (lastRoomBonfire != null && lastRoomBonfire.GetComponent<BoxCollider>().enabled)
         {
             lastRoomBonfire.GetComponentInChildren<ParticleSystem>().Stop();
+            lastRoomBonfire.GetComponentInChildren<ParticleSystem>().gameObject.SetActive(false);
         }
     }
 

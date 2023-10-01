@@ -240,6 +240,8 @@ public class UIManagerBonfire : MonoBehaviour
         // 焚火の火を消す
         ParticleSystem particle = PlayerController.Instance.bonfire.GetComponentInChildren<ParticleSystem>();
         particle.Stop();
+        // 焚火のポイントライトを消す
+        particle.transform.GetChild(0).gameObject.SetActive(false);
 
         // 焚火の当たり判定を消す。
         PlayerController.Instance.bonfire.GetComponent<BoxCollider>().enabled = false;
