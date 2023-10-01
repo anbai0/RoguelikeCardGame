@@ -41,15 +41,13 @@ public class ResultSceneManager : MonoBehaviour
         if (gm.isClear == true)
         {
             clearBG.SetActive(true);
-            viewText = clearText;
+            StartCoroutine(ClearTextAnim());
         }           
         else
         {
             gameOverBG.SetActive(true);
-            viewText = gameOverText;
+            StartCoroutine(GameOverTextAnim());
         }
-
-        StartCoroutine(TextAnimCoroutine());
 
         InitDeck();
         ShowRelics();
@@ -57,10 +55,9 @@ public class ResultSceneManager : MonoBehaviour
     }
 
 
-    IEnumerator TextAnimCoroutine()
+    IEnumerator ClearTextAnim()
     {
-
-        DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(viewText);
+        DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(clearText);
 
         for (int i = 0; i < tmproAnimator.textInfo.characterCount; ++i)
         {
@@ -79,7 +76,32 @@ public class ResultSceneManager : MonoBehaviour
         }
 
         // アニメーションが完了したら再度実行
-        StartCoroutine(TextAnimCoroutine());
+        StartCoroutine(ClearTextAnim());
+    }
+
+
+    IEnumerator GameOverTextAnim()
+    {
+        gameOverText.DOFade(0, 0);
+        DOTweenTMPAnimator tmproAnimator = new DOTweenTMPAnimator(gameOverText);     
+
+        for (int i = 0; i < tmproAnimator.textInfo.characterCount; ++i)
+        {
+            Vector3 currCharOffset = tmproAnimator.GetCharOffset(i);
+            DOTween.Sequence()
+                .Append(tmproAnimator.DOOffsetChar(i, currCharOffset - new Vector3(0f, 50f, 0f), 1f))
+                .Join(tmproAnimator.DOFadeChar(i, 1f, 1f))
+                .SetDelay(0.07f * i);
+
+            // 最後の文字のアニメーションが完了したら待機
+            if (i == tmproAnimator.textInfo.characterCount - 1)
+            {
+                yield return new WaitForSeconds(0.07f * tmproAnimator.textInfo.characterCount + 2f);
+            }
+        }
+
+        // アニメーションが完了したら再度実行
+        StartCoroutine(GameOverTextAnim());
     }
 
 
