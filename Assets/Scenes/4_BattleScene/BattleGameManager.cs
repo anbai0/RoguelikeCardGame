@@ -212,6 +212,7 @@ public class BattleGameManager : MonoBehaviour
                 isPlayerMove = false;
                 playerTurnDisplay.enabled = true;
                 enemyTurnDisplay.enabled = false;
+                Debug.Log("プレイヤーの行動可否 = " + CheckPlayerCanMove());
                 if (!CheckPlayerCanMove())
                 {
                     WaitTurnEndCompletion();
@@ -254,8 +255,9 @@ public class BattleGameManager : MonoBehaviour
     /// <returns>行動できるならtrueを行動できないのであればfalseを返す</returns>
     bool CheckPlayerCanMove()
     {
-        CardController[] cards = CardPlace.GetComponentsInChildren<CardController>();
-        foreach(var card in cards)
+        //本来ならばCardPlaceからデッキ情報を取得したいが、カードのParentを外す関係上取得できないときがあるのでParentの動くことのないPickCardPlaceから取得する
+        CardController[] cards = PickCardPlace.GetComponentsInChildren<CardController>();
+        foreach (var card in cards)
         {
             var cardCost = card.cardDataManager._cardCost;
             if (cardCost <= playerScript.GetSetCurrentAP)
