@@ -21,7 +21,7 @@ public class CardCostChange : MonoBehaviour
             CardController deckCard = child.GetComponent<CardController>();
             if (deckCard.cardDataManager._cardType == "Attack" ) //カードのタイプがAttackの場合
             {
-                if (deckCard.cardDataManager._cardID != 13 || deckCard.cardDataManager._cardID != 113) //フルバーストじゃない場合
+                if (deckCard.cardDataManager._cardID != 13 && deckCard.cardDataManager._cardID != 113) //フルバーストじゃない場合
                 {
                     //カードのコストを下げる
                     deckCard.cardDataManager._cardCost -= accelerateValue;
