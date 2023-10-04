@@ -212,6 +212,7 @@ public class BattleGameManager : MonoBehaviour
                 isPlayerMove = false;
                 playerTurnDisplay.enabled = true;
                 enemyTurnDisplay.enabled = false;
+                Debug.Log("プレイヤーの行動可否 = " + CheckPlayerCanMove());
                 if (!CheckPlayerCanMove())
                 {
                     WaitTurnEndCompletion();
@@ -254,8 +255,9 @@ public class BattleGameManager : MonoBehaviour
     /// <returns>行動できるならtrueを行動できないのであればfalseを返す</returns>
     bool CheckPlayerCanMove()
     {
-        CardController[] cards = CardPlace.GetComponentsInChildren<CardController>();
-        foreach(var card in cards)
+        //本来ならばCardPlaceからデッキ情報を取得したいが、カードのParentを外す関係上取得できないときがあるのでParentの動くことのないPickCardPlaceから取得する
+        CardController[] cards = PickCardPlace.GetComponentsInChildren<CardController>();
+        foreach (var card in cards)
         {
             var cardCost = card.cardDataManager._cardCost;
             if (cardCost <= playerScript.GetSetCurrentAP)
@@ -488,12 +490,21 @@ public class BattleGameManager : MonoBehaviour
         {
             SetDeckSpace(40, 0);
         }
+        else if (deckCount > 7 && deckCount == 11)
+        {
+            SetDeckSpace(20, 0);
+        }
         else
         {
             SetDeckSpace(80, 0);
         }
     }
 
+    /// <summary>
+    /// デッキの枚数に応じて配置するスペースを設定する
+    /// </summary>
+    /// <param name="horizontalSpace"></param>
+    /// <param name="verticalSpace"></param>
     void SetDeckSpace(int horizontalSpace,int verticalSpace)
     {
         var space = new Vector2(horizontalSpace, verticalSpace);

@@ -223,19 +223,13 @@ public class RelicEffectList : MonoBehaviour
     /// <param name="ID12Quantity">レリック番号12の個数</param>
     /// <param name="type">エネミーの種類</param>
     /// <returns>加算する筋力増強の値</returns>
-    public int RelicID12(int ID12Quantity, string type)
+    public void RelicID12(int ID12Quantity, string type)
     {
-        int addPlayerUpStrength = 0;
+        var bg = BattleGameManager.Instance;
 
         if (ID12Quantity > 0 && type == "Boss")
         {
-            addPlayerUpStrength += 1 * ID12Quantity;
+            bg.relicID2Player += 1 * ID12Quantity;
         }
-        else
-        {
-            return addPlayerUpStrength;
-        }
-
-        return addPlayerUpStrength;
     }
 }

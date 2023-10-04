@@ -234,7 +234,7 @@ public class PlayerBattleAction : CharacterBattleAction
         GetSetConstAP = relicEffect.RelicID5(hasPlayerRelics[5], GetSetConstAP, GetSetChargeAP).constAP;
         es.AddConditionStatus("Burn", relicEffect.RelicID6(hasPlayerRelics[6]));
         GetSetGP = relicEffect.RelicID8(hasPlayerRelics[8], GetSetGP);
-        AddConditionStatus("UpStrength", relicEffect.RelicID12(hasPlayerRelics[12], enemyType));
+        relicEffect.RelicID12(hasPlayerRelics[12], enemyType);
         return es;
     }
 
