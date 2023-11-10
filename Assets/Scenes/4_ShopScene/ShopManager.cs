@@ -277,7 +277,7 @@ public class ShopManager : MonoBehaviour
             if (selectedCardID != healCardID)   // 選んだカードが回復カードではなかった場合
             {
                 // デッキ上限チェック
-                if (gm.CheckDeckFull())                 // デッキ上限に達している場合
+                if (gm.CheckDeckFull(selectedItem))                 // デッキ上限に達している場合
                 {
                     gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
                     buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納

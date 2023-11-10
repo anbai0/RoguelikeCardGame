@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
     /// デッキ上限に達している場合、true
     /// <para>デッキ上限に達していない場合、false</para>
     /// </returns>
-    public bool CheckDeckFull()
+    public bool CheckDeckFull(GameObject getCard)
     {
         int maxDeckSize = defaultDeckSize + hasRelics[ariadnesThreadID];
         List<int> checkDeck = playerData._deckList.ToList();   // デッキチェック用にデッキをコピー
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
         // 所持しているカードがデッキのサイズ以上だったら
         if (checkDeck.Count >= maxDeckSize)
         {
-            uiManager.ToggleDiscardScreen(true);        // カード破棄画面
+            uiManager.ToggleDiscardScreen(true, getCard);        // カード破棄画面
             return true;
         }
         return false;
