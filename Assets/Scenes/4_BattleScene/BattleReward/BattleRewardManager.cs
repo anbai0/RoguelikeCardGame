@@ -11,6 +11,8 @@ public class BattleRewardManager : MonoBehaviour
     [Header("報酬画面用UI")]
     [SerializeField]
     GameObject battleRewardUI;
+    [Header("ゲームモード選択画面用UI"), SerializeField]
+    GameObject selectGamemodeUI;
 
     //[Header("参照するコンポーネント")]
     
@@ -35,6 +37,8 @@ public class BattleRewardManager : MonoBehaviour
     const int RelicID1 = 1; //アリアドネの糸(レアリティ３)
     Vector3 cardScale =  Vector3.one * 0.25f;       // 生成するカードの大きさ
 
+    [HideInInspector] public int selectLevel = 3;
+
     GameManager gm;
     BattleGameManager bg;
 
@@ -43,6 +47,7 @@ public class BattleRewardManager : MonoBehaviour
         gm = GameManager.Instance;
         bg = BattleGameManager.Instance;
         battleRewardUI.SetActive(false);
+        selectGamemodeUI.SetActive(false);
     }
 
     /// <summary>
@@ -51,10 +56,18 @@ public class BattleRewardManager : MonoBehaviour
     /// <param name="type">エネミーの種類</param>
     public void ShowReward(string type)
     {
-        battleRewardUI.SetActive(true); 
-        SelectRewardByCards(type);
-        SelectRewardByRelics(type);
-        battleRewardUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+        if(type == "Boss")
+        {
+            selectGamemodeUI.SetActive(true);
+            selectGamemodeUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+        }
+        else
+        {
+            battleRewardUI.SetActive(true);
+            SelectRewardByCards(type);
+            SelectRewardByRelics(type);
+            battleRewardUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+        }
     }
 
     /// <summary>
@@ -148,7 +161,7 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (bg.enemyType == "Boss")
         {
-            if (gm.floor < 1) //階層が3階まで到達していない場合
+            if (gm.floor < selectLevel) //階層が3階まで到達していない場合
             {
                 gm.floor++; //階層を1つ上げる
                 loadSceneName = "FieldScene";       //ロードするシーンをフィールドシーンに設定
