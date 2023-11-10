@@ -148,7 +148,7 @@ public class BattleRewardManager : MonoBehaviour
     {
         if (bg.enemyType == "Boss")
         {
-            if (gm.floor < 3) //ŠK‘w‚ª3ŠK‚Ü‚Å“ž’B‚µ‚Ä‚¢‚È‚¢ê‡
+            if (gm.floor < 1) //ŠK‘w‚ª3ŠK‚Ü‚Å“ž’B‚µ‚Ä‚¢‚È‚¢ê‡
             {
                 gm.floor++; //ŠK‘w‚ð1‚Âã‚°‚é
                 loadSceneName = "FieldScene";       //ƒ[ƒh‚·‚éƒV[ƒ“‚ðƒtƒB[ƒ‹ƒhƒV[ƒ“‚ÉÝ’è
