@@ -191,6 +191,7 @@ public class BattleGameManager : MonoBehaviour
             cardCostChange.CardCostDown(accelerateValue);
             isAccelerate = false;
             isDecelerate = true;
+            Debug.Log("アクセラレーション処理");
         }
 
         int playerCurrentAP = playerScript.GetSetCurrentAP;

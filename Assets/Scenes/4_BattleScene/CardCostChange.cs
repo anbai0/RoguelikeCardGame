@@ -11,6 +11,9 @@ public class CardCostChange : MonoBehaviour
     [SerializeField, Header("表示カードのある場所")]
     Transform pickCardPlace;
 
+    PickCard pickCardScript;
+    GameObject pickCard = null;
+
     /// <summary>
     /// CardEffectListのアクセラレートの効果でカードのコストを減少させる
     /// </summary>
@@ -29,6 +32,11 @@ public class CardCostChange : MonoBehaviour
                     {
                         deckCard.cardDataManager._cardCost = 1;
                     }
+
+                    //ピックされるカードにコストを反映
+                    pickCardScript = child.GetComponent<PickCard>();
+                    pickCard = pickCardScript.ChoosePickCard(deckCard.gameObject);
+                    pickCard = pickCardScript.SetPickCardStatusInCardCost(deckCard.gameObject, pickCard);
                 }
             }
             TextMeshProUGUI costText = child.transform.Find("CardInfo/CardCost").GetComponentInChildren<TextMeshProUGUI>();
