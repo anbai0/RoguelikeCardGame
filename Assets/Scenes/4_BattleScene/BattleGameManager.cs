@@ -196,6 +196,7 @@ public class BattleGameManager : MonoBehaviour
 
         int playerCurrentAP = playerScript.GetSetCurrentAP;
         int enemyCurrentAP = enemyScript.GetSetCurrentAP;
+        
         if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
         {
             if (playerCurrentAP >= enemyCurrentAP) //APを比較して多い方が行動する
@@ -246,7 +247,27 @@ public class BattleGameManager : MonoBehaviour
         }
         else //どちらも行動できない場合
         {
-            WaitTurnEndCompletion();
+            if (CheckPlayerCanMove())
+            {
+                if (playerScript.IsCurse()) //呪縛になっていたら 
+                {
+                    //Curseの処理で減ったAPの更新
+                    playerScript.CursedUpdateAP();
+                    //変化したAPの値を保存
+                    playerScript.SaveRoundAP();
+                }
+                //プレイヤーの行動
+                isPlayerTurn = true;
+                turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
+                isPlayerMove = false;
+                playerTurnDisplay.enabled = true;
+                enemyTurnDisplay.enabled = false;
+                Debug.Log("プレイヤーの行動可否 = " + CheckPlayerCanMove());
+            }
+            else
+            {
+                WaitTurnEndCompletion();
+            }
         }
     }
 
@@ -263,7 +284,19 @@ public class BattleGameManager : MonoBehaviour
             var cardCost = card.cardDataManager._cardCost;
             if (cardCost <= playerScript.GetSetCurrentAP)
             {
-                return true;
+                var cardID = card.cardDataManager._cardID;
+                var cardState = card.cardDataManager._cardState;
+                if(cardID == 3 || cardID == 13 || cardID == 113)
+                {
+                    if(cardState != 2)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
         return false;
