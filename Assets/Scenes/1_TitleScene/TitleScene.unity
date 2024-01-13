@@ -896,7 +896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   demoDisplay: {fileID: 1844718161}
   demoVideoPlayer: {fileID: 1469244790}
-  demoVideoDuration: 10
+  demoVideoDuration: 60
 --- !u!4 &1469244789
 Transform:
   m_ObjectHideFlags: 0
@@ -920,7 +920,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469244787}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 4cb5cb2f337c9aa44bcc15f1ba91f5ec, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: b552ed0b0adaccd488518b9d4811719a, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 0}

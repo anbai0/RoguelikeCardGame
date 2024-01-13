@@ -58,11 +58,21 @@ public class BattleRewardManager : MonoBehaviour
     {
         if(type == "Boss")
         {
-            selectGamemodeUI.SetActive(true);
-            selectGamemodeUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+            // 3階層目の場合、リザルトへ直行
+            if (gm.floor == 3)
+            {
+                selectLevel = 3;
+                UnLoadBattleScene();
+            }
+            else // 他の階層の場合、先の階層に進むか確認を取る
+            {
+                selectGamemodeUI.SetActive(true);
+                selectGamemodeUI.GetComponent<DisplayAnimation>().StartPopUPAnimation();
+            }
         }
         else
         {
+            // 報酬画面の表示
             battleRewardUI.SetActive(true);
             SelectRewardByCards(type);
             SelectRewardByRelics(type);

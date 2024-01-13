@@ -197,7 +197,7 @@ public class BattleGameManager : MonoBehaviour
         int playerCurrentAP = playerScript.GetSetCurrentAP;
         int enemyCurrentAP = enemyScript.GetSetCurrentAP;
         
-        if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
+        if (playerCurrentAP >= 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
         {
             if (playerCurrentAP >= enemyCurrentAP) //APを比較して多い方が行動する
             {
@@ -247,27 +247,7 @@ public class BattleGameManager : MonoBehaviour
         }
         else //どちらも行動できない場合
         {
-            if (CheckPlayerCanMove())
-            {
-                if (playerScript.IsCurse()) //呪縛になっていたら 
-                {
-                    //Curseの処理で減ったAPの更新
-                    playerScript.CursedUpdateAP();
-                    //変化したAPの値を保存
-                    playerScript.SaveRoundAP();
-                }
-                //プレイヤーの行動
-                isPlayerTurn = true;
-                turnEndBlackPanel.SetActive(false); //TurnEndButtonの暗転を解除
-                isPlayerMove = false;
-                playerTurnDisplay.enabled = true;
-                enemyTurnDisplay.enabled = false;
-                Debug.Log("プレイヤーの行動可否 = " + CheckPlayerCanMove());
-            }
-            else
-            {
-                WaitTurnEndCompletion();
-            }
+            WaitTurnEndCompletion();
         }
     }
 
@@ -277,26 +257,19 @@ public class BattleGameManager : MonoBehaviour
     /// <returns>行動できるならtrueを行動できないのであればfalseを返す</returns>
     bool CheckPlayerCanMove()
     {
+        // 前のターンでターン終了をしていた場合、このターンは行動出来ない
+        if(isTurnEnd) 
+            return false;
+
         //本来ならばCardPlaceからデッキ情報を取得したいが、カードのParentを外す関係上取得できないときがあるのでParentの動くことのないPickCardPlaceから取得する
         CardController[] cards = PickCardPlace.GetComponentsInChildren<CardController>();
         foreach (var card in cards)
         {
-            var cardCost = card.cardDataManager._cardCost;
-            if (cardCost <= playerScript.GetSetCurrentAP)
+            int cardCost = card.cardDataManager._cardCost;
+            int cardState = card.cardDataManager._cardState;
+            if (cardCost <= playerScript.GetSetCurrentAP && cardState == 0)
             {
-                var cardID = card.cardDataManager._cardID;
-                var cardState = card.cardDataManager._cardState;
-                if(cardID == 3 || cardID == 13 || cardID == 113)
-                {
-                    if(cardState != 2)
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -489,6 +462,8 @@ public class BattleGameManager : MonoBehaviour
         //エネミーのステータスを割り振る
         enemyScript.SetStatus(floor, enemy);
         enemyScript.hasEnemyRelics = selectEnemyRelic.SetEnemyRelics(enemyScript.hasEnemyRelics, floor, enemyName);
+        enemyScript.ViewEnemyRelic(gm);
+        uiManagerBattle.GetComponent<UIManagerBattle>().UIEventsReload();
     }
 
     /// <summary>

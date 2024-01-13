@@ -9,14 +9,18 @@ using UnityEngine.UI;
 public class CharacterBattleAction : MonoBehaviour
 {
     //ステータス
-    [Range(0, 999)] int HP; //最大HP
+    int HP; //最大HP
+    const int maxHP = 999; // HPの上限値
     int currentHP; //現在のHP
-    [Range(0, 99)] int AP; //最大AP
+    int AP; //最大AP
+    const int maxAP = 99; // APの上限値
     int constAP; //戦闘開始時の最大AP
     int currentAP; //現在のAP
     int chargeAP; //ラウンドが進むごとに増加するAPの値
     int roundStartAP; //ラウンド開始時の最大AP(IsCurseの判定に用いる)
-    [Range(0, 999)] int GP; //ダメージを防げるガードポイント
+    int GP; //ダメージを防げるガードポイント
+    const int maxGP = 999; // ガードポイントの上限値
+
     public int GetSetHP { get => HP; set => HP = value; }
     public int GetSetCurrentHP { get => currentHP; set => currentHP = value; }
     public int GetSetAP { get => AP; set => AP = value; }
@@ -74,6 +78,9 @@ public class CharacterBattleAction : MonoBehaviour
     /// <param name="HPSlider">HPスライダー(エネミーのみ)</param>
     public void UpdateText(Text HPText, Text APText, Text GPText, Slider HPSlider)
     {
+        HP = Mathf.Min(HP, maxHP);
+        AP = Mathf.Min(AP, maxAP);
+        GP = Mathf.Min(GP, maxGP);
         //currentHPの値は0以上HP以下
         currentHP = currentHP > HP ? HP : currentHP;
         currentHP = currentHP < 0 ? 0 : currentHP;

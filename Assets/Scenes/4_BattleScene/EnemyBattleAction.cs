@@ -19,6 +19,8 @@ public class EnemyBattleAction : CharacterBattleAction
     [SerializeField, Header("ガード表示オブジェクト")] GameObject gardUI;
     [SerializeField, Header("ダメージと回復表示の出現場所")] GameObject damageOrHealingPos;
     [SerializeField, Header("状態異常のアイコン表示スクリプト")] EnemyConditionDisplay enemyConditionDisplay;
+    [SerializeField, Header("３層目の敵が持つレリック")] RelicController enemyRelic;
+    [SerializeField, Header("レリックの表示位置")] Transform enemyRelicPlace;
 
     [SerializeField] EnemyAI enemyAI;
     [SerializeField] FlashImage flash;
@@ -139,6 +141,27 @@ public class EnemyBattleAction : CharacterBattleAction
         enemyCondition.Add("Weakness", 0);
         enemyCondition.Add("Burn", 0);
         enemyCondition.Add("Poison", 0);
+    }
+
+    // 所持しているレリックの表示
+    public void ViewEnemyRelic(GameManager gm)
+    {
+        for (int RelicID = 1; RelicID <= maxRelics; RelicID++)
+        {
+            //辞書内に指定したRelicIDのキーが存在するかどうかとレリックを１つ以上所持しているか
+            if (hasEnemyRelics.ContainsKey(RelicID) && hasEnemyRelics[RelicID] >= 1)
+            {
+                RelicController relic = Instantiate(enemyRelic, enemyRelicPlace);
+                relic.Init(RelicID);                                               // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
+
+                relic.transform.GetChild(4).gameObject.SetActive(true);
+                relic.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text = hasEnemyRelics[RelicID].ToString();      // Prefabの子オブジェクトである所持数を表示するテキストを変更
+
+                relic.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[RelicID]._relicName.ToString();        // レリックの名前を変更
+                relic.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>().text = gm.relicDataList[RelicID]._relicEffect.ToString();      // レリック説明変更
+
+            }
+        }
     }
 
     /// <summary>
