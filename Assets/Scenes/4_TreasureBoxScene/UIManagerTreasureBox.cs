@@ -100,7 +100,7 @@ public class UIManagerTreasureBox : MonoBehaviour
 
             if (lastSelectedItem.CompareTag("Cards"))
             {
-                if (gm.CheckDeckFull()) //デッキの上限に達している場合
+                if (gm.CheckDeckFull(lastSelectedItem)) //デッキの上限に達している場合
                 {
                     //破棄画面を呼び出し
                     gm.OnCardDiscard += ReGetTreasure;

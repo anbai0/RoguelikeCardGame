@@ -191,11 +191,13 @@ public class BattleGameManager : MonoBehaviour
             cardCostChange.CardCostDown(accelerateValue);
             isAccelerate = false;
             isDecelerate = true;
+            Debug.Log("アクセラレーション処理");
         }
 
         int playerCurrentAP = playerScript.GetSetCurrentAP;
         int enemyCurrentAP = enemyScript.GetSetCurrentAP;
-        if (playerCurrentAP > 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
+        
+        if (playerCurrentAP >= 0 || enemyCurrentAP > 0) //どちらかのAPが残っている場合
         {
             if (playerCurrentAP >= enemyCurrentAP) //APを比較して多い方が行動する
             {
@@ -255,12 +257,17 @@ public class BattleGameManager : MonoBehaviour
     /// <returns>行動できるならtrueを行動できないのであればfalseを返す</returns>
     bool CheckPlayerCanMove()
     {
+        // 前のターンでターン終了をしていた場合、このターンは行動出来ない
+        if(isTurnEnd) 
+            return false;
+
         //本来ならばCardPlaceからデッキ情報を取得したいが、カードのParentを外す関係上取得できないときがあるのでParentの動くことのないPickCardPlaceから取得する
         CardController[] cards = PickCardPlace.GetComponentsInChildren<CardController>();
         foreach (var card in cards)
         {
-            var cardCost = card.cardDataManager._cardCost;
-            if (cardCost <= playerScript.GetSetCurrentAP)
+            int cardCost = card.cardDataManager._cardCost;
+            int cardState = card.cardDataManager._cardState;
+            if (cardCost <= playerScript.GetSetCurrentAP && cardState == 0)
             {
                 return true;
             }
@@ -455,6 +462,8 @@ public class BattleGameManager : MonoBehaviour
         //エネミーのステータスを割り振る
         enemyScript.SetStatus(floor, enemy);
         enemyScript.hasEnemyRelics = selectEnemyRelic.SetEnemyRelics(enemyScript.hasEnemyRelics, floor, enemyName);
+        enemyScript.ViewEnemyRelic(gm);
+        uiManagerBattle.GetComponent<UIManagerBattle>().UIEventsReload();
     }
 
     /// <summary>

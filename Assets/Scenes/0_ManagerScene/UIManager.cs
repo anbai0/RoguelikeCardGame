@@ -55,7 +55,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] Transform deckCardPlace;
     [SerializeField] Transform discardCardPlace;
     [SerializeField] Transform discardHolder;       //破棄するカードを表示するのに使う親オブジェクト
+    [SerializeField] Transform getCardHolder;       //取得するカードを表示するのに使う親オブジェクト
     private CardController discardCard;
+    private CardController getCard;
     //[SerializeField] Transform upperCardPlace;
     //[SerializeField] Transform lowerCardPlace;
     //private Vector3 upperCardPos = new Vector3(0, 176, 0);   // upperCardのデフォルトの位置
@@ -78,6 +80,11 @@ public class UIManager : MonoBehaviour
         discardCard = Instantiate(cardPrefab, discardHolder);
         discardCard.gameObject.GetComponent<UIController>().enabled = false;        // UIEventを拾ってほしくないためfalseに
         discardCard.transform.SetParent(discardHolder);
+
+        // 取得するカードを表示するPrefabを作成
+        getCard = Instantiate(cardPrefab, getCardHolder);
+        getCard.gameObject.GetComponent<UIController>().enabled = false;        // UIEventを拾ってほしくないためfalseに
+        getCard.transform.SetParent(getCardHolder);
 
         UIEventsReload();
     }
@@ -258,7 +265,6 @@ public class UIManager : MonoBehaviour
                 AudioManager.Instance.PlaySE("選択音1");
 
                 // ボタン切り替え
-                discardReturnButton.SetActive(false);
                 discardButton.SetActive(true);
 
                 // 破棄するカードを表示
@@ -288,15 +294,16 @@ public class UIManager : MonoBehaviour
                 isSelected = false;
                 discardHolder.gameObject.SetActive(false);     // 破棄するカードを非表示に
 
-                // 強化ボタン切り替え
-                discardReturnButton.SetActive(true);
+                // 破棄ボタン表示切り替え
                 discardButton.SetActive(false);
             }
 
             // カード破棄画面を非表示に
-            if (!isSelected && UIObject == discardReturnButton)
+            if (UIObject == discardReturnButton)
             {
                 AudioManager.Instance.PlaySE("選択音1");
+                lastSelectedCards = null;
+                isSelected = false;
                 discardHolder.gameObject.SetActive(false);     // 破棄するカードを非表示に
                 ToggleDiscardScreen(false);
                 gm.TriggerDiscardAction(false);
@@ -448,7 +455,7 @@ public class UIManager : MonoBehaviour
     /// カード破棄画面を表示または非表示にするメソッド
     /// </summary>
     /// <param name="show">表示する場合はtrue、非表示にする場合はfalse</param>
-    public void ToggleDiscardScreen(bool show)
+    public void ToggleDiscardScreen(bool show, GameObject _getCard = null)
     {
         isShowingCardDiscard = true;
         DeckConfirmationButton.SetActive(false);    // デッキ確認アイコン非表示
@@ -466,6 +473,9 @@ public class UIManager : MonoBehaviour
 
             // カード破棄画面を表示
             cardDiscardScreen.SetActive(true);
+
+            // 取得するカードを表示
+            getCard.Init(_getCard.GetComponent<CardController>().cardDataManager._cardID);        //デッキデータの表示
 
             DiscardCardDeck();
             UIEventsReload();
@@ -507,8 +517,8 @@ public class UIManager : MonoBehaviour
 
         for (int init = 0; init < discardDeck.Count; init++)         // 選択出来るデッキの枚数分
         {
-            Debug.Log(discardDeck.Count);
-            Debug.Log(discardDeck[init]);
+            //Debug.Log(discardDeck.Count);
+            //Debug.Log(discardDeck[init]);
             CardController card = Instantiate(cardPrefab, discardCardPlace);   //カードを生成する
             card.transform.localScale = scaleReset;
             card.name = "Deck" + (init).ToString();                     //生成したカードに名前を付ける

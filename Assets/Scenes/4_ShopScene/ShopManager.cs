@@ -15,7 +15,8 @@ public class ShopManager : MonoBehaviour
 
     private const int healCardID = 3;                       // 回復カードのID
     private const int deckLimitIncRelicID = 1;              // デッキの上限を1枚増やすレリックのID
-    private Vector3 scaleReset = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
+    private Vector3 cardScale = Vector3.one * 0.37f;       // カードのデフォルトの大きさ
+    private Vector3 relicScale = Vector3.one * 2.5f;       // レリックのデフォルトの大きさ
     private GameObject buyCard;                             // カードを買うときに一時的に格納
 
     [Header("参照するUI")]
@@ -139,6 +140,7 @@ public class ShopManager : MonoBehaviour
         {
             GameObject cardObject = Instantiate(cardPrefab, cardPlace[cardID].transform.position, cardPlace[cardID].transform.rotation);       // カードのPrefabを生成
             cardObject.transform.SetParent(shoppingUI.transform);                                                                   // shoppingUIの子にする
+            cardObject.transform.localScale = cardScale;                                                                           // スケール調整
             CardController cardController = cardObject.GetComponent<CardController>();                                              // 生成したPrefabのCardControllerを取得
             cardController.Init(shopCardsID[cardID]);                                                                               // 取得したCardControllerのInitメソッドを使いカードの生成と表示をする
             cardObject.transform.Find("PriceBackGround").gameObject.SetActive(true);                                                // 値札を表示
@@ -150,6 +152,7 @@ public class ShopManager : MonoBehaviour
         {
             GameObject relicObject = Instantiate(relicPrefab, relicPlace[relicID].transform.position, relicPlace[relicID].transform.rotation);     // レリックのPrefabを生成
             relicObject.transform.SetParent(shoppingUI.transform);                                                                      // shoppingUIの子にする
+            relicObject.transform.localScale = relicScale;                                                                               // スケール調整
             RelicController relicController = relicObject.GetComponent<RelicController>();                                              // 生成したPrefabのRelicControllerを取得
             relicController.Init(shopRelicsID[relicID]);                                                                                // 取得したRelicControllerのInitメソッドを使いレリックの生成と表示をする
             relicObject.transform.Find("RelicPriceBG").gameObject.SetActive(true);                                                      // 値札を表示
@@ -274,7 +277,7 @@ public class ShopManager : MonoBehaviour
             if (selectedCardID != healCardID)   // 選んだカードが回復カードではなかった場合
             {
                 // デッキ上限チェック
-                if (gm.CheckDeckFull())                 // デッキ上限に達している場合
+                if (gm.CheckDeckFull(selectedItem))                 // デッキ上限に達している場合
                 {
                     gm.OnCardDiscard += RetryBuyItem;   // カードを破棄した後、もう一度メソッドを呼ぶためにデリゲートに追加
                     buyCard = selectedItem;             // カード破棄画面に移るため一時的に格納

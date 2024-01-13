@@ -44,6 +44,7 @@ public class UIManagerCharaSelect : MonoBehaviour
 
     [Header("キャラを選択テキスト関係")]
     [SerializeField] TextMeshProUGUI charaSelectText;
+    [SerializeField] TextMeshProUGUI cardSelectText;
     [SerializeField]
     [Range(0.1f, 10.0f)] float fadeDuration = 1.0f;  //テキストを点滅させる間隔
     private Color32 startColor = new Color32(255, 255, 255, 255);
@@ -295,6 +296,8 @@ public class UIManagerCharaSelect : MonoBehaviour
 
         // テキストを点滅させる
         charaSelectText.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / fadeDuration, 1.0f));
+
+        cardSelectText.color = Color.Lerp(startColor, endColor, Mathf.PingPong(Time.time / fadeDuration, 1.0f));
     }
 
     void highLight(Image warriorImage, Image wizardImage)

@@ -45,4 +45,21 @@ public class PickCard : MonoBehaviour
         pickCard.GetComponent<CardState>().isActive = true;
         return pickCard;
     }
+
+    /// <summary>
+    /// カードコスト用のピックカードへの転写
+    /// </summary>
+    /// <param name="deckCard"></param>
+    /// <param name="pickCard"></param>
+    /// <returns></returns>
+    public GameObject SetPickCardStatusInCardCost(GameObject deckCard, GameObject pickCard)
+    {
+        var deckData = deckCard.GetComponent<CardController>().cardDataManager;
+        pickCard.GetComponent<CardViewManager>().ViewCard(deckData);
+        var deckEffect = deckCard.transform.Find("CardInfo/CardEffect").GetComponent<TextMeshProUGUI>().text;
+        pickCard.transform.Find("CardInfo/CardEffect").GetComponent<TextMeshProUGUI>().text = deckEffect;
+        pickCard.GetComponent<CardController>().cardDataManager._cardState = deckData._cardState;
+        pickCard.GetComponent<CardController>().cardDataManager._cardCost = deckData._cardCost;
+        return pickCard;
+    }
 }

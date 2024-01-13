@@ -434,6 +434,11 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(damage);
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 2;
+
+        //プレイヤーの行動判定に使用するためにピックカードのデータを転写する
+        GameObject pickCard = null;
+        pickCard = card.gameObject.GetComponent<PickCard>().ChoosePickCard(card.gameObject);
+        pickCard = card.gameObject.GetComponent<PickCard>().SetPickCardStatusInCardCost(card.gameObject, pickCard);
     }
     /// <summary>
     /// 技名：強化フルバースト
@@ -449,6 +454,11 @@ public class CardEffectList : MonoBehaviour
         PlayerAttacking(damage);
         //このラウンド中カードを使用不可にする
         card.cardDataManager._cardState = 2;
+
+        //プレイヤーの行動判定に使用するためにピックカードのデータを転写する
+        GameObject pickCard = null;
+        pickCard = card.gameObject.GetComponent<PickCard>().ChoosePickCard(card.gameObject);
+        pickCard = card.gameObject.GetComponent<PickCard>().SetPickCardStatusInCardCost(card.gameObject, pickCard);
     }
     /// <summary>
     /// 技名：ハイボルケーノ 

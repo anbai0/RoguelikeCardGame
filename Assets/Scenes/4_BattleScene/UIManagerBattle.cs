@@ -69,14 +69,22 @@ public class UIManagerBattle : MonoBehaviour
         {
             if (UIObject.CompareTag("Condition"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.GetChild(1).gameObject.SetActive(true); //PlayerConditionEffectBG‚ð•\Ž¦‚·‚é
             }
             else if (UIObject.CompareTag("EnemyCondition"))
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.transform.GetChild(2).gameObject.SetActive(true); //EnemyConditionEffectBG‚ð•\Ž¦‚·‚é
+            }
+            else if(UIObject.CompareTag("EnemyRelic"))
+            {
+                AudioManager.Instance.PlaySE("OnCursor");
+                UIObject.transform.GetChild(5).gameObject.SetActive(true);
             }
             else
             {
+                AudioManager.Instance.PlaySE("OnCursor");
                 UIObject.GetComponent<CardMovement>().CardEnter(UIObject);
             }
             
@@ -100,6 +108,10 @@ public class UIManagerBattle : MonoBehaviour
             else if(UIObject.CompareTag("EnemyCondition"))
             {
                 UIObject.transform.GetChild(2).gameObject.SetActive(false); //EnemyConditionEffectBG‚ð”ñ•\Ž¦‚É‚·‚é
+            }
+            else if (UIObject.CompareTag("EnemyRelic"))
+            {
+                UIObject.transform.GetChild(5).gameObject.SetActive(false);
             }
             else
             {
